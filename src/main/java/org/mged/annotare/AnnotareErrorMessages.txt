@@ -1,0 +1,62 @@
+#Validation	Errors 
+1.	Unrecognized column headings in SDRF
+2.	Unrecognized column headings in ADF
+3.	Unrecognized rows IDF header
+4.	Unrecognized rows ADF header
+5.	Factor Values do not resolve across IDF and SDRF.
+6.	Ontology Term Source Names are present in IDF/SDRF that do not resolve with names declared in the IDF. 
+7.	Protocols are present in the SDRF and do not resolve with those in the IDF.
+8.	Local data file references are present in the SDRF and cannot be resolved locally, or are unreadable.  
+9.	Email address in file conflicts with that of logged in user.
+10.	Essential info for opening an existing file is missing.  
+11.	An SDRF file is specified in the SDRF file tag but is not resolvable.
+12.	Unsupported characters are present in the file.
+13.	Parameters supplied in the SDRF do not match those in the IDF.
+14.	Parameters supplied in the SDRF do not match with the correct protocol in the IDF.  
+15.	SDRF Columns in the wrong order.
+16.	IDF Rows in the wrong order.
+17.	Feature information is duplicate. Features are physical and can't be duplicate.  
+18.	Incomplete Feature information; if specified all 4 cols should be present. 
+19.	Duplicated row is present in IDF. 
+20.	Duplicated row is present in SDRF. 
+21.	Duplicated column is present in IDF. 
+22.	Duplicated column is present in SDRF. 
+
+#Validation	Warnings 
+1001.	Ontology term source files expressed as URIs don't resolve in IDF.
+1002.	Ontology term source files expressed as URIs don't resolve in SDRF .
+1003.	Ontology term source files expressed as URIs don't resolve ADF .
+1004.	Ontology term sources are present but ontology term is not in IDF.
+1005.	Ontology term sources are present but ontology term is not in SDRF.
+1006.	Ontology term sources are present but ontology term is not in ADR.
+1007.	Email address is present but First Name/Last Name is not (IDF) 
+1008.	Dates in wrong formats (IDF) 
+1009.	Pubmed id in wrong format in IDF.
+1010.	DOI in wrong format in IDF.
+1011.	Ontology term source doesn't resolve with the ontology specified in IDF. 
+1012.	Ontology term source doesn't resolve with the ontology specified in SDRF. 
+1013.	Ontology term source doesn't resolve with the ontology specified in ADF. 
+1007.	Where a person has email address declared but no name (this is an AE check, may be too stringent) (IDF) 
+1015.	Missing info in IDF: `the following fields have no data'. 
+1016.	Missing info in SDRF: `the following fields have no data'. 
+1017.	Missing info in ADF: `the following fields have no data'. 
+1018.	Unresolvable external reference for an Accession number, an Ontology Term/Term Source, or a URL in SDRF.
+1019.	Unresolvable external reference for an Accession number, an Ontology Term/Term Source, or a URL in ADF.
+1020.	URI in illegal format in IDF.
+1021.	Multiple values delimited by illegal characters e.g. ',' used instead of ';' in IDF.
+1022.	Data files are in an illegal format: binary Derived Array Data Matrix 
+1023.	Data files are in an illegal format: Derived Array Data Matrix is truncated.
+1024.	Data files are present in multiple rows but do not have matching source rows in SDRF.
+1025.	Two color hybs are used (two rows per channel) but labels are not supplied in SDRF.
+1026.	Assay (v1.1) is used and technology type info is missing in SDRF.
+1027.	Numeric factor values are supplied with no units in SDRF.
+1028.	Multiple comments of the same type are supplied in IDF.
+1029.	Multiple comments of the same type are supplied in SDRF.
+1030.	Multiple comments of the same type are supplied in ADF.
+1031.	Missing raw Data file for Derived Array Data Matrix in SDRF.
+1032.	Missing Normalization column for Derived Array Data Matrix in SDRF.
+1033.	Array Design reference is used with a non Array technology (v1.1) in SDRF.
+1034.	Reporter sequence uses illegal characters in ADF.
+1035.	Features are present which do not map to a reporter in ADF.
+1036.	Reporter Composite Element mappings are unresolved in ADF. 
+1037.	Check block layout is regular in ADF. 
