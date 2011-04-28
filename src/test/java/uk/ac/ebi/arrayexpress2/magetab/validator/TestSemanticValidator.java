@@ -7,16 +7,10 @@ import org.mged.magetab.error.ErrorItem;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.MAGETABInvestigation;
 import uk.ac.ebi.arrayexpress2.magetab.exception.ParseException;
 import uk.ac.ebi.arrayexpress2.magetab.listener.ErrorItemListener;
-import uk.ac.ebi.arrayexpress2.magetab.parser.AbstractParser;
 import uk.ac.ebi.arrayexpress2.magetab.parser.MAGETABParser;
-import uk.ac.ebi.arrayexpress2.magetab.parser.Parser;
 
-import java.io.File;
-import java.io.OutputStream;
-import java.net.URISyntaxException;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Javadocs go here!
@@ -32,15 +26,15 @@ public class TestSemanticValidator extends TestCase {
     private URL idfResource;
 
     public void setUp() {
-        idfResource = getClass().getClassLoader().getResource("E-MEXP-986/E-MEXP-986.idf.txt");
+//        idfResource = getClass().getClassLoader().getResource("E-MEXP-986/E-MEXP-986.idf.txt");
         try {
-            validator = new SemanticValidator(new File(idfResource.toURI()).getAbsolutePath());
-            parser = new MAGETABParser(validator);
+            idfResource = new URL("http://www.ebi.ac.uk/microarray-as/ae/files/E-TABM-886/E-TABM-886.idf.txt");
         }
-        catch (URISyntaxException e) {
-            e.printStackTrace();
+        catch (MalformedURLException e) {
             fail();
         }
+        validator = new SemanticValidator(idfResource.getFile());
+        parser = new MAGETABParser(validator);
     }
 
     public void tearDown() {
@@ -50,10 +44,12 @@ public class TestSemanticValidator extends TestCase {
     public void testParseAndValidate() {
         parser.addErrorItemListener(new ErrorItemListener() {
             public void errorOccurred(ErrorItem item) {
-                System.out.println("Next error -\t" + item.getErrorCode() + ":\t" + item.getMesg() + " " + item.getComment());
+                System.out
+                        .println("Next error -\t" + item.getErrorCode() + ":\t" + item.getMesg() + " " +
+                                         item.getComment());
             }
         });
-        
+
         try {
             parser.parse(idfResource);
         }
