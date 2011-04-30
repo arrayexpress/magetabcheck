@@ -377,13 +377,19 @@ public class AnnotareValidator
                                        + idfFile.getName() + ".");
             mfu.printStackTrace();
         }
+        catch (ValidateException e) {
+            for (ErrorItem err : e.getErrorItems()) {
+                annErr.addErrorItem(err);
+            }
+            e.printStackTrace();
+        }
         catch (ParseException pe) {
             pe.printStackTrace();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-        semanticValidation(this.investigation);
+//        semanticValidation(this.investigation);
 
         return annErr.getErrorList();
     }
@@ -405,13 +411,19 @@ public class AnnotareValidator
                                        + sdrfFile.getName() + ".");
             mfu.printStackTrace();
         }
+        catch (ValidateException e) {
+            for (ErrorItem err : e.getErrorItems()) {
+                annErr.addErrorItem(err);
+            }
+            e.printStackTrace();
+        }
         catch (ParseException pe) {
             pe.printStackTrace();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-        semanticValidation(this.investigation);
+//        semanticValidation(this.investigation);
 
         return annErr.getErrorList();
     }
@@ -467,20 +479,22 @@ public class AnnotareValidator
         String logFullName = idfPath + File.separatorChar + parseLog;
         this.sdrfFile = findSDRF(inIDFFileName);
         //instantiate the validator and pass it to the parser, instead of 'null'
-        SemanticValidator sv = new SemanticValidator(inIDFFileName);
-        MAGETABParser mageTabParser = new MAGETABParser(sv);
+        // no longer necessary to instantiate and pass, just create parser instead
+//        SemanticValidator sv = new SemanticValidator(inIDFFileName);
+//        MAGETABParser mageTabParser = new MAGETABParser(sv);
+        MAGETABParser mageTabParser = new MAGETABParser();
         mageTabParser.addErrorItemListener(getListener());
         /*
            * class loader that can load class from different jar files
            * also common interface for all of these files
            * declare SV as a generic and use class loader to choose SV based on what's available
            */
-        if (this.dataValidation == true) {
-            sv.setDataValOn();
-        }
-        else {
-            sv.setDataValOff();
-        }
+//        if (this.dataValidation == true) {
+//            sv.setDataValOn();
+//        }
+//        else {
+//            sv.setDataValOff();
+//        }
         if (idfFile != null) {
             URL fileURL;
             try {
@@ -848,20 +862,22 @@ public class AnnotareValidator
     }
 
     public ArrayList<ErrorItem> semanticValidation(MAGETABInvestigation I) {
-        SemanticValidator sv = new SemanticValidator(annErr);
-        //sv.testDebug = true;
-        try {
-            System.out.println("Semantic validation call");
-            sv.validate(I);
-        }
-        catch (ValidateException ve) {
-            ve.printStackTrace();
-        }
+//        SemanticValidator sv = new SemanticValidator(annErr);
+//        //sv.testDebug = true;
+//        try {
+//            System.out.println("Semantic validation call");
+//            sv.validate(I);
+//        }
+//        catch (ValidateException ve) {
+//            ve.printStackTrace();
+//        }
+//
+//        ArrayList<ErrorItem> al = sv.getErrors();
+//
+//        System.out.println("Semantic validation call: failed");
+//        return al;
 
-        ArrayList<ErrorItem> al = sv.getErrors();
-
-        System.out.println("Semantic validation call: failed");
-        return al;
+        return annErr.getAllItems();
     }
 
 }

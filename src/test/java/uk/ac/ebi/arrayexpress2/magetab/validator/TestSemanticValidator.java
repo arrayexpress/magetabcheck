@@ -21,7 +21,7 @@ import java.net.URL;
 public class TestSemanticValidator extends TestCase {
     private MAGETABParser parser;
     private AnnotareError errors;
-    private Validator<MAGETABInvestigation> validator;
+//    private Validator<MAGETABInvestigation> validator;
 
     private URL idfResource;
 
@@ -33,8 +33,9 @@ public class TestSemanticValidator extends TestCase {
         catch (MalformedURLException e) {
             fail();
         }
-        validator = new SemanticValidator(idfResource.getFile());
-        parser = new MAGETABParser(validator);
+        // no need to construct, should get auto discovered
+//        validator = new SemanticValidator(idfResource.getFile());
+        parser = new MAGETABParser();
     }
 
     public void tearDown() {
@@ -45,8 +46,8 @@ public class TestSemanticValidator extends TestCase {
         parser.addErrorItemListener(new ErrorItemListener() {
             public void errorOccurred(ErrorItem item) {
                 System.out
-                        .println("Next error -\t" + item.getErrorCode() + ":\t" + item.getMesg() + " " +
-                                         item.getComment());
+                        .println("Next error - line " + item.getLine() + ", col " + item.getCol() + "\t" +
+                                         item.getErrorCode() + ":\t" + item.getMesg() + " " + item.getComment());
             }
         });
 

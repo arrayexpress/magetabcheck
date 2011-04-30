@@ -32,9 +32,15 @@ import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.FactorValue
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.ParameterValueAttribute;
 import uk.ac.ebi.arrayexpress2.magetab.exception.ValidateException;
 import uk.ac.ebi.arrayexpress2.magetab.handler.MAGETABValidateHandler;
+import uk.ac.ebi.arrayexpress2.magetab.utils.MAGETABUtils;
 
 import java.awt.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -107,47 +113,47 @@ public class SemanticValidator extends MAGETABValidateHandler {
      */
     @Override
     public void validateData(MAGETABInvestigation investigation) throws ValidateException {
-        try {
-            // create AnnotareError to collect all errors
-            AnnotareError annError = new AnnotareError();
+        // create AnnotareError to collect all errors
+        AnnotareError annError = new AnnotareError();
 
-            if (investigation.IDF.getLocation() == null) {
-                System.out.println("IDF location is null.");
-                createEvent("IDF location is null.", 999, "validate", annError);
-                ArrayList<ErrorItem> errors = annError.getAllItems();
-                ErrorItem[] errorItemArray = errors.toArray(new ErrorItem[errors.size()]);
-                throw new ValidateException(true,
-                                            "Cannot locate IDF, unable to resolve relative paths",
-                                            errorItemArray);
-            }
-            System.out.println("Semantic validation: validate method");
-
-            //get list of TermSource Names from IDF
-            List<String> tsrList = investigation.IDF.termSourceName;
-            this.tsrStr = tsrList.toString();
-
-            boolean success = false;
-            boolean failIDF = false;
-            boolean failSDRF = false;
-            boolean failRefs = false;
-            if (investigation.IDF != null) {
-                failIDF = checkIDF(investigation.IDF, annError);
-            }
-            if (investigation.SDRF != null && investigation.IDF.sdrfFile != null) {
-                failSDRF = checkSDRF(investigation.SDRF, investigation, annError);
-            }
-            if (investigation.SDRF != null && investigation.IDF != null) {
-                failRefs = checkRefs(investigation, annError);
-            }
-            if (failIDF == false && failSDRF == false && failRefs == false) {
-                success = true;
-            }
-            System.out.println("Semantic validation: validate method check complete");
+        if (investigation.IDF.getLocation() == null) {
+            System.out.println("IDF location is null.");
+            createEvent(annError, "IDF location is null.", 999, "validate",
+                        investigation.IDF.getLocation().toString());
+            ArrayList<ErrorItem> errors = annError.getAllItems();
+            ErrorItem[] errorItemArray = errors.toArray(new ErrorItem[errors.size()]);
+            throw new ValidateException(true,
+                                        "Cannot locate IDF, unable to resolve relative paths",
+                                        errorItemArray);
         }
-        catch (NullPointerException e) {
-            System.err.println("Semantic Validator caused a NPE...");
-            e.printStackTrace();
-            throw e;
+        System.out.println("Semantic validation: validate method");
+
+        //get list of TermSource Names from IDF
+        List<String> tsrList = investigation.IDF.termSourceName;
+        this.tsrStr = tsrList.toString();
+
+        boolean success = false;
+        boolean failIDF = false;
+        boolean failSDRF = false;
+        boolean failRefs = false;
+        if (investigation.IDF != null) {
+            failIDF = checkIDF(investigation.IDF, annError);
+        }
+        if (investigation.SDRF != null && investigation.IDF.sdrfFile != null) {
+            failSDRF = checkSDRF(investigation.SDRF, investigation, annError);
+        }
+        if (investigation.SDRF != null && investigation.IDF != null) {
+            failRefs = checkRefs(investigation, annError);
+        }
+        if (failIDF == false && failSDRF == false && failRefs == false) {
+            success = true;
+        }
+        Collection<ErrorItem> errItems = annError.getAllItems();
+        ErrorItem[] errArray = errItems.toArray(new ErrorItem[errItems.size()]);
+        System.out.println("Semantic validation: validate method check complete, " + errItems.size() + " errors");
+        if (!errItems.isEmpty()) {
+            if (annError.countErrors() > 0)
+            throw new ValidateException(annError.countErrors() > 0, errArray);
         }
     }
 
@@ -290,11 +296,11 @@ public class SemanticValidator extends MAGETABValidateHandler {
 //		label = label.toLowerCase();
 //		label = label.replace(" ", "");
         if (tag.equals("")) {
-            createEvent(annError, "IDF date tag " + label + " is empty", 1015, "validation error",
-                        idf.getLocation().toString(),
+            createEvent(annError, "IDF date tag " + label + " is empty", 1015, "checkTextTag",
+                        idf.getLocation().toString(), "validation error",
                         idf.getLayout().getLineNumberForHeader(label),
-                        -1,
-                        "checkTextTag");
+                        -1
+            );
         }
         return check;
     }
@@ -307,11 +313,11 @@ public class SemanticValidator extends MAGETABValidateHandler {
 //		label = label.toLowerCase();
 //		label = label.replace(" ", "");
         if (tag.equals("")) {
-            createEvent(annError, "IDF date tag " + label + " is missing", 1015, "validation error",
-                        idf.getLocation().toString(),
+            createEvent(annError, "IDF date tag " + label + " is missing", 1015, "checkDateTag",
+                        idf.getLocation().toString(), "validation error",
                         idf.getLayout().getLineNumberForHeader(label),
-                        -1,
-                        "checkDateTag");
+                        -1
+            );
 
 //			check = true;
         }
@@ -324,11 +330,10 @@ public class SemanticValidator extends MAGETABValidateHandler {
                 createEvent(annError,
                             "Incorrect date format for " + label + ": " + tag + "; use format: YYYY-MM-DD",
                             1008,
-                            "validation error",
-                            idf.getLocation().toString(),
+                            "checkDateTag", idf.getLocation().toString(), "validation error",
                             idf.getLayout().getLineNumberForHeader(label),
-                            -1,
-                            "checkDateTag");
+                            -1
+                );
                 check = true;
             }
         }
@@ -355,21 +360,21 @@ public class SemanticValidator extends MAGETABValidateHandler {
                     //Error Code is fudged; this is not currently a MAGE-TAB error  
                     createEvent(annError, "Experiment date and Publication date "
                             + "are out of sync: Experiment Date logically precedes "
-                            + "Publication date.", 1039, "validation warning",
-                                idf.getLocation().toString(),
+                            + "Publication date.", 1039, "checkDateOrder", idf.getLocation().toString(),
+                                "validation warning",
                                 idf.getLayout().getLineNumberForHeader("Date of Experiment"),
-                                -1,
-                                "checkDateOrder");
+                                -1
+                    );
                 }
             }
             catch (ParseException pe) {
                 //This error code is correct for date format.
                 createEvent(annError, "Incorrect date format for date: " + dateStr
-                        + "; use format: YYYY-MM-DD", 1008, "validation error",
-                            idf.getLocation().toString(),
+                        + "; use format: YYYY-MM-DD", 1008, "checkDateOrder", idf.getLocation().toString(),
+                            "validation error",
                             idf.getLayout().getLineNumberForHeader("Date of Experiment"),
-                            -1,
-                            "checkDateOrder");
+                            -1
+                );
             }
         }
         return ordered;
@@ -386,8 +391,8 @@ public class SemanticValidator extends MAGETABValidateHandler {
         int people = 0;
         if (idf.personLastName == null) {
             //first Person cannot be null
-            createEvent("Error: required IDF tag 'personLastName' is missing",
-                        24, "checkPerson", annError);
+            createEvent(annError, "Error: required IDF tag 'personLastName' is missing",
+                        24, "checkPerson", idf.getLocation().toString());
             check = true;
         }
         else {
@@ -398,53 +403,53 @@ public class SemanticValidator extends MAGETABValidateHandler {
 //				label = label.replace(" ", "");
                 if (lastName.equals("")) {
                     createEvent(annError, "Error: lastName in IDF column " + (i + 2)
-                            + " is missing", 24, "validation error",
-                                idf.getLocation().toString(),
+                            + " is missing", 24, "checkPerson", idf.getLocation().toString(), "validation error",
                                 idf.getLayout().getLineNumberForHeader("Person Last Name"),
-                                -1,
-                                "checkPerson");
+                                -1
+                    );
                     check = true;
                 }
             }
         }
         if (idf.personEmail == null) {
             //email cannot be null; generates line, column = -1,-1 due to defaults in ErrorItem.
-            createEvent("Error: tag 'personEmail' in IDF is missing", 24,
-                        "checkPerson", annError);
+            createEvent(annError, "Error: tag 'personEmail' in IDF is missing", 24,
+                        "checkPerson", idf.getLocation().toString());
             check = true;
         }
         else {
             if (idf.personEmail.size() < 1) {
                 //generates line, column = -1,-1 due to defaults in ErrorItem.
-                createEvent("Error: At least one Email address must be provided in IDF", 24,
-                            "checkPerson", annError);
+                createEvent(annError, "Error: At least one Email address must be provided in IDF", 24,
+                            "checkPerson", idf.getLocation().toString());
                 check = true;
             }
             else if (idf.personEmail.size() < people) {
                 for (int i = 0; i < idf.personEmail.size(); i++) {
                     if (idf.personEmail.get(i) == null) {
                         createEvent(annError, "Warning: Email address for " + idf.personLastName.get(i)
-                                + " in IDF is missing", 1015, "validation warning",
-                                    idf.getLocation().toString(),
+                                + " in IDF is missing", 1015, "checkPerson", idf.getLocation().toString(),
+                                    "validation warning",
                                     idf.getLayout().getLineNumberForHeader("Person Email"),
-                                    -1,
-                                    "checkPerson");
+                                    -1
+                        );
                     }
                 }
             }
         }
         if (idf.personRoles == null) {
             //role should not be null
-            createEvent("Error: IDF tag 'personRole' is missing", 24, "checkPerson", annError);
+            createEvent(annError, "Error: IDF tag 'personRole' is missing", 24, "checkPerson",
+                        idf.getLocation().toString());
             check = true;
         }
         else {
             if (idf.personRoles.size() < 1) {
-                createEvent(annError, "Error: At least one Role must be provided in IDF", 24, "validation error",
-                            idf.getLocation().toString(),
+                createEvent(annError, "Error: At least one Role must be provided in IDF", 24, "checkPerson",
+                            idf.getLocation().toString(), "validation error",
                             idf.getLayout().getLineNumberForHeader("Person Roles"),
-                            -1,
-                            "checkPerson");
+                            -1
+                );
                 check = true;
             }
             else if (idf.personRoles.size() < people) {
@@ -456,11 +461,10 @@ public class SemanticValidator extends MAGETABValidateHandler {
                         createEvent(annError,
                                     "Error: Role for " + idf.personLastName.get(i) + " in IDF is missing",
                                     24,
-                                    "validation error",
-                                    idf.getLocation().toString(),
+                                    "checkPerson", idf.getLocation().toString(), "validation error",
                                     idf.getLayout().getLineNumberForHeader("Person Roles"),
-                                    i + 2,
-                                    "checkPerson");
+                                    i + 2
+                        );
                         check = true;
                     }
                 }
@@ -478,11 +482,10 @@ public class SemanticValidator extends MAGETABValidateHandler {
                 createEvent(annError,
                             "Error: IDF: at least one Person must have Role = 'submitter'",
                             24,
-                            "validation error",
-                            idf.getLocation().toString(),
+                            "checkPerson", idf.getLocation().toString(), "validation error",
                             idf.getLayout().getLineNumberForHeader("Person Roles"),
-                            -1,
-                            "checkPerson");
+                            -1
+                );
 
                 check = true;
             }
@@ -521,11 +524,11 @@ public class SemanticValidator extends MAGETABValidateHandler {
             ArrayList<String> al = (ArrayList<String>) tmp.get(key);
             if (al == null || al.size() == 0) {
                 createEvent(annError, "Incomplete name information in IDF: "
-                        + key + " is missing", 1015, "validation missingData",
-                            idf.getLocation().toString(),
+                        + key + " is missing", 1015, "checkPerson", idf.getLocation().toString(),
+                            "validation missingData",
                             idf.getLayout().getLineNumberForHeader(key),
-                            -1,
-                            "checkPerson");
+                            -1
+                );
 
             }
             else {
@@ -537,30 +540,28 @@ public class SemanticValidator extends MAGETABValidateHandler {
                         String s = al.get(j);
                         if (s == null || s.equals("")) {
                             createEvent(annError, "Incomplete information in IDF for " + lastName + "; "
-                                    + key + " is empty", 1015, "validation warning",
-                                        idf.getLocation().toString(),
+                                    + key + " is empty", 1015, "checkPerson", idf.getLocation().toString(),
+                                        "validation warning",
                                         idf.getLayout().getLineNumberForHeader(key),
-                                        j + 2,
-                                        "checkPerson");
+                                        j + 2
+                            );
 
                         }
                     }
                 }
                 catch (NullPointerException npe) {
                     createEvent(annError, "Incomplete information in IDF for " + lastName + "; " + key + " is empty",
-                                1015, "validation warning",
-                                idf.getLocation().toString(),
+                                1015, "checkPerson", idf.getLocation().toString(), "validation warning",
                                 idf.getLayout().getLineNumberForHeader(key),
-                                j + 2,
-                                "checkPerson");
+                                j + 2
+                    );
                 }
                 catch (IndexOutOfBoundsException iob) {
                     createEvent(annError, "Incomplete information in IDF for " + lastName + "; " + key + " is empty",
-                                1015, "validation warning",
-                                idf.getLocation().toString(),
+                                1015, "checkPerson", idf.getLocation().toString(), "validation warning",
                                 idf.getLayout().getLineNumberForHeader(key),
-                                j + 2,
-                                "checkPerson");
+                                j + 2
+                    );
                 }
             }
         }
@@ -589,7 +590,7 @@ public class SemanticValidator extends MAGETABValidateHandler {
         else {
             //not really an error, but should be noted anyway
             createEvent(annError, "Information: IDF, no document identifier information was supplied", 1015,
-                        "validation warning", "checkPub");
+                        "checkPub", idf.getLocation().toString(), "validation warning");
         }
 //System.out.println("numDocs: " + numDocs);
 
@@ -624,8 +625,8 @@ public class SemanticValidator extends MAGETABValidateHandler {
             ArrayList<String> al = (ArrayList<String>) tmp.get(key);
             if (al == null || al.size() == 0) {
                 createEvent(annError, "Incomplete name information in IDF: "
-                        + key + " is missing", 1015, "validation missingData",
-                            idf.getLocation().toString(), idf.getLayout().getLineNumberForHeader(key), -1, "checkPub");
+                        + key + " is missing", 1015, "checkPub", idf.getLocation().toString(), "validation missingData",
+                            idf.getLayout().getLineNumberForHeader(key), -1);
             }
             else {
                 int j = 0;
@@ -634,29 +635,26 @@ public class SemanticValidator extends MAGETABValidateHandler {
                         String s = al.get(j);
                         if (s == null || s.equals("")) {
                             createEvent(annError, "Incomplete information in IDF: " + key + " is empty",
-                                        1015, "validation warning",
-                                        idf.getLocation().toString(),
+                                        1015, "checkPub", idf.getLocation().toString(), "validation warning",
                                         idf.getLayout().getLineNumberForHeader(key),
-                                        j + 2,
-                                        "checkPub");
+                                        j + 2
+                            );
                         }
                     }
                 }
                 catch (NullPointerException npe) {
                     createEvent(annError, "Incomplete information in IDF: " + key + " is empty",
-                                1015, "validation warning",
-                                idf.getLocation().toString(),
+                                1015, "checkPub", idf.getLocation().toString(), "validation warning",
                                 idf.getLayout().getLineNumberForHeader(key),
-                                j + 2,
-                                "checkPub");
+                                j + 2
+                    );
                 }
                 catch (IndexOutOfBoundsException iob) {
                     createEvent(annError, "Incomplete information in IDF: " + key + " is empty",
-                                1015, "validation warning",
-                                idf.getLocation().toString(),
+                                1015, "checkPub", idf.getLocation().toString(), "validation warning",
                                 idf.getLayout().getLineNumberForHeader(key),
-                                j + 2,
-                                "checkPub");
+                                j + 2
+                    );
                 }
             }
         }
@@ -672,7 +670,8 @@ public class SemanticValidator extends MAGETABValidateHandler {
         int numProtocols = 0;
         if (idf.protocolName == null) {
             //Protocol names needed
-            createEvent("Error: required IDF tag 'protocolName' is missing", 24, "checkIDFProtocol", annError);
+            createEvent(annError, "Error: required IDF tag 'protocolName' is missing", 24, "checkIDFProtocol",
+                        idf.getLocation().toString());
             check = true;
         }
         else {
@@ -682,17 +681,17 @@ public class SemanticValidator extends MAGETABValidateHandler {
                 String protocolName = idf.protocolName.get(i);
                 if (protocolName == null || protocolName.equals("")) {
                     createEvent(annError, "Incomplete information in IDF: Protocol Name is empty",
-                                1015, "validation warning",
-                                idf.getLocation().toString(),
+                                1015, "checkIDFProtocol", idf.getLocation().toString(), "validation warning",
                                 idf.getLayout().getLineNumberForHeader("Protocol Name"),
-                                -1,
-                                "checkIDFProtocol");
+                                -1
+                    );
                 }
             }
         }
         if (idf.protocolType == null) {
             //protocol type is essential
-            createEvent("Error: protocolType is missing", 24, "checkIDFProtocol", annError);
+            createEvent(annError, "Error: protocolType is missing", 24, "checkIDFProtocol",
+                        idf.getLocation().toString());
             check = true;
         }
         else {
@@ -708,11 +707,11 @@ public class SemanticValidator extends MAGETABValidateHandler {
 //					label = label.toLowerCase();
 //					label = label.replace(" ", "");
                     createEvent(annError, "Incomplete information in IDF: Protocol Type for "
-                            + protocolName + " is empty", 1015, "validation warning",
-                                idf.getLocation().toString(),
+                            + protocolName + " is empty", 1015, "checkIDFProtocol", idf.getLocation().toString(),
+                                "validation warning",
                                 idf.getLayout().getLineNumberForHeader("Protocol Type"),
-                                i + 1,
-                                "checkIDFProtocol");
+                                i + 1
+                    );
                 }
             }
         }
@@ -750,8 +749,9 @@ public class SemanticValidator extends MAGETABValidateHandler {
             ArrayList<String> al = (ArrayList<String>) tmp.get(key);
             if (al == null || al.size() == 0) {
                 createEvent(annError, "Incomplete name information in IDF: "
-                        + key + " not supplied", 1015, "validation missingData",
-                            idf.getLocation().toString(), 0, 0, "checkIDFProtocol");
+                        + key + " not supplied", 1015, "checkIDFProtocol", idf.getLocation().toString(),
+                            "validation missingData",
+                            0, 0);
             }
             else {
                 while (al.size() < numProtocols) {
@@ -765,29 +765,26 @@ public class SemanticValidator extends MAGETABValidateHandler {
                         if (s == null || s.equals("")) {
                             createEvent(annError, "Incomplete information in IDF: " + key + " for Protocol "
                                     + idf.protocolName.get(j) + " is empty",
-                                        1015, "validation warning",
-                                        idf.getLocation().toString(),
+                                        1015, "checkIDFProtocol", idf.getLocation().toString(), "validation warning",
                                         idf.getLayout().getLineNumberForHeader(key),
-                                        j + 2,
-                                        "checkIDFProtocol");
+                                        j + 2
+                            );
                         }
                     }
                 }
                 catch (NullPointerException npe) {
                     createEvent(annError, "Incomplete information in IDF: " + key + " not supplied",
-                                1015, "validation warning",
-                                idf.getLocation().toString(),
+                                1015, "checkIDFProtocol", idf.getLocation().toString(), "validation warning",
                                 idf.getLayout().getLineNumberForHeader(key),
-                                j + 2,
-                                "checkIDFProtocol");
+                                j + 2
+                    );
                 }
                 catch (IndexOutOfBoundsException iob) {
                     createEvent(annError, "Incomplete information in IDF: " + key + " is empty",
-                                1015, "validation warning",
-                                idf.getLocation().toString(),
+                                1015, "checkIDFProtocol", idf.getLocation().toString(), "validation warning",
                                 idf.getLayout().getLineNumberForHeader(key),
-                                j + 2,
-                                "checkIDFProtocol");
+                                j + 2
+                    );
                 }
             }
         }
@@ -803,11 +800,11 @@ public class SemanticValidator extends MAGETABValidateHandler {
 //		label = label.toLowerCase();
 //		label = label.replace(" ", "");
         if (tag == null || tag.equals("")) {
-            createEvent(annError, "IDF tag " + label + " is null", 1015, "validation warning",
-                        idf.getLocation().toString(),
+            createEvent(annError, "IDF tag " + label + " is null", 1015, "checkArrayTag", idf.getLocation().toString(),
+                        "validation warning",
                         idf.getLayout().getLineNumberForHeader(label),
-                        -1,
-                        "checkArrayTag");
+                        -1
+            );
             check = true;
         }
 
@@ -825,8 +822,8 @@ public class SemanticValidator extends MAGETABValidateHandler {
         int numNames = 0;
         if (names == null) {
             //At least one type is expected
-            createEvent("Error: required IDF tag " + label + " is missing", 24,
-                        "checkTermSources", annError);
+            createEvent(annError, "Error: required IDF tag " + label + " is missing", 24,
+                        "checkTermSources", idf.getLocation().toString());
             check = true;
         }
         else {
@@ -834,11 +831,10 @@ public class SemanticValidator extends MAGETABValidateHandler {
             numNames = names.size();
             if (numNames == 0) {
                 createEvent(annError, "Incomplete information in IDF: " + label + " is missing",
-                            1015, "validation warning",
-                            idf.getLocation().toString(),
+                            1015, "checkTermSources", idf.getLocation().toString(), "validation warning",
                             idf.getLayout().getLineNumberForHeader(label),
-                            -1,
-                            "checkTermSources");
+                            -1
+                );
 
             }
             while (urls.size() < numNames) {
@@ -857,11 +853,10 @@ public class SemanticValidator extends MAGETABValidateHandler {
 //					label = label.toLowerCase();
 //					label = label.replace(" ", "");
                     createEvent(annError, "Incomplete information in IDF: " + label + " is empty",
-                                1015, "validation warning",
-                                idf.getLocation().toString(),
+                                1015, "checkTermSources", idf.getLocation().toString(), "validation warning",
                                 idf.getLayout().getLineNumberForHeader("Term Source Name"),
-                                i + 2,
-                                "checkTermSources");
+                                i + 2
+                    );
                 }
                 else {
                     //Bandaid method to catch duplicate term source names; NOTE: NOT an error.  
@@ -879,8 +874,8 @@ public class SemanticValidator extends MAGETABValidateHandler {
                         createEvent(annError, "Duplicate information in IDF for " + label + ": "
                                 + sourceName + " is duplicated in row " + p.x + ", columns: "
                                 + pcol + " and " + qcol + ".",
-                                    21, "validation warning",
-                                    idf.getLocation().toString(), p.x, i + 2, "checkTermSources");
+                                    21, "checkTermSources", idf.getLocation().toString(), "validation warning",
+                                    p.x, i + 2);
                     }
                     else {
                         //keys are sourceName, NOT Point.  Note: could use i+2, but didn't for consistency
@@ -889,19 +884,17 @@ public class SemanticValidator extends MAGETABValidateHandler {
                 }
                 if (url == null || url.equals("")) {
                     createEvent(annError, "Incomplete information in IDF: Term Source File is empty",
-                                1015, "validation warning",
-                                idf.getLocation().toString(),
+                                1015, "checkTermSources", idf.getLocation().toString(), "validation warning",
                                 idf.getLayout().getLineNumberForHeader("Term Source File"),
-                                i + 2,
-                                "checkTermSources");
+                                i + 2
+                    );
                 }
                 if (version == null || version.equals("")) {
                     createEvent(annError, "Incomplete information in IDF: Term Source Version is empty",
-                                1015, "validation warning",
-                                idf.getLocation().toString(),
+                                1015, "checkTermSources", idf.getLocation().toString(), "validation warning",
                                 idf.getLayout().getLineNumberForHeader("Term Source Version"),
-                                i + 2,
-                                "checkTermSources");
+                                i + 2
+                    );
                 }
             }
         }
@@ -945,11 +938,10 @@ public class SemanticValidator extends MAGETABValidateHandler {
         if (idf.getLayout().getLineNumberForHeader(label) == -1) {
             //At least one type is expected
             createEvent(annError, "Incomplete information in IDF: " + label + " was not supplied",
-                        1015, "validation warning",
-                        idf.getLocation().toString(),
+                        1015, "checkTagAndTermSource", idf.getLocation().toString(), "validation warning",
                         idf.getLayout().getLineNumberForHeader(label),
-                        -1,
-                        "checkTagAndTermSource");
+                        -1
+            );
             check = true;
         }
         else if (types == null || types.size() == 0) {
@@ -957,11 +949,10 @@ public class SemanticValidator extends MAGETABValidateHandler {
             numTypes = types.size();
             if (numTypes == 0) {
                 createEvent(annError, "Incomplete information in IDF: " + label + " is empty",
-                            1015, "validation warning",
-                            idf.getLocation().toString(),
+                            1015, "checkTagAndTermSource", idf.getLocation().toString(), "validation warning",
                             idf.getLayout().getLineNumberForHeader(label),
-                            -1,
-                            "checkTagAndTermSource");
+                            -1
+                );
             }
         }
         else {
@@ -979,11 +970,10 @@ public class SemanticValidator extends MAGETABValidateHandler {
                 String typeName = types.get(i);
                 if (typeName == "") {
                     createEvent(annError, "Incomplete information in IDF: " + label + " has no value",
-                                1015, "validation warning",
-                                idf.getLocation().toString(),
+                                1015, "checkTagAndTermSource", idf.getLocation().toString(), "validation warning",
                                 idf.getLayout().getLineNumberForHeader(label),
-                                -1,
-                                "checkTagAndTermSource");
+                                -1
+                    );
                 }
 /*				//The next line doesn't work
 				int line = mti.getLocationTracker().getIDFLocations(label);
@@ -1004,29 +994,26 @@ public class SemanticValidator extends MAGETABValidateHandler {
 //					label = label.replace(" ", "");
                     if (idf.getLayout().getLineNumberForHeader(REFLabel.toString()) == -1) {
                         createEvent(annError, "Incomplete information in IDF: " + label + " has no Term Source REF",
-                                    1015, "validation warning",
-                                    idf.getLocation().toString(),
+                                    1015, "checkTagAndTermSource", idf.getLocation().toString(), "validation warning",
                                     idf.getLayout().getLineNumberForHeader(label),
-                                    i + 2,
-                                    "checkTagAndTermSource");
+                                    i + 2
+                        );
                     }
                     else {
                         createEvent(annError, "Incomplete information in IDF: " + REFLabel.toString() + " has no value",
-                                    1015, "validation warning",
-                                    idf.getLocation().toString(),
+                                    1015, "checkTagAndTermSource", idf.getLocation().toString(), "validation warning",
                                     idf.getLayout().getLineNumberForHeader(label),
-                                    i + 2,
-                                    "checkTagAndTermSource");
+                                    i + 2
+                        );
                     }
                 }
                 else {
                     if (sourceName.contains("Type")) {
                         createEvent(annError, "Incorrect IDF header: Term Source REF tag does not include 'Type'",
-                                    3, "validation error",
-                                    idf.getLocation().toString(),
+                                    3, "checkTagAndTermSource", idf.getLocation().toString(), "validation error",
                                     idf.getLayout().getLineNumberForHeader(label),
-                                    i + 2,
-                                    "checkTagAndTermSource");
+                                    i + 2
+                        );
                     }
 
                 }
@@ -1034,11 +1021,10 @@ public class SemanticValidator extends MAGETABValidateHandler {
                     String myTag = tags.get(i);
                     if (myTag == null || myTag.equals("")) {
                         createEvent(annError, "Incomplete information in IDF: " + label + " is empty",
-                                    1015, "validation warning",
-                                    idf.getLocation().toString(),
+                                    1015, "checkTagAndTermSource", idf.getLocation().toString(), "validation warning",
                                     idf.getLayout().getLineNumberForHeader(label),
-                                    i + 2,
-                                    "checkTagAndTermSource");
+                                    i + 2
+                        );
                     }
                 }
             }
@@ -1220,43 +1206,47 @@ public class SemanticValidator extends MAGETABValidateHandler {
             }
 
             if (sourceName.equals("")) {
-                createEvent(annError, "Error: at least one Sample has no Source name", 25, "validation error",
-                            mti.SDRF.getLocation().toString(), x, y, "checkSources");
+                createEvent(annError, "Error: at least one Sample has no Source name", 25, "checkSources",
+                            mti.SDRF.getLocation().toString(), "validation error",
+                            x, y);
                 check = true;
             }
             if (source.materialType != null && source.materialType.getNodeName().equals("")) {
                 createEvent(annError,
                             "Incomplete information for " + sourceName + "; value for materialType is missing",
                             1016,
-                            "validation warning",
-                            mti.SDRF.getLocation().toString(), x, y, "checkSources");
+                            "checkSources", mti.SDRF.getLocation().toString(), "validation warning",
+                            x, y);
             }
             else if (source.materialType == null) {
                 createEvent(annError, "Incomplete information for " + sourceName + "; materialType not supplied", 1016,
-                            "validation missingData",
-                            mti.SDRF.getLocation().toString(), x, y, "checkSources");
+                            "checkSources", mti.SDRF.getLocation().toString(), "validation missingData",
+                            x, y);
 
             }
             else if (source.materialType != null) {
                 String materialName = source.materialType.getNodeName();
                 if (source.materialType.termSourceREF != null && source.materialType.termSourceREF.equals("")) {
                     createEvent(annError, "Incomplete information for " + sourceName
-                            + "; MaterialType " + materialName + " has no Term Source", 1005, "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkSources");
+                            + "; MaterialType " + materialName + " has no Term Source", 1005, "checkSources",
+                                mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
 
                 }
                 else if (source.materialType.termSourceREF == null) {
                     createEvent(annError,
                                 "Incomplete information for " + sourceName +
                                         "; Material Type Term Source not supplied for "
-                                        + materialName, 1016, "validation missingData",
-                                mti.SDRF.getLocation().toString(), x, y, "checkSources");
+                                        + materialName, 1016, "checkSources", mti.SDRF.getLocation().toString(),
+                                "validation missingData",
+                                x, y);
                 }
                 else if (!tsrStr.contains(source.materialType.termSourceREF)) {
                     createEvent(annError,
                                 "Term Source REF, " + source.materialType.termSourceREF + ", for Material Type "
-                                        + materialName + " is not declared in the IDF", 6, "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkSources");
+                                        + materialName + " is not declared in the IDF", 6, "checkSources",
+                                mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
             }
 
@@ -1264,15 +1254,15 @@ public class SemanticValidator extends MAGETABValidateHandler {
                 createEvent(annError,
                             "Incomplete information for " + sourceName + "; value for provider is missing",
                             1016,
-                            "validation warning",
-                            mti.SDRF.getLocation().toString(), x, y, "checkSources");
+                            "checkSources", mti.SDRF.getLocation().toString(), "validation warning",
+                            x, y);
             }
             else if (source.provider == null) {
                 createEvent(annError,
                             "Incomplete information for " + sourceName + "; provider not supplied",
                             1016,
-                            "validation missingData",
-                            mti.SDRF.getLocation().toString(), x, y, "checkSources");
+                            "checkSources", mti.SDRF.getLocation().toString(), "validation missingData",
+                            x, y);
             }
 
             //changes for the new magetab_parser.jar
@@ -1293,52 +1283,55 @@ public class SemanticValidator extends MAGETABValidateHandler {
                 if (attr != null && attr.getNodeName().equals("")) {
                     createEvent(annError, "Incomplete information for " + sourceName
                             + "; Characteristic " + attrType + " nas no value", 1016,
-                                "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkSources");
+                                "checkSources", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 if (attr.termSourceREF != null && attr.termSourceREF.equals("")) {
                     createEvent(annError, "Incomplete information for " + sourceName
                             + "; Characteristic " + attrType + " has no Term Source", 1005,
-                                "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkSources");
+                                "checkSources", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 else if (attr.termSourceREF == null) {
                     createEvent(annError, "Incomplete information for " + sourceName + "; Term Source not supplied for "
-                            + attrType, 1016, "validation missingData",
-                                mti.SDRF.getLocation().toString(), x, y, "checkSources");
+                            + attrType, 1016, "checkSources", mti.SDRF.getLocation().toString(),
+                                "validation missingData",
+                                x, y);
                 }
                 else if (!tsrStr.contains(attr.termSourceREF)) {
                     createEvent(annError, "Term Source REF, " + attr.termSourceREF + ", for Characteristic "
-                            + attrType + " is not declared in the IDF", 6, "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkSources");
+                            + attrType + " is not declared in the IDF", 6, "checkSources",
+                                mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                     check = true;
                 }
                 if (attr.unit != null && attr.unit.getNodeName().equals("")) {
                     createEvent(annError, "Incomplete information for " + sourceName
-                            + "; Characteristic " + attrType + " has no Units", 1016, "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkSources");
+                            + "; Characteristic " + attrType + " has no Units", 1016, "checkSources",
+                                mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 else if (attr.unit != null) {
                     if (attr.unit.termSourceREF != null && attr.unit.termSourceREF.equals("")) {
                         createEvent(annError, "Incomplete information for " + sourceName
                                 + "; Characteristic " + attrType + " has no Unit Term Source",
                                     1005,
-                                    "validation warning",
-                                    mti.SDRF.getLocation().toString(), x, y, "checkSources");
+                                    "checkSources", mti.SDRF.getLocation().toString(), "validation warning",
+                                    x, y);
                     }
                     else if (attr.unit.termSourceREF == null) {
                         createEvent(annError,
                                     "Incomplete information for " + sourceName +
                                             "; Unit Term Source not supplied for " + attrType,
-                                    1016, "validation missingData",
-                                    mti.SDRF.getLocation().toString(), x, y, "checkSources");
+                                    1016, "checkSources", mti.SDRF.getLocation().toString(), "validation missingData",
+                                    x, y);
                     }
                     else if (!tsrStr.contains(attr.unit.termSourceREF)) {
                         createEvent(annError, "Unit Term Source REF, " + attr.unit.termSourceREF
                                 + ", for Characteristic " + attrType + " is not declared in the IDF",
                                     6,
-                                    "validation warning",
-                                    mti.SDRF.getLocation().toString(), x, y, "checkSources");
+                                    "checkSources", mti.SDRF.getLocation().toString(), "validation warning",
+                                    x, y);
                         check = true;
                     }
                 }
@@ -1373,44 +1366,46 @@ public class SemanticValidator extends MAGETABValidateHandler {
             }
 
             if (sampleName.equals("")) {
-                createEvent(annError, "Warning: at least one Sample has no sample name", 1016, "validation warning",
-                            mti.SDRF.getLocation().toString(), x, y, "checkSamples");
+                createEvent(annError, "Warning: at least one Sample has no sample name", 1016, "checkSamples",
+                            mti.SDRF.getLocation().toString(), "validation warning",
+                            x, y);
             }
             if (sample.materialType != null && sample.materialType.getNodeName().equals("")) {
                 createEvent(annError,
                             "Incomplete information for " + sampleName + "; value for materialType is missing",
                             1016,
-                            "validation warning",
-                            mti.SDRF.getLocation().toString(), x, y, "checkSamples");
+                            "checkSamples", mti.SDRF.getLocation().toString(), "validation warning",
+                            x, y);
                 check = true;
             }
             else if (sample.materialType == null) {
                 createEvent(annError, "Incomplete information for " + sampleName + "; materialType not supplied", 1016,
-                            "validation missingData",
-                            mti.SDRF.getLocation().toString(), x, y, "checkSamples");
+                            "checkSamples", mti.SDRF.getLocation().toString(), "validation missingData",
+                            x, y);
             }
             else if (sample.materialType != null) {
                 String materialName = sample.materialType.getNodeName();
                 if (sample.materialType.termSourceREF != null && sample.materialType.termSourceREF.equals("")) {
                     createEvent(annError, "Incomplete information for " + sampleName
                             + "; MaterialType " + materialName + " has no Term Source", 1005,
-                                "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkSamples");
+                                "checkSamples", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 else if (sample.materialType.termSourceREF == null) {
                     createEvent(annError,
                                 "Incomplete information for " + sampleName +
                                         "; Material Type Term Source not supplied for "
-                                        + materialName, 1016, "validation missingData",
-                                mti.SDRF.getLocation().toString(), x, y, "checkSamples");
+                                        + materialName, 1016, "checkSamples", mti.SDRF.getLocation().toString(),
+                                "validation missingData",
+                                x, y);
                 }
                 else if (!tsrStr.contains(sample.materialType.termSourceREF)) {
                     createEvent(annError,
                                 "Term Source REF, " + sample.materialType.termSourceREF + ", for Material Type "
                                         + materialName + " is not declared in the IDF",
                                 6,
-                                "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkSamples");
+                                "checkSamples", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
             }
 
@@ -1433,52 +1428,55 @@ public class SemanticValidator extends MAGETABValidateHandler {
                 if (attr != null && attr.getNodeName().equals("")) {
                     createEvent(annError, "Incomplete information for " + sampleName
                             + "; Characteristic " + attrType + " nas no value", 1016,
-                                "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkSamples");
+                                "checkSamples", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 if (attr.termSourceREF != null && attr.termSourceREF.equals("")) {
                     createEvent(annError, "Incomplete information for " + sampleName
                             + "; Characteristic " + attrType + " has no Term Source", 1005,
-                                "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkSamples");
+                                "checkSamples", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 else if (attr.termSourceREF == null) {
                     createEvent(annError, "Incomplete information for " + sampleName + "; Term Source not supplied for "
-                            + attrType, 1016, "validation missingData",
-                                mti.SDRF.getLocation().toString(), x, y, "checkSamples");
+                            + attrType, 1016, "checkSamples", mti.SDRF.getLocation().toString(),
+                                "validation missingData",
+                                x, y);
                 }
                 else if (!tsrStr.contains(attr.termSourceREF)) {
                     createEvent(annError, "Term Source REF, " + attr.termSourceREF + ", for Characteristic "
-                            + attrType + " is not declared in the IDF", 6, "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkSamples");
+                            + attrType + " is not declared in the IDF", 6, "checkSamples",
+                                mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                     check = true;
                 }
                 if (attr.unit != null && attr.unit.getNodeName().equals("")) {
                     createEvent(annError, "Incomplete information for " + sampleName
-                            + "; Characteristic " + attrType + " has no Units", 1016, "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkSamples");
+                            + "; Characteristic " + attrType + " has no Units", 1016, "checkSamples",
+                                mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                     check = true;
                 }
                 else if (attr.unit != null) {
                     if (attr.unit.termSourceREF != null && attr.unit.termSourceREF.equals("")) {
                         createEvent(annError, "Incomplete information for " + sampleName
                                 + "; Characteristic " + attrType + " has no Unit Term Source", 1005,
-                                    "validation warning",
-                                    mti.SDRF.getLocation().toString(), x, y, "checkSamples");
+                                    "checkSamples", mti.SDRF.getLocation().toString(), "validation warning",
+                                    x, y);
 //						check = true;
                     }
                     else if (attr.unit.termSourceREF == null) {
                         createEvent(annError, "Incomplete information for " + sampleName
                                 + "; Unit Term Source not supplied for " + attrType, 1016,
-                                    "validation missingData",
-                                    mti.SDRF.getLocation().toString(), x, y, "checkSamples");
+                                    "checkSamples", mti.SDRF.getLocation().toString(), "validation missingData",
+                                    x, y);
 
                     }
                     else if (!tsrStr.contains(attr.unit.termSourceREF)) {
                         createEvent(annError, "Unit Term Source REF, " + attr.unit.termSourceREF
                                 + ", for Characteristic " + attrType + " is not declared in the IDF",
-                                    6, "validation warning",
-                                    mti.SDRF.getLocation().toString(), x, y, "checkSamples");
+                                    6, "checkSamples", mti.SDRF.getLocation().toString(), "validation warning",
+                                    x, y);
                         check = true;
                     }
 
@@ -1512,41 +1510,44 @@ public class SemanticValidator extends MAGETABValidateHandler {
             }
 
             if (extractName.equals("")) {
-                createEvent(annError, "Error: at least one extract has no extract name", 25, "validation error",
-                            mti.SDRF.getLocation().toString(), x, y, "checkExtracts");
+                createEvent(annError, "Error: at least one extract has no extract name", 25, "checkExtracts",
+                            mti.SDRF.getLocation().toString(), "validation error",
+                            x, y);
                 check = true;
             }
             if (extract.materialType != null && extract.materialType.getNodeName().equals("")) {
                 createEvent(annError,
                             "Incomplete information for " + extractName + "; value for materialType is missing",
-                            1016, "validation warning",
-                            mti.SDRF.getLocation().toString(), x, y, "checkExtracts");
+                            1016, "checkExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                            x, y);
             }
             else if (extract.materialType == null) {
                 createEvent(annError, "Incomplete information for " + extractName + "; materialType not supplied",
-                            1016, "validation missingData",
-                            mti.SDRF.getLocation().toString(), x, y, "checkExtracts");
+                            1016, "checkExtracts", mti.SDRF.getLocation().toString(), "validation missingData",
+                            x, y);
             }
             else if (extract.materialType != null) {
                 String materialName = extract.materialType.getNodeName();
                 if (extract.materialType.termSourceREF != null && extract.materialType.termSourceREF.equals("")) {
                     createEvent(annError, "Incomplete information for " + extractName
                             + "; MaterialType " + materialName + " has no Term Source", 1005,
-                                "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkExtracts");
+                                "checkExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 else if (extract.materialType.termSourceREF == null) {
                     createEvent(annError,
                                 "Incomplete information for " + extractName +
                                         "; Material Type Term Source not supplied for "
-                                        + materialName, 1016, "validation missingData",
-                                mti.SDRF.getLocation().toString(), x, y, "checkExtracts");
+                                        + materialName, 1016, "checkExtracts", mti.SDRF.getLocation().toString(),
+                                "validation missingData",
+                                x, y);
                 }
                 else if (!tsrStr.contains(extract.materialType.termSourceREF)) {
                     createEvent(annError,
                                 "Term Source REF, " + extract.materialType.termSourceREF + ", for Material Type "
-                                        + materialName + " is not declared in the IDF", 6, "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkExtracts");
+                                        + materialName + " is not declared in the IDF", 6, "checkExtracts",
+                                mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                     check = true;
                 }
             }
@@ -1570,52 +1571,52 @@ public class SemanticValidator extends MAGETABValidateHandler {
                 if (attr != null && attr.getNodeName().equals("")) {
                     createEvent(annError, "Incomplete information for " + extractName
                             + "; Characteristic " + attrType + " nas no value",
-                                1016, "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkExtracts");
+                                1016, "checkExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 if (attr.termSourceREF != null && attr.termSourceREF.equals("")) {
                     createEvent(annError, "Incomplete information for " + extractName
                             + "; Characteristic " + attrType + " has no Term Source",
-                                1016, "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkExtracts");
+                                1016, "checkExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 else if (attr.termSourceREF == null) {
                     createEvent(annError, "Incomplete information for " + extractName
                             + "; Term Source not supplied for " + attrType, 1016,
-                                "validation missingData",
-                                mti.SDRF.getLocation().toString(), x, y, "checkExtracts");
+                                "checkExtracts", mti.SDRF.getLocation().toString(), "validation missingData",
+                                x, y);
                 }
                 else if (!tsrStr.contains(attr.termSourceREF)) {
                     createEvent(annError, "Term Source REF, " + attr.termSourceREF + ", for Characteristic "
                             + attrType + " is not declared in the IDF", 6,
-                                "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkExtracts");
+                                "checkExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                     check = true;
                 }
                 if (attr.unit != null && attr.unit.getNodeName().equals("")) {
                     createEvent(annError, "Incomplete information for " + extractName
                             + "; Characteristic " + attrType + " has no Units", 1016,
-                                "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkExtracts");
+                                "checkExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 else if (attr.unit != null) {
                     if (attr.unit.termSourceREF != null && attr.unit.termSourceREF.equals("")) {
                         createEvent(annError, "Incomplete information for " + extractName
                                 + "; Characteristic " + attrType + " has no Unit Term Source",
-                                    1005, "validation warning",
-                                    mti.SDRF.getLocation().toString(), x, y, "checkExtracts");
+                                    1005, "checkExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                                    x, y);
                     }
                     else if (attr.unit.termSourceREF == null) {
                         createEvent(annError, "Incomplete information for " + extractName
                                 + "; Unit Term Source not supplied for " + attrType,
-                                    1016, "validation missingData",
-                                    mti.SDRF.getLocation().toString(), x, y, "checkExtracts");
+                                    1016, "checkExtracts", mti.SDRF.getLocation().toString(), "validation missingData",
+                                    x, y);
                     }
                     else if (!tsrStr.contains(attr.unit.termSourceREF)) {
                         createEvent(annError, "Unit Term Source REF, " + attr.unit.termSourceREF
                                 + ", for Characteristic " + attrType + " is not declared in the IDF",
-                                    6, "validation warning",
-                                    mti.SDRF.getLocation().toString(), x, y, "checkExtracts");
+                                    6, "checkExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                                    x, y);
                         check = true;
                     }
                 }
@@ -1651,22 +1652,22 @@ public class SemanticValidator extends MAGETABValidateHandler {
 
             if (labeledExtractName == null) {
                 createEvent(annError, "Error: at least one labeledExtract has no labeledExtract name", 25,
-                            "validation error",
-                            mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                            "checkLabeledExtracts", mti.SDRF.getLocation().toString(), "validation error",
+                            x, y);
                 check = true;
             }
             if (labeledExtract.materialType != null && labeledExtract.materialType.getNodeName().equals("")) {
                 createEvent(annError,
                             "Incomplete information for " + labeledExtractName + "; value for materialType is missing",
-                            1016, "validation warning",
-                            mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                            1016, "checkLabeledExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                            x, y);
             }
             else if (labeledExtract.materialType == null) {
                 createEvent(annError,
                             "Incomplete information for " + labeledExtractName + "; materialType not supplied",
                             1016,
-                            "validation missingData",
-                            mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                            "checkLabeledExtracts", mti.SDRF.getLocation().toString(), "validation missingData",
+                            x, y);
             }
             else if (labeledExtract.materialType != null) {
                 String materialName = labeledExtract.materialType.getNodeName();
@@ -1674,52 +1675,55 @@ public class SemanticValidator extends MAGETABValidateHandler {
                         labeledExtract.materialType.termSourceREF.equals("")) {
                     createEvent(annError, "Incomplete information for " + labeledExtractName
                             + "; MaterialType " + materialName + " has no Term Source", 1005,
-                                "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                                "checkLabeledExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 else if (labeledExtract.materialType.termSourceREF == null) {
                     createEvent(annError, "Incomplete information for " + labeledExtractName
                             + "; Material Type Term Source not supplied for " + materialName,
-                                1016, "validation missingData",
-                                mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                                1016, "checkLabeledExtracts", mti.SDRF.getLocation().toString(),
+                                "validation missingData",
+                                x, y);
                 }
                 else if (!tsrStr.contains(labeledExtract.materialType.termSourceREF)) {
                     createEvent(annError, "Term Source REF, " + labeledExtract.materialType.termSourceREF
                             + ", for Material Type " + materialName + " is not declared in the IDF",
-                                6, "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                                6, "checkLabeledExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                     check = true;
                 }
             }
             String labelName = labeledExtract.label.getNodeName();
             if (labeledExtract.label != null && labelName.equals("")) {
                 createEvent(annError, "Incomplete information for " + labeledExtractName
-                        + "; value for label is missing", 1016, "validation warning",
-                            mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                        + "; value for label is missing", 1016, "checkLabeledExtracts",
+                            mti.SDRF.getLocation().toString(), "validation warning",
+                            x, y);
             }
             else if (labeledExtract.label == null) {
                 createEvent(annError, "Incomplete information for " + labeledExtractName + "; label not supplied",
-                            1016, "validation missingData",
-                            mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                            1016, "checkLabeledExtracts", mti.SDRF.getLocation().toString(), "validation missingData",
+                            x, y);
             }
             else if (labeledExtract.label != null) {
                 if (labeledExtract.label.termSourceREF != null && labeledExtract.label.termSourceREF.equals("")) {
                     createEvent(annError, "Incomplete information for " + labeledExtractName
                             + "; Label " + labelName + " has no Term Source",
-                                1005, "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                                1005, "checkLabeledExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 else if (labeledExtract.label.termSourceREF == null) {
                     createEvent(annError, "Incomplete information for " + labeledExtractName
                             + "; Label Term Source not supplied for " + labelName,
-                                1016, "validation missingData",
-                                mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                                1016, "checkLabeledExtracts", mti.SDRF.getLocation().toString(),
+                                "validation missingData",
+                                x, y);
                 }
                 else if (!tsrStr.contains(labeledExtract.label.termSourceREF)) {
                     createEvent(annError, "Term Source REF, " + labeledExtract.label.termSourceREF + ", for Label "
                             + labelName + " is not declared in the IDF", 6,
-                                "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                                "checkLabeledExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                     check = true;
                 }
             }
@@ -1744,52 +1748,53 @@ public class SemanticValidator extends MAGETABValidateHandler {
                 if (attr != null && attr.getNodeName().equals("")) {
                     createEvent(annError, "Incomplete information for " + labeledExtractName
                             + "; Characteristic " + attrType + " nas no value", 1016,
-                                "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                                "checkLabeledExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 if (attr.termSourceREF != null && attr.termSourceREF.equals("")) {
                     createEvent(annError, "Incomplete information for " + labeledExtractName
                             + "; Characteristic " + attrType + " has no Term Source",
-                                1016, "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                                1016, "checkLabeledExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 else if (attr.termSourceREF == null) {
                     createEvent(annError, "Incomplete information for " + labeledExtractName
                             + "; Term Source not supplied for " + attrType, 1016,
-                                "validation missingData",
-                                mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                                "checkLabeledExtracts", mti.SDRF.getLocation().toString(), "validation missingData",
+                                x, y);
                 }
                 else if (!tsrStr.contains(attr.termSourceREF)) {
                     createEvent(annError, "Term Source REF, " + attr.termSourceREF + ", for Characteristic "
                             + attrType + " is not declared in the IDF", 6,
-                                "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                                "checkLabeledExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                     check = true;
                 }
                 if (attr.unit != null && attr.unit.getNodeName().equals("")) {
                     createEvent(annError, "Incomplete information for " + labeledExtractName
                             + "; Characteristic " + attrType + " has no Units", 1016,
-                                "validation warning",
-                                mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                                "checkLabeledExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 else if (attr.unit != null) {
                     if (attr.unit.termSourceREF != null && attr.unit.termSourceREF.equals("")) {
                         createEvent(annError, "Incomplete information for " + labeledExtractName
                                 + "; Characteristic " + attrType + " has no Unit Term Source",
-                                    1005, "validation warning",
-                                    mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                                    1005, "checkLabeledExtracts", mti.SDRF.getLocation().toString(),
+                                    "validation warning",
+                                    x, y);
                     }
                     else if (attr.unit.termSourceREF == null) {
                         createEvent(annError, "Incomplete information for " + labeledExtractName
                                 + "; Unit Term Source not supplied for " + attrType, 1016,
-                                    "validation missingData",
-                                    mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                                    "checkLabeledExtracts", mti.SDRF.getLocation().toString(), "validation missingData",
+                                    x, y);
                     }
                     else if (!tsrStr.contains(attr.unit.termSourceREF)) {
                         createEvent(annError, "Unit Term Source REF, " + attr.unit.termSourceREF
                                 + ", for Characteristic " + attrType + " is not declared in the IDF",
-                                    6, "validation warning",
-                                    mti.SDRF.getLocation().toString(), x, y, "checkLabeledExtracts");
+                                    6, "checkLabeledExtracts", mti.SDRF.getLocation().toString(), "validation warning",
+                                    x, y);
                         check = true;
                     }
                 }
@@ -1812,19 +1817,22 @@ public class SemanticValidator extends MAGETABValidateHandler {
             List<ProtocolApplicationNode> protocols = new ArrayList<ProtocolApplicationNode>();
 
             //get location of the object
-            Set<Point> locations = mti.getLocationTracker().getSDRFLocations(hybridization);
-            Object[] alist = locations.toArray();
-            Point p;
-            if (alist.length == 0) {
-                p = findCell(hybridizationName, sdrfMap);
+            Collection<Location> locations = mti.SDRF.getLayout().getLocationsForNode(hybridization);
+            int x, y;
+            if (locations.size() != 0) {
+                Location firstLoc = locations.iterator().next();
+                x = firstLoc.getLineNumber();
+                y = firstLoc.getColumn();
             }
             else {
-                Point tmp = (Point) alist[0];
-                p = new Point(tmp.y, tmp.x);
+                x = -1;
+                y = -1;
             }
+
             if (hybridizationName.equals("")) {
                 createEvent(annError, "Error: at least one hybridization has no hybridization name",
-                            25, "validation error", sdrfFileName, p.x, p.y, "checkHybridizations");
+                            25, "checkHybridizations", mti.SDRF.getLocation().toString(), "validation error",
+                            x, y);
                 check = true;
             }
             //changes for the new magetab_parser.jar
@@ -1843,56 +1851,55 @@ public class SemanticValidator extends MAGETABValidateHandler {
             List<FactorValueAttribute> fvList = hybridization.factorValues;
             for (FactorValueAttribute attr : fvList) {
                 String attrType = attr.type;
-                Point a = findCell(attr.getNodeName(), sdrfMap);
-
                 if (attr != null && attr.getNodeName().equals("")) {
                     createEvent(annError, "Incomplete information for " + hybridizationName
                             + "; Factor value " + attrType + " nas no value", 1016,
-                                "validation warning", sdrfFileName, p.x, a.y + 1,
-                                "checkHybridizations");
+                                "checkHybridizations", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 if (attr.termSourceREF != null && attr.termSourceREF.equals("")) {
                     createEvent(annError, "Incomplete information for " + hybridizationName
                             + "; Factor value " + attrType + " has no Term Source", 1005,
-                                "validation warning", sdrfFileName, p.x, a.y + 1,
-                                "checkHybridizations");
+                                "checkHybridizations", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 else if (attr.termSourceREF == null) {
                     createEvent(annError, "Incomplete information for " + hybridizationName
-                            + "; Term Source not supplied for " + attrType, 1016, "validation missingData",
-                                sdrfFileName, p.x, a.y, "checkHybridizations");
+                            + "; Term Source not supplied for " + attrType, 1016, "checkHybridizations",
+                                mti.SDRF.getLocation().toString(), "validation missingData",
+                                x, y);
                 }
                 else if (!tsrStr.contains(attr.termSourceREF)) {
                     createEvent(annError, "Term Source REF, " + attr.termSourceREF + ", for Factor value "
-                            + attrType + " is not declared in the IDF", 6, "validation warning",
-                                sdrfFileName, p.x, a.y + 1, "checkHybridizations");
+                            + attrType + " is not declared in the IDF", 6, "checkHybridizations",
+                                mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                     check = true;
                 }
                 if (attr.unit != null && attr.unit.getNodeName().equals("")) {
                     createEvent(annError, "Incomplete information for " + hybridizationName
                             + "; Factor value " + attrType + " has no Units", 1016,
-                                "validation warning", sdrfFileName, p.x, a.y + 1,
-                                "checkHybridizations");
-//					check = true;
+                                "checkHybridizations", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 else if (attr.unit != null) {
-                    Point u = findCell(attr.unit.getNodeName(), sdrfMap);
                     if (attr.unit.termSourceREF != null && attr.unit.termSourceREF.equals("")) {
                         createEvent(annError, "Incomplete information for " + hybridizationName
                                 + "; Factor value " + attrType + " has no Unit Term Source", 1005,
-                                    "validation warning", sdrfFileName, p.x, u.y + 1, "checkHybridizations");
-//						check = true;
+                                    "checkHybridizations", mti.SDRF.getLocation().toString(), "validation warning",
+                                    x, y);
                     }
                     else if (attr.termSourceREF == null) {
                         createEvent(annError, "Incomplete information for " + hybridizationName
                                 + "; Unit Term Source not supplied for " + attrType, 1016,
-                                    "validation missingData", sdrfFileName, p.x, u.y, "checkHybridizations");
+                                    "checkHybridizations", mti.SDRF.getLocation().toString(), "validation missingData",
+                                    x, y);
                     }
                     else if (!tsrStr.contains(attr.termSourceREF)) {
                         createEvent(annError, "Unit Term Source REF, " + attr.unit.termSourceREF
                                 + ", for Factor value " + attrType + " is not declared in the IDF",
-                                    6, "validation warning", sdrfFileName, p.x, u.y + 1,
-                                    "checkHybridizations");
+                                    6, "checkHybridizations", mti.SDRF.getLocation().toString(), "validation warning",
+                                    x, y);
                         check = true;
                     }
                 }
@@ -1911,53 +1918,59 @@ public class SemanticValidator extends MAGETABValidateHandler {
 
             String assayName = assay.getNodeName();
             List<ProtocolApplicationNode> protocols = new ArrayList<ProtocolApplicationNode>();
-//			List<ProtocolNode> protocols = new ArrayList<ProtocolNode>();
 
             //get location of the object
-            Set<Point> locations = mti.getLocationTracker().getSDRFLocations(assay);
-            Object[] alist = locations.toArray();
-            Point p;
-            if (alist.length == 0) {
-                p = findCell(assayName, sdrfMap);
+            Collection<Location> locations = mti.SDRF.getLayout().getLocationsForNode(assay);
+            int x, y;
+            if (locations.size() != 0) {
+                Location firstLoc = locations.iterator().next();
+                x = firstLoc.getLineNumber();
+                y = firstLoc.getColumn();
             }
             else {
-                Point tmp = (Point) alist[0];
-                p = new Point(tmp.y, tmp.x);
+                x = -1;
+                y = -1;
             }
+
             if (assayName.equals("")) {
                 createEvent(annError, "Error: at least one assay has no assay name", 25,
-                            "validation error", sdrfFileName, p.x, p.y, "checkAssays");
+                            "checkAssays", mti.SDRF.getLocation().toString(), "validation error",
+                            x, y);
                 check = true;
             }
             if (assay.technologyType != null && assay.technologyType.getNodeName().equals("")) {
                 createEvent(annError, "Incomplete information for " + assayName
                         + "; value for technologyType is missing", 1026,
-                            "validation error", sdrfFileName, p.x, p.y + 1, "checkAssays");
+                            "checkAssays", mti.SDRF.getLocation().toString(), "validation error",
+                            x, y);
                 check = true;
             }
             else if (assay.technologyType == null) {
                 createEvent(annError, "Incomplete information for " + assayName
-                        + "; technologyType not supplied", 1026, "validation error",
-                            sdrfFileName, p.x, p.y, "checkAssays");
+                        + "; technologyType not supplied", 1026, "checkAssays", mti.SDRF.getLocation().toString(),
+                            "validation error",
+                            x, y);
                 check = true;
             }
             else {
                 if (assay.technologyType.termSourceREF != null && assay.technologyType.termSourceREF.equals("")) {
                     createEvent(annError, "Incomplete information for " + assayName
                             + "; value for technologyType Term Source is missing", 1016,
-                                "validation warning", sdrfFileName, p.x, p.y + 1, "checkAssays");
-//					check = true;
+                                "checkAssays", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 else if (assay.technologyType.termSourceREF == null) {
                     createEvent(annError, "Incomplete information for " + assayName
-                            + "; technologyType Term Source not supplied", 1016, "validation missingData",
-                                sdrfFileName, p.x, p.y, "checkAssays");
+                            + "; technologyType Term Source not supplied", 1016, "checkAssays",
+                                mti.SDRF.getLocation().toString(), "validation missingData",
+                                x, y);
                 }
                 else if (!tsrStr.contains(assay.technologyType.termSourceREF)) {
                     createEvent(annError,
                                 "Term Source REF, " + assay.technologyType.termSourceREF + ", for technologyType "
-                                        + assay.technologyType + " is not declared in the IDF", 6, "validation warning",
-                                sdrfFileName, p.x, p.y + 1, "checkAssays");
+                                        + assay.technologyType + " is not declared in the IDF", 6, "checkAssays",
+                                mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                     check = true;
                 }
             }
@@ -1987,9 +2000,21 @@ public class SemanticValidator extends MAGETABValidateHandler {
         for (SDRFNode myNode : nodes) {
             String nodeName = myNode.getNodeName();
             List<ProtocolApplicationNode> protocols = new ArrayList<ProtocolApplicationNode>();
-//			List<ProtocolNode> protocols = new ArrayList<ProtocolNode>();
-            Point p = findCell(nodeName, sdrfMap);
-            // Set up error messages based on SDRFNode type.  
+
+            //get location of the object
+            Collection<Location> locations = mti.SDRF.getLayout().getLocationsForNode(myNode);
+            int x, y;
+            if (locations.size() != 0) {
+                Location firstLoc = locations.iterator().next();
+                x = firstLoc.getLineNumber();
+                y = firstLoc.getColumn();
+            }
+            else {
+                x = -1;
+                y = -1;
+            }
+
+            // Set up error messages based on SDRFNode type.
             String methodName = "";
             String fileType = "";
             if (myNode instanceof ScanNode) {
@@ -2003,19 +2028,11 @@ public class SemanticValidator extends MAGETABValidateHandler {
             else if (myNode instanceof NormalizationNode) {
                 methodName = "checkNormalization";
                 fileType = "normalization entry";
-                Set<Point> locations = mti.getLocationTracker().getSDRFLocations(myNode);
-                Object[] alist = locations.toArray();
-                if (alist.length == 0) {
-                    p = findCell(nodeName, sdrfMap);
-                }
-                else {
-                    Point tmp = (Point) alist[0];
-                    p = new Point(tmp.y, tmp.x);
-                }
             }
             if (nodeName.equals("")) {
-                createEvent(annError, "Warning: at least one " + fileType + " has no name", 1016, "validation warning",
-                            sdrfFileName, p.x, p.y, methodName);
+                createEvent(annError, "Warning: at least one " + fileType + " has no name", 1016, methodName,
+                            mti.SDRF.getLocation().toString(), "validation warning",
+                            x, y);
                 check = true;
             }
 
@@ -2045,11 +2062,24 @@ public class SemanticValidator extends MAGETABValidateHandler {
         for (ScanNode scan : scans) {
             String scanName = scan.getNodeName();
             List<ProtocolApplicationNode> protocols = new ArrayList<ProtocolApplicationNode>();
-//			List<ProtocolNode> protocols = new ArrayList<ProtocolNode>();
-            Point p = findCell(scanName, sdrfMap);
+
+            //get location of the object
+            Collection<Location> locations = mti.SDRF.getLayout().getLocationsForNode(scan);
+            int x, y;
+            if (locations.size() != 0) {
+                Location firstLoc = locations.iterator().next();
+                x = firstLoc.getLineNumber();
+                y = firstLoc.getColumn();
+            }
+            else {
+                x = -1;
+                y = -1;
+            }
+
             if (scanName.equals("")) {
-                createEvent(annError, "Warning: at least one scan has no scan name", 1016, "validation warning",
-                            sdrfFileName, p.x, p.y, "checkScans");
+                createEvent(annError, "Warning: at least one scan has no scan name", 1016, "checkScans",
+                            mti.SDRF.getLocation().toString(), "validation warning",
+                            x, y);
                 check = true;
             }
             //changes for the new magetab_parser.jar
@@ -2077,11 +2107,24 @@ public class SemanticValidator extends MAGETABValidateHandler {
         for (ImageNode image : images) {
             String imageName = image.getNodeName();
             List<ProtocolApplicationNode> protocols = new ArrayList<ProtocolApplicationNode>();
-//			List<ProtocolNode> protocols = new ArrayList<ProtocolNode>();
-            Point p = findCell(imageName, sdrfMap);
+
+            //get location of the object
+            Collection<Location> locations = mti.SDRF.getLayout().getLocationsForNode(image);
+            int x, y;
+            if (locations.size() != 0) {
+                Location firstLoc = locations.iterator().next();
+                x = firstLoc.getLineNumber();
+                y = firstLoc.getColumn();
+            }
+            else {
+                x = -1;
+                y = -1;
+            }
+
             if (imageName == null) {
-                createEvent(annError, "Warning: at least one image has no image name", 1016, "validation warning",
-                            sdrfFileName, p.x, p.y, "checkScans");
+                createEvent(annError, "Warning: at least one image has no image name", 1016, "checkScans",
+                            mti.SDRF.getLocation().toString(), "validation warning",
+                            x, y);
                 check = true;
             }
             //changes for the new magetab_parser.jar
@@ -2111,27 +2154,42 @@ public class SemanticValidator extends MAGETABValidateHandler {
         for (ArrayDesignNode arrayDesign : arrayDesigns) {
             String arrayDesignName = arrayDesign.getNodeName();
             List<ProtocolApplicationNode> protocols = new ArrayList<ProtocolApplicationNode>();
-//			List<ProtocolNode> protocols = new ArrayList<ProtocolNode>();
-            Point p = findCell(arrayDesignName, sdrfMap);
+            //get location of the object
+            Collection<Location> locations = mti.SDRF.getLayout().getLocationsForNode(arrayDesign);
+            int x, y;
+            if (locations.size() != 0) {
+                Location firstLoc = locations.iterator().next();
+                x = firstLoc.getLineNumber();
+                y = firstLoc.getColumn();
+            }
+            else {
+                x = -1;
+                y = -1;
+            }
+
             if (arrayDesignName.equals("")) {
                 createEvent(annError, "Error: at least one arrayDesign has no arrayDesign name", 25,
-                            "validation error", sdrfFileName, p.x, p.y, "checkArrayDesign");
+                            "checkArrayDesign", mti.SDRF.getLocation().toString(), "validation error",
+                            x, y);
                 check = true;
             }
             if (arrayDesign.termSourceREF != null && arrayDesign.termSourceREF.equals("")) {
                 createEvent(annError, "Incomplete information for " + arrayDesignName
-                        + "; value for termSourceREF is missing", 1016, "validation warning",
-                            sdrfFileName, p.x, p.y + 1, "checkArrayDesign");
+                        + "; value for termSourceREF is missing", 1016, "checkArrayDesign",
+                            mti.SDRF.getLocation().toString(), "validation warning",
+                            x, y);
             }
             else if (arrayDesign.termSourceREF == null) {
                 createEvent(annError, "Incomplete information for " + arrayDesignName
-                        + "; termSourceREF not supplied", 1016, "validation missingData",
-                            sdrfFileName, p.x, p.y, "checkArrayDesign");
+                        + "; termSourceREF not supplied", 1016, "checkArrayDesign", mti.SDRF.getLocation().toString(),
+                            "validation missingData",
+                            x, y);
             }
             else if (!tsrStr.contains(arrayDesign.termSourceREF)) {
                 createEvent(annError, "Term Source REF, " + arrayDesign.termSourceREF + ", for Array Design "
                         + arrayDesignName + " is not declared in the IDF", 6,
-                            "validation warning", sdrfFileName, p.x, p.y + 1, "checkArrayDesign");
+                            "checkArrayDesign", mti.SDRF.getLocation().toString(), "validation warning",
+                            x, y);
                 check = true;
             }
             //changes for the new magetab_parser.jar
@@ -2162,20 +2220,24 @@ public class SemanticValidator extends MAGETABValidateHandler {
         for (NormalizationNode method : normalization) {
             String normalizationName = method.getNodeName();
             List<ProtocolApplicationNode> protocols = new ArrayList<ProtocolApplicationNode>();
-            Set<Point> locations = mti.getLocationTracker().getSDRFLocations(method);
-            Object[] alist = locations.toArray();
-            Point p;
-            if (alist.length == 0) {
-                p = findCell(normalizationName, sdrfMap);
+
+            //get location of the object
+            Collection<Location> locations = mti.SDRF.getLayout().getLocationsForNode(method);
+            int x, y;
+            if (locations.size() != 0) {
+                Location firstLoc = locations.iterator().next();
+                x = firstLoc.getLineNumber();
+                y = firstLoc.getColumn();
             }
             else {
-                Point tmp = (Point) alist[0];
-                p = new Point(tmp.y, tmp.x);
+                x = -1;
+                y = -1;
             }
+
             if (normalizationName == null) {
                 createEvent(annError, "Warning: at least one normalization entry has no name", 1016,
-                            "validation warning", sdrfFileName, p.x, p.y,
-                            "checkNormalization");
+                            "checkNormalization", mti.SDRF.getLocation().toString(), "validation warning",
+                            x, y);
                 check = true;
             }
             //changes for the new magetab_parser.jar
@@ -2201,32 +2263,23 @@ public class SemanticValidator extends MAGETABValidateHandler {
     boolean checkArrayData(Collection<? extends SDRFNode> arrayData, MAGETABInvestigation mti, AnnotareError annError) {
         boolean check = false;
         String sourcePath;
-//		Collection<ArrayDataNode> arrayData1 = new (Collection<ArrayDataNode>) arrayData;
-//		for (ArrayDataNode dataSource : arrayData) {
         for (SDRFNode dataSource : arrayData) {
             String dataSourceName = dataSource.getNodeName();
-            if (dataSourceName.lastIndexOf(File.separatorChar) > 0) {
-                sourcePath = dataSourceName.substring(0, dataSourceName.lastIndexOf(File.separatorChar));
-                dataSourceName = dataSourceName.substring(dataSourceName.lastIndexOf(File.separatorChar) + 1);
-            }
-            else {
-                sourcePath = this.idfFileName.substring(0, this.idfFileName.lastIndexOf(File.separatorChar));
-            }
-            String sourceFullName = sourcePath + File.separatorChar + dataSourceName;
-            System.out.println("DataSource: " + dataSourceName + "; " + sourceFullName);
 
             List<ProtocolApplicationNode> protocols = new ArrayList<ProtocolApplicationNode>();
-//			List<ProtocolNode> protocols = new ArrayList<ProtocolNode>();
-            Set<Point> locations = mti.getLocationTracker().getSDRFLocations(dataSource);
-            Object[] alist = locations.toArray();
-            Point p;
-            if (alist.length == 0) {
-                p = findCell(dataSourceName, sdrfMap);
+            //get location of the object
+            Collection<Location> locations = mti.SDRF.getLayout().getLocationsForNode(dataSource);
+            int x, y;
+            if (locations.size() != 0) {
+                Location firstLoc = locations.iterator().next();
+                x = firstLoc.getLineNumber();
+                y = firstLoc.getColumn();
             }
             else {
-                Point tmp = (Point) alist[0];
-                p = new Point(tmp.y, tmp.x);
+                x = -1;
+                y = -1;
             }
+
             String methodName = "";
             String fileType = "";
             if (dataSource instanceof ArrayDataNode) {
@@ -2239,15 +2292,38 @@ public class SemanticValidator extends MAGETABValidateHandler {
             }
             if (dataSourceName == null) {
                 createEvent(annError, "Error: at least one " + fileType + " entry has no name", 25,
-                            "validation error", sdrfFileName, p.x, p.y, methodName);
-//					"validation error", sdrfFileName, p.x, p.y);
+                            methodName, mti.SDRF.getLocation().toString(), "validation error",
+                            x, y);
                 check = true;
             }
-            File f = new File(sourceFullName);
-            if (!f.exists()) {
+
+            try {
+                // resolve relative path to data file
+                URL dataFileLocation = MAGETABUtils.resolveRelativeLocation(mti.SDRF.getLocation(), dataSourceName);
+                System.out.println("DataSource: " + dataSourceName + "; " + dataFileLocation.toString());
+                // try to open a connection to the dataFileLocation - if this fails, file is missing
+                if (dataFileLocation.getProtocol().equals("file")) {
+                    // just check we can open, will throw IOException if missing
+                    dataFileLocation.openConnection();
+                }
+                else {
+                    // not local file, so check we can open and check response code isn't 404
+                    int response = ((HttpURLConnection) dataFileLocation.openConnection()).getResponseCode();
+                    if (response != HttpURLConnection.HTTP_OK) {
+                        // non-200 response code, file not present here
+                        createEvent(annError,
+                                    fileType + " " + dataSourceName + " could not be found at " + dataFileLocation +
+                                            ", HTTP response " + response, 1031,
+                                    methodName, mti.SDRF.getLocation().toString(), "validation error",
+                                    x, y);
+                    }
+                    getLog().debug("Found content at " + dataFileLocation.toString() + ", data file present");
+                }
+            }
+            catch (IOException e) {
                 createEvent(annError, fileType + " " + dataSourceName + " is missing", 1031,
-                            "validation error", sdrfFileName, p.x, p.y, methodName);
-//					"validation warning", sdrfFileName, p.x, p.y);
+                            methodName, mti.SDRF.getLocation().toString(), "validation error",
+                            x, y);
             }
             //changes for the new magetab_parser.jar
             //must check 'type' and lookup protocolref nodes in the SDRF
@@ -2278,27 +2354,21 @@ public class SemanticValidator extends MAGETABValidateHandler {
 //		for (ArrayDataMatrixNode dataSource : arrayDataMatrix) {
         for (SDRFNode dataSource : arrayDataMatrix) {
             String dataSourceName = dataSource.getNodeName();
-            if (dataSourceName.lastIndexOf(File.separatorChar) > 0) {
-                sourcePath = dataSourceName.substring(0, dataSourceName.lastIndexOf(File.separatorChar));
-                dataSourceName = dataSourceName.substring(dataSourceName.lastIndexOf(File.separatorChar) + 1);
-            }
-            else {
-                sourcePath = this.idfFileName.substring(0, this.idfFileName.lastIndexOf(File.separatorChar));
-            }
-            String sourceFullName = sourcePath + File.separatorChar + dataSourceName;
-            System.out.println("DataSource: " + dataSourceName + "; " + sourceFullName);
 
             List<ProtocolApplicationNode> protocols = new ArrayList<ProtocolApplicationNode>();
-            Set<Point> locations = mti.getLocationTracker().getSDRFLocations(dataSource);
-            Object[] alist = locations.toArray();
-            Point p;
-            if (alist.length == 0) {
-                p = findCell(dataSourceName, sdrfMap);
+            //get location of the object
+            Collection<Location> locations = mti.SDRF.getLayout().getLocationsForNode(dataSource);
+            int x, y;
+            if (locations.size() != 0) {
+                Location firstLoc = locations.iterator().next();
+                x = firstLoc.getLineNumber();
+                y = firstLoc.getColumn();
             }
             else {
-                Point tmp = (Point) alist[0];
-                p = new Point(tmp.y, tmp.x);
+                x = -1;
+                y = -1;
             }
+
             String methodName = "";
             String fileType = "";
             if (dataSource instanceof ArrayDataMatrixNode) {
@@ -2311,8 +2381,8 @@ public class SemanticValidator extends MAGETABValidateHandler {
             }
             if (dataSourceName == null) {
                 createEvent(annError, "Error: at least one sample has no " + fileType + " name", 25,
-                            "validation error", sdrfFileName, p.x, p.y, methodName);
-//					"validation error", sdrfFileName, sloc.y, p.y);
+                            methodName, mti.SDRF.getLocation().toString(), "validation error",
+                            x, y);
                 check = true;
             }
             //changes for the new magetab_parser.jar
@@ -2330,33 +2400,37 @@ public class SemanticValidator extends MAGETABValidateHandler {
 
             if (dataVal == true) {
                 Collection nodes;
-                if (mti.SDRF.lookupNodes(SourceNode.class) != null) {
-                    nodes = mti.SDRF.lookupNodes(SourceNode.class);
+                if (mti.SDRF.getNodes(SourceNode.class) != null) {
+                    nodes = mti.SDRF.getNodes(SourceNode.class);
                 }
-                else if (mti.SDRF.lookupNodes(SampleNode.class) != null) {
-                    nodes = mti.SDRF.lookupNodes(SampleNode.class);
+                else if (mti.SDRF.getNodes(SampleNode.class) != null) {
+                    nodes = mti.SDRF.getNodes(SampleNode.class);
                 }
-                else if (mti.SDRF.lookupNodes(ExtractNode.class) != null) {
-                    nodes = mti.SDRF.lookupNodes(ExtractNode.class);
+                else if (mti.SDRF.getNodes(ExtractNode.class) != null) {
+                    nodes = mti.SDRF.getNodes(ExtractNode.class);
                 }
-                else if (mti.SDRF.lookupNodes(LabeledExtractNode.class) != null) {
-                    nodes = mti.SDRF.lookupNodes(LabeledExtractNode.class);
+                else if (mti.SDRF.getNodes(LabeledExtractNode.class) != null) {
+                    nodes = mti.SDRF.getNodes(LabeledExtractNode.class);
                 }
-                else if (mti.SDRF.lookupNodes(HybridizationNode.class) != null) {
-                    nodes = mti.SDRF.lookupNodes(HybridizationNode.class);
+                else if (mti.SDRF.getNodes(HybridizationNode.class) != null) {
+                    nodes = mti.SDRF.getNodes(HybridizationNode.class);
                 }
-                else if (mti.SDRF.lookupNodes(AssayNode.class) != null) {
-                    nodes = mti.SDRF.lookupNodes(AssayNode.class);
+                else if (mti.SDRF.getNodes(AssayNode.class) != null) {
+                    nodes = mti.SDRF.getNodes(AssayNode.class);
                 }
                 else {
                     nodes = new ArrayList<LabeledExtractNode>();
                     createEvent(annError, "Unable to match Biomaterial names to " + fileType + " columns", 1024,
-                                "validation error", sdrfFileName, p.x, p.y, methodName);
-//						"validation error", sdrfFileName, sloc.y, p.y);
+                                methodName, mti.SDRF.getLocation().toString(), "validation error",
+                                x, y);
                 }
                 BufferedReader br;
                 try {
-                    br = new BufferedReader(new FileReader(sourceFullName));
+                    // resolve relative path to data file
+                    URL dataFileLocation = MAGETABUtils.resolveRelativeLocation(mti.SDRF.getLocation(), dataSourceName);
+                    System.out.println("DataSource: " + dataSourceName + "; " + dataFileLocation.toString());
+
+                    br = new BufferedReader(new InputStreamReader(dataFileLocation.openStream()));
                     StringSplitter ss = new StringSplitter((char) 0x09);
                     String currentLine;
                     int ctr = 0;
@@ -2408,9 +2482,9 @@ public class SemanticValidator extends MAGETABValidateHandler {
                                 if (!header1.containsKey(name)) {
                                     createEvent(annError, "BioMaterial name " + name
                                             + " not found in Array Data matrix file "
-                                            + dataSourceName, 1024, "validation error",
-                                                sdrfFileName, p.x, p.y, methodName);
-//			            			sdrfFileName, sloc.y, p.y);
+                                            + dataSourceName, 1024, methodName, mti.SDRF.getLocation().toString(),
+                                                "validation error",
+                                                x, y);
                                 }
                             }
                         }
@@ -2473,8 +2547,8 @@ public class SemanticValidator extends MAGETABValidateHandler {
                                     }
                                     catch (NumberFormatException nfe) {
                                         createEvent(annError, "Number Format Exception, value= " + value, 1038,
-                                                    "validation warning", dataSourceName, ctr, fctr,
-                                                    methodName);
+                                                    methodName, dataSourceName, "validation warning", ctr, fctr
+                                        );
                                         System.out.println("NumberFormatException in " + dataSourceName
                                                                    + "; line " + ctr + ", column " + fctr + "; value " +
                                                                    value);
@@ -2482,8 +2556,8 @@ public class SemanticValidator extends MAGETABValidateHandler {
                                 }
                                 else {
                                     createEvent(annError, "Empty data cell in " + fileType, 1038,
-                                                "validation warning", dataSourceName, ctr, fctr,
-                                                methodName);
+                                                methodName, dataSourceName, "validation warning", ctr, fctr
+                                    );
                                 }
                             }
                         }
@@ -2491,13 +2565,13 @@ public class SemanticValidator extends MAGETABValidateHandler {
                 }
                 catch (FileNotFoundException e) {
                     createEvent(annError, "Data file " + dataSourceName + " was not found", 8,
-                                "validation error", sdrfFileName, p.x, p.y,
-                                methodName);
+                                methodName, mti.SDRF.getLocation().toString(), "validation error",
+                                x, y);
                 }
                 catch (IOException ioe) {
                     createEvent(annError, "Data file " + dataSourceName + " was not readable", 8,
-                                "validation error", sdrfFileName, p.x, p.y,
-                                methodName);
+                                methodName, mti.SDRF.getLocation().toString(), "validation error",
+                                x, y);
                 }
             }
             if (check == true) {
@@ -2509,114 +2583,109 @@ public class SemanticValidator extends MAGETABValidateHandler {
 
     boolean checkProtocols(List<ProtocolApplicationNode> protocols, MAGETABInvestigation mti, AnnotareError annError) {
         boolean check = false;
-        for (ProtocolApplicationNode protocol : protocols) {
+        for (ProtocolApplicationNode protocolAppNode : protocols) {
+            String protocolName = protocolAppNode.protocol;
 
-            String protocolAppName = protocol.getNodeName();
-            String parentName = null;
-            if (protocolAppName.lastIndexOf(File.separatorChar) > 0) {
-                parentName = protocolAppName.substring(0, protocolAppName.indexOf(':'));
+            //get location of the object
+            Collection<Location> locations = mti.SDRF.getLayout().getLocationsForNode(protocolAppNode);
+            int x, y;
+            if (locations.size() != 0) {
+                Location firstLoc = locations.iterator().next();
+                x = firstLoc.getLineNumber();
+                y = firstLoc.getColumn();
             }
             else {
-                parentName = "";
-            }
-            String protocolName = protocol.protocol;
-/*
-			Collection<Node> parents = protocol.getParentNodes();
-			parentName = null;
-			for(Node myParent: parents) {
-				parentName = myParent.getNodeName();
-				Set<Point> parentLoc = mti.getLocationTracker().getSDRFLocations(protocol);
-				Object[] alist = locations.toArray();
-			}
-*/
-            Set<Point> locations = mti.getLocationTracker().getSDRFLocations(protocol);
-            Object[] alist = locations.toArray();
-            Point p;
-            if (alist.length == 0) {
-                p = findCell(protocolName, sdrfMap);
-            }
-            else {
-                Point tmp = (Point) alist[0];
-                p = new Point(tmp.y, tmp.x);
+                x = -1;
+                y = -1;
             }
 
             if (protocolName.equals("")) {
                 createEvent(annError, "Error: at least one protocol has no protocol name", 25,
-                            "validation error", sdrfFileName, p.x, p.y, "checkProtocols");
+                            "checkProtocols", mti.SDRF.getLocation().toString(), "validation error",
+                            x, y);
                 check = true;
             }
-            if (protocol.date != null && protocol.date.equals("")) {
+            if (protocolAppNode.date != null && protocolAppNode.date.equals("")) {
                 createEvent(annError, "Incomplete information for " + protocolName + "; value for date is missing",
-                            1016, "validation warning", sdrfFileName, p.x, p.y, "checkProtocols");
+                            1016, "checkProtocols", mti.SDRF.getLocation().toString(), "validation warning",
+                            x, y);
             }
-            else if (protocol.date == null) {
+            else if (protocolAppNode.date == null) {
                 createEvent(annError, "Incomplete information for " + protocolName + "; date not supplied", 1016,
-                            "validation missingData", sdrfFileName, p.x, p.y, "checkProtocols");
+                            "checkProtocols", mti.SDRF.getLocation().toString(), "validation missingData",
+                            x, y);
             }
             else {
-                boolean fail = checkDateTag(protocolName, protocol.date, annError);
-                if (fail = true) {
+                boolean fail = checkDateTag(mti.IDF, protocolName, protocolAppNode.date, annError);
+                if (fail) {
                     check = true;
                 }
             }
-            if (protocol.termSourceREF != null && protocol.termSourceREF.equals("")) {
+            if (protocolAppNode.termSourceREF != null && protocolAppNode.termSourceREF.equals("")) {
                 createEvent(annError, "Incomplete information for " + protocolName
                         + "; value for termSourceREF is empty", 1016,
-                            "validation warning", sdrfFileName, p.x, p.y, "checkProtocols");
+                            "checkProtocols", mti.SDRF.getLocation().toString(), "validation warning",
+                            x, y);
             }
-            else if (protocol.termSourceREF == null) {
+            else if (protocolAppNode.termSourceREF == null) {
                 createEvent(annError, "Incomplete information for " + protocolName
                         + "; termSourceREF is missing", 1016,
-                            "validation missingData", sdrfFileName, p.x, p.y, "checkProtocols");
+                            "checkProtocols", mti.SDRF.getLocation().toString(), "validation missingData",
+                            x, y);
             }
-            else if (!tsrStr.contains(protocol.termSourceREF)) {
-                createEvent(annError, "Term Source REF, " + protocol.termSourceREF + ", for Protocol "
+            else if (!tsrStr.contains(protocolAppNode.termSourceREF)) {
+                createEvent(annError, "Term Source REF, " + protocolAppNode.termSourceREF + ", for Protocol "
                         + protocolName + " is not declared in the IDF", 6,
-                            "validation warning", sdrfFileName, p.x, p.y, "checkProtocols");
+                            "checkProtocols", mti.SDRF.getLocation().toString(), "validation warning",
+                            x, y);
                 check = true;
             }
-            if (protocol.performer != null && protocol.performer.toString().equals("")) {
+            if (protocolAppNode.performer != null && protocolAppNode.performer.toString().equals("")) {
                 createEvent(annError, "Incomplete information for " + protocolName
-                        + "; value for performer is missing", 1016, "validation warning",
-                            sdrfFileName, p.x, p.y, "checkProtocols");
+                        + "; value for performer is missing", 1016, "checkProtocols", mti.SDRF.getLocation().toString(),
+                            "validation warning",
+                            x, y);
             }
-            else if (protocol.performer == null) {
+            else if (protocolAppNode.performer == null) {
                 createEvent(annError, "Incomplete information for " + protocolName
-                        + "; performer not supplied", 1016, "validation missingData",
-                            sdrfFileName, p.x, p.y, "checkProtocols");
+                        + "; performer not supplied", 1016, "checkProtocols", mti.SDRF.getLocation().toString(),
+                            "validation missingData",
+                            x, y);
             }
-            List<ParameterValueAttribute> paramList = protocol.parameterValues;
+            List<ParameterValueAttribute> paramList = protocolAppNode.parameterValues;
             for (ParameterValueAttribute attr : paramList) {
                 String attrType = attr.type;
-                Point a = findCell(attr.getNodeName(), sdrfMap);
-
-                if (attr != null && attr.getNodeName().equals("")) {
+                if (attr.getNodeName().equals("")) {
                     createEvent(annError, "Incomplete information for " + protocolName
                             + "; Parameter Value " + attrType + " nas no value", 1016,
-                                "validation warning", sdrfFileName, p.x, a.y + 1, "checkProtocols");
+                                "checkProtocols", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 if (attr.unit != null && attr.unit.getNodeName().equals("")) {
                     createEvent(annError, "Incomplete information for " + protocolName
                             + "; Parameter Value " + attrType + " has no Units", 1016,
-                                "validation warning", sdrfFileName, p.x, a.y + 1, "checkProtocols");
+                                "checkProtocols", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
                 else if (attr.unit != null) {
-                    Point u = findCell(attr.unit.getNodeName(), sdrfMap);
                     if (attr.unit.termSourceREF != null && attr.unit.termSourceREF.equals("")) {
                         createEvent(annError, "Incomplete information for " + protocolName
                                 + "; Parameter Value " + attrType + " has no Unit Term Source", 1005,
-                                    "validation warning", sdrfFileName, p.x, u.y + 1, "checkProtocols");
+                                    "checkProtocols", mti.SDRF.getLocation().toString(), "validation warning",
+                                    x, y);
                     }
                     else if (attr.unit.termSourceREF == null) {
                         createEvent(annError, "Incomplete information for " + attr.unit
-                                + "; termSourceREF not supplied", 1016, "validation missingData",
-                                    sdrfFileName, p.x, u.y, "checkProtocols");
+                                + "; termSourceREF not supplied", 1016, "checkProtocols",
+                                    mti.SDRF.getLocation().toString(), "validation missingData",
+                                    x, y);
                     }
                     else if (!tsrStr.contains(attr.unit.termSourceREF)) {
                         createEvent(annError, "Term Source REF, " + attr.unit.termSourceREF
                                 + ", for ParameterValue " + attr.unit.getNodeName()
-                                + " is not declared in the IDF", 6, "validation warning",
-                                    sdrfFileName, p.x, u.y + 1, "checkProtocols");
+                                + " is not declared in the IDF", 6, "checkProtocols", mti.SDRF.getLocation().toString(),
+                                    "validation warning",
+                                    x, y);
                         check = true;
                     }
                 }
@@ -2662,49 +2731,48 @@ public class SemanticValidator extends MAGETABValidateHandler {
             String hybridizationName = hybridization.getNodeName();
             List<FactorValueAttribute> fvList = hybridization.factorValues;
 
-            Set<Point> locations = mti.getLocationTracker().getSDRFLocations(hybridization);
-            Object[] alist = locations.toArray();
-            // 2009-12-13: added guard against empty list --mm 
-            Point sloc;
-            if (alist.length == 0) {
-                sloc = new Point();
-            }
-            else {
-                sloc = (Point) alist[0];
-            }
             for (FactorValueAttribute attr : fvList) {
                 String attrName = attr.getNodeName();
                 String attrType = attr.type;
                 if (!usedEF.contains(attrType)) {
                     usedEF.add(attrType);
                 }
-                Point p = findCell(attrName, sdrfMap);
-                if (sloc.y == 0) {
-                    locLine = p.x;
+
+                //get location of the object
+                Collection<Location> locations = mti.SDRF.getLayout().getLocationsForAttribute(attr);
+                int x, y;
+                if (locations.size() != 0) {
+                    Location firstLoc = locations.iterator().next();
+                    x = firstLoc.getLineNumber();
+                    y = firstLoc.getColumn();
                 }
                 else {
-                    locLine = sloc.y;
+                    x = -1;
+                    y = -1;
                 }
                 if (!efStr.contains(attrType)) {
                     System.out.println("name: " + attrName + "; type: " + attrType);
                     createEvent(annError, "Error: Factor value " + attrType + " is not declared in the IDF",
-                                5, "validation error", sdrfFileName, locLine, p.y, "checkRefs");
+                                5, "checkRefs", mti.SDRF.getLocation().toString(), "validation error",
+                                x, y);
                     fail = true;
                 }
-                if (attr != null && attr.getNodeName().equals("")) {
+                if (attr.getNodeName().equals("")) {
                     createEvent(annError, "Incomplete information for Hybridization " + hybridizationName
                             + "; Factor value " + attrType + " nas no value", 1027,
-                                "validation warning", sdrfFileName, locLine, p.y, "checkRefs");
+                                "checkProtocols", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                 }
             }
         }
         //check ef list for unused factors; report as warnings
         for (String s : ef) {
             if (!usedEF.contains(s)) {
-                Point p = findCell(s, idfMap);
+                int lineNumber = mti.IDF.getLayout().getLineNumberForHeader("Experimental Factor Name");
                 createEvent(annError,
                             "Warning: ExperimentalFactor " + s + " is declared in the IDF but not used in the SDRF",
-                            5, "validation warning", idfFileName, p.x, p.y, "checkRefs");
+                            5, "checkRefs", mti.IDF.getLocation().toString(), "validation warning",
+                            lineNumber, -1);
             }
         }
 
@@ -2714,67 +2782,48 @@ public class SemanticValidator extends MAGETABValidateHandler {
             protocols.add(protocol);
         }
 
-        for (ProtocolApplicationNode protocol : protocols) {
-            String protocolName = protocol.protocol;
+        for (ProtocolApplicationNode protocolAppNode : protocols) {
+            String protocolName = protocolAppNode.protocol;
 
-            //Note: 2/9/10: getSDRFLocations is returning a null locations list
-            Set<Point> locations = mti.getLocationTracker().getSDRFLocations(protocol);
-            Object[] alist = locations.toArray();
-            //Temporary patch to avoid null alist[] array.  
-            Point sloc;
-            if (alist.length == 0) {
-                sloc = new Point();
+            //get location of the object
+            Collection<Location> locations = mti.SDRF.getLayout().getLocationsForNode(protocolAppNode);
+            int x, y;
+            if (locations.size() != 0) {
+                Location firstLoc = locations.iterator().next();
+                x = firstLoc.getLineNumber();
+                y = firstLoc.getColumn();
             }
             else {
-                sloc = (Point) alist[0];
+                x = -1;
+                y = -1;
             }
 
             if (!pnStr.contains(protocolName)) {
-                Point p;
-                //Catch "Unknown Protocol" due to parser problem
-                if (protocolName.equalsIgnoreCase("Unknown Protocol")) {
-                    p = new Point(0, 0);
-                    locLine = p.x;
-                }
-                else {
-                    p = findCell(protocolName, sdrfMap);
-                    if (sloc.y == 0) {
-                        locLine = p.x;
-                    }
-                    else {
-                        locLine = sloc.y;
-                    }
-
-                }
                 System.out.println("Protocol name not found in Protocol list: " + protocolName);
-                for (Node node : protocol.getParentNodes()) {
+                for (Node node : protocolAppNode.getParentNodes()) {
                     System.out.println(node.getNodeName() + ' ');
                 }
                 createEvent(annError, "Error: Protocol " + protocolName + " is not declared in the IDF",
-                            7, "validation error", sdrfFileName, locLine, p.y, "checkRefs");
+                            7, "checkRefs", mti.SDRF.getLocation().toString(), "validation error",
+                            x, y);
                 fail = true;
             }
-            List<ParameterValueAttribute> pvList = protocol.parameterValues;
+            List<ParameterValueAttribute> pvList = protocolAppNode.parameterValues;
             for (ParameterValueAttribute attr : pvList) {
                 String attrName = attr.getNodeName();
                 String attrType = attr.type;
-                Point p = findCell(attrName, sdrfMap);
-                if (sloc.y == 0) {
-                    locLine = p.x;
-                }
-                else {
-                    locLine = sloc.y;
-                }
                 if (!pvStr.contains(attrType)) {
                     System.out.println("name: " + attrName + "; type: " + attrType);
                     createEvent(annError, "Error: Parameter value " + attrType + " is not declared in the IDF",
-                                13, "validation error", sdrfFileName, locLine, p.y, "checkRefs");
+                                13, "checkProtocols", mti.SDRF.getLocation().toString(), "validation error",
+                                x, y);
                     fail = true;
                 }
                 if (attr != null && attr.getNodeName().equals("")) {
                     createEvent(annError, "Incomplete information for Protocol " + protocolName
                             + "; Parameter value " + attrType + " nas no value", 1016,
-                                "validation warning", sdrfFileName, locLine, p.y, "checkRefs");
+                                "checkProtocols", mti.SDRF.getLocation().toString(), "validation warning",
+                                x, y);
                     fail = true;
                 }
             }
@@ -2783,58 +2832,31 @@ public class SemanticValidator extends MAGETABValidateHandler {
         if (testDebug == true) {
             ErrorItem event = eif.generateErrorItem("Check Refs test", ErrorCode.APPLICATION_TEST,
                                                     this.getClass());
-            createEvent("test passed", 998, "checkRefs", annError);
+            createEvent(annError, "test passed", 998, "checkRefs", mti.SDRF.getLocation().toString());
         }
 
         return fail;
     }
 
-    private Point findCell(String errDatum, Hashtable<Point, String> map) {
-        Point errCell = new Point(-1, -1);
-        //The keys are Point() objects. The values are String objects.
-        Enumeration<Point> keys = map.keys();
-        while (keys.hasMoreElements()) {
-            Point p = keys.nextElement();
-            String value = map.get(p);
-            if (value.equalsIgnoreCase(errDatum)) {
-                errCell = p;
-                break;
-            }
-        }
-        if (testDebug == true) {
-            if (errCell.x == -1) {
-                System.out.println(errDatum);
-            }
-        }
-        return errCell;
+    private void createEvent(AnnotareError annError,
+                             String comment,
+                             int code,
+                             String caller,
+                             String fileName) {
+        createEvent(annError, comment, code, caller, fileName, "validation error");
     }
 
-    private void createEvent(String comment, int code, String caller, AnnotareError annError) {
-        createEvent(annError, comment, code, "validation error", caller);
-    }
-
-    private void createEvent(AnnotareError annError, String comment, int code, String eType, String caller) {
+    private void createEvent(AnnotareError annError,
+                             String comment,
+                             int code,
+                             String caller,
+                             String fileName,
+                             String eType) {
         ErrorCode ec = ErrorCode.getErrorFromCode(code);
         String mesg = ec.getErrorMessage();
         ErrorItem event = eif.generateErrorItem(mesg, code, this.getClass());
         event.setComment(comment);
         event.setErrorType(eType);
-        String fileName = null;
-        if (mesg.contains("IDF") || mesg.contains("idf")) {
-            fileName = idfFileName;
-        }
-        else if (mesg.contains("SDRF") || mesg.contains("sdrf")) {
-            fileName = sdrfFileName;
-        }
-        else if (comment.contains("IDF") || comment.contains("idf")) {
-            fileName = idfFileName;
-        }
-        else if (comment.contains("SDRF") || comment.contains("sdrf")) {
-            fileName = sdrfFileName;
-        }
-        else {
-            fileName = "";
-        }
         event.setParsedFile(fileName);
         event.setCaller(caller);
         annError.addErrorItem(event);
@@ -2846,19 +2868,19 @@ public class SemanticValidator extends MAGETABValidateHandler {
      * @param annError
      * @param comment
      * @param code
-     * @param eType:   error type, One-of: validation error, validation warning, validation missingData
      * @param fileName
+     * @param eType:   error type, One-of: validation error, validation warning, validation missingData
      * @param line
      * @param column
      */
     private void createEvent(AnnotareError annError,
                              String comment,
                              int code,
-                             String eType,
+                             String caller,
                              String fileName,
+                             String eType,
                              int line,
-                             int column,
-                             String caller) {
+                             int column) {
         ErrorCode ec = ErrorCode.getErrorFromCode(code);
         String mesg = ec.getErrorMessage();
         ErrorItem event = eif.generateErrorItem(mesg, code, this.getClass());
