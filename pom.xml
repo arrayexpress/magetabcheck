@@ -1,14 +1,56 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>annotare</groupId>
-    <artifactId>limpopo-validator-annotare</artifactId>
+    <groupId>uk.ac.ebi.fg.annotare2</groupId>
+    <artifactId>magetabcheck</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>limpopo-validator-annotare</name>
-    <url>http://maven.apache.org</url>
+    <name>MAGE-TAB Checker</name>
+
+    <properties>
+        <gwt.version>2.4.0</gwt.version>
+        <guava.version>12.0</guava.version>
+        <slf4j.version>1.6.4</slf4j.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <licenses>
+        <license>
+            <name>Apache Software License 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/arrayexpress/magetabcheck</url>
+        <connection>scm:git:git://github.com/arrayexpress/magetabcheck.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/arrayexpress/magetabcheck.git</developerConnection>
+    </scm>
+
+    <repositories>
+        <repository>
+            <id>limpopo-repo</id>
+            <name>Limpopo Mini-SF Repository</name>
+            <url>http://limpopo.sourceforge.net/maven/repo</url>
+        </repository>
+    </repositories>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
 
     <build>
         <plugins>
@@ -16,30 +58,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.6</source>
+                    <target>1.6</target>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>attached</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
@@ -55,129 +76,62 @@
         </plugins>
     </build>
 
-    <!-- Reporting/Documentation output -->
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.7</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.0.1</version>
-            </plugin>
-        </plugins>
-    </reporting>
-
-    <!-- Licensing -->
-    <licenses>
-        <license>
-            <name>GNU Lesser General Public License</name>
-            <url>http://www.gnu.org/copyleft/lesser.html</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <!-- Developer Listing -->
-    <developers>
-        <developer>
-            <id>tburdett</id>
-            <name>Tony Burdett</name>
-            <email>tburdett@ebi.ac.uk</email>
-            <organization>EBI</organization>
-            <organizationUrl>http://www.ebi.ac.uk</organizationUrl>
-            <roles>
-                <role>administrator</role>
-                <role>Developer</role>
-            </roles>
-            <timezone>0</timezone>
-            <properties />
-        </developer>
-    </developers>
-
-    <!-- SVN connection -->
-    <scm>
-        <connection>
-            scm:svn:https://limpopo.svn.sourceforge.net/svnroot/limpopo
-        </connection>
-        <developerConnection>
-            scm:svn:https://limpopo.svn.sourceforge.net/svnroot/limpopo
-        </developerConnection>
-        <url>
-            http://limpopo.svn.sourceforge.net/viewvc/limpopo
-        </url>
-    </scm>
-
-    <!-- Maven repository deploy -->
-    <distributionManagement>
-        <downloadUrl>http://limpopo.sourceforge.net/maven/repo</downloadUrl>
-        <repository>
-            <id>limpopo-repo</id>
-            <name>Limpopo Mini-SF Repository</name>
-            <url>
-                scp://shell.sourceforge.net/home/project-web/limpopo/htdocs/maven/repo
-            </url>
-        </repository>
-        <snapshotRepository>
-            <id>limpopo-repo</id>
-            <name>Limpopo Mini-SF Repository</name>
-            <url>
-                scp://shell.sourceforge.net/home/project-web/limpopo/htdocs/maven/repo
-            </url>
-        </snapshotRepository>
-        <site>
-            <id>limpopo.sf.net</id>
-            <url>scp://shell.sourceforge.net/home/project-web/limpopo/htdocs</url>
-        </site>
-    </distributionManagement>
-
-    <!-- Maven repository download -->
-    <repositories>
-        <repository>
-            <id>limpopo-repo</id>
-            <name>Limpopo Mini-SF Repository</name>
-            <url>http://limpopo.sourceforge.net/maven/repo</url>
-        </repository>
-        <repository>
-            <id>erroritem-repo</id>
-            <name>ErrorItem Mini-SF Repository</name>
-            <url>http://erroritem.sourceforge.net/maven/repo</url>
-        </repository>
-        <repository>
-            <id>hasbanana-repo</id>
-            <url>http://www.hasbanana.com/maven/repo</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>uk.ac.ebi.arrayexpress2</groupId>
             <artifactId>limpopo</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>1.1.2</version>
         </dependency>
+
+        <!-- essential -->
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+
+        <!-- unit tests -->
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.2</version>
+            <version>4.7</version>
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+            <version>3.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- logging -->
+
+        <dependency> <!-- this will allow redirection of java.util.logging calls via slf4j -->
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.6.0</version>
-            <scope>test</scope>
+            <artifactId>jul-to-slf4j</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
-        <dependency>
+        <dependency> <!-- this will allow redirection of org.apache.commons.logging calls via slf4j -->
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency> <!-- native slf4j api for own application logging -->
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency> <!-- log4j itself -->
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.14</version>
-            <scope>test</scope>
+            <version>1.2.16</version>
+        </dependency>
+        <dependency> <!-- log4-slf4j bridge -->
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
 </project>
