@@ -8,4 +8,6 @@ import java.util.List;
 public interface IdfData {
 
     List<Person> getContacts();
+
+    List<TermSource> getTermSources();
 }

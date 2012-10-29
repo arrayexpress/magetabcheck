@@ -38,14 +38,14 @@ public class IdfChecker {
         error("List of contacts must be non empty", contacts, is(not(empty())));
 
         for (Person p : contacts) {
-            assertThat("LastName field is empty", p.getLastName(), not(isEmptyString()));
+            error("Contact must have Last Name specified", p.getLastName(), not(isEmptyString()));
         }
 
-        assertThat("There are no contacts with email", contacts, hasItem(personWithEmail()));
+        error("There is must be at least one contact with email specified", contacts, hasItem(personWithEmail()));
 
-        assertThat("There are no contacts with roles", contacts, hasItem(personWithRoles()));
+        error("There is must be at least one contact with roles specified ", contacts, hasItem(personWithRoles()));
 
-        assertThat("There are no contacts with 'submitter' role", contacts, hasItem(personWithRole("submitter")));
+        error("There is must be at least one contact with 'submitter' role", contacts, hasItem(personWithRole("submitter")));
     }
 
     private <T> void error(String msg, T target, Matcher<? super T> matcher) {

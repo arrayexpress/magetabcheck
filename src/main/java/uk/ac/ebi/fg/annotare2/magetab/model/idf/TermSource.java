@@ -25,8 +25,6 @@ public interface TermSource {
 
     String getVersion();
 
-    void setVersion(String version);
-
     String getFile();
 
 }
