@@ -10,9 +10,6 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static uk.ac.ebi.fg.annotare2.magetab.check.ContactMatchers.personWithEmail;
-import static uk.ac.ebi.fg.annotare2.magetab.check.ContactMatchers.personWithRole;
-import static uk.ac.ebi.fg.annotare2.magetab.check.ContactMatchers.personWithRoles;
 
 /**
  * @author Olga Melnichuk
@@ -41,11 +38,11 @@ public class IdfChecker {
             error("Contact must have Last Name specified", p.getLastName(), not(isEmptyString()));
         }
 
-        error("There is must be at least one contact with email specified", contacts, hasItem(personWithEmail()));
+       // error("There is must be at least one contact with email specified", contacts, hasItem(personWithEmail()));
 
-        error("There is must be at least one contact with roles specified ", contacts, hasItem(personWithRoles()));
+       // error("There is must be at least one contact with roles specified ", contacts, hasItem(personWithRoles()));
 
-        error("There is must be at least one contact with 'submitter' role", contacts, hasItem(personWithRole("submitter")));
+       // error("There is must be at least one contact with 'submitter' role", contacts, hasItem(personWithRole("submitter")));
     }
 
     private <T> void error(String msg, T target, Matcher<? super T> matcher) {
