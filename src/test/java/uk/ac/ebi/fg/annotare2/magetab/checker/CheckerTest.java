@@ -43,4 +43,22 @@ public class CheckerTest {
         assertNotNull(clazz);
         assertEquals(Person.class, clazz);
     }
+
+    @Test
+    public void testGenericDepthSuperClassInheritance() {
+        abstract class C<S,T> implements GlobalCheck<T> {}
+        abstract class B<S> extends C<S, Person> {}
+        class A extends B<Integer> {
+            @Override
+            public void visit(Person person) {
+            }
+
+            @Override
+            public void check() {
+            }
+        }
+        Class<?> clazz = Checker.getTypeArgument(A.class);
+        assertNotNull(clazz);
+        assertEquals(Person.class, clazz);
+    }
 }
