@@ -1,6 +1,6 @@
 package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
 
-import uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplication;
+import uk.ac.ebi.fg.annotare2.magetab.checker.InvestigationType;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality;
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Person;
@@ -28,7 +28,7 @@ public class IdfSimpleChecks {
         assertThat("Contact should have First Name specified", person.getFirstName(), not(isEmptyString()));
     }
 
-    @MageTabCheck(applyTo = CheckApplication.HTS)
+    @MageTabCheck(applyTo = InvestigationType.HTS)
     public void submitterMustHaveAffiliation(Person person) {
         TermList roles = person.getRoles();
         if (roles == null || roles.isEmpty()) {
