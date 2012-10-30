@@ -5,11 +5,12 @@ import uk.ac.ebi.fg.annotare2.magetab.model.idf.Person;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.AllChecks.getTypeArgument;
 
 /**
  * @author Olga Melnichuk
  */
-public class CheckerTest {
+public class AllChecksTest {
 
     @Test
     public void testDirectInterfaceInheritance() {
@@ -22,7 +23,7 @@ public class CheckerTest {
             }
         }
 
-        Class<?> clazz = Checker.getTypeArgument(A.class);
+        Class<?> clazz = getTypeArgument(A.class);
         assertNotNull(clazz);
         assertEquals(Person.class, clazz);
     }
@@ -39,7 +40,7 @@ public class CheckerTest {
             public void check() {
             }
         }
-        Class<?> clazz = Checker.getTypeArgument(A.class);
+        Class<?> clazz = getTypeArgument(A.class);
         assertNotNull(clazz);
         assertEquals(Person.class, clazz);
     }
@@ -57,7 +58,7 @@ public class CheckerTest {
             public void check() {
             }
         }
-        Class<?> clazz = Checker.getTypeArgument(A.class);
+        Class<?> clazz = getTypeArgument(A.class);
         assertNotNull(clazz);
         assertEquals(Person.class, clazz);
     }
