@@ -5,7 +5,7 @@ package uk.ac.ebi.fg.annotare2.magetab.checker;
  */
 public interface GlobalCheck<T> {
 
-    public void visit(T t);
+    void visit(T t);
 
-    public void check();
+    void check();
 }
