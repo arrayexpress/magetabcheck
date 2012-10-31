@@ -10,7 +10,7 @@ import static org.hamcrest.Matchers.greaterThan;
 /**
  * @author Olga Melnichuk
  */
-@MageTabGlobalCheck
+@MageTabGlobalCheck("List of contacts must be non empty")
 public class ListOfContactsMustBeNonEmpty implements GlobalCheck<Person> {
 
     private int contactCount;
@@ -22,6 +22,6 @@ public class ListOfContactsMustBeNonEmpty implements GlobalCheck<Person> {
 
     @Override
     public void check() {
-        assertThat("List of contacts must be non empty", contactCount, greaterThan(0));
+        assertThat(contactCount, greaterThan(0));
     }
 }

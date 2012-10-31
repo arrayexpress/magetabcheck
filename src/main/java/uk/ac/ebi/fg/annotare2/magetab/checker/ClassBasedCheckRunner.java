@@ -1,41 +1,50 @@
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
+import java.util.List;
+
 /**
  * @author Olga Melnichuk
  */
-class ClassBasedCheckRunner<T> {
-
-    private final Class targetClass;
+class ClassBasedCheckRunner<T> extends CheckRunner<T> {
 
     private final GlobalCheck<T> target;
 
-    private Throwable exception;
-
     ClassBasedCheckRunner(Class<? extends GlobalCheck<T>> targetClass) {
+        super(isNotNull(targetClass.getAnnotation(MageTabGlobalCheck.class)));
 
         GlobalCheck<T> t = null;
         try {
             t = targetClass.newInstance();
         } catch (InstantiationException e) {
-            this.exception = e;
+            error(e);
         } catch (IllegalAccessException e) {
-            this.exception = e;
+            error(e);
         }
 
         this.target = t;
-        this.targetClass = targetClass;
     }
 
-    public void visit(T obj) {
-        target.visit(obj);
+    private static MageTabGlobalCheck isNotNull(MageTabGlobalCheck annotation) {
+        if (annotation == null) {
+            throw new NullPointerException(
+                    "Global MageTab check class must be annotated with MageTabGlobalCheck annotation");
+        }
+        return annotation;
     }
 
-    public CheckResult check() {
+    @Override
+    public void runForEach(T item) {
+        target.visit(item);
+    }
+
+    @Override
+    public List<CheckResult> sumUp() {
         try {
             target.check();
+            success();
         } catch (AssertionError e) {
-            //TODO
+            failure(e);
         }
-        return null;
+        return super.sumUp();
     }
 }

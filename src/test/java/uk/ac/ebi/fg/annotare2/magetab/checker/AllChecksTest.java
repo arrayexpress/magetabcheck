@@ -5,7 +5,7 @@ import uk.ac.ebi.fg.annotare2.magetab.model.idf.Person;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static uk.ac.ebi.fg.annotare2.magetab.checker.AllChecks.getTypeArgument;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.AllChecks.getGlobalCheckTypeArgument;
 
 /**
  * @author Olga Melnichuk
@@ -23,7 +23,7 @@ public class AllChecksTest {
             }
         }
 
-        Class<?> clazz = getTypeArgument(A.class);
+        Class<?> clazz = getGlobalCheckTypeArgument(A.class);
         assertNotNull(clazz);
         assertEquals(Person.class, clazz);
     }
@@ -40,7 +40,7 @@ public class AllChecksTest {
             public void check() {
             }
         }
-        Class<?> clazz = getTypeArgument(A.class);
+        Class<?> clazz = getGlobalCheckTypeArgument(A.class);
         assertNotNull(clazz);
         assertEquals(Person.class, clazz);
     }
@@ -58,7 +58,7 @@ public class AllChecksTest {
             public void check() {
             }
         }
-        Class<?> clazz = getTypeArgument(A.class);
+        Class<?> clazz = getGlobalCheckTypeArgument(A.class);
         assertNotNull(clazz);
         assertEquals(Person.class, clazz);
     }

@@ -7,5 +7,5 @@ public class IdfConstants {
 
     private IdfConstants() {}
 
-    public static String SUBMITTER_ROLE = "submitter";
+    public static final String SUBMITTER_ROLE = "submitter";
 }

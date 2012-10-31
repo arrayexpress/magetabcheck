@@ -6,30 +6,38 @@ import java.lang.reflect.Method;
 /**
  * @author Olga Melnichuk
  */
-class MethodBasedCheckRunner<T> {
+class MethodBasedCheckRunner<T> extends CheckRunner<T> {
 
     private final Class<?> clazz;
 
     private final Method method;
 
     MethodBasedCheckRunner(Class<?> clazz, Method method) {
+        super(isNotNull(method.getAnnotation(MageTabCheck.class)));
         this.clazz = clazz;
         this.method = method;
     }
 
-    public CheckResult check(T t) {
-        try {
-            method.invoke(clazz.newInstance(), t);
-        } catch (AssertionError assertionError) {
-            //TODO
-        } catch (InvocationTargetException e) {
-            //TODO
-        } catch (InstantiationException e) {
-            //TODO
-        } catch (IllegalAccessException e) {
-            //TODO
+    private static MageTabCheck isNotNull(MageTabCheck annotation) {
+        if (annotation == null) {
+            throw new NullPointerException("Method based MageTab check must be annotated with MageTabCheck annotation");
         }
-        return null;
+        return annotation;
     }
 
+    @Override
+    public void runForEach(T item) {
+        try {
+            method.invoke(clazz.newInstance(), item);
+            success();
+        } catch (AssertionError assertionError) {
+            failure(assertionError);
+        } catch (InvocationTargetException e) {
+            error(e);
+        } catch (InstantiationException e) {
+            error(e);
+        } catch (IllegalAccessException e) {
+            error(e);
+        }
+    }
 }

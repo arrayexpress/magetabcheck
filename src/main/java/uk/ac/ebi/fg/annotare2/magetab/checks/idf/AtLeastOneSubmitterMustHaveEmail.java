@@ -13,7 +13,7 @@ import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.SUBMITTER_R
 /**
  * @author Olga Melnichuk
  */
-@MageTabGlobalCheck
+@MageTabGlobalCheck("At least one contact must have a role")
 public class AtLeastOneSubmitterMustHaveEmail implements GlobalCheck<Person> {
 
     private int emailCount;
@@ -31,6 +31,6 @@ public class AtLeastOneSubmitterMustHaveEmail implements GlobalCheck<Person> {
 
     @Override
     public void check() {
-        assertThat("At least one contact must have a role", emailCount, greaterThan(0));
+        assertThat(emailCount, greaterThan(0));
     }
 }

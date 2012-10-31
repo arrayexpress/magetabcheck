@@ -18,24 +18,24 @@ import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.SUBMITTER_R
  */
 public class IdfSimpleChecks {
 
-    @MageTabCheck
+    @MageTabCheck("Contact must have Last Name specified")
     public void contactMustHaveLastName(Person person) {
-        assertThat("Contact must have Last Name specified", person.getLastName(), not(isEmptyString()));
+        assertThat(person.getLastName(), not(isEmptyString()));
     }
 
-    @MageTabCheck(modality = CheckModality.WARNING)
+    @MageTabCheck(value = "Contact should have First Name specified", modality = CheckModality.WARNING)
     public void contactShouldHaveFirstName(Person person) {
-        assertThat("Contact should have First Name specified", person.getFirstName(), not(isEmptyString()));
+        assertThat(person.getFirstName(), not(isEmptyString()));
     }
 
-    @MageTabCheck(applyTo = InvestigationType.HTS)
+    @MageTabCheck(value = "Contact with '" + SUBMITTER_ROLE + "' role must have Affiliation specified", applyTo = InvestigationType.HTS)
     public void submitterMustHaveAffiliation(Person person) {
         TermList roles = person.getRoles();
         if (roles == null || roles.isEmpty()) {
             return;
         }
         if (roles.getNames().contains(SUBMITTER_ROLE)) {
-            assertThat("Contact with '" + SUBMITTER_ROLE + "' role must have Affiliation specified", person.getAffiliation(), not(isEmptyString()));
+            assertThat(person.getAffiliation(), not(isEmptyString()));
         }
     }
 

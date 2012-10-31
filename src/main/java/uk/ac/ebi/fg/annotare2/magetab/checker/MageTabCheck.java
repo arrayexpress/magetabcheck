@@ -12,6 +12,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface MageTabCheck {
 
+    String value();
+
     CheckModality modality() default CheckModality.ERROR;
 
     InvestigationType applyTo() default InvestigationType.ALL;

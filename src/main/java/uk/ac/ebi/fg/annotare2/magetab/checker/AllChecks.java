@@ -30,25 +30,25 @@ public class AllChecks {
         }
     };
 
-    public static <T> CheckRunnerList<T> checkRunnersFor(Class<T> itemClass) {
-        List<ClassBasedCheckRunner<T>> cbChecks = new ArrayList<ClassBasedCheckRunner<T>>();
+    public static <T> List<CheckRunner<T>> checkRunnersFor(Class<T> itemClass) {
+        List<CheckRunner<T>> runners = new ArrayList<CheckRunner<T>>();
+
         for (Class clazz : classBasedChecks) {
-            Class typeArg = getTypeArgument(clazz);
+            Class typeArg = getGlobalCheckTypeArgument(clazz);
             if (typeArg != null && (typeArg.equals(itemClass))) {
-                cbChecks.add(new ClassBasedCheckRunner<T>(clazz));
+                runners.add(new ClassBasedCheckRunner<T>((Class<? extends GlobalCheck<T>>)clazz));
             }
         }
 
-        List<MethodBasedCheckRunner<T>> mbChecks = new ArrayList<MethodBasedCheckRunner<T>>();
         for (Class clazz : methodBasedChecks) {
             for (Method method : clazz.getMethods()) {
                 MageTabCheck annot = method.getAnnotation(MageTabCheck.class);
                 if (annot != null) {
-                    mbChecks.add(new MethodBasedCheckRunner<T>(clazz, method));
+                    runners.add(new MethodBasedCheckRunner<T>(clazz, method));
                 }
             }
         }
-        return new CheckRunnerList<T>(mbChecks, cbChecks);
+        return runners;
     }
 
     /**
@@ -92,7 +92,7 @@ public class AllChecks {
      * @param clazz the class to check
      * @return a list of the raw classes for the actual type arguments.
      */
-    protected static Class<?> getTypeArgument(Class<?> clazz) {
+    protected static Class<?> getGlobalCheckTypeArgument(Class<?> clazz) {
         Type type = clazz;
         ParameterizedType interf = null;
 

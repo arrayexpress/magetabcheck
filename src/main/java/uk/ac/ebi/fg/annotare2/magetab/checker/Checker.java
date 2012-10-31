@@ -17,23 +17,21 @@ public class Checker {
     private List<CheckResult> results = new ArrayList<CheckResult>();
 
     public void check(IdfData idf) {
-        //TODO
-        checkAll(new ArrayList<Person>(), Person.class);
+        checkAll(idf.getContacts(), Person.class);
     }
 
     private <T> void checkAll(Collection<T> collection, Class<T> itemClass) {
-        CheckRunnerList<T> checkRunnerList = AllChecks.<T>checkRunnersFor(itemClass);
-        if (checkRunnerList.isEmpty()) {
+        List<CheckRunner<T>> checkRunners = AllChecks.<T>checkRunnersFor(itemClass);
+        if (checkRunners.isEmpty()) {
             return;
         }
-        for(T item : collection) {
-            checkRunnerList.visit(item);
+        for (T item : collection) {
+            for (CheckRunner<T> runner : checkRunners) {
+                runner.runForEach(item);
+            }
         }
-        checkRunnerList.check();
-        results.addAll(checkRunnerList.getResults());
-    }
-
-    public static void main(String... args) {
-        new Checker().check(null);
+        for (CheckRunner<T> runner : checkRunners) {
+            results.addAll(runner.sumUp());
+        }
     }
 }
