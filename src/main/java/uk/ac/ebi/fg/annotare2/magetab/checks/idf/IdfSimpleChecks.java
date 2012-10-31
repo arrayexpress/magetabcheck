@@ -22,11 +22,13 @@ import uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality;
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Person;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermList;
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
+import static org.hamcrest.Matchers.notNullValue;
 import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.SUBMITTER_ROLE;
 
 
@@ -48,6 +50,15 @@ public class IdfSimpleChecks {
     @MageTabCheck(value = "A contact should have Affiliation specified", modality = CheckModality.WARNING)
     public void contactShouldHaveAffiliation(Person person) {
         assertThat(person.getAffiliation(), not(isEmptyString()));
+    }
+
+    @MageTabCheck(value = "A contact roles should have TermSource specified", modality = CheckModality.WARNING)
+    public void check(Person person) {
+        TermList roles = person.getRoles();
+        if (roles == null || roles.isEmpty()) {
+            return;
+        }
+        assertThat(roles.getSource(), notNullValue());
     }
 
     @MageTabCheck(
