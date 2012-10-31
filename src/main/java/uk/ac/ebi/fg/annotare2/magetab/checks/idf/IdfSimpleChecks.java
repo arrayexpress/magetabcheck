@@ -45,6 +45,11 @@ public class IdfSimpleChecks {
         assertThat(person.getFirstName(), not(isEmptyString()));
     }
 
+    @MageTabCheck(value = "Contact should have Affiliation specified", modality = CheckModality.WARNING)
+    public void contactShouldHaveAffiliation(Person person) {
+        assertThat(person.getAffiliation(), not(isEmptyString()));
+    }
+
     @MageTabCheck(
             value = "Contact with '" + SUBMITTER_ROLE + "' role must have Affiliation specified",
             application = CheckApplicationType.HTS_ONLY)
