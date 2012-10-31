@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * @author Olga Melnichuk
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD})
 public @interface MageTabCheck {
 
     String value();

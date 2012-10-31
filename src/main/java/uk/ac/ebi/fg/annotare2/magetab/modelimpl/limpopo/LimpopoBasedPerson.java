@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Arrays.asList;
 
 /**
@@ -69,8 +70,15 @@ public class LimpopoBasedPerson extends LimpopoBasedIdfObject implements Person 
         String roleAccessions = get(idf().personRolesTermAccession, index);
         final String roleTermSource = get(idf().personRolesTermSourceREF, index);
 
-        final List<String> names = isNullOrEmpty(roleNames) ? new ArrayList<String>() : asList(roleNames.split(","));
-        final List<String> accessions = isNullOrEmpty(roleAccessions) ? new ArrayList<String>() : asList(roleAccessions.split(","));
+        final List<String> names = newArrayList();
+        if (!isNullOrEmpty(roleNames)) {
+            names.addAll(asList(roleNames.split(",")));
+        }
+
+        final List<String> accessions = newArrayList();
+        if (!isNullOrEmpty(roleAccessions)) {
+            accessions.addAll(asList(roleAccessions.split(",")));
+        }
 
         final int size = toTheSameSize(names, accessions);
 

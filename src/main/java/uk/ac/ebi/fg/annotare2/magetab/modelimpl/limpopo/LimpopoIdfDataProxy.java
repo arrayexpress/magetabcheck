@@ -12,11 +12,11 @@ import java.util.List;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedIdfData implements IdfData {
+public class LimpopoIdfDataProxy implements IdfData {
 
     private final LimpopoIdfHelper idfHelper;
 
-    public LimpopoBasedIdfData(@Nonnull IDF idf) {
+    public LimpopoIdfDataProxy(@Nonnull IDF idf) {
         this.idfHelper = new LimpopoIdfHelper(idf);
     }
 

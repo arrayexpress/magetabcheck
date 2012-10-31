@@ -34,4 +34,15 @@ public class CheckResult {
     public static CheckResult checkBroken(String checkTitle, CheckModality checkModality, Exception e) {
         return new CheckResult(checkTitle, checkModality, CheckResultType.RUN_ERROR, "an exception were thrown during the check run", e);
     }
+
+    @Override
+    public String toString() {
+        return "CheckResult{" +
+                "type=" + type +
+                ", modality=" + modality +
+                ", message='" + message + '\'' +
+                ", title='" + title + '\'' +
+                ", exception=" + exception +
+                '}';
+    }
 }

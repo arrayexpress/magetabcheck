@@ -5,6 +5,7 @@ import uk.ac.ebi.fg.annotare2.magetab.model.idf.Person;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,5 +34,9 @@ public class Checker {
         for (CheckRunner<T> runner : checkRunners) {
             results.addAll(runner.sumUp());
         }
+    }
+
+    public List<CheckResult> getResults() {
+        return Collections.unmodifiableList(results);
     }
 }
