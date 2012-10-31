@@ -8,21 +8,27 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import static uk.ac.ebi.fg.annotare2.magetab.checker.AllChecks.checkRunnersFor;
+
 /**
  * @author Olga Melnichuk
  */
 public class Checker {
 
-    private final InvestigationType invType = InvestigationType.MICRO_ARRAY;
+    private final InvestigationType invType;
 
     private List<CheckResult> results = new ArrayList<CheckResult>();
+
+    public Checker(InvestigationType invType) {
+        this.invType = invType;
+    }
 
     public void check(IdfData idf) {
         checkAll(idf.getContacts(), Person.class);
     }
 
     private <T> void checkAll(Collection<T> collection, Class<T> itemClass) {
-        List<CheckRunner<T>> checkRunners = AllChecks.<T>checkRunnersFor(itemClass);
+        List<CheckRunner<T>> checkRunners = checkRunnersFor(itemClass, invType);
         if (checkRunners.isEmpty()) {
             return;
         }

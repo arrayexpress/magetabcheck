@@ -16,5 +16,5 @@ public @interface MageTabCheck {
 
     CheckModality modality() default CheckModality.ERROR;
 
-    InvestigationType applyTo() default InvestigationType.ALL;
+    CheckApplicationType application() default CheckApplicationType.ANY;
 }

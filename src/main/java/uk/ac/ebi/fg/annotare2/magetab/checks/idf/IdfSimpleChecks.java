@@ -1,5 +1,6 @@
 package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
 
+import uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType;
 import uk.ac.ebi.fg.annotare2.magetab.checker.InvestigationType;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality;
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
@@ -28,7 +29,9 @@ public class IdfSimpleChecks {
         assertThat(person.getFirstName(), not(isEmptyString()));
     }
 
-    @MageTabCheck(value = "Contact with '" + SUBMITTER_ROLE + "' role must have Affiliation specified", applyTo = InvestigationType.HTS)
+    @MageTabCheck(
+            value = "Contact with '" + SUBMITTER_ROLE + "' role must have Affiliation specified",
+            application = CheckApplicationType.HTS_ONLY)
     public void submitterMustHaveAffiliation(Person person) {
         TermList roles = person.getRoles();
         if (roles == null || roles.isEmpty()) {

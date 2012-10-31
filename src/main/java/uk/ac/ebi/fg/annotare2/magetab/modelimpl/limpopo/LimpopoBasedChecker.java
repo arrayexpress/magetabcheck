@@ -7,6 +7,7 @@ import uk.ac.ebi.arrayexpress2.magetab.exception.ParseException;
 import uk.ac.ebi.arrayexpress2.magetab.parser.MAGETABParser;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult;
 import uk.ac.ebi.fg.annotare2.magetab.checker.Checker;
+import uk.ac.ebi.fg.annotare2.magetab.checker.InvestigationType;
 
 import java.io.File;
 import java.util.List;
@@ -29,7 +30,8 @@ public class LimpopoBasedChecker {
         MAGETABParser parser = new MAGETABParser();
         try {
             MAGETABInvestigation inv = parser.parse(new File(args[0]));
-            Checker ch = new Checker();
+            // TODO need to know investigation type somehow...
+            Checker ch = new Checker(InvestigationType.MICRO_ARRAY);
             ch.check(new LimpopoIdfDataProxy(inv.IDF));
             List<CheckResult> results = ch.getResults();
             log.info("Results: " + results.size());

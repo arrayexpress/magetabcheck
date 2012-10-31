@@ -1,5 +1,7 @@
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.fg.annotare2.magetab.checks.idf.*;
 
 import java.lang.reflect.Method;
@@ -13,6 +15,8 @@ import java.util.List;
  * @author Olga Melnichuk
  */
 public class AllChecks {
+
+    private static final Logger log = LoggerFactory.getLogger(AllChecks.class);
 
     private static final List<Class> methodBasedChecks = new ArrayList<Class>() {
         {
@@ -30,25 +34,32 @@ public class AllChecks {
         }
     };
 
-    public static <T> List<CheckRunner<T>> checkRunnersFor(Class<T> itemClass) {
+    public static <T> List<CheckRunner<T>> checkRunnersFor(Class<T> itemClass, InvestigationType type) {
         List<CheckRunner<T>> runners = new ArrayList<CheckRunner<T>>();
 
         for (Class clazz : classBasedChecks) {
             Class typeArg = getGlobalCheckTypeArgument(clazz);
             if (typeArg != null && (typeArg.equals(itemClass))) {
-                runners.add(new ClassBasedCheckRunner<T>((Class<? extends GlobalCheck<T>>)clazz));
+                MageTabCheck annot = (MageTabCheck) clazz.getAnnotation(MageTabCheck.class);
+                if (isApplicable(annot, type)) {
+                    runners.add(new ClassBasedCheckRunner<T>((Class<? extends GlobalCheck<T>>) clazz));
+                }
             }
         }
 
         for (Class clazz : methodBasedChecks) {
             for (Method method : clazz.getMethods()) {
                 MageTabCheck annot = method.getAnnotation(MageTabCheck.class);
-                if (annot != null) {
+                if (isApplicable(annot, type)) {
                     runners.add(new MethodBasedCheckRunner<T>(clazz, method));
                 }
             }
         }
         return runners;
+    }
+
+    private static boolean isApplicable(MageTabCheck annot, InvestigationType type) {
+        return annot != null && annot.application().appliesTo(type);
     }
 
     /**
