@@ -35,23 +35,23 @@ import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.SUBMITTER_R
  */
 public class IdfSimpleChecks {
 
-    @MageTabCheck("Contact must have Last Name specified")
+    @MageTabCheck("A contact must have Last Name specified")
     public void contactMustHaveLastName(Person person) {
         assertThat(person.getLastName(), not(isEmptyString()));
     }
 
-    @MageTabCheck(value = "Contact should have First Name specified", modality = CheckModality.WARNING)
+    @MageTabCheck(value = "A contact should have First Name specified", modality = CheckModality.WARNING)
     public void contactShouldHaveFirstName(Person person) {
         assertThat(person.getFirstName(), not(isEmptyString()));
     }
 
-    @MageTabCheck(value = "Contact should have Affiliation specified", modality = CheckModality.WARNING)
+    @MageTabCheck(value = "A contact should have Affiliation specified", modality = CheckModality.WARNING)
     public void contactShouldHaveAffiliation(Person person) {
         assertThat(person.getAffiliation(), not(isEmptyString()));
     }
 
     @MageTabCheck(
-            value = "Contact with '" + SUBMITTER_ROLE + "' role must have Affiliation specified",
+            value = "A contact with '" + SUBMITTER_ROLE + "' role must have Affiliation specified",
             application = CheckApplicationType.HTS_ONLY)
     public void submitterMustHaveAffiliation(Person person) {
         TermList roles = person.getRoles();
