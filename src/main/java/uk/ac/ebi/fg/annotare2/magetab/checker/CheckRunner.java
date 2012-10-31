@@ -29,10 +29,6 @@ abstract class CheckRunner<T> {
         this(annot.value(), annot.modality());
     }
 
-    protected CheckRunner(MageTabGlobalCheck annot) {
-        this(annot.value(), annot.modality());
-    }
-
     protected void success() {
         results.add(checkSucceeded(checkTitle));
     }

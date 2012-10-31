@@ -10,7 +10,7 @@ class ClassBasedCheckRunner<T> extends CheckRunner<T> {
     private final GlobalCheck<T> target;
 
     ClassBasedCheckRunner(Class<? extends GlobalCheck<T>> targetClass) {
-        super(isNotNull(targetClass.getAnnotation(MageTabGlobalCheck.class)));
+        super(isNotNull(targetClass.getAnnotation(MageTabCheck.class)));
 
         GlobalCheck<T> t = null;
         try {
@@ -24,10 +24,10 @@ class ClassBasedCheckRunner<T> extends CheckRunner<T> {
         this.target = t;
     }
 
-    private static MageTabGlobalCheck isNotNull(MageTabGlobalCheck annotation) {
+    private static MageTabCheck isNotNull(MageTabCheck annotation) {
         if (annotation == null) {
             throw new NullPointerException(
-                    "Global MageTab check class must be annotated with MageTabGlobalCheck annotation");
+                    "Global MageTab check class must be annotated with MageTabCheck annotation");
         }
         return annotation;
     }
