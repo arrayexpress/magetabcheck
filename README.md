@@ -5,5 +5,9 @@ This is a validation library for [MAGE-TAB](https://annotare.googlecode.com/file
 
 Magetabcheck is the next version of the validator.
 
+License
+=======
+[Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
 
 
