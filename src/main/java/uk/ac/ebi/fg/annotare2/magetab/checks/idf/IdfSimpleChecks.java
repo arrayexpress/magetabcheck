@@ -17,18 +17,17 @@
 package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
 
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType;
-import uk.ac.ebi.fg.annotare2.magetab.checker.InvestigationType;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality;
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.Info;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Person;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermList;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.matchers.IsDateString.isDateString;
+import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.DATE_FORMAT;
 import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.SUBMITTER_ROLE;
 
 
@@ -36,6 +35,58 @@ import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.SUBMITTER_R
  * @author Olga Melnichuk
  */
 public class IdfSimpleChecks {
+
+    @MageTabCheck("Investigation Title must be specified")
+    public void investigationTitleRequired(Info info) {
+        assertThat(info.getTitle(), not(isEmptyString()));
+    }
+
+    @MageTabCheck("Experiment Description must be specified")
+    public void experimentDescriptionRequired(Info info) {
+        assertThat(info.getExperimentDescription(), not(isEmptyString()));
+    }
+
+    @MageTabCheck("Public Release Date must be specified")
+    public void publicReleaseDateRequired(Info info) {
+       assertThat(info.getPublicReleaseDate(), not(isEmptyString()));
+    }
+
+    @MageTabCheck("Public Release Date must be in 'YYYY-MM-DD' format")
+    public void publicReleaseDateFormat(Info info) {
+        String str = info.getPublicReleaseDate();
+        if (isNullOrEmpty(str)) {
+            return;
+        }
+        assertThat(str, isDateString(DATE_FORMAT));
+    }
+
+    @MageTabCheck(value = "Date Of Experiment should be specified", modality = CheckModality.WARNING)
+    public void dateOfExperimentShouldBeSpecified(Info info) {
+        assertThat(info.getDateOfExperiment(), not(isEmptyString()));
+    }
+
+    @MageTabCheck("Date Of Experiment must be in 'YYYY-MM-DD' format")
+    public void dateOfExperimentFormat(Info info) {
+        String str = info.getDateOfExperiment();
+        if (isNullOrEmpty(str)) {
+            return;
+        }
+        assertThat(str, isDateString(DATE_FORMAT));
+    }
+
+    @MageTabCheck("SDRF File must be specified")
+    public void sdrfFileMustBeSpecified(Info info) {
+        assertThat(info.getSdrfFile(), not(isEmptyString()));
+    }
+
+    @MageTabCheck("SDRF File must be valid location")
+    public void sdrfFileMustBeValidLocation(Info info) {
+        String sdrfFile = info.getSdrfFile();
+        if (isNullOrEmpty(sdrfFile)) {
+            return;
+        }
+        //TODO
+    }
 
     @MageTabCheck("A contact must have Last Name specified")
     public void contactMustHaveLastName(Person person) {
@@ -73,5 +124,4 @@ public class IdfSimpleChecks {
             assertThat(person.getAffiliation(), not(isEmptyString()));
         }
     }
-
 }

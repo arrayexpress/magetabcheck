@@ -50,14 +50,14 @@ public class AllChecks {
         }
     };
 
-    public static <T> List<CheckRunner<T>> checkRunnersFor(Class<T> itemClass, InvestigationType type) {
+    public static <T> List<CheckRunner<T>> checkRunnersFor(Class<T> itemClass, InvestigationType invType) {
         List<CheckRunner<T>> runners = new ArrayList<CheckRunner<T>>();
 
         for (Class clazz : classBasedChecks) {
             Class typeArg = getGlobalCheckTypeArgument(clazz);
-            if (typeArg != null && (typeArg.equals(itemClass))) {
+            if (typeArg != null && (typeArg.isAssignableFrom(itemClass))) {
                 MageTabCheck annot = (MageTabCheck) clazz.getAnnotation(MageTabCheck.class);
-                if (isApplicable(annot, type)) {
+                if (isApplicable(annot, invType)) {
                     runners.add(new ClassBasedCheckRunner<T>((Class<? extends GlobalCheck<T>>) clazz));
                 }
             }
@@ -66,7 +66,14 @@ public class AllChecks {
         for (Class clazz : methodBasedChecks) {
             for (Method method : clazz.getMethods()) {
                 MageTabCheck annot = method.getAnnotation(MageTabCheck.class);
-                if (isApplicable(annot, type)) {
+                if (annot == null) {
+                    continue;
+                }
+                Class[] types = method.getParameterTypes();
+                if (types != null && !types[0].isAssignableFrom(itemClass)) {
+                    continue;
+                }
+                if (isApplicable(annot, invType)) {
                     runners.add(new MethodBasedCheckRunner<T>(clazz, method));
                 }
             }

@@ -40,6 +40,7 @@ public class Checker {
     }
 
     public void check(IdfData idf) {
+        checkOne(idf.getInfo());
         checkAll(idf.getContacts(), Person.class);
     }
 
@@ -49,10 +50,28 @@ public class Checker {
             return;
         }
         for (T item : collection) {
-            for (CheckRunner<T> runner : checkRunners) {
-                runner.runForEach(item);
-            }
+            runAllWith(checkRunners, item);
         }
+       sumUp(checkRunners);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> void checkOne(T item) {
+        List<CheckRunner<T>> checkRunners = checkRunnersFor((Class<T>) item.getClass(), invType);
+        if (checkRunners.isEmpty()) {
+            return;
+        }
+        runAllWith(checkRunners, item);
+        sumUp(checkRunners);
+    }
+
+    private <T> void runAllWith(List<CheckRunner<T>> checkRunners, T item) {
+        for (CheckRunner<T> runner : checkRunners) {
+            runner.runWith(item);
+        }
+    }
+
+    private <T> void sumUp(List<CheckRunner<T>> checkRunners) {
         for (CheckRunner<T> runner : checkRunners) {
             results.addAll(runner.sumUp());
         }

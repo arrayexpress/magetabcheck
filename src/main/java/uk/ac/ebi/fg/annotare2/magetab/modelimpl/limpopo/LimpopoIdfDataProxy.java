@@ -18,6 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo;
 
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.IDF;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.Info;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Person;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 
@@ -34,6 +35,11 @@ public class LimpopoIdfDataProxy implements IdfData {
 
     public LimpopoIdfDataProxy(@Nonnull IDF idf) {
         this.idfHelper = new LimpopoIdfHelper(idf);
+    }
+
+    @Override
+    public Info getInfo() {
+        return new LimpopoBasedInfo(idfHelper);
     }
 
     @Override

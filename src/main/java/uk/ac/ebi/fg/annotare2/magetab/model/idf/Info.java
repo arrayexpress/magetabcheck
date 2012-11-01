@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
-
-import java.text.SimpleDateFormat;
+package uk.ac.ebi.fg.annotare2.magetab.model.idf;
 
 /**
  * @author Olga Melnichuk
  */
-public class IdfConstants {
+public interface Info {
 
-    private IdfConstants() {}
+    String getTitle();
 
-    public static final String SUBMITTER_ROLE = "submitter";
+    String getExperimentDescription();
 
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    String getDateOfExperiment();
+
+    String getPublicReleaseDate();
+
+    String getSdrfFile();
 }

@@ -42,7 +42,7 @@ class MethodBasedCheckRunner<T> extends CheckRunner<T> {
     }
 
     @Override
-    public void runForEach(T item) {
+    public void runWith(T item) {
         try {
             method.invoke(clazz.newInstance(), item);
             success();

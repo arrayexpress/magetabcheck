@@ -23,6 +23,8 @@ import java.util.List;
  */
 public interface IdfData {
 
+    Info getInfo();
+
     List<Person> getContacts();
 
     List<TermSource> getTermSources();

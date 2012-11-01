@@ -61,5 +61,5 @@ abstract class CheckRunner<T> {
         return Collections.unmodifiableList(results);
     }
 
-    public abstract void runForEach(T item);
+    public abstract void runWith(T item);
 }
