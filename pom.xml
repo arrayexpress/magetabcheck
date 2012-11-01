@@ -48,6 +48,20 @@
         <developerConnection>scm:git:ssh://git@github.com/arrayexpress/magetabcheck.git</developerConnection>
     </scm>
 
+    <distributionManagement>
+        <downloadUrl>https://oss.sonatype.org/content/groups/public</downloadUrl>
+        <repository>
+            <id>oss-sonatype-staging</id>
+            <name>OSS Repository at sonatype</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+        <snapshotRepository>
+            <id>oss-sonatype-snapshots</id>
+            <name>OSS Snapshot Repository at sonatype</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <repositories>
         <repository>
             <id>limpopo-repo</id>
