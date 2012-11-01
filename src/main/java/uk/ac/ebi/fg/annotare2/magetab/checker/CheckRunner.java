@@ -16,6 +16,9 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +32,8 @@ import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult.checkSucceeded;
  * @author Olga Melnichuk
  */
 abstract class CheckRunner<T> {
+
+    private static final Logger log = LoggerFactory.getLogger(CheckRunner.class);
 
     private List<CheckResult> results = newArrayList();
 
@@ -53,7 +58,8 @@ abstract class CheckRunner<T> {
         results.add(checkFailed(checkTitle, checkModality, assertionError.getMessage()));
     }
 
-    protected void error(Exception e) {
+    protected void error(Throwable e) {
+        log.error("Check running error(" + checkTitle + ")", e);
         results.add(checkBroken(checkTitle, checkModality, e));
     }
 

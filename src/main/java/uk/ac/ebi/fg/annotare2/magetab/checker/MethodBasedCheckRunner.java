@@ -46,10 +46,13 @@ class MethodBasedCheckRunner<T> extends CheckRunner<T> {
         try {
             method.invoke(clazz.newInstance(), item);
             success();
-        } catch (AssertionError assertionError) {
-            failure(assertionError);
         } catch (InvocationTargetException e) {
-            error(e);
+            Throwable t = e.getCause();
+            if (t instanceof AssertionError) {
+                failure((AssertionError)t);
+            } else {
+                error(t);
+            }
         } catch (InstantiationException e) {
             error(e);
         } catch (IllegalAccessException e) {

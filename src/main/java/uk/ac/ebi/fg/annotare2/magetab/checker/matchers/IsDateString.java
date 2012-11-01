@@ -24,6 +24,8 @@ import org.hamcrest.TypeSafeMatcher;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 /**
  * @author Olga Melnichuk
  */
@@ -36,9 +38,12 @@ public class IsDateString extends TypeSafeMatcher<String> {
     }
 
     @Override
-    public boolean matchesSafely(String date) {
+    public boolean matchesSafely(String str) {
+        if (isNullOrEmpty(str)) {
+            return false;
+        }
         try {
-            format.parse(date);
+            format.parse(str);
             return true;
         } catch (ParseException e) {
             return false;

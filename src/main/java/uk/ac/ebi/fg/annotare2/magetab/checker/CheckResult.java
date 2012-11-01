@@ -29,9 +29,9 @@ public class CheckResult {
 
     private final String title;
 
-    private final Exception exception;
+    private final Throwable exception;
 
-    private CheckResult(String title, CheckModality modality, CheckResultType type, String message, Exception exeption) {
+    private CheckResult(String title, CheckModality modality, CheckResultType type, String message, Throwable exeption) {
         this.title = title;
         this.type = type;
         this.modality = modality;
@@ -47,7 +47,7 @@ public class CheckResult {
         return new CheckResult(checkTitle, checkModality, CheckResultType.CHECK_FAILURE, message, null);
     }
 
-    public static CheckResult checkBroken(String checkTitle, CheckModality checkModality, Exception e) {
+    public static CheckResult checkBroken(String checkTitle, CheckModality checkModality, Throwable e) {
         return new CheckResult(checkTitle, checkModality, CheckResultType.RUN_ERROR, "an exception were thrown during the check run", e);
     }
 

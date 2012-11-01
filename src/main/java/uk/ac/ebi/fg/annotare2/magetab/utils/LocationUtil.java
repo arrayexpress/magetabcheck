@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.model.idf;
+package uk.ac.ebi.fg.annotare2.magetab.utils;
+
+import java.net.URL;
+import java.util.regex.Pattern;
 
 /**
  * @author Olga Melnichuk
  */
-public interface Info {
+public class LocationUtil {
 
-    String getTitle();
+    private static final Pattern urlProtocol = Pattern.compile("(http|file):\\/\\/");
 
-    String getExperimentDescription();
-
-    String getDateOfExperiment();
-
-    String getPublicReleaseDate();
-
-    Location getSdrfFile();
+    public static URL asUrl(String location, URL defaultRoot) {
+        return null;
+    }
 }

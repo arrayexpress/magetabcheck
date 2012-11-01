@@ -20,13 +20,16 @@ import uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality;
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Info;
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.Location;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Person;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermList;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.lang.Boolean.FALSE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.matchers.IsDateString.isDateString;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.matchers.IsValidFileLocation.isValidFileLocation;
 import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.DATE_FORMAT;
 import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.SUBMITTER_ROLE;
 
@@ -38,17 +41,17 @@ public class IdfSimpleChecks {
 
     @MageTabCheck("Investigation Title must be specified")
     public void investigationTitleRequired(Info info) {
-        assertThat(info.getTitle(), not(isEmptyString()));
+        assertThat(info.getTitle(), not(isEmptyOrNullString()));
     }
 
     @MageTabCheck("Experiment Description must be specified")
     public void experimentDescriptionRequired(Info info) {
-        assertThat(info.getExperimentDescription(), not(isEmptyString()));
+        assertThat(info.getExperimentDescription(), not(isEmptyOrNullString()));
     }
 
     @MageTabCheck("Public Release Date must be specified")
     public void publicReleaseDateRequired(Info info) {
-       assertThat(info.getPublicReleaseDate(), not(isEmptyString()));
+       assertThat(info.getPublicReleaseDate(), not(isEmptyOrNullString()));
     }
 
     @MageTabCheck("Public Release Date must be in 'YYYY-MM-DD' format")
@@ -62,7 +65,7 @@ public class IdfSimpleChecks {
 
     @MageTabCheck(value = "Date Of Experiment should be specified", modality = CheckModality.WARNING)
     public void dateOfExperimentShouldBeSpecified(Info info) {
-        assertThat(info.getDateOfExperiment(), not(isEmptyString()));
+        assertThat(info.getDateOfExperiment(), not(isEmptyOrNullString()));
     }
 
     @MageTabCheck("Date Of Experiment must be in 'YYYY-MM-DD' format")
@@ -76,31 +79,33 @@ public class IdfSimpleChecks {
 
     @MageTabCheck("SDRF File must be specified")
     public void sdrfFileMustBeSpecified(Info info) {
-        assertThat(info.getSdrfFile(), not(isEmptyString()));
+        Location loc = info.getSdrfFile();
+        assertThat(loc, notNullValue());
+        assertThat(loc.isEmpty(), is(FALSE));
     }
 
     @MageTabCheck("SDRF File must be valid location")
     public void sdrfFileMustBeValidLocation(Info info) {
-        String sdrfFile = info.getSdrfFile();
-        if (isNullOrEmpty(sdrfFile)) {
+        Location loc = info.getSdrfFile();
+        if (loc == null || loc.isEmpty()) {
             return;
         }
-        //TODO
+        assertThat(info.getSdrfFile(), isValidFileLocation());
     }
 
     @MageTabCheck("A contact must have Last Name specified")
     public void contactMustHaveLastName(Person person) {
-        assertThat(person.getLastName(), not(isEmptyString()));
+        assertThat(person.getLastName(), not(isEmptyOrNullString()));
     }
 
     @MageTabCheck(value = "A contact should have First Name specified", modality = CheckModality.WARNING)
     public void contactShouldHaveFirstName(Person person) {
-        assertThat(person.getFirstName(), not(isEmptyString()));
+        assertThat(person.getFirstName(), not(isEmptyOrNullString()));
     }
 
     @MageTabCheck(value = "A contact should have Affiliation specified", modality = CheckModality.WARNING)
     public void contactShouldHaveAffiliation(Person person) {
-        assertThat(person.getAffiliation(), not(isEmptyString()));
+        assertThat(person.getAffiliation(), not(isEmptyOrNullString()));
     }
 
     @MageTabCheck(value = "A contact roles should have TermSource specified", modality = CheckModality.WARNING)
@@ -121,7 +126,7 @@ public class IdfSimpleChecks {
             return;
         }
         if (roles.getNames().contains(SUBMITTER_ROLE)) {
-            assertThat(person.getAffiliation(), not(isEmptyString()));
+            assertThat(person.getAffiliation(), not(isEmptyOrNullString()));
         }
     }
 }

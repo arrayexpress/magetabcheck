@@ -16,18 +16,31 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.model.idf;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 /**
  * @author Olga Melnichuk
  */
-public interface Info {
+public class Location {
 
-    String getTitle();
+    private final URL context;
 
-    String getExperimentDescription();
+    private final String path;
 
-    String getDateOfExperiment();
+    public Location(URL context, String path) {
+        this.context = context;
+        this.path = path;
+    }
 
-    String getPublicReleaseDate();
+    public boolean isEmpty() {
+        return isNullOrEmpty(path);
+    }
 
-    Location getSdrfFile();
+    public URL toURL() throws MalformedURLException {
+        return isEmpty() ? null : new URL(context, path);
+    }
+
 }
