@@ -16,39 +16,70 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
+
 /**
  * @author Olga Melnichuk
  */
 public class CheckResult {
 
-    private final CheckResultType type;
+    private CheckResultType type;
 
-    private final CheckModality modality;
+    private CheckModality modality;
 
-    private final String message;
+    private String title;
 
-    private final String title;
+    private Throwable exception;
 
-    private final Throwable exception;
+    private CheckPosition position;
 
-    private CheckResult(String title, CheckModality modality, CheckResultType type, String message, Throwable exeption) {
-        this.title = title;
+    private CheckResult() {
+    }
+
+    private CheckResult setType(CheckResultType type) {
         this.type = type;
+        return this;
+    }
+
+    private CheckResult setModality(CheckModality modality) {
         this.modality = modality;
-        this.message = message;
-        this.exception = exeption;
+        return this;
+    }
+
+    private CheckResult setTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public CheckResult setException(Throwable exception) {
+        this.exception = exception;
+        return this;
+    }
+
+    private CheckResult setPosition(CheckPosition position) {
+        this.position = position;
+        return this;
     }
 
     public static CheckResult checkSucceeded(String checkTitle) {
-        return new CheckResult(checkTitle, null, CheckResultType.CHECK_SUCCESS, null, null);
+        return new CheckResult()
+                .setType(CheckResultType.CHECK_SUCCESS)
+                .setTitle(checkTitle);
     }
 
-    public static CheckResult checkFailed(String checkTitle, CheckModality checkModality, String message) {
-        return new CheckResult(checkTitle, checkModality, CheckResultType.CHECK_FAILURE, message, null);
+    public static CheckResult checkFailed(String checkTitle, CheckModality checkModality, CheckPosition pos) {
+        return new CheckResult()
+                .setType(CheckResultType.CHECK_FAILURE)
+                .setTitle(checkTitle)
+                .setModality(checkModality)
+                .setPosition(pos);
     }
 
     public static CheckResult checkBroken(String checkTitle, CheckModality checkModality, Throwable e) {
-        return new CheckResult(checkTitle, checkModality, CheckResultType.RUN_ERROR, "an exception were thrown during the check run", e);
+        return new CheckResult()
+                .setType(CheckResultType.RUN_ERROR)
+                .setTitle(checkTitle)
+                .setModality(checkModality)
+                .setException(e);
     }
 
     @Override
@@ -56,9 +87,9 @@ public class CheckResult {
         return "CheckResult{" +
                 "type=" + type +
                 ", modality=" + modality +
-                ", message='" + message + '\'' +
                 ", title='" + title + '\'' +
                 ", exception=" + exception +
+                ", position=" + position +
                 '}';
     }
 }

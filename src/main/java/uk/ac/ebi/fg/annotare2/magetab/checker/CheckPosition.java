@@ -14,22 +14,39 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.model.idf;
-
-import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
+package uk.ac.ebi.fg.annotare2.magetab.checker;
 
 /**
  * @author Olga Melnichuk
  */
-public interface Info {
+public class CheckPosition {
 
-    Cell<String> getTitle();
+    private final int line;
 
-    Cell<String> getExperimentDescription();
+    private final int column;
 
-    Cell<String> getDateOfExperiment();
+    public CheckPosition(int line, int column) {
+        this.line = line;
+        this.column = column;
+    }
 
-    Cell<String> getPublicReleaseDate();
+    public CheckPosition(int line) {
+        this(line, -1);
+    }
 
-    Cell<Location> getSdrfFile();
+    public int getLine() {
+        return line;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    @Override
+    public String toString() {
+        return "CheckPosition{" +
+                "line=" + line +
+                ", column=" + column +
+                '}';
+    }
 }

@@ -59,7 +59,7 @@ class ClassBasedCheckRunner<T> extends CheckRunner<T> {
             target.check();
             success();
         } catch (AssertionError e) {
-            failure(e);
+            failure();
         }
         return super.sumUp();
     }

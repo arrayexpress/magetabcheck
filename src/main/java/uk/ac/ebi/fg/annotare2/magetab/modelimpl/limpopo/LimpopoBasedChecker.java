@@ -50,7 +50,7 @@ public class LimpopoBasedChecker {
             Checker ch = new Checker(InvestigationType.MICRO_ARRAY);
             ch.check(new LimpopoIdfDataProxy(inv.IDF));
             List<CheckResult> results = ch.getResults();
-            log.info("sum(Errors + Warnings) = " + results.size());
+            log.info("Total Number Of Results = " + results.size());
             for(CheckResult res : results) {
                 log.info("" + res);
             }

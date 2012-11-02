@@ -19,6 +19,7 @@ package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality;
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Info;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Location;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Person;
@@ -28,11 +29,11 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.lang.Boolean.FALSE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckContext.setCheckPosition;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.matchers.IsDateString.isDateString;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.matchers.IsValidFileLocation.isValidFileLocation;
 import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.DATE_FORMAT;
 import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.SUBMITTER_ROLE;
-
 
 /**
  * @author Olga Melnichuk
@@ -40,72 +41,77 @@ import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.SUBMITTER_R
 public class IdfSimpleChecks {
 
     @MageTabCheck("Investigation Title must be specified")
-    public void investigationTitleRequired(Info info) {
-        assertThat(info.getTitle(), not(isEmptyOrNullString()));
+    public void investigationTitleRequired(final Info info) {
+        assertNotEmptyString(info.getTitle());
     }
 
     @MageTabCheck("Experiment Description must be specified")
     public void experimentDescriptionRequired(Info info) {
-        assertThat(info.getExperimentDescription(), not(isEmptyOrNullString()));
+        assertNotEmptyString(info.getExperimentDescription());
     }
 
     @MageTabCheck("Public Release Date must be specified")
     public void publicReleaseDateRequired(Info info) {
-       assertThat(info.getPublicReleaseDate(), not(isEmptyOrNullString()));
+        assertNotEmptyString(info.getPublicReleaseDate());
     }
 
     @MageTabCheck("Public Release Date must be in 'YYYY-MM-DD' format")
     public void publicReleaseDateFormat(Info info) {
-        String str = info.getPublicReleaseDate();
-        if (isNullOrEmpty(str)) {
+        Cell<String> cell = info.getPublicReleaseDate();
+        if (isNullOrEmpty(cell.getValue())) {
             return;
         }
-        assertThat(str, isDateString(DATE_FORMAT));
+        setCheckPosition(cell.getLine(), cell.getColumn());
+        assertThat(cell.getValue(), isDateString(DATE_FORMAT));
     }
 
     @MageTabCheck(value = "Date Of Experiment should be specified", modality = CheckModality.WARNING)
     public void dateOfExperimentShouldBeSpecified(Info info) {
-        assertThat(info.getDateOfExperiment(), not(isEmptyOrNullString()));
+        assertNotEmptyString(info.getDateOfExperiment());
     }
 
     @MageTabCheck("Date Of Experiment must be in 'YYYY-MM-DD' format")
     public void dateOfExperimentFormat(Info info) {
-        String str = info.getDateOfExperiment();
-        if (isNullOrEmpty(str)) {
+        Cell<String> cell = info.getDateOfExperiment();
+        if (isNullOrEmpty(cell.getValue())) {
             return;
         }
-        assertThat(str, isDateString(DATE_FORMAT));
+        setCheckPosition(cell.getLine(), cell.getColumn());
+        assertThat(cell.getValue(), isDateString(DATE_FORMAT));
     }
 
     @MageTabCheck("SDRF File must be specified")
     public void sdrfFileMustBeSpecified(Info info) {
-        Location loc = info.getSdrfFile();
-        assertThat(loc, notNullValue());
-        assertThat(loc.isEmpty(), is(FALSE));
+        Cell<Location> cell = info.getSdrfFile();
+        setCheckPosition(cell.getLine(), cell.getColumn());
+        assertThat(cell.getValue(), notNullValue());
+        assertThat(cell.getValue().isEmpty(), is(FALSE));
     }
 
     @MageTabCheck("SDRF File must be valid location")
     public void sdrfFileMustBeValidLocation(Info info) {
-        Location loc = info.getSdrfFile();
+        Cell<Location> celll = info.getSdrfFile();
+        Location loc = celll.getValue();
         if (loc == null || loc.isEmpty()) {
             return;
         }
-        assertThat(info.getSdrfFile(), isValidFileLocation());
+        setCheckPosition(celll.getLine(), celll.getColumn());
+        assertThat(loc, isValidFileLocation());
     }
 
     @MageTabCheck("A contact must have Last Name specified")
     public void contactMustHaveLastName(Person person) {
-        assertThat(person.getLastName(), not(isEmptyOrNullString()));
+        assertNotEmptyString(person.getLastName());
     }
 
     @MageTabCheck(value = "A contact should have First Name specified", modality = CheckModality.WARNING)
     public void contactShouldHaveFirstName(Person person) {
-        assertThat(person.getFirstName(), not(isEmptyOrNullString()));
+        assertNotEmptyString(person.getFirstName());
     }
 
     @MageTabCheck(value = "A contact should have Affiliation specified", modality = CheckModality.WARNING)
     public void contactShouldHaveAffiliation(Person person) {
-        assertThat(person.getAffiliation(), not(isEmptyOrNullString()));
+        assertNotEmptyString(person.getAffiliation());
     }
 
     @MageTabCheck(value = "A contact roles should have TermSource specified", modality = CheckModality.WARNING)
@@ -126,7 +132,12 @@ public class IdfSimpleChecks {
             return;
         }
         if (roles.getNames().contains(SUBMITTER_ROLE)) {
-            assertThat(person.getAffiliation(), not(isEmptyOrNullString()));
+            assertNotEmptyString(person.getAffiliation());
         }
+    }
+
+    private static void assertNotEmptyString(Cell<String> cell) {
+        setCheckPosition(cell.getLine(), cell.getColumn());
+        assertThat(cell.getValue(), not(isEmptyOrNullString()));
     }
 }

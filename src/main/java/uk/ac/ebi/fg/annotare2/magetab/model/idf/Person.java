@@ -16,26 +16,28 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.model.idf;
 
+import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
+
 /**
  * @author Olga Melnichuk
  */
 public interface Person {
 
-    String getFirstName();
+    Cell<String> getFirstName();
 
-    String getLastName();
+    Cell<String> getLastName();
 
-    String getMidInitials();
+    Cell<String> getMidInitials();
 
-    String getEmail();
+    Cell<String> getEmail();
 
-    String getPhone();
+    Cell<String> getPhone();
 
-    String getFax();
+    Cell<String> getFax();
 
-    String getAddress();
+    Cell<String> getAddress();
 
-    String getAffiliation();
+    Cell<String> getAffiliation();
 
     TermList getRoles();
 }

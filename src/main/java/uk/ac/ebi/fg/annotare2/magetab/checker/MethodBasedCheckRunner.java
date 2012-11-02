@@ -19,6 +19,9 @@ package uk.ac.ebi.fg.annotare2.magetab.checker;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckContext.clearContext;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckContext.getCheckPosition;
+
 /**
  * @author Olga Melnichuk
  */
@@ -43,13 +46,14 @@ class MethodBasedCheckRunner<T> extends CheckRunner<T> {
 
     @Override
     public void runWith(T item) {
+        clearContext();
         try {
             method.invoke(clazz.newInstance(), item);
             success();
         } catch (InvocationTargetException e) {
             Throwable t = e.getCause();
             if (t instanceof AssertionError) {
-                failure((AssertionError)t);
+                failure(getCheckPosition());
             } else {
                 error(t);
             }

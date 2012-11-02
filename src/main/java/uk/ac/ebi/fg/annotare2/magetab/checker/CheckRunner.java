@@ -54,8 +54,12 @@ abstract class CheckRunner<T> {
         results.add(checkSucceeded(checkTitle));
     }
 
-    protected void failure(AssertionError assertionError) {
-        results.add(checkFailed(checkTitle, checkModality, assertionError.getMessage()));
+    protected void failure() {
+        failure(null);
+    }
+
+    protected void failure(CheckPosition pos) {
+        results.add(checkFailed(checkTitle, checkModality, pos));
     }
 
     protected void error(Throwable e) {

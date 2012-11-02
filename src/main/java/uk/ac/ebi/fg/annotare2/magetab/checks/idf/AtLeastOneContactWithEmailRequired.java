@@ -34,7 +34,7 @@ public class AtLeastOneContactWithEmailRequired implements GlobalCheck<Person> {
 
     @Override
     public void visit(Person person) {
-        if (!isNullOrEmpty(person.getEmail())) {
+        if (!isNullOrEmpty(person.getEmail().getValue())) {
             emailCount++;
         }
     }

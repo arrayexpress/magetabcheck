@@ -14,22 +14,42 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.model.idf;
-
-import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
+package uk.ac.ebi.fg.annotare2.magetab.model;
 
 /**
  * @author Olga Melnichuk
  */
-public interface Info {
+public class Cell<T> {
 
-    Cell<String> getTitle();
+    private final T value;
 
-    Cell<String> getExperimentDescription();
+    private final int line;
 
-    Cell<String> getDateOfExperiment();
+    private final int column;
 
-    Cell<String> getPublicReleaseDate();
+    public Cell(T value) {
+        this(value, -1, -1);
+    }
 
-    Cell<Location> getSdrfFile();
+    public Cell(T value, int line) {
+        this(value, line, -1);
+    }
+
+    public Cell(T value, int line, int column) {
+        this.value = value;
+        this.line = line;
+        this.column = column;
+    }
+
+    public T getValue() {
+        return value;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public int getColumn() {
+        return column;
+    }
 }

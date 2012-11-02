@@ -16,11 +16,14 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo;
 
+import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Info;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Location;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+
+import static uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.IdfTags.*;
 
 /**
  * @author Olga Melnichuk
@@ -32,29 +35,39 @@ public class LimpopoBasedInfo extends LimpopoBasedIdfObject implements Info {
     }
 
     @Override
-    public String getTitle() {
-        return idf().investigationTitle;
+    public Cell<String> getTitle() {
+        return new Cell<String>(
+                idf().investigationTitle,
+                idf().getLayout().getLineNumberForHeader(INVESTIGATION_TITLE));
     }
 
     @Override
-    public String getExperimentDescription() {
-        return idf().experimentDescription;
+    public Cell<String> getExperimentDescription() {
+        return new Cell<String>(
+                idf().experimentDescription,
+                idf().getLayout().getLineNumberForHeader(EXPERIMENT_DESCRIPTION));
     }
 
     @Override
-    public String getDateOfExperiment() {
-        return idf().dateOfExperiment;
+    public Cell<String> getDateOfExperiment() {
+        return new Cell<String>(
+                idf().dateOfExperiment,
+                idf().getLayout().getLineNumberForHeader(DATE_OF_EXPERIMENT));
     }
 
     @Override
-    public String getPublicReleaseDate() {
-        return idf().publicReleaseDate;
+    public Cell<String> getPublicReleaseDate() {
+        return new Cell<String>(
+                idf().publicReleaseDate,
+                idf().getLayout().getLineNumberForHeader(PUBLIC_RELEASE_DATE));
     }
 
     @Override
-    public Location getSdrfFile() {
+    public Cell<Location> getSdrfFile() {
         List<String> sdrfFiles = idf().sdrfFile;
-        return new Location(idf().getLocation(),
-                (sdrfFiles == null || sdrfFiles.isEmpty()) ? null : sdrfFiles.get(0));
+        return new Cell<Location>(
+                new Location(idf().getLocation(),
+                        (sdrfFiles == null || sdrfFiles.isEmpty()) ? null : sdrfFiles.get(0)),
+                idf().getLayout().getLineNumberForHeader(SDRF_FILE));
     }
 }

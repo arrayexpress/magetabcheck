@@ -16,17 +16,18 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo;
 
+import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Person;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermList;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Arrays.asList;
+import static uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.IdfTags.*;
 
 /**
  * @author Olga Melnichuk
@@ -41,43 +42,67 @@ public class LimpopoBasedPerson extends LimpopoBasedIdfObject implements Person 
     }
 
     @Override
-    public String getFirstName() {
-        return get(idf().personFirstName, index);
+    public Cell<String> getFirstName() {
+        return new Cell<String>(
+                get(idf().personFirstName, index),
+                idf().getLayout().getLineNumberForHeader(PERSON_FIRST_NAME),
+                getColumn());
     }
 
     @Override
-    public String getLastName() {
-        return get(idf().personLastName, index);
+    public Cell<String> getLastName() {
+        return new Cell<String>(
+                get(idf().personLastName, index),
+                idf().getLayout().getLineNumberForHeader(PERSON_LAST_NAME),
+                getColumn());
     }
 
     @Override
-    public String getMidInitials() {
-        return get(idf().personMidInitials, index);
+    public Cell<String> getMidInitials() {
+        return new Cell<String>(
+                get(idf().personMidInitials, index),
+                idf().getLayout().getLineNumberForHeader(PERSON_MID_INITIALS),
+                getColumn());
     }
 
     @Override
-    public String getEmail() {
-        return get(idf().personEmail, index);
+    public Cell<String> getEmail() {
+        return new Cell<String>(
+                get(idf().personEmail, index),
+                idf().getLayout().getLineNumberForHeader(PERSON_EMAIL),
+                getColumn());
     }
 
     @Override
-    public String getPhone() {
-        return get(idf().personPhone, index);
+    public Cell<String> getPhone() {
+        return new Cell<String>(
+                get(idf().personPhone, index),
+                idf().getLayout().getLineNumberForHeader(PERSON_PHONE),
+                getColumn());
     }
 
     @Override
-    public String getFax() {
-        return get(idf().personFax, index);
+    public Cell<String> getFax() {
+        return new Cell<String>(
+                get(idf().personFax, index),
+                idf().getLayout().getLineNumberForHeader(PERSON_FAX),
+                getColumn());
     }
 
     @Override
-    public String getAddress() {
-        return get(idf().personAddress, index);
+    public Cell<String> getAddress() {
+        return new Cell<String>(
+                get(idf().personAddress, index),
+                idf().getLayout().getLineNumberForHeader(PERSON_ADDRESS),
+                getColumn());
     }
 
     @Override
-    public String getAffiliation() {
-        return get(idf().personAffiliation, index);
+    public Cell<String> getAffiliation() {
+        return new Cell<String>(
+                get(idf().personAffiliation, index),
+                idf().getLayout().getLineNumberForHeader(PERSON_AFFILIATION),
+                getColumn());
     }
 
     @Override
@@ -140,5 +165,9 @@ public class LimpopoBasedPerson extends LimpopoBasedIdfObject implements Person 
             }
         }
         return size;
+    }
+
+    private int getColumn() {
+        return index + 1;
     }
 }

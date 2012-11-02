@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.greaterThan;
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck("At least one contact must have a role")
+@MageTabCheck("At least one contact must have a role specified")
 public class AtLeastOneContactWithRolesRequired implements GlobalCheck<Person> {
 
     private int roleCount;
