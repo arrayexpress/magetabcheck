@@ -21,11 +21,5 @@ import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
 /**
  * @author Olga Melnichuk
  */
-public interface ExperimentalDesign {
-
-    Cell<String> getName();
-
-    Cell<String> getAccession();
-
-    Cell<TermSource> getSource();
+public interface ExperimentalDesign extends Term {
 }

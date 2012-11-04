@@ -16,6 +16,7 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo;
 
+import com.google.common.primitives.Ints;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.IDF;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;
 
@@ -54,10 +55,24 @@ public class LimpopoIdfDataProxy implements IdfData {
     public List<ExperimentalDesign> getExperimentDesigns() {
         int size = size(idfHelper.idf().experimentalDesign);
         List<ExperimentalDesign> designs = newArrayList();
-        for (int i = 0; i < size; i ++) {
+        for (int i = 0; i < size; i++) {
             designs.add(new LimpopoBasedExperimentalDesign(idfHelper, i));
         }
         return designs;
+    }
+
+    @Override
+    public List<Publication> getPublications() {
+        int size = Ints.max(size(idfHelper.idf().publicationTitle),
+                size(idfHelper.idf().publicationStatus),
+                size(idfHelper.idf().pubMedId),
+                size(idfHelper.idf().publicationDOI),
+                size(idfHelper.idf().publicationAuthorList));
+        List<Publication> publications = newArrayList();
+        for (int i = 0; i < size; i++) {
+            publications.add(new LimpopoBasedPublication(idfHelper, i));
+        }
+        return publications;
     }
 
     @Override

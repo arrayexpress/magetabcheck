@@ -62,4 +62,17 @@ public abstract class IdfTags {
     public static final String EXPERIMENTAL_DESIGN_TERM_SOURCE_REF = "Experimental Design Term Source REF";
 
 
+    public static final String PUBLICATION_PUB_MED_ID = "PubMed ID";
+
+    public static final String PUBLICATION_DOI = "Publication DOI";
+
+    public static final String PUBLICATION_AUTHOR_LIST = "Publication Author List";
+
+    public static final String PUBLICATION_TITLE = "Publication Title";
+
+    public static final String PUBLICATION_STATUS = "Publication Status";
+
+    public static final String PUBLICATION_STATUS_TERM_ACCESSION_NUMBER = "Publication Status Term Accession Number";
+
+    public static final String PUBLICATION_STATUS_TERM_SOURCE_REF = "Publication Status Term Source REF";
 }

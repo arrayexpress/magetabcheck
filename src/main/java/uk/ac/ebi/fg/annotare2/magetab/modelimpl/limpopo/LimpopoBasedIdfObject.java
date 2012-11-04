@@ -53,6 +53,6 @@ public abstract class LimpopoBasedIdfObject {
     }
 
     protected int getColumn() {
-        return index < 0 ? index : index + 1;
+        return index < 0 ? index : index + 2;
     }
 }

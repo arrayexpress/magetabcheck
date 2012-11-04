@@ -29,5 +29,7 @@ public interface IdfData {
 
     List<ExperimentalDesign> getExperimentDesigns();
 
+    List<Publication> getPublications();
+
     List<TermSource> getTermSources();
 }
