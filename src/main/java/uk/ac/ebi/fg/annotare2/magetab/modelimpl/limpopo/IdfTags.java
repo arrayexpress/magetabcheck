@@ -55,4 +55,11 @@ public abstract class IdfTags {
     public static final String PERSON_ROLES_TERM_ACCESSION_NUMBER = "Person Roles Term Accession Number";
 
 
+    public static final String EXPERIMENTAL_DESIGN = "Experimental Design";
+
+    public static final String EXPERIMENTAL_DESIGN_TERM_ACCESSION_NUMBER = "Experimental Design Term Accession Number";
+
+    public static final String EXPERIMENTAL_DESIGN_TERM_SOURCE_REF = "Experimental Design Term Source REF";
+
+
 }

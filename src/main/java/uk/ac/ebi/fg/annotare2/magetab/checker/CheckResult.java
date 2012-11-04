@@ -17,6 +17,10 @@
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
 
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality.*;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckResultType.CHECK_FAILURE;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckResultType.CHECK_SUCCESS;
+
 /**
  * @author Olga Melnichuk
  */
@@ -62,13 +66,13 @@ public class CheckResult {
 
     public static CheckResult checkSucceeded(String checkTitle) {
         return new CheckResult()
-                .setType(CheckResultType.CHECK_SUCCESS)
+                .setType(CHECK_SUCCESS)
                 .setTitle(checkTitle);
     }
 
     public static CheckResult checkFailed(String checkTitle, CheckModality checkModality, CheckPosition pos) {
         return new CheckResult()
-                .setType(CheckResultType.CHECK_FAILURE)
+                .setType(CHECK_FAILURE)
                 .setTitle(checkTitle)
                 .setModality(checkModality)
                 .setPosition(pos);
@@ -90,22 +94,21 @@ public class CheckResult {
 
         sb.append(" : ");
 
-        switch(type) {
-            case CHECK_SUCCESS:
-                sb.append("SUCCESS");
-                break;
-            case CHECK_FAILURE:
-                sb.append(modality == null ? "Unknown check modality" : modality);
-                break;
-            case RUN_ERROR:
-                sb.append("EXCEPTION");
+        if (isSuccess()) {
+            sb.append("SUCCESS");
+        } else if (isError() || isWarning()) {
+            sb.append(modality);
+        } else if (isException()) {
+            sb.append("EXCEPTION");
+        } else {
+            sb.append("OTHER");
         }
 
         sb.append(" : ")
                 .append(title == null ? "Unknown check" : title);
 
         if (exception != null) {
-            sb.append( " : ")
+            sb.append(" : ")
                     .append(exception.getMessage())
                     .append("; See logs for details");
         }
@@ -121,5 +124,21 @@ public class CheckResult {
                 ", exception=" + exception +
                 ", position=" + position +
                 '}';
+    }
+
+    public boolean isSuccess() {
+        return type == CHECK_SUCCESS;
+    }
+
+    public boolean isWarning() {
+        return type == CHECK_FAILURE && modality == WARNING;
+    }
+
+    public boolean isError() {
+        return type == CHECK_FAILURE && modality == ERROR;
+    }
+
+    public boolean isException() {
+        return exception != null;
     }
 }

@@ -16,18 +16,16 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.model.idf;
 
-import java.util.List;
+import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
 
 /**
  * @author Olga Melnichuk
  */
-public interface IdfData {
+public interface ExperimentalDesign {
 
-    Info getInfo();
+    Cell<String> getName();
 
-    List<Person> getContacts();
+    Cell<String> getAccession();
 
-    List<ExperimentalDesign> getExperimentDesigns();
-
-    List<TermSource> getTermSources();
+    Cell<TermSource> getSource();
 }

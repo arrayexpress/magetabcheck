@@ -21,27 +21,24 @@ import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedTermSource extends LimpopoBasedIdfObject implements TermSource{
-
-    private final int index;
+public class LimpopoBasedTermSource extends LimpopoBasedIdfObject implements TermSource {
 
     public LimpopoBasedTermSource(LimpopoIdfHelper helper, int index) {
-        super(helper);
-        this.index = index;
+        super(helper, index);
     }
 
     @Override
     public String getName() {
-        return get(idf().termSourceName, index);
+        return get(idf().termSourceName);
     }
 
     @Override
     public String getVersion() {
-        return get(idf().termSourceVersion, index);
+        return get(idf().termSourceVersion);
     }
 
     @Override
     public String getFile() {
-        return get(idf().termSourceFile, index);
+        return get(idf().termSourceFile);
     }
 }

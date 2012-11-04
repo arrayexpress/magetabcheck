@@ -16,6 +16,7 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.ExperimentalDesign;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Person;
 
@@ -42,6 +43,7 @@ public class Checker {
     public void check(IdfData idf) {
         checkOne(idf.getInfo());
         checkAll(idf.getContacts(), Person.class);
+        checkAll(idf.getExperimentDesigns(), ExperimentalDesign.class);
     }
 
     private <T> void checkAll(Collection<T> collection, Class<T> itemClass) {

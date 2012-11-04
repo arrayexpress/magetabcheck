@@ -25,12 +25,19 @@ import java.util.List;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedIdfObject {
+public abstract class LimpopoBasedIdfObject {
 
     private final LimpopoIdfHelper helper;
 
+    private final int index;
+
     public LimpopoBasedIdfObject(@Nonnull LimpopoIdfHelper helper) {
+        this(helper, -1);
+    }
+
+    public LimpopoBasedIdfObject(@Nonnull LimpopoIdfHelper helper, int index) {
         this.helper = helper;
+        this.index = index;
     }
 
     protected IDF idf() {
@@ -41,7 +48,11 @@ public class LimpopoBasedIdfObject {
         return helper.getTermSource(name);
     }
 
-    protected String get(List<String> list, int index) {
+    protected String get(List<String> list) {
         return list == null || index >= list.size() ? null : list.get(index);
+    }
+
+    protected int getColumn() {
+        return index < 0 ? index : index + 1;
     }
 }

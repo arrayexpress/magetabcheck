@@ -47,6 +47,7 @@ public class AllChecks {
             add(AtLeastOneContactWithRolesRequired.class);
             add(AtLeastOneSubmitterMustHaveEmail.class);
             add(ListOfContactsMustBeNonEmpty.class);
+            add(ListOfExperimentalDesignsShouldBeNonEmpty.class);
         }
     };
 

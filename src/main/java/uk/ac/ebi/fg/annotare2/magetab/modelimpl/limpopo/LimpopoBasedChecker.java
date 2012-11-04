@@ -50,10 +50,28 @@ public class LimpopoBasedChecker {
             Checker ch = new Checker(InvestigationType.MICRO_ARRAY);
             ch.check(new LimpopoIdfDataProxy(inv.IDF));
             List<CheckResult> results = ch.getResults();
-            log.info("Total Checks = " + results.size());
-            for(CheckResult res : results) {
+            int success = 0, errors = 0, warnings = 0, exceptions = 0, other = 0;
+            for (CheckResult res : results) {
                 log.info(res.asString());
+                if (res.isSuccess()) {
+                    success++;
+                } else if (res.isWarning()) {
+                    warnings++;
+                } else if (res.isError()) {
+                    errors++;
+                } else if (res.isException()) {
+                    exceptions++;
+                } else {
+                    other++;
+                }
             }
+            log.info("---");
+            log.info("total=[" + results.size() + "]" +
+                    ", successes=[" + success + "]" +
+                    ", errors=[" + errors + "]" +
+                    ", warnings=[" + warnings + "]" +
+                    ", exceptions=[" + exceptions + "]" +
+                    ", other=[" + other + "]");
         } catch (ParseException e) {
             log.error("Can not parse file", e);
         }

@@ -17,14 +17,12 @@
 package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo;
 
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.IDF;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.Info;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.Person;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * @author Olga Melnichuk
@@ -44,8 +42,8 @@ public class LimpopoIdfDataProxy implements IdfData {
 
     @Override
     public List<Person> getContacts() {
-        int size = idfHelper.idf().personFirstName.size();
-        List<Person> contacts = new ArrayList<Person>();
+        int size = size(idfHelper.idf().personFirstName);
+        List<Person> contacts = newArrayList();
         for (int i = 0; i < size; i++) {
             contacts.add(new LimpopoBasedPerson(idfHelper, i));
         }
@@ -53,8 +51,21 @@ public class LimpopoIdfDataProxy implements IdfData {
     }
 
     @Override
+    public List<ExperimentalDesign> getExperimentDesigns() {
+        int size = size(idfHelper.idf().experimentalDesign);
+        List<ExperimentalDesign> designs = newArrayList();
+        for (int i = 0; i < size; i ++) {
+            designs.add(new LimpopoBasedExperimentalDesign(idfHelper, i));
+        }
+        return designs;
+    }
+
+    @Override
     public List<TermSource> getTermSources() {
         return idfHelper.getTermSources();
     }
 
+    private int size(List<String> list) {
+        return list == null || list.isEmpty() ? 0 : list.size();
+    }
 }

@@ -20,16 +20,14 @@ import uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality;
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.Info;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.Location;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.Person;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermList;
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.lang.Boolean.FALSE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckContext.setCheckPosition;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality.WARNING;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.matchers.IsDateString.isDateString;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.matchers.IsValidFileLocation.isValidFileLocation;
 import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.DATE_FORMAT;
@@ -61,11 +59,11 @@ public class IdfSimpleChecks {
         if (isNullOrEmpty(cell.getValue())) {
             return;
         }
-        setCheckPosition(cell.getLine(), cell.getColumn());
+        setPosition(cell);
         assertThat(cell.getValue(), isDateString(DATE_FORMAT));
     }
 
-    @MageTabCheck(value = "Date Of Experiment should be specified", modality = CheckModality.WARNING)
+    @MageTabCheck(value = "Date Of Experiment should be specified", modality = WARNING)
     public void dateOfExperimentShouldBeSpecified(Info info) {
         assertNotEmptyString(info.getDateOfExperiment());
     }
@@ -76,26 +74,26 @@ public class IdfSimpleChecks {
         if (isNullOrEmpty(cell.getValue())) {
             return;
         }
-        setCheckPosition(cell.getLine(), cell.getColumn());
+        setPosition(cell);
         assertThat(cell.getValue(), isDateString(DATE_FORMAT));
     }
 
     @MageTabCheck("SDRF File must be specified")
     public void sdrfFileMustBeSpecified(Info info) {
         Cell<Location> cell = info.getSdrfFile();
-        setCheckPosition(cell.getLine(), cell.getColumn());
+        setPosition(cell);
         assertThat(cell.getValue(), notNullValue());
         assertThat(cell.getValue().isEmpty(), is(FALSE));
     }
 
     @MageTabCheck("SDRF File must be valid location")
     public void sdrfFileMustBeValidLocation(Info info) {
-        Cell<Location> celll = info.getSdrfFile();
-        Location loc = celll.getValue();
+        Cell<Location> cell = info.getSdrfFile();
+        Location loc = cell.getValue();
         if (loc == null || loc.isEmpty()) {
             return;
         }
-        setCheckPosition(celll.getLine(), celll.getColumn());
+        setPosition(cell);
         assertThat(loc, isValidFileLocation());
     }
 
@@ -104,23 +102,24 @@ public class IdfSimpleChecks {
         assertNotEmptyString(person.getLastName());
     }
 
-    @MageTabCheck(value = "A contact should have First Name specified", modality = CheckModality.WARNING)
+    @MageTabCheck(value = "A contact should have First Name specified", modality = WARNING)
     public void contactShouldHaveFirstName(Person person) {
         assertNotEmptyString(person.getFirstName());
     }
 
-    @MageTabCheck(value = "A contact should have Affiliation specified", modality = CheckModality.WARNING)
+    @MageTabCheck(value = "A contact should have Affiliation specified", modality = WARNING)
     public void contactShouldHaveAffiliation(Person person) {
         assertNotEmptyString(person.getAffiliation());
     }
 
-    @MageTabCheck(value = "A contact roles should have TermSource specified", modality = CheckModality.WARNING)
-    public void check(Person person) {
+    @MageTabCheck(value = "A contact roles should have TermSource specified", modality = WARNING)
+    public void  contactRolesShouldHaveTermSource(Person person) {
         TermList roles = person.getRoles();
         if (roles == null || roles.isEmpty()) {
             return;
         }
-        assertThat(roles.getSource(), notNullValue());
+        setPosition(roles.getSource());
+        assertThat(roles.getSource().getValue(), notNullValue());
     }
 
     @MageTabCheck(
@@ -136,8 +135,23 @@ public class IdfSimpleChecks {
         }
     }
 
+    @MageTabCheck(value = "An experimental design should have name specified", modality = WARNING)
+    public void experimentDesignShouldHaveName(ExperimentalDesign exd) {
+        assertNotEmptyString(exd.getName());
+    }
+
+    @MageTabCheck(value = "An experimental design should have TermSource specified", modality = WARNING)
+    public void experimentalDesignShouldHaveTermSource(ExperimentalDesign exd) {
+        setPosition(exd.getSource());
+        assertThat(exd.getSource().getValue(), notNullValue());
+    }
+
     private static void assertNotEmptyString(Cell<String> cell) {
-        setCheckPosition(cell.getLine(), cell.getColumn());
+        setPosition(cell);
         assertThat(cell.getValue(), not(isEmptyOrNullString()));
+    }
+
+    private static <T> void setPosition(Cell<T> cell) {
+        setCheckPosition(cell.getLine(), cell.getColumn());
     }
 }
