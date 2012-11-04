@@ -16,6 +16,8 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.model.idf;
 
+import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
+
 import java.util.List;
 
 /**
@@ -23,11 +25,11 @@ import java.util.List;
  */
 public interface TermList {
 
-    List<String> getNames();
+    Cell<List<String>> getNames();
 
-    List<String> getAccessions();
+    Cell<List<String>> getAccessions();
 
-    TermSource getSource();
+    Cell<TermSource> getSource();
 
     int size();
 

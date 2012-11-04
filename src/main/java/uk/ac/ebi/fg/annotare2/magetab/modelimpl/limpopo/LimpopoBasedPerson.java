@@ -125,18 +125,27 @@ public class LimpopoBasedPerson extends LimpopoBasedIdfObject implements Person 
 
         return new TermList() {
             @Override
-            public List<String> getNames() {
-                return Collections.unmodifiableList(names);
+            public Cell<List<String>> getNames() {
+                return new Cell<List<String>>(
+                        Collections.unmodifiableList(names),
+                        idf().getLayout().getLineNumberForHeader(IdfTags.PERSON_ROLES),
+                        getColumn());
             }
 
             @Override
-            public List<String> getAccessions() {
-                return Collections.unmodifiableList(accessions);
+            public Cell<List<String>> getAccessions() {
+                return new Cell<List<String>>(
+                        Collections.unmodifiableList(accessions),
+                        idf().getLayout().getLineNumberForHeader(IdfTags.PERSON_ROLES_TERM_ACCESSION_NUMBER),
+                        getColumn());
             }
 
             @Override
-            public TermSource getSource() {
-                return termSource(roleTermSource);
+            public Cell<TermSource> getSource() {
+                return new Cell<TermSource>(
+                        termSource(roleTermSource),
+                        idf().getLayout().getLineNumberForHeader(IdfTags.PERSON_ROLES_TERM_SOURCE_REF),
+                        getColumn());
             }
 
             @Override

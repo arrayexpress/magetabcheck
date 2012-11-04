@@ -131,7 +131,7 @@ public class IdfSimpleChecks {
         if (roles == null || roles.isEmpty()) {
             return;
         }
-        if (roles.getNames().contains(SUBMITTER_ROLE)) {
+        if (roles.getNames().getValue().contains(SUBMITTER_ROLE)) {
             assertNotEmptyString(person.getAffiliation());
         }
     }

@@ -28,53 +28,56 @@ import static uk.ac.ebi.fg.annotare2.magetab.checker.AllChecks.getGlobalCheckTyp
  */
 public class AllChecksTest {
 
+    static class A implements GlobalCheck<Person> {
+        @Override
+        public void visit(Person person) {
+        }
+        @Override
+        public void check() {
+        }
+    }
+
     @Test
     public void testDirectInterfaceInheritance() {
-        class A implements GlobalCheck<Person> {
-            @Override
-            public void visit(Person person) {
-            }
-            @Override
-            public void check() {
-            }
-        }
-
         Class<?> clazz = getGlobalCheckTypeArgument(A.class);
         assertNotNull(clazz);
         assertEquals(Person.class, clazz);
+    }
+
+
+    static abstract class B1<T> implements GlobalCheck<T> {}
+    static class A1 extends B1<Person> {
+        @Override
+        public void visit(Person person) {
+        }
+
+        @Override
+        public void check() {
+        }
     }
 
     @Test
     public void testGenericSuperClassInheritance() {
-        abstract class B<T> implements GlobalCheck<T> {}
-        class A extends B<Person> {
-            @Override
-            public void visit(Person person) {
-            }
-
-            @Override
-            public void check() {
-            }
-        }
-        Class<?> clazz = getGlobalCheckTypeArgument(A.class);
+        Class<?> clazz = getGlobalCheckTypeArgument(A1.class);
         assertNotNull(clazz);
         assertEquals(Person.class, clazz);
     }
 
+    static abstract class C2<S,T> implements GlobalCheck<T> {}
+    static abstract class B2<S> extends C2<S, Person> {}
+    static class A2 extends B2<Integer> {
+        @Override
+        public void visit(Person person) {
+        }
+
+        @Override
+        public void check() {
+        }
+    }
+
     @Test
     public void testGenericDepthSuperClassInheritance() {
-        abstract class C<S,T> implements GlobalCheck<T> {}
-        abstract class B<S> extends C<S, Person> {}
-        class A extends B<Integer> {
-            @Override
-            public void visit(Person person) {
-            }
-
-            @Override
-            public void check() {
-            }
-        }
-        Class<?> clazz = getGlobalCheckTypeArgument(A.class);
+        Class<?> clazz = getGlobalCheckTypeArgument(A2.class);
         assertNotNull(clazz);
         assertEquals(Person.class, clazz);
     }

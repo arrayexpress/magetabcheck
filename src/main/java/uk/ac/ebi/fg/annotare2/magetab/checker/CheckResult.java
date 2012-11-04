@@ -82,6 +82,36 @@ public class CheckResult {
                 .setException(e);
     }
 
+    public String asString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(position == null ? -1 : position.getLine())
+                .append(",")
+                .append(position == null ? -1 : position.getColumn());
+
+        sb.append(" : ");
+
+        switch(type) {
+            case CHECK_SUCCESS:
+                sb.append("SUCCESS");
+                break;
+            case CHECK_FAILURE:
+                sb.append(modality == null ? "Unknown check modality" : modality);
+                break;
+            case RUN_ERROR:
+                sb.append("EXCEPTION");
+        }
+
+        sb.append(" : ")
+                .append(title == null ? "Unknown check" : title);
+
+        if (exception != null) {
+            sb.append( " : ")
+                    .append(exception.getMessage())
+                    .append("; See logs for details");
+        }
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
         return "CheckResult{" +

@@ -40,7 +40,8 @@ public class AtLeastOneSubmitterMustHaveEmail implements GlobalCheck<Person> {
         if (roles == null || roles.isEmpty()) {
             return;
         }
-        if (roles.getNames().contains(SUBMITTER_ROLE) && !isNullOrEmpty(person.getEmail().getValue())) {
+        if (roles.getNames().getValue().contains(SUBMITTER_ROLE)
+                && !isNullOrEmpty(person.getEmail().getValue())) {
             emailCount++;
         }
     }

@@ -30,7 +30,7 @@ public @interface MageTabCheck {
 
     String value();
 
-    CheckModality modality() default CheckModality.ERROR;
+    CheckModality modality() default uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality.ERROR;
 
-    CheckApplicationType application() default CheckApplicationType.ANY;
+    CheckApplicationType application() default uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType.ANY;
 }
