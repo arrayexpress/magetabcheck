@@ -78,6 +78,13 @@ public abstract class IdfTags {
     public static final String QUALITY_CONTROL_TERM_SOURCE_REF = "Quality Control Term Source REF";
 
 
+    public static final String REPLICATE_TYPE = "Replicate Type";
+
+    public static final String REPLICATE_TERM_ACCESSION_NUMBER = "Replicate Term Accession Number";
+
+    public static final String REPLICATE_TERM_SOURCE_REF = "Replicate Term Source REF";
+
+
     public static final String PUBLICATION_PUB_MED_ID = "PubMed ID";
 
     public static final String PUBLICATION_DOI = "Publication DOI";

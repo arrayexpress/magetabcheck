@@ -24,6 +24,7 @@ import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.valueOf;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -163,12 +164,22 @@ public class IdfSimpleChecks {
 
     @MageTabCheck(value = "A quality control type should have name specified", modality = WARNING)
     public void qualityControlTypeShouldHaveName(QualityControlType qt) {
-       assertNotEmptyString(qt.getName());
+        assertNotEmptyString(qt.getName());
     }
 
     @MageTabCheck(value = "A quality control type should have TermSource specified", modality = WARNING)
     public void qualityControlTypeShouldHaveSource(QualityControlType qt) {
         assertNotNull(qt.getSource());
+    }
+
+    @MageTabCheck(value = "A replicate type should have name specified", modality = WARNING)
+    public void replicateTypeShouldHaveName(ReplicateType rt) {
+        assertNotEmptyString(rt.getName());
+    }
+
+    @MageTabCheck(value = "A replicate type should have TermSource specified", modality = WARNING)
+    public void replicateTypeShouldHaveSource(ReplicateType rt) {
+        assertNotNull(rt.getSource());
     }
 
     @MageTabCheck(value = "A publication should have least one of PubMed ID, Publication DOI specified", modality = WARNING)

@@ -84,6 +84,16 @@ public class LimpopoIdfDataProxy implements IdfData {
     }
 
     @Override
+    public List<ReplicateType> getReplicateTypes() {
+        int size = size(idfHelper.idf().replicateType);
+        List<ReplicateType> replicateTypes = newArrayList();
+        for (int i = 0; i < size; i++) {
+            replicateTypes.add(new LimpopoBasedReplicateType(idfHelper, i));
+        }
+        return replicateTypes;
+    }
+
+    @Override
     public List<Publication> getPublications() {
         int size = max(size(idfHelper.idf().publicationTitle),
                 size(idfHelper.idf().publicationStatus),

@@ -34,12 +34,14 @@ public class AllChecks {
 
     private static final Logger log = LoggerFactory.getLogger(AllChecks.class);
 
+    //TODO make it automatically detected
     private static final List<Class> methodBasedChecks = new ArrayList<Class>() {
         {
             add(IdfSimpleChecks.class);
         }
     };
 
+    //TODO make it automatically detected
     private static final List<Class> classBasedChecks = new ArrayList<Class>() {
         {
             add(AtLeastOneContactMustBeSubmitter.class);
@@ -50,6 +52,7 @@ public class AllChecks {
             add(ListOfExperimentalDesignsShouldBeNonEmpty.class);
             add(ListOfExperimentalFactorsMustBeNonEmpty.class);
             add(ListOfQualityControlTypesShouldBeNonEmpty.class);
+            add(ListOfReplicateTypesShouldBeNonEmpty.class);
         }
     };
 

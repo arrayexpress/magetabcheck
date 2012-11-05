@@ -44,6 +44,7 @@ public class Checker {
         checkAll(idf.getExperimentDesigns(), ExperimentalDesign.class);
         checkAll(idf.getExperimentalFactors(), ExperimentalFactor.class);
         checkAll(idf.getQualityControlTypes(), QualityControlType.class);
+        checkAll(idf.getReplicateTypes(), ReplicateType.class);
         checkAll(idf.getPublications(), Publication.class);
     }
 
