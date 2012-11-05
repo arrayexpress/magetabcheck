@@ -14,22 +14,14 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.model.idf;
+package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
 
-import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
+import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.ExperimentalFactor;
 
 /**
  * @author Olga Melnichuk
  */
-public interface Publication {
-
-    Cell<String> getPubMedId();
-
-    Cell<String> getPublicationDOI();
-
-    Cell<String> getAuthorList();
-
-    Cell<String> getTitle();
-
-    PublicationStatus getStatus();
+@MageTabCheck("List of experimental factors must be non empty")
+public class ListOfExperimentalFactorsMustBeNonEmpty extends NonEmptyListCheck<ExperimentalFactor> {
 }

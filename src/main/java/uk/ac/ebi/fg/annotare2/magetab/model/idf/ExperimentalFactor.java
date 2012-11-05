@@ -21,15 +21,9 @@ import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
 /**
  * @author Olga Melnichuk
  */
-public interface Publication {
+public interface ExperimentalFactor {
 
-    Cell<String> getPubMedId();
+    Cell<String> getName();
 
-    Cell<String> getPublicationDOI();
-
-    Cell<String> getAuthorList();
-
-    Cell<String> getTitle();
-
-    PublicationStatus getStatus();
+    ExperimentalFactorType getType();
 }

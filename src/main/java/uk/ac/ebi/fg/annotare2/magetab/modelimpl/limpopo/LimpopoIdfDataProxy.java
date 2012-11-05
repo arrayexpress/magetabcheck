@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.primitives.Ints.max;
 
 /**
  * @author Olga Melnichuk
@@ -62,8 +63,19 @@ public class LimpopoIdfDataProxy implements IdfData {
     }
 
     @Override
+    public List<ExperimentalFactor> getExperimentalFactors() {
+        int size = max(size(idfHelper.idf().experimentalFactorName),
+                size(idfHelper.idf().experimentalFactorType));
+        List<ExperimentalFactor> factors = newArrayList();
+        for (int i = 0; i < size; i++) {
+            factors.add(new LimpopoBasedExperimentalFactor(idfHelper, i));
+        }
+        return factors;
+    }
+
+    @Override
     public List<Publication> getPublications() {
-        int size = Ints.max(size(idfHelper.idf().publicationTitle),
+        int size = max(size(idfHelper.idf().publicationTitle),
                 size(idfHelper.idf().publicationStatus),
                 size(idfHelper.idf().pubMedId),
                 size(idfHelper.idf().publicationDOI),

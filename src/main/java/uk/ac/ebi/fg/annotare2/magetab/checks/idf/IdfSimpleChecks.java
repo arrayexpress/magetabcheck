@@ -146,6 +146,21 @@ public class IdfSimpleChecks {
         assertNotNull(exd.getSource());
     }
 
+    @MageTabCheck("An experimental factor must have name specified")
+    public void experimentalFactorMustHaveName(ExperimentalFactor exf) {
+        assertNotEmptyString(exf.getName());
+    }
+
+    @MageTabCheck(value = "An experimental factor type should be specified")
+    public void experimentalFactorShouldHaveType(ExperimentalFactor exf) {
+        assertNotEmptyString(exf.getType().getName());
+    }
+
+    @MageTabCheck(value = "An experimental factor type should have TermSource specified", modality = WARNING)
+    public void experimentalFactorTypeShouldHaveSource(ExperimentalFactor exf) {
+        assertNotNull(exf.getType().getSource());
+    }
+
     @MageTabCheck(value = "A publication should have least one of PubMed ID, Publication DOI specified", modality = WARNING)
     public void publicationShouldHavePubMedIDOrDOI(Publication pub) {
         setPosition(pub.getPubMedId());

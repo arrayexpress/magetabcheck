@@ -62,6 +62,15 @@ public abstract class IdfTags {
     public static final String EXPERIMENTAL_DESIGN_TERM_SOURCE_REF = "Experimental Design Term Source REF";
 
 
+    public static final String EXPERIMENTAL_FACTOR_NAME = "Experimental Factor Name";
+
+    public static final String EXPERIMENTAL_FACTOR_TYPE = "Experimental Factor Type";
+
+    public static final String EXPERIMENTAL_FACTOR_TERM_ACCESSION_NUMBER = "Experimental Factor Term Accession Number";
+
+    public static final String EXPERIMENTAL_FACTOR_TERM_SOURCE_REF = "Experimental Factor Term Source REF";
+
+
     public static final String PUBLICATION_PUB_MED_ID = "PubMed ID";
 
     public static final String PUBLICATION_DOI = "Publication DOI";

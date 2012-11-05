@@ -14,22 +14,27 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.model.idf;
+package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
 
-import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
+import uk.ac.ebi.fg.annotare2.magetab.checker.GlobalCheck;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 
 /**
  * @author Olga Melnichuk
  */
-public interface Publication {
+public class NonEmptyListCheck <T> implements GlobalCheck<T> {
 
-    Cell<String> getPubMedId();
+    private int count;
 
-    Cell<String> getPublicationDOI();
+    @Override
+    public void visit(T t) {
+        count++;
+    }
 
-    Cell<String> getAuthorList();
-
-    Cell<String> getTitle();
-
-    PublicationStatus getStatus();
+    @Override
+    public void check() {
+        assertThat(count, greaterThan(0));
+    }
 }

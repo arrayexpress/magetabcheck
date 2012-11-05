@@ -28,17 +28,5 @@ import static org.hamcrest.Matchers.greaterThan;
  * @author Olga Melnichuk
  */
 @MageTabCheck(value = "List of experimental designs should be non empty", modality = CheckModality.WARNING)
-public class ListOfExperimentalDesignsShouldBeNonEmpty implements GlobalCheck<ExperimentalDesign> {
-
-    private int designCount;
-
-    @Override
-    public void visit(ExperimentalDesign experimentalDesign) {
-        designCount++;
-    }
-
-    @Override
-    public void check() {
-        assertThat(designCount, greaterThan(0));
-    }
+public class ListOfExperimentalDesignsShouldBeNonEmpty extends NonEmptyListCheck<ExperimentalDesign> {
 }
