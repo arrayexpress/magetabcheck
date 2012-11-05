@@ -161,6 +161,16 @@ public class IdfSimpleChecks {
         assertNotNull(exf.getType().getSource());
     }
 
+    @MageTabCheck(value = "A quality control type should have name specified", modality = WARNING)
+    public void qualityControlTypeShouldHaveName(QualityControlType qt) {
+       assertNotEmptyString(qt.getName());
+    }
+
+    @MageTabCheck(value = "A quality control type should have TermSource specified", modality = WARNING)
+    public void qualityControlTypeShouldHaveSource(QualityControlType qt) {
+        assertNotNull(qt.getSource());
+    }
+
     @MageTabCheck(value = "A publication should have least one of PubMed ID, Publication DOI specified", modality = WARNING)
     public void publicationShouldHavePubMedIDOrDOI(Publication pub) {
         setPosition(pub.getPubMedId());

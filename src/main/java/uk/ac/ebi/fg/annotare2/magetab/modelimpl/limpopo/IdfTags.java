@@ -71,6 +71,13 @@ public abstract class IdfTags {
     public static final String EXPERIMENTAL_FACTOR_TERM_SOURCE_REF = "Experimental Factor Term Source REF";
 
 
+    public static final String QUALITY_CONTROL_TYPE = "Quality Control Type";
+
+    public static final String QUALITY_CONTROL_TERM_ACCESSION_NUMBER = "Quality Control Term Accession Number";
+
+    public static final String QUALITY_CONTROL_TERM_SOURCE_REF = "Quality Control Term Source REF";
+
+
     public static final String PUBLICATION_PUB_MED_ID = "PubMed ID";
 
     public static final String PUBLICATION_DOI = "Publication DOI";

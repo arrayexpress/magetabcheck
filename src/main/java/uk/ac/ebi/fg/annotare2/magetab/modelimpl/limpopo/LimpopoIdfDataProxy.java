@@ -74,6 +74,16 @@ public class LimpopoIdfDataProxy implements IdfData {
     }
 
     @Override
+    public List<QualityControlType> getQualityControlTypes() {
+        int size = size(idfHelper.idf().qualityControlType);
+        List<QualityControlType> qualityControlTypes = newArrayList();
+        for (int i = 0; i < size; i++) {
+            qualityControlTypes.add(new LimpopoBasedQualityControlType(idfHelper, i));
+        }
+        return qualityControlTypes;
+    }
+
+    @Override
     public List<Publication> getPublications() {
         int size = max(size(idfHelper.idf().publicationTitle),
                 size(idfHelper.idf().publicationStatus),

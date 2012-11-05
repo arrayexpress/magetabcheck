@@ -49,6 +49,7 @@ public class AllChecks {
             add(ListOfContactsMustBeNonEmpty.class);
             add(ListOfExperimentalDesignsShouldBeNonEmpty.class);
             add(ListOfExperimentalFactorsMustBeNonEmpty.class);
+            add(ListOfQualityControlTypesShouldBeNonEmpty.class);
         }
     };
 

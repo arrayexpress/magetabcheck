@@ -43,6 +43,7 @@ public class Checker {
         checkAll(idf.getContacts(), Person.class);
         checkAll(idf.getExperimentDesigns(), ExperimentalDesign.class);
         checkAll(idf.getExperimentalFactors(), ExperimentalFactor.class);
+        checkAll(idf.getQualityControlTypes(), QualityControlType.class);
         checkAll(idf.getPublications(), Publication.class);
     }
 
@@ -54,7 +55,7 @@ public class Checker {
         for (T item : collection) {
             runAllWith(checkRunners, item);
         }
-       sumUp(checkRunners);
+        sumUp(checkRunners);
     }
 
     @SuppressWarnings("unchecked")

@@ -14,26 +14,15 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.model.idf;
+package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
 
-import java.util.List;
+import uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality;
+import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.QualityControlType;
 
 /**
  * @author Olga Melnichuk
  */
-public interface IdfData {
-
-    Info getInfo();
-
-    List<Person> getContacts();
-
-    List<ExperimentalDesign> getExperimentDesigns();
-
-    List<ExperimentalFactor> getExperimentalFactors();
-
-    List<QualityControlType> getQualityControlTypes();
-
-    List<Publication> getPublications();
-
-    List<TermSource> getTermSources();
+@MageTabCheck(value = "List of quality control types should not be empty", modality = CheckModality.WARNING)
+public class ListOfQualityControlTypesShouldBeNonEmpty extends NonEmptyListCheck<QualityControlType> {
 }
