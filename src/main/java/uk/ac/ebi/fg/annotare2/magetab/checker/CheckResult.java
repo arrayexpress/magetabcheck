@@ -89,7 +89,7 @@ public class CheckResult {
     public String asString() {
         StringBuilder sb = new StringBuilder();
         sb.append(position == null ? -1 : position.getLine())
-                .append(",")
+                .append(", ")
                 .append(position == null ? -1 : position.getColumn());
 
         sb.append(" : ");
