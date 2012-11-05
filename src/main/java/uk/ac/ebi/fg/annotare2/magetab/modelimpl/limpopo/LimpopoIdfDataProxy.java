@@ -94,6 +94,16 @@ public class LimpopoIdfDataProxy implements IdfData {
     }
 
     @Override
+    public List<NormalizationType> getNormalizationTypes() {
+        int size = size(idfHelper.idf().normalizationType);
+        List<NormalizationType> normalizationTypes = newArrayList();
+        for (int i = 0; i < size; i++) {
+            normalizationTypes.add(new LimpopoBasedNormalizationType(idfHelper, i));
+        }
+        return normalizationTypes;
+    }
+
+    @Override
     public List<Publication> getPublications() {
         int size = max(size(idfHelper.idf().publicationTitle),
                 size(idfHelper.idf().publicationStatus),

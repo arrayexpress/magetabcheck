@@ -53,6 +53,7 @@ public class AllChecks {
             add(ListOfExperimentalFactorsMustBeNonEmpty.class);
             add(ListOfQualityControlTypesShouldBeNonEmpty.class);
             add(ListOfReplicateTypesShouldBeNonEmpty.class);
+            add(ListOfNormalizationTypesShouldBeNonEmpty.class);
         }
     };
 

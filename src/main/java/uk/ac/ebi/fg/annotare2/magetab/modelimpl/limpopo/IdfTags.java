@@ -85,6 +85,13 @@ public abstract class IdfTags {
     public static final String REPLICATE_TERM_SOURCE_REF = "Replicate Term Source REF";
 
 
+    public static final String NORMALIZATION_TYPE = "Normalization Type";
+
+    public static final String NORMALIZATION_TERM_ACCESSION_NUMBER = "Normalization Term Accession Number";
+
+    public static final String NORMALIZATION_TERM_SOURCE_REF = "Normalization Term Source REF";
+
+
     public static final String PUBLICATION_PUB_MED_ID = "PubMed ID";
 
     public static final String PUBLICATION_DOI = "Publication DOI";

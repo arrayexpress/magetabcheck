@@ -182,6 +182,16 @@ public class IdfSimpleChecks {
         assertNotNull(rt.getSource());
     }
 
+    @MageTabCheck(value = "A normalization type should have name specified", modality = WARNING)
+    public void normalizationTypeShouldHaveName(NormalizationType nt) {
+        assertNotEmptyString(nt.getName());
+    }
+
+    @MageTabCheck(value = "A normalization type should have TermSource specified", modality = WARNING)
+    public void normalizationTypeShouldHaveSource(NormalizationType nt) {
+        assertNotNull(nt.getSource());
+    }
+
     @MageTabCheck(value = "A publication should have least one of PubMed ID, Publication DOI specified", modality = WARNING)
     public void publicationShouldHavePubMedIDOrDOI(Publication pub) {
         setPosition(pub.getPubMedId());
