@@ -118,6 +118,16 @@ public class LimpopoIdfDataProxy implements IdfData {
     }
 
     @Override
+    public List<Protocol> getProtocols() {
+        int size = size(idfHelper.idf().protocolName);
+        List<Protocol> protocols = newArrayList();
+        for (int i=0; i<size; i++) {
+            protocols.add(new LimpopoBasedProtocol(idfHelper, i));
+        }
+        return protocols;
+    }
+
+    @Override
     public List<TermSource> getTermSources() {
         return idfHelper.getTermSources();
     }

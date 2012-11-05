@@ -16,30 +16,27 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.model.idf;
 
+import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
+
 import java.util.List;
 
 /**
  * @author Olga Melnichuk
  */
-public interface IdfData {
+public interface Protocol {
 
-    Info getInfo();
+    Cell<String> getName();
 
-    List<Person> getContacts();
+    Cell<String> getDescription();
 
-    List<ExperimentalDesign> getExperimentDesigns();
+    Cell<List<String>> getParameters();
 
-    List<ExperimentalFactor> getExperimentalFactors();
+    Cell<String> getHardware();
 
-    List<QualityControlType> getQualityControlTypes();
+    Cell<String> getSoftware();
 
-    List<ReplicateType> getReplicateTypes();
+    Cell<String> getContact();
 
-    List<NormalizationType> getNormalizationTypes();
+    ProtocolType getType();
 
-    List<Publication> getPublications();
-
-    List<Protocol> getProtocols();
-
-    List<TermSource> getTermSources();
 }

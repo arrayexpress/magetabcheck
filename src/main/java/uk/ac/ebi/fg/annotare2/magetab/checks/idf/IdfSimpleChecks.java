@@ -22,6 +22,8 @@ import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;
 
+import java.util.List;
+
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.valueOf;
@@ -227,6 +229,41 @@ public class IdfSimpleChecks {
     @MageTabCheck(value = "A publication status should have TermSource specified", modality = WARNING)
     public void publicationStatusShouldHaveTermSourceSpecified(Publication pub) {
         assertNotNull(pub.getStatus().getSource());
+    }
+
+    @MageTabCheck("A protocol name required")
+    public void protocolMustHaveName(Protocol prot) {
+        assertNotEmptyString(prot.getName());
+    }
+
+    @MageTabCheck("A protocol type required")
+    public void protocolMustHaveType(Protocol prot) {
+        assertNotEmptyString(prot.getType().getName());
+    }
+
+    @MageTabCheck(value = "A protocol type should have TermSource specified", modality = WARNING)
+    public void protocolTypeShouldHaveSource(Protocol prot) {
+        assertNotNull(prot.getType().getSource());
+    }
+
+    @MageTabCheck(value = "A protocol should have description specified", modality = WARNING)
+    public void protocolShouldHaveDescription(Protocol prot) {
+        assertNotEmptyString(prot.getDescription());
+    }
+
+    @MageTabCheck(value = "A protocol description should be over 50 characters long", modality = WARNING)
+    public void protocolDescriptionShouldBeOver50CharsLong(Protocol prot) {
+        Cell<String> cell = prot.getDescription();
+        if (isNullOrEmpty(cell.getValue())) {
+            return;
+        }
+        setPosition(cell);
+        assertThat(cell.getValue().length(), greaterThan(50));
+    }
+
+    public void protocolShouldHaveParameters(Protocol prot) {
+        setPosition(prot.getParameters());
+        assertThat(prot.getParameters().getValue(), is(not(empty())));
     }
 
     private static <T> void assertNotNull(Cell<T> cell) {

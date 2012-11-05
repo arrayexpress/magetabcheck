@@ -105,4 +105,23 @@ public abstract class IdfTags {
     public static final String PUBLICATION_STATUS_TERM_ACCESSION_NUMBER = "Publication Status Term Accession Number";
 
     public static final String PUBLICATION_STATUS_TERM_SOURCE_REF = "Publication Status Term Source REF";
+
+
+    public static final String PROTOCOL_NAME = "Protocol Name";
+
+    public static final String PROTOCOL_TYPE = "Protocol Type";
+
+    public static final String PROTOCOL_TERM_ACCESSION_NUMBER = "Protocol Term Accession Number";
+
+    public static final String PROTOCOL_TERM_SOURCE_REF = "Protocol Term Source REF";
+
+    public static final String PROTOCOL_DESCRIPTION = "Protocol Description";
+
+    public static final String PROTOCOL_PARAMETERS = "Protocol Parameters";
+
+    public static final String PROTOCOL_SOFTWARE = "Protocol Software";
+
+    public static final String PROTOCOL_HARDWARE = "Protocol Hardware";
+
+    public static final String PROTOCOL_CONTACT = "Protocol Contact";
 }

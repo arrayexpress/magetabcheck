@@ -46,6 +46,7 @@ public class Checker {
         checkAll(idf.getQualityControlTypes(), QualityControlType.class);
         checkAll(idf.getReplicateTypes(), ReplicateType.class);
         checkAll(idf.getNormalizationTypes(), NormalizationType.class);
+        checkAll(idf.getProtocols(), Protocol.class);
         checkAll(idf.getPublications(), Publication.class);
     }
 

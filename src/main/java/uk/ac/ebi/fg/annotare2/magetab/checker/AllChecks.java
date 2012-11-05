@@ -54,6 +54,7 @@ public class AllChecks {
             add(ListOfQualityControlTypesShouldBeNonEmpty.class);
             add(ListOfReplicateTypesShouldBeNonEmpty.class);
             add(ListOfNormalizationTypesShouldBeNonEmpty.class);
+            add(ListOfProtocolsMustBeNonEmpty.class);
         }
     };
 
