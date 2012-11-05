@@ -16,15 +16,17 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.model.idf;
 
+import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
+
 /**
  * @author Olga Melnichuk
  */
 public interface TermSource {
 
-    String getName();
+    Cell<String> getName();
 
-    String getVersion();
+    Cell<String> getVersion();
 
-    String getFile();
+    Cell<String> getFile();
 
 }

@@ -16,6 +16,7 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo;
 
+import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 
 /**
@@ -28,17 +29,26 @@ public class LimpopoBasedTermSource extends LimpopoBasedIdfObject implements Ter
     }
 
     @Override
-    public String getName() {
-        return get(idf().termSourceName);
+    public Cell<String> getName() {
+        return new Cell<String>(
+                get(idf().termSourceName),
+                idf().getLayout().getLineNumberForHeader(IdfTags.TERM_SOURCE_NAME),
+                getColumn());
     }
 
     @Override
-    public String getVersion() {
-        return get(idf().termSourceVersion);
+    public Cell<String> getVersion() {
+        return new Cell<String>(
+                get(idf().termSourceVersion),
+                idf().getLayout().getLineNumberForHeader(IdfTags.TERM_SOURCE_VERSION),
+                getColumn());
     }
 
     @Override
-    public String getFile() {
-        return get(idf().termSourceFile);
+    public Cell<String> getFile() {
+        return new Cell<String>(
+                get(idf().termSourceFile),
+                idf().getLayout().getLineNumberForHeader(IdfTags.TERM_SOURCE_FILE),
+                getColumn());
     }
 }

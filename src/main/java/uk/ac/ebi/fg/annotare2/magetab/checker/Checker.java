@@ -48,6 +48,7 @@ public class Checker {
         checkAll(idf.getNormalizationTypes(), NormalizationType.class);
         checkAll(idf.getProtocols(), Protocol.class);
         checkAll(idf.getPublications(), Publication.class);
+        checkAll(idf.getTermSources(), TermSource.class);
     }
 
     private <T> void checkAll(Collection<T> collection, Class<T> itemClass) {

@@ -124,4 +124,12 @@ public abstract class IdfTags {
     public static final String PROTOCOL_HARDWARE = "Protocol Hardware";
 
     public static final String PROTOCOL_CONTACT = "Protocol Contact";
+
+
+    public static final String TERM_SOURCE_NAME = "Term Source Name";
+
+    public static final String TERM_SOURCE_FILE = "Term Source File";
+
+    public static final String TERM_SOURCE_VERSION = "Term Source Version";
+
 }

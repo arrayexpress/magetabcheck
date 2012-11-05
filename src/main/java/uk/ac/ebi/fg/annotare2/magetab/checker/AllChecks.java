@@ -55,6 +55,7 @@ public class AllChecks {
             add(ListOfReplicateTypesShouldBeNonEmpty.class);
             add(ListOfNormalizationTypesShouldBeNonEmpty.class);
             add(ListOfProtocolsMustBeNonEmpty.class);
+            add(TermSourcesMustBeUniqueByName.class);
         }
     };
 

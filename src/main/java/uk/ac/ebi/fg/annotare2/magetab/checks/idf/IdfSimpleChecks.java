@@ -261,6 +261,21 @@ public class IdfSimpleChecks {
         assertThat(cell.getValue().length(), greaterThan(50));
     }
 
+    @MageTabCheck(value = "A term source should have name", modality = WARNING)
+    public void termSourceShouldHaveName(TermSource ts) {
+        assertNotEmptyString(ts.getName());
+    }
+
+    @MageTabCheck(value = "A term source should have file/url specified", modality = WARNING)
+    public void termSourceShouldHaveFile(TermSource ts) {
+        assertNotEmptyString(ts.getFile());
+    }
+
+    @MageTabCheck(value = "A term source should have version specified", modality = WARNING)
+    public void termSourceShouldHaveVersion(TermSource ts) {
+        assertNotEmptyString(ts.getVersion());
+    }
+
     public void protocolShouldHaveParameters(Protocol prot) {
         setPosition(prot.getParameters());
         assertThat(prot.getParameters().getValue(), is(not(empty())));

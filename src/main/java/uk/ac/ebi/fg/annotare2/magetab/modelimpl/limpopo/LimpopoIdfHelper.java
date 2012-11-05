@@ -40,7 +40,7 @@ public class LimpopoIdfHelper {
         int size = this.idf.termSourceName.size();
         for (int i = 0; i < size; i++) {
             TermSource ts = new LimpopoBasedTermSource(this, i);
-            termSources.put(ts.getName(), ts);
+            termSources.put(ts.getName().getValue(), ts);
         }
     }
 
