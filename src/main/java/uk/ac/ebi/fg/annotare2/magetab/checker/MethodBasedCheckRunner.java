@@ -18,8 +18,10 @@ package uk.ac.ebi.fg.annotare2.magetab.checker;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.newHashSet;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.clearCheckPosition;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.getCheckPosition;
@@ -46,14 +48,14 @@ class MethodBasedCheckRunner<T> extends CheckRunner<T> {
         return annotation;
     }
 
-    private static <T> Set<T> add(Set<T> set, T item) {
-        Set<T> newSet = newHashSet(set);
-        newSet.add(item);
-        return newSet;
+    private static Map<Class<?>, Object> add(Map<Class<?>, Object> map, Object item) {
+        Map<Class<?>, Object> newMap = newHashMap(map);
+        newMap.put(item.getClass(), item);
+        return newMap;
     }
 
     @Override
-    public void runWith(T item, Set<Object> context) {
+    public void runWith(T item, Map<Class<?>, Object> context) {
         clearCheckPosition();
         try {
             Object[] params = getParams(method, add(context, item));

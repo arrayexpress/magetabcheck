@@ -21,15 +21,12 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult.checkBroken;
-import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult.checkFailed;
-import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult.checkSucceeded;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult.*;
 
 /**
  * @author Olga Melnichuk
@@ -81,14 +78,14 @@ abstract class CheckRunner<T> {
         return hasErrors;
     }
 
-    protected static Object[] getParams(Method method, Set<Object> context) throws IllegalAccessException {
+    protected static Object[] getParams(Method method, Map<Class<?>, Object> context) throws IllegalAccessException {
         Class<?>[] types = method.getParameterTypes();
         List<Object> params = newArrayList();
         for (int i = 0; i < types.length; i++) {
             Class<?> type = types[i];
-            for (Object obj : context) {
-                if (type.isAssignableFrom(obj.getClass())) {
-                    params.add(obj);
+            for (Class<?> keyType : context.keySet()) {
+                if (type.isAssignableFrom(keyType)) {
+                    params.add(context.get(keyType));
                     break;
                 }
             }
@@ -103,5 +100,5 @@ abstract class CheckRunner<T> {
         return Collections.unmodifiableList(results);
     }
 
-    public abstract void runWith(T item, Set<Object> context);
+    public abstract void runWith(T item, Map<Class<?>, Object> context);
 }

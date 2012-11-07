@@ -16,20 +16,15 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.SDRF;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.graph.Node;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SDRFNode;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
-import static com.google.common.collect.Sets.filter;
+import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.newHashSet;
-import static java.util.Collections.emptySet;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.AllChecks.checkRunnersFor;
 
 /**
@@ -59,9 +54,9 @@ public class Checker {
     }
 
     public void check(SDRF sdrf, IdfData idf) {
-        Set<Object> context = new HashSet<Object>();
-        context.add(sdrf.getLayout());
-        context.add(idf);
+        Map<Class<?>, Object> context = newHashMap();
+        context.put(sdrf.getLayout().getClass(), sdrf.getLayout());
+        context.put(idf.getClass(), idf);
 
         Set<SDRFNode> marks = newHashSet();
         Queue<SDRFNode> queue = new ArrayDeque<SDRFNode>();
@@ -87,17 +82,17 @@ public class Checker {
             return;
         }
         for (T item : collection) {
-            runAllWith(checkRunners, item, emptySet());
+            runAllWith(checkRunners, item, Collections.<Class<?>, Object>emptyMap());
         }
         sumUp(checkRunners);
     }
 
     private <T> void checkOne(T item) {
-        checkOne(item, emptySet());
+        checkOne(item, Collections.<Class<?>, Object>emptyMap());
     }
 
     @SuppressWarnings("unchecked")
-    private <T> void checkOne(T item, Set<Object> context) {
+    private <T> void checkOne(T item, Map<Class<?>, Object> context) {
         List<CheckRunner<T>> checkRunners = checkRunnersFor((Class<T>) item.getClass(), invType);
         if (checkRunners.isEmpty()) {
             return;
@@ -106,7 +101,7 @@ public class Checker {
         sumUp(checkRunners);
     }
 
-    private <T> void runAllWith(List<CheckRunner<T>> checkRunners, T item, Set<Object> context) {
+    private <T> void runAllWith(List<CheckRunner<T>> checkRunners, T item, Map<Class<?>, Object> context) {
         for (CheckRunner<T> runner : checkRunners) {
             runner.runWith(item, context);
         }

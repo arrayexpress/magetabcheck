@@ -19,6 +19,7 @@ package uk.ac.ebi.fg.annotare2.magetab.checker;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -63,7 +64,7 @@ class ClassBasedCheckRunner<T> extends CheckRunner<T> {
     }
 
     @Override
-    public void runWith(T item, Set<Object> context) {
+    public void runWith(T item, Map<Class<?>, Object> context) {
         try {
             if (setContext != null) {
                 setContext.invoke(target, getParams(setContext, context));
