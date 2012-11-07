@@ -64,10 +64,12 @@ public class CheckResult {
         return this;
     }
 
-    public static CheckResult checkSucceeded(String checkTitle) {
+    public static CheckResult checkSucceeded(String checkTitle, CheckModality checkModality, CheckPosition pos) {
         return new CheckResult()
                 .setType(CHECK_SUCCESS)
-                .setTitle(checkTitle);
+                .setTitle(checkTitle)
+                .setModality(checkModality)
+                .setPosition(pos);
     }
 
     public static CheckResult checkFailed(String checkTitle, CheckModality checkModality, CheckPosition pos) {
@@ -88,11 +90,8 @@ public class CheckResult {
 
     public String asString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(position == null ? -1 : position.getLine())
-                .append(", ")
-                .append(position == null ? -1 : position.getColumn());
 
-        sb.append(" : ");
+        sb.append("[");
 
         if (isSuccess()) {
             sb.append("SUCCESS");
@@ -104,8 +103,13 @@ public class CheckResult {
             sb.append("OTHER");
         }
 
-        sb.append(" : ")
-                .append(title == null ? "Unknown check" : title);
+        sb.append("] @(")
+                .append(position == null ? -1 : position.getLine())
+                .append(", ")
+                .append(position == null ? -1 : position.getColumn())
+                .append(") ");
+
+        sb.append(title == null ? "Unknown check" : title);
 
         if (exception != null) {
             sb.append(" : ")
