@@ -32,7 +32,7 @@ public abstract class LimpopoBasedIdfObject {
     private final int index;
 
     public LimpopoBasedIdfObject(@Nonnull LimpopoIdfHelper helper) {
-        this(helper, -1);
+        this(helper, 0);
     }
 
     public LimpopoBasedIdfObject(@Nonnull LimpopoIdfHelper helper, int index) {

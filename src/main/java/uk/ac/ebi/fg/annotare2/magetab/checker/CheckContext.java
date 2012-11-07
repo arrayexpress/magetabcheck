@@ -16,32 +16,16 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * @author Olga Melnichuk
  */
-public class CheckContext {
-
-    public static final ThreadLocal<CheckContext> threadLocal = new ThreadLocal<CheckContext>();
-
-    private CheckPosition position;
-
-    public CheckPosition getPosition() {
-        return position;
-    }
-
-    public void setPosition(CheckPosition position) {
-        this.position = position;
-    }
-
-    public static void clearContext() {
-        threadLocal.set(new CheckContext());
-    }
-
-    public static void setCheckPosition(int line, int column) {
-        threadLocal.get().setPosition(new CheckPosition(line, column));
-    }
-
-    public static CheckPosition getCheckPosition() {
-        return threadLocal.get().getPosition();
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD})
+public @interface CheckContext {
 }
+

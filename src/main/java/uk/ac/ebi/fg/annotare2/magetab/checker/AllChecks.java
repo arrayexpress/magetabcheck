@@ -19,6 +19,7 @@ package uk.ac.ebi.fg.annotare2.magetab.checker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.fg.annotare2.magetab.checks.idf.*;
+import uk.ac.ebi.fg.annotare2.magetab.checks.sdrf.SdrfSimpleChecks;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -38,6 +39,7 @@ public class AllChecks {
     private static final List<Class> methodBasedChecks = new ArrayList<Class>() {
         {
             add(IdfSimpleChecks.class);
+            add(SdrfSimpleChecks.class);
         }
     };
 

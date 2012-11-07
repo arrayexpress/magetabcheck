@@ -24,9 +24,10 @@ import uk.ac.ebi.arrayexpress2.magetab.parser.MAGETABParser;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult;
 import uk.ac.ebi.fg.annotare2.magetab.checker.Checker;
 import uk.ac.ebi.fg.annotare2.magetab.checker.InvestigationType;
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
 
 import java.io.File;
-import java.util.List;
+import java.util.Collection;
 
 import static java.lang.System.exit;
 
@@ -48,8 +49,10 @@ public class LimpopoBasedChecker {
             MAGETABInvestigation inv = parser.parse(new File(args[0]));
             // TODO need to know investigation type somehow...
             Checker ch = new Checker(InvestigationType.MICRO_ARRAY);
-            ch.check(new LimpopoIdfDataProxy(inv.IDF));
-            List<CheckResult> results = ch.getResults();
+            IdfData idf = new LimpopoIdfDataProxy(inv.IDF);
+            ch.check(idf);
+            ch.check(inv.SDRF, idf);
+            Collection<CheckResult> results = ch.getResults();
             int success = 0, errors = 0, warnings = 0, exceptions = 0, other = 0;
             for (CheckResult res : results) {
                 log.info(res.asString());

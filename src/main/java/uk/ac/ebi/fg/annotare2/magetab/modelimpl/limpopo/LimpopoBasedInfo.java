@@ -38,28 +38,32 @@ public class LimpopoBasedInfo extends LimpopoBasedIdfObject implements Info {
     public Cell<String> getTitle() {
         return new Cell<String>(
                 idf().investigationTitle,
-                idf().getLayout().getLineNumberForHeader(INVESTIGATION_TITLE));
+                idf().getLayout().getLineNumberForHeader(INVESTIGATION_TITLE),
+                getColumn());
     }
 
     @Override
     public Cell<String> getExperimentDescription() {
         return new Cell<String>(
                 idf().experimentDescription,
-                idf().getLayout().getLineNumberForHeader(EXPERIMENT_DESCRIPTION));
+                idf().getLayout().getLineNumberForHeader(EXPERIMENT_DESCRIPTION),
+                getColumn());
     }
 
     @Override
     public Cell<String> getDateOfExperiment() {
         return new Cell<String>(
                 idf().dateOfExperiment,
-                idf().getLayout().getLineNumberForHeader(DATE_OF_EXPERIMENT));
+                idf().getLayout().getLineNumberForHeader(DATE_OF_EXPERIMENT),
+                getColumn());
     }
 
     @Override
     public Cell<String> getPublicReleaseDate() {
         return new Cell<String>(
                 idf().publicReleaseDate,
-                idf().getLayout().getLineNumberForHeader(PUBLIC_RELEASE_DATE));
+                idf().getLayout().getLineNumberForHeader(PUBLIC_RELEASE_DATE),
+                getColumn());
     }
 
     @Override
@@ -68,6 +72,7 @@ public class LimpopoBasedInfo extends LimpopoBasedIdfObject implements Info {
         return new Cell<Location>(
                 new Location(idf().getLocation(),
                         (sdrfFiles == null || sdrfFiles.isEmpty()) ? null : sdrfFiles.get(0)),
-                idf().getLayout().getLineNumberForHeader(SDRF_FILE));
+                idf().getLayout().getLineNumberForHeader(SDRF_FILE),
+                getColumn());
     }
 }

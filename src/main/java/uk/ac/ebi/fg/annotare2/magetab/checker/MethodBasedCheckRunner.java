@@ -18,9 +18,11 @@ package uk.ac.ebi.fg.annotare2.magetab.checker;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Set;
 
-import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckContext.clearContext;
-import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckContext.getCheckPosition;
+import static com.google.common.collect.Sets.newHashSet;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.clearCheckPosition;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.getCheckPosition;
 
 /**
  * @author Olga Melnichuk
@@ -44,12 +46,19 @@ class MethodBasedCheckRunner<T> extends CheckRunner<T> {
         return annotation;
     }
 
+    private static <T> Set<T> add(Set<T> set, T item) {
+        Set<T> newSet = newHashSet(set);
+        newSet.add(item);
+        return newSet;
+    }
+
     @Override
-    public void runWith(T item) {
-        clearContext();
+    public void runWith(T item, Set<Object> context) {
+        clearCheckPosition();
         try {
-            method.invoke(clazz.newInstance(), item);
-            success();
+            Object[] params = getParams(method, add(context, item));
+            method.invoke(clazz.newInstance(), params);
+            success(getCheckPosition());
         } catch (InvocationTargetException e) {
             Throwable t = e.getCause();
             if (t instanceof AssertionError) {

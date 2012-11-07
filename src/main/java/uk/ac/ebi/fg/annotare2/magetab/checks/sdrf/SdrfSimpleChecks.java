@@ -1,0 +1,54 @@
+/*
+ * Copyright 2012 EMBL - European Bioinformatics Institute
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or impl
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package uk.ac.ebi.fg.annotare2.magetab.checks.sdrf;
+
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.layout.Location;
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.layout.SDRFLayout;
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SDRFNode;
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SourceNode;
+import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
+
+import java.util.Collection;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality.WARNING;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.setCheckPosition;
+
+/**
+ * @author Olga Melnichuk
+ */
+public class SdrfSimpleChecks {
+
+    @MageTabCheck("A source node must have name specified")
+    public void sourceNodeMustHaveName(SourceNode sourceNode, SDRFLayout layout) {
+        setPosition(sourceNode, layout);
+        assertThat(sourceNode.getNodeName(), not(isEmptyOrNullString()));
+    }
+
+    @MageTabCheck(value = "A source node should have Material Type attribute specified", modality = WARNING)
+    public void sourceNodeShouldHaveMaterialTypeAttribute(SourceNode sourceNode, SDRFLayout layout) {
+        setPosition(sourceNode, layout);
+        assertThat(sourceNode.materialType, notNullValue());
+    }
+
+    private static <T extends SDRFNode> void setPosition(T node, SDRFLayout layout) {
+        Collection<Location> locations = layout.getLocationsForNode(node);
+        Location loc = locations.iterator().next();
+        setCheckPosition(loc.getLineNumber(), loc.getColumn());
+    }
+}

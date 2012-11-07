@@ -16,7 +16,10 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Olga Melnichuk
@@ -25,19 +28,30 @@ class ClassBasedCheckRunner<T> extends CheckRunner<T> {
 
     private final GlobalCheck<T> target;
 
+    private final Method setContext;
+
     ClassBasedCheckRunner(Class<? extends GlobalCheck<T>> targetClass) {
         super(isNotNull(targetClass.getAnnotation(MageTabCheck.class)));
 
-        GlobalCheck<T> t = null;
+        Method contextSetter = null;
+        for(Method m : targetClass.getMethods()) {
+            if (m.getAnnotation(CheckContext.class) != null) {
+                contextSetter = m;
+                break;
+            }
+        }
+        this.setContext = contextSetter;
+
+        GlobalCheck<T> target = null;
         try {
-            t = targetClass.newInstance();
+            target = targetClass.newInstance();
         } catch (InstantiationException e) {
             error(e);
         } catch (IllegalAccessException e) {
             error(e);
         }
 
-        this.target = t;
+        this.target = target;
     }
 
     private static MageTabCheck isNotNull(MageTabCheck annotation) {
@@ -49,17 +63,28 @@ class ClassBasedCheckRunner<T> extends CheckRunner<T> {
     }
 
     @Override
-    public void runWith(T item) {
-        target.visit(item);
+    public void runWith(T item, Set<Object> context) {
+        try {
+            if (setContext != null) {
+                setContext.invoke(target, getParams(setContext, context));
+            }
+            target.visit(item);
+        } catch (IllegalAccessException e) {
+            error(e);
+        } catch (InvocationTargetException e) {
+            error(e.getCause());
+        }
     }
 
     @Override
     public List<CheckResult> sumUp() {
-        try {
-            target.check();
-            success();
-        } catch (AssertionError e) {
-            failure();
+        if (!hasErrors()) {
+            try {
+                target.check();
+                success();
+            } catch (AssertionError e) {
+                failure();
+            }
         }
         return super.sumUp();
     }

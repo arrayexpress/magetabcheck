@@ -20,8 +20,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult.checkBroken;
@@ -41,6 +44,8 @@ abstract class CheckRunner<T> {
 
     private CheckModality checkModality;
 
+    private boolean hasErrors = false;
+
     protected CheckRunner(String checkTitle, CheckModality checkModality) {
         this.checkTitle = checkTitle;
         this.checkModality = checkModality;
@@ -51,7 +56,11 @@ abstract class CheckRunner<T> {
     }
 
     protected void success() {
-        results.add(checkSucceeded(checkTitle));
+        success(null);
+    }
+
+    protected void success(CheckPosition pos) {
+        results.add(checkSucceeded(checkTitle, checkModality, pos));
     }
 
     protected void failure() {
@@ -65,11 +74,34 @@ abstract class CheckRunner<T> {
     protected void error(Throwable e) {
         log.error("Check running error(" + checkTitle + ")", e);
         results.add(checkBroken(checkTitle, checkModality, e));
+        hasErrors = true;
+    }
+
+    protected boolean hasErrors() {
+        return hasErrors;
+    }
+
+    protected static Object[] getParams(Method method, Set<Object> context) throws IllegalAccessException {
+        Class<?>[] types = method.getParameterTypes();
+        List<Object> params = newArrayList();
+        for (int i = 0; i < types.length; i++) {
+            Class<?> type = types[i];
+            for (Object obj : context) {
+                if (type.isAssignableFrom(obj.getClass())) {
+                    params.add(obj);
+                    break;
+                }
+            }
+            if (params.size() != i + 1) {
+                throw new IllegalAccessException("Can't find object of class " + type + " in the check context");
+            }
+        }
+        return params.toArray(new Object[params.size()]);
     }
 
     public List<CheckResult> sumUp() {
         return Collections.unmodifiableList(results);
     }
 
-    public abstract void runWith(T item);
+    public abstract void runWith(T item, Set<Object> context);
 }
