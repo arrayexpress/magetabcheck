@@ -16,22 +16,25 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
+import com.google.common.primitives.Ints;
+import org.omg.CORBA.UNKNOWN;
+
 /**
  * @author Olga Melnichuk
  */
-public class CheckPosition {
+public class CheckPosition implements Comparable<CheckPosition> {
+
+    private static final int UNKNOWN_INDEX = -1;
+
+    private static final CheckPosition UNKNOWN = new CheckPosition(UNKNOWN_INDEX, UNKNOWN_INDEX);
 
     private final int line;
 
     private final int column;
 
-    public CheckPosition(int line, int column) {
+    private CheckPosition(int line, int column) {
         this.line = line;
         this.column = column;
-    }
-
-    public CheckPosition(int line) {
-        this(line, -1);
     }
 
     public int getLine() {
@@ -42,11 +45,45 @@ public class CheckPosition {
         return column;
     }
 
+    public String asString() {
+        return "@(" + line + ", " + column + ")";
+    }
+
+    public boolean isUnknown() {
+        return this == UNKNOWN;
+    }
+
     @Override
     public String toString() {
         return "CheckPosition{" +
                 "line=" + line +
                 ", column=" + column +
                 '}';
+    }
+
+    @Override
+    public int compareTo(CheckPosition o) {
+        if (isUnknown() && o.isUnknown()) {
+            return 0;
+        } else if (isUnknown()) {
+            return 1;
+        } else if (o.isUnknown()) {
+            return -1;
+        }
+
+        int compareLines = Ints.compare(line, o.line);
+        if (compareLines != 0) {
+            return compareLines;
+        }
+
+        return Ints.compare(column, o.column);
+    }
+
+    public static CheckPosition newCheckPosition(int line, int column) {
+        return line == UNKNOWN_INDEX || column == UNKNOWN_INDEX ? UNKNOWN : new CheckPosition(line, column);
+    }
+
+    public static CheckPosition unknownPosition() {
+        return UNKNOWN;
     }
 }

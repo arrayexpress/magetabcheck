@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.utils;
-
-import java.net.URL;
-import java.util.regex.Pattern;
+package uk.ac.ebi.fg.annotare2.magetab.model.sdrf;
 
 /**
  * @author Olga Melnichuk
  */
-public class LocationUtil {
+public interface SdrfAttribute {
 
-    private static final Pattern urlProtocol = Pattern.compile("(http|file):\\/\\/");
+    String getName();
 
-    public static URL asUrl(String location, URL defaultRoot) {
-        return null;
-    }
+    String getValue();
 }

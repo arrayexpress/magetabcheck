@@ -22,13 +22,15 @@ import uk.ac.ebi.arrayexpress2.magetab.datamodel.MAGETABInvestigation;
 import uk.ac.ebi.arrayexpress2.magetab.exception.ParseException;
 import uk.ac.ebi.arrayexpress2.magetab.parser.MAGETABParser;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult;
+import uk.ac.ebi.fg.annotare2.magetab.checker.CheckResultStatus;
 import uk.ac.ebi.fg.annotare2.magetab.checker.Checker;
 import uk.ac.ebi.fg.annotare2.magetab.checker.InvestigationType;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
 
 import java.io.File;
-import java.util.Collection;
+import java.util.List;
 
+import static com.google.common.collect.Ordering.natural;
 import static java.lang.System.exit;
 
 /**
@@ -52,20 +54,24 @@ public class LimpopoBasedChecker {
             IdfData idf = new LimpopoIdfDataProxy(inv.IDF);
             ch.check(idf);
             ch.check(inv.SDRF, idf);
-            Collection<CheckResult> results = ch.getResults();
-            int success = 0, errors = 0, warnings = 0, exceptions = 0, other = 0;
+            List<CheckResult> results = natural().sortedCopy(ch.getResults());
+
+            int success = 0, errors = 0, warnings = 0, exceptions = 0;
             for (CheckResult res : results) {
                 log.info(res.asString());
-                if (res.isSuccess()) {
-                    success++;
-                } else if (res.isWarning()) {
-                    warnings++;
-                } else if (res.isError()) {
-                    errors++;
-                } else if (res.isException()) {
-                    exceptions++;
-                } else {
-                    other++;
+                CheckResultStatus status = res.getStatus();
+                switch (status) {
+                    case SUCCESS:
+                        success++;
+                        break;
+                    case WARNING:
+                        warnings++;
+                        break;
+                    case ERROR:
+                        errors++;
+                        break;
+                    case EXCEPTION:
+                        exceptions++;
                 }
             }
             log.info("---");
@@ -73,8 +79,7 @@ public class LimpopoBasedChecker {
                     ", successes=[" + success + "]" +
                     ", errors=[" + errors + "]" +
                     ", warnings=[" + warnings + "]" +
-                    ", exceptions=[" + exceptions + "]" +
-                    ", other=[" + other + "]");
+                    ", exceptions=[" + exceptions + "]");
         } catch (ParseException e) {
             log.error("Can not parse file", e);
         }

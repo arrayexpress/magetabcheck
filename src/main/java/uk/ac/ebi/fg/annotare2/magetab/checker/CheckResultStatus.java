@@ -19,25 +19,9 @@ package uk.ac.ebi.fg.annotare2.magetab.checker;
 /**
  * @author Olga Melnichuk
  */
-public enum CheckResultType {
-    CHECK_SUCCESS {
-        @Override
-        public CheckResultStatus status(CheckModality modality) {
-            return CheckResultStatus.SUCCESS;
-        }
-    },
-    CHECK_FAILURE {
-        @Override
-        public CheckResultStatus status(CheckModality modality) {
-            return modality.isWarning() ? CheckResultStatus.WARNING : CheckResultStatus.ERROR;
-        }
-    },
-    RUN_ERROR {
-        @Override
-        public CheckResultStatus status(CheckModality modality) {
-            return CheckResultStatus.EXCEPTION;
-        }
-    };
-
-    public abstract CheckResultStatus status(CheckModality modality);
+public enum CheckResultStatus {
+    SUCCESS,
+    WARNING,
+    ERROR,
+    EXCEPTION
 }

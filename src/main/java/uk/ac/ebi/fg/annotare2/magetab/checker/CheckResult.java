@@ -17,36 +17,34 @@
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
 
-import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality.*;
-import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckResultType.CHECK_FAILURE;
-import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckResultType.CHECK_SUCCESS;
+import javax.annotation.Nonnull;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+
+import static com.google.common.collect.Ordering.natural;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPosition.unknownPosition;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckResultType.*;
 
 /**
  * @author Olga Melnichuk
  */
-public class CheckResult {
+public class CheckResult implements Comparable<CheckResult> {
 
-    private CheckResultType type;
+    private final CheckResultType type;
 
-    private CheckModality modality;
+    private final CheckModality modality;
 
     private String title;
 
     private Throwable exception;
 
-    private CheckPosition position;
+    private CheckPosition position = unknownPosition();
 
-    private CheckResult() {
-    }
-
-    private CheckResult setType(CheckResultType type) {
+    private CheckResult(@Nonnull CheckResultType type, @Nonnull CheckModality modality) {
         this.type = type;
-        return this;
-    }
-
-    private CheckResult setModality(CheckModality modality) {
         this.modality = modality;
-        return this;
     }
 
     private CheckResult setTitle(String title) {
@@ -60,63 +58,30 @@ public class CheckResult {
     }
 
     private CheckResult setPosition(CheckPosition position) {
-        this.position = position;
+        this.position = position == null ? unknownPosition() : position;
         return this;
     }
 
     public static CheckResult checkSucceeded(String checkTitle, CheckModality checkModality, CheckPosition pos) {
-        return new CheckResult()
-                .setType(CHECK_SUCCESS)
+        return new CheckResult(CHECK_SUCCESS, checkModality)
                 .setTitle(checkTitle)
-                .setModality(checkModality)
                 .setPosition(pos);
     }
 
     public static CheckResult checkFailed(String checkTitle, CheckModality checkModality, CheckPosition pos) {
-        return new CheckResult()
-                .setType(CHECK_FAILURE)
+        return new CheckResult(CHECK_FAILURE, checkModality)
                 .setTitle(checkTitle)
-                .setModality(checkModality)
                 .setPosition(pos);
     }
 
     public static CheckResult checkBroken(String checkTitle, CheckModality checkModality, Throwable e) {
-        return new CheckResult()
-                .setType(CheckResultType.RUN_ERROR)
+        return new CheckResult(RUN_ERROR, checkModality)
                 .setTitle(checkTitle)
-                .setModality(checkModality)
                 .setException(e);
     }
 
-    public String asString() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("[");
-
-        if (isSuccess()) {
-            sb.append("SUCCESS");
-        } else if (isError() || isWarning()) {
-            sb.append(modality);
-        } else if (isException()) {
-            sb.append("EXCEPTION");
-        } else {
-            sb.append("OTHER");
-        }
-
-        sb.append("] @(")
-                .append(position == null ? -1 : position.getLine())
-                .append(", ")
-                .append(position == null ? -1 : position.getColumn())
-                .append(") ");
-
-        sb.append(title == null ? "Unknown check" : title);
-
-        if (exception != null) {
-            sb.append(" : ")
-                    .append(exception.getMessage())
-                    .append("; See logs for details");
-        }
-        return sb.toString();
+    public final CheckResultStatus getStatus() {
+        return type.status(modality);
     }
 
     @Override
@@ -130,19 +95,45 @@ public class CheckResult {
                 '}';
     }
 
-    public boolean isSuccess() {
-        return type == CHECK_SUCCESS;
+    @Override
+    public int compareTo(CheckResult o) {
+        int statusCompare = getStatus().compareTo(o.getStatus());
+        if (statusCompare != 0) {
+            return statusCompare;
+        }
+
+        int positionCompare = natural().nullsLast().compare(position, o.position);
+        if (positionCompare != 0) {
+            return positionCompare;
+        }
+
+        return natural().nullsLast().compare(title, o.title);
     }
 
-    public boolean isWarning() {
-        return type == CHECK_FAILURE && modality == WARNING;
+    public String asString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("[")
+                .append(getStatus())
+                .append("]");
+
+        sb.append(" ")
+                .append(position.asString());
+
+        sb.append(" ")
+                .append(title == null ? "Unknown check" : title);
+
+        if (exception != null) {
+            sb.append("\n")
+                    .append(getStackTrace(exception));
+        }
+        return sb.toString();
     }
 
-    public boolean isError() {
-        return type == CHECK_FAILURE && modality == ERROR;
-    }
-
-    public boolean isException() {
-        return exception != null;
+    public static String getStackTrace(Throwable t) {
+        final Writer w = new StringWriter();
+        t.printStackTrace(new PrintWriter(w));
+        return w.toString();
     }
 }
+

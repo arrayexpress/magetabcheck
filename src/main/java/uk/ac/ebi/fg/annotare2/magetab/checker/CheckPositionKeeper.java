@@ -16,6 +16,8 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPosition.newCheckPosition;
+
 /**
  * @author Olga Melnichuk
  */
@@ -38,7 +40,7 @@ public class CheckPositionKeeper {
     }
 
     public static void setCheckPosition(int line, int column) {
-        threadLocal.get().setPosition(new CheckPosition(line, column));
+        threadLocal.get().setPosition(newCheckPosition(line, column));
     }
 
     public static CheckPosition getCheckPosition() {

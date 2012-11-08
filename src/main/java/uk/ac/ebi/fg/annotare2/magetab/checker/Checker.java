@@ -16,11 +16,15 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.SDRF;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.graph.Node;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SDRFNode;
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.MaterialTypeAttribute;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 import static com.google.common.collect.Maps.newHashMap;
@@ -31,6 +35,8 @@ import static uk.ac.ebi.fg.annotare2.magetab.checker.AllChecks.checkRunnersFor;
  * @author Olga Melnichuk
  */
 public class Checker {
+
+    private static final Logger log = LoggerFactory.getLogger(Checker.class);
 
     private final InvestigationType invType;
 
@@ -66,11 +72,28 @@ public class Checker {
             if (marks.contains(node)) {
                 continue;
             }
-            checkOne(node, context);
+            checkNode(node, context);
             marks.add(node);
             for (Node n : node.getChildNodes()) {
                 if (n instanceof SDRFNode) {
                     queue.add((SDRFNode) n);
+                }
+            }
+        }
+    }
+
+    //TODO field check can be eliminated by the new proper SDRF Graph model
+    private void checkNode(SDRFNode node, Map<Class<?>, Object> context) {
+        checkOne(node, context);
+        for(Field f : node.getClass().getFields()) {
+            if (f.getType().equals(MaterialTypeAttribute.class)) {
+                try {
+                    MaterialTypeAttribute mta = (MaterialTypeAttribute) f.get(node);
+                    if (mta != null) {
+                        checkOne(mta, context);
+                    }
+                } catch (IllegalAccessException e) {
+                    log.error("Can't access field: " + node.getClass() + "." + f.getName(), e);
                 }
             }
         }
