@@ -21,5 +21,13 @@ package uk.ac.ebi.fg.annotare2.magetab.checker;
  */
 public enum CheckModality {
     ERROR,
-    WARNING
+    WARNING;
+
+    public boolean isWarning() {
+        return this == WARNING;
+    }
+
+    public boolean isError() {
+        return this == ERROR;
+    }
 }
