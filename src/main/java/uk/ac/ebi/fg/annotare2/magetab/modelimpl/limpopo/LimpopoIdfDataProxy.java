@@ -132,6 +132,11 @@ public class LimpopoIdfDataProxy implements IdfData {
         return idfHelper.getTermSources();
     }
 
+    @Override
+    public TermSource getTermSource(String ref) {
+        return idfHelper.getTermSource(ref);
+    }
+
     private int size(List<String> list) {
         return list == null || list.isEmpty() ? 0 : list.size();
     }

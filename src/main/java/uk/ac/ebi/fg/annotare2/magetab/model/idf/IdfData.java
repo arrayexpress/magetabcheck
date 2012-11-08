@@ -42,4 +42,6 @@ public interface IdfData {
     List<Protocol> getProtocols();
 
     List<TermSource> getTermSources();
+
+    TermSource getTermSource(String ref);
 }
