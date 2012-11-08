@@ -20,12 +20,14 @@ import uk.ac.ebi.arrayexpress2.magetab.datamodel.layout.Location;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.layout.SDRFLayout;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SDRFNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SourceNode;
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.CharacteristicsAttribute;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.MaterialTypeAttribute;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
 
 import java.util.Collection;
+import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -47,7 +49,14 @@ public class SdrfSimpleChecks {
     @MageTabCheck(value = "A source node should have Material Type attribute specified", modality = WARNING)
     public void sourceNodeShouldHaveMaterialTypeAttribute(SourceNode sourceNode, SDRFLayout layout) {
         setPosition(sourceNode, layout);
-        assertThat(sourceNode.materialType, notNullValue());
+        assertNotNull(sourceNode.materialType);
+    }
+
+    @MageTabCheck(value = "A source node should have Provider attribute specified", modality = WARNING)
+    public void sourceNodeShouldHaveProviderAttribute(SourceNode sourceNode, SDRFLayout layout) {
+        setPosition(sourceNode, layout);
+        assertNotNull(sourceNode.provider);
+        assertNotEmptyString(sourceNode.provider.getAttributeValue());
     }
 
     @MageTabCheck(value = "A material type attribute should have name specified", modality = WARNING)
@@ -69,7 +78,11 @@ public class SdrfSimpleChecks {
             return;
         }
         setPosition(mta, layout);
-        assertThat(idf.getTermSource(termSourceRef), notNullValue());
+        assertNotNull(idf.getTermSource(termSourceRef));
+    }
+
+    private static <T> void assertNotNull(T obj) {
+        assertThat(obj, notNullValue());
     }
 
     private static void assertNotEmptyString(String str) {
