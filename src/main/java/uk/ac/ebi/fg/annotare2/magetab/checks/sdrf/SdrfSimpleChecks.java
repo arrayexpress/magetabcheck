@@ -16,12 +16,7 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checks.sdrf;
 
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.layout.Location;
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.layout.SDRFLayout;
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.MaterialTypeAttribute;
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.*;
 
@@ -87,13 +82,21 @@ public class SdrfSimpleChecks {
         assertThat(characteristics.size(), greaterThanOrEqualTo(2));
     }
 
-    @MageTabCheck(value = "A source node shold be described by a protocol", modality = WARNING)
+    @MageTabCheck(value = "A source node should be described by a protocol", modality = WARNING)
     public void sourceNodeShouldBeDescribedByProtocol(SdrfSourceNode sourceNode) {
         Collection<? extends SdrfGraphNode> parents = sourceNode.getParentNodes();
         if (parents.isEmpty()) {
             return;
         }
-        //TODO protocol node needed
+        setPosition(sourceNode);
+        SdrfGraphNode protocolNode = null;
+        for (SdrfGraphNode p : parents) {
+            if (SdrfProtocolNode.class.isAssignableFrom(p.getClass())) {
+                protocolNode = p;
+                break;
+            }
+        }
+        assertNotNull(protocolNode);
     }
 
     @MageTabCheck(value = "A material type attribute should have name specified", modality = WARNING)
