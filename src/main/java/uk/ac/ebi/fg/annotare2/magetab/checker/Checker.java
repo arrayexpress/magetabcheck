@@ -22,12 +22,17 @@ import uk.ac.ebi.arrayexpress2.magetab.datamodel.SDRF;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.graph.Node;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SDRFNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.MaterialTypeAttribute;
+import uk.ac.ebi.fg.annotare2.magetab.model.Identity;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;
+import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraph;
+import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraphAttribute;
+import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraphNode;
 
 import java.lang.reflect.Field;
 import java.util.*;
 
 import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Queues.newArrayDeque;
 import static com.google.common.collect.Sets.newHashSet;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.AllChecks.checkRunnersFor;
 
@@ -59,43 +64,31 @@ public class Checker {
         checkAll(idf.getTermSources(), TermSource.class);
     }
 
-    public void check(SDRF sdrf, IdfData idf) {
+    public void check(SdrfGraph graph) {
+        //TODO do we still need context?
         Map<Class<?>, Object> context = newHashMap();
-        context.put(sdrf.getLayout().getClass(), sdrf.getLayout());
-        context.put(idf.getClass(), idf);
 
-        Set<SDRFNode> marks = newHashSet();
-        Queue<SDRFNode> queue = new ArrayDeque<SDRFNode>();
-        queue.addAll(sdrf.getRootNodes());
+        Set<Identity> marks = newHashSet();
+        Queue<SdrfGraphNode> queue = newArrayDeque();
+        queue.addAll(graph.getRootNodes());
         while (!queue.isEmpty()) {
-            SDRFNode node = queue.poll();
-            if (marks.contains(node)) {
+            SdrfGraphNode node = queue.poll();
+            Identity id = new Identity(node);
+            if (marks.contains(id)) {
                 continue;
             }
             checkNode(node, context);
-            marks.add(node);
-            for (Node n : node.getChildNodes()) {
-                if (n instanceof SDRFNode) {
-                    queue.add((SDRFNode) n);
-                }
+            marks.add(id);
+            for (SdrfGraphNode n : node.getChildNodes()) {
+                queue.add(n);
             }
         }
     }
 
-    //TODO field check can be eliminated by the new proper SDRF Graph model
-    private void checkNode(SDRFNode node, Map<Class<?>, Object> context) {
+    private void checkNode(SdrfGraphNode node, Map<Class<?>, Object> context) {
         checkOne(node, context);
-        for(Field f : node.getClass().getFields()) {
-            if (f.getType().equals(MaterialTypeAttribute.class)) {
-                try {
-                    MaterialTypeAttribute mta = (MaterialTypeAttribute) f.get(node);
-                    if (mta != null) {
-                        checkOne(mta, context);
-                    }
-                } catch (IllegalAccessException e) {
-                    log.error("Can't access field: " + node.getClass() + "." + f.getName(), e);
-                }
-            }
+        for (SdrfGraphAttribute attr : node.getAttributes()) {
+            checkOne(attr, context);
         }
     }
 

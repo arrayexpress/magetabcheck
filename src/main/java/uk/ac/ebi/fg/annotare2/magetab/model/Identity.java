@@ -14,10 +14,34 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.model.sdrf;
+package uk.ac.ebi.fg.annotare2.magetab.model;
 
 /**
  * @author Olga Melnichuk
  */
-public interface SdrfCharacteristicAttribute extends SdrfGraphAttribute, HasTermSource{
+public class Identity {
+    private final Object o;
+
+    public Identity(Object o) {
+        this.o = o;
+    }
+
+    public Object get() {
+        return o;
+    }
+
+    @Override
+    public boolean equals(Object o1) {
+        if (this == o1) return true;
+        if (o1 == null || getClass() != o1.getClass()) return false;
+
+        Identity identity = (Identity) o1;
+
+        return o == identity.o;
+    }
+
+    @Override
+    public int hashCode() {
+        return o != null ? System.identityHashCode(o) : 0;
+    }
 }

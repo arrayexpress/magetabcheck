@@ -16,8 +16,12 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.model.sdrf;
 
+import java.util.Collection;
+
 /**
  * @author Olga Melnichuk
  */
-public interface SdrfCharacteristicAttribute extends SdrfGraphAttribute, HasTermSource{
+public interface SdrfGraph {
+
+    Collection<? extends SdrfGraphNode> getRootNodes();
 }

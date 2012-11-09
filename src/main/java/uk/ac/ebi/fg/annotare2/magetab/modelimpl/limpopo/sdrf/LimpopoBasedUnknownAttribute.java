@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.model.sdrf;
+package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.sdrf;
+
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
 
 /**
  * @author Olga Melnichuk
  */
-public interface SdrfCharacteristicAttribute extends SdrfGraphAttribute, HasTermSource{
+public class LimpopoBasedUnknownAttribute extends LimpopoBasedSdrfAttribute<SDRFAttribute> {
+    protected LimpopoBasedUnknownAttribute(SDRFAttribute attribute, SdrfHelper helper) {
+        super(attribute, helper);
+    }
 }

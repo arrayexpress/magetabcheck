@@ -26,6 +26,8 @@ import uk.ac.ebi.fg.annotare2.magetab.checker.CheckResultStatus;
 import uk.ac.ebi.fg.annotare2.magetab.checker.Checker;
 import uk.ac.ebi.fg.annotare2.magetab.checker.InvestigationType;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
+import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraph;
+import uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.sdrf.LimpopoBasedSdrfGraph;
 
 import java.io.File;
 import java.util.List;
@@ -52,8 +54,9 @@ public class LimpopoBasedChecker {
             // TODO need to know investigation type somehow...
             Checker ch = new Checker(InvestigationType.MICRO_ARRAY);
             IdfData idf = new LimpopoIdfDataProxy(inv.IDF);
+            SdrfGraph sdrf = new LimpopoBasedSdrfGraph(inv.SDRF, idf);
             ch.check(idf);
-            ch.check(inv.SDRF, idf);
+            ch.check(sdrf);
             List<CheckResult> results = natural().sortedCopy(ch.getResults());
 
             int success = 0, errors = 0, warnings = 0, exceptions = 0;
