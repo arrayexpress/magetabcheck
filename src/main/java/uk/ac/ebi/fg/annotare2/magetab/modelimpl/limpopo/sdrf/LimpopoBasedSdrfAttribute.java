@@ -24,7 +24,7 @@ import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraphAttribute;
 /**
  * @author Olga Melnichuk
  */
-public abstract class LimpopoBasedSdrfAttribute<T extends SDRFAttribute> implements SdrfGraphAttribute {
+public abstract class LimpopoBasedSdrfAttribute<T extends SDRFAttribute> extends ObjectWithAttributes implements SdrfGraphAttribute {
 
     private final SdrfHelper helper;
 
@@ -33,6 +33,7 @@ public abstract class LimpopoBasedSdrfAttribute<T extends SDRFAttribute> impleme
     private final Location location;
 
     protected LimpopoBasedSdrfAttribute(T attribute, SdrfHelper helper) {
+        super(helper);
         this.helper = helper;
         this.attribute = attribute;
         this.location = helper.getLocation(attribute);

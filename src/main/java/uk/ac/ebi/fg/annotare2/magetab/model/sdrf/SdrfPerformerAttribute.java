@@ -16,14 +16,8 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.model.sdrf;
 
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
-
 /**
  * @author Olga Melnichuk
  */
-public interface HasTermSource {
-
-    String getTermSourceRef();
-
-    TermSource getTermSource();
+public interface SdrfPerformerAttribute extends SdrfGraphAttribute {
 }

@@ -17,8 +17,13 @@
 package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.sdrf;
 
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.MaterialTypeAttribute;
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfMaterialTypeAttribute;
+
+import java.util.Collection;
+
+import static java.util.Collections.emptyList;
 
 /**
  * @author Olga Melnichuk
@@ -31,7 +36,17 @@ public class LimpopoBasedMaterialTypeAttribute extends LimpopoBasedSdrfAttribute
     }
 
     @Override
+    public String getTermSourceRef() {
+        return attr().termSourceREF;
+    }
+
+    @Override
     public TermSource getTermSource() {
         return termSource(attr().termSourceREF);
+    }
+
+    @Override
+    protected Collection<SDRFAttribute> getRawAttributes() {
+        return emptyList();
     }
 }

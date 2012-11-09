@@ -21,13 +21,11 @@ import java.util.Collection;
 /**
  * @author Olga Melnichuk
  */
-public interface SdrfGraphNode extends HasLocation {
+public interface SdrfGraphNode extends HasLocation, HasAttributes {
 
     Collection<? extends SdrfGraphNode> getChildNodes();
 
     Collection<? extends SdrfGraphNode> getParentNodes();
-
-    Collection<? extends SdrfGraphAttribute> getAttributes();
 
     String getName();
 }

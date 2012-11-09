@@ -23,9 +23,7 @@ import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribu
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
-import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.HasLocation;
-import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfCharacteristicAttribute;
-import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfSourceNode;
+import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.*;
 
 import java.util.Collection;
 
@@ -81,26 +79,42 @@ public class SdrfSimpleChecks {
         return null;
     }
 
+    @MageTabCheck(value = "A source node should have more than 2 characteristics", modality = WARNING)
+    public void sourceNodeShouldHaveMoreThan2Characteristics(SdrfSourceNode sourceNode) {
+        setPosition(sourceNode);
+        Collection<SdrfCharacteristicAttribute> characteristics = sourceNode.getCharacteristics();
+        assertNotNull(characteristics);
+        assertThat(characteristics.size(), greaterThanOrEqualTo(2));
+    }
+
+    @MageTabCheck(value = "A source node shold be described by a protocol", modality = WARNING)
+    public void sourceNodeShouldBeDescribedByProtocol(SdrfSourceNode sourceNode) {
+        Collection<? extends SdrfGraphNode> parents = sourceNode.getParentNodes();
+        if (parents.isEmpty()) {
+            return;
+        }
+        //TODO protocol node needed
+    }
+
     @MageTabCheck(value = "A material type attribute should have name specified", modality = WARNING)
-    public void materialTypeAttributeShouldHaveName(MaterialTypeAttribute mta, SDRFLayout layout) {
-        setPosition(mta, layout);
-        assertNotEmptyString(mta.getNodeName());
+    public void materialTypeAttributeShouldHaveName(SdrfMaterialTypeAttribute mta) {
+        setPosition(mta);
+        assertNotEmptyString(mta.getName());
     }
 
     @MageTabCheck(value = "A material type attribute should have TermSource specified", modality = WARNING)
-    public void materialTypeAttributeShouldHaveTermSource(MaterialTypeAttribute mta, SDRFLayout layout) {
-        setPosition(mta, layout);
-        assertNotEmptyString(mta.termSourceREF);
+    public void materialTypeAttributeShouldHaveTermSource(SdrfMaterialTypeAttribute mta) {
+        setPosition(mta);
+        assertNotEmptyString(mta.getTermSourceRef());
     }
 
     @MageTabCheck("TermSource value of material type attribute must be defined in IDF")
-    public void termSourceOfMaterialTypeAttributeMustBeValid(MaterialTypeAttribute mta, SDRFLayout layout, IdfData idf) {
-        String termSourceRef = mta.termSourceREF;
-        if (isNullOrEmpty(termSourceRef)) {
+    public void termSourceOfMaterialTypeAttributeMustBeValid(SdrfMaterialTypeAttribute mta) {
+        if (isNullOrEmpty(mta.getTermSourceRef())) {
             return;
         }
-        setPosition(mta, layout);
-        assertNotNull(idf.getTermSource(termSourceRef));
+        setPosition(mta);
+        assertNotNull(mta.getTermSource());
     }
 
     private static <T> void assertNotNull(T obj) {
@@ -113,11 +127,5 @@ public class SdrfSimpleChecks {
 
     private static <T extends HasLocation> void setPosition(T t) {
         setCheckPosition(t.getLine(), t.getColumn());
-    }
-
-    private static <T extends SDRFAttribute> void setPosition(T attr, SDRFLayout layout) {
-        Collection<Location> locations = layout.getLocationsForAttribute(attr);
-        Location loc = locations.iterator().next();
-        setCheckPosition(loc.getLineNumber(), loc.getColumn());
     }
 }

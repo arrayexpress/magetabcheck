@@ -16,10 +16,10 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.sdrf;
 
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.CharacteristicsAttribute;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.UnitAttribute;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
-import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfCharacteristicAttribute;
+import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfUnitAttribute;
 
 import java.util.Collection;
 
@@ -28,11 +28,15 @@ import static java.util.Collections.emptyList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedCharacteristicAttribute extends LimpopoBasedSdrfAttribute<CharacteristicsAttribute>
-        implements SdrfCharacteristicAttribute {
+public class LimpopoBasedUnitAttribute extends LimpopoBasedSdrfAttribute<UnitAttribute> implements SdrfUnitAttribute {
 
-    protected LimpopoBasedCharacteristicAttribute(CharacteristicsAttribute attribute, SdrfHelper helper) {
+    public LimpopoBasedUnitAttribute(UnitAttribute attribute, SdrfHelper helper) {
         super(attribute, helper);
+    }
+
+    @Override
+    public String getType() {
+        return attr().type;
     }
 
     @Override
@@ -43,11 +47,6 @@ public class LimpopoBasedCharacteristicAttribute extends LimpopoBasedSdrfAttribu
     @Override
     public TermSource getTermSource() {
         return termSource(attr().termSourceREF);
-    }
-
-    @Override
-    public String getType() {
-        return attr().type;
     }
 
     @Override

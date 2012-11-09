@@ -20,6 +20,7 @@ import uk.ac.ebi.arrayexpress2.magetab.datamodel.graph.Node;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.layout.Location;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SDRFNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraphAttribute;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraphNode;
 
@@ -32,7 +33,7 @@ import static com.google.common.collect.Lists.newArrayList;
 /**
  * @author Olga Melnichuk
  */
-public abstract class LimpopoBasedSdrfNode<T extends SDRFNode> implements SdrfGraphNode {
+public abstract class LimpopoBasedSdrfNode<T extends SDRFNode> extends ObjectWithAttributes implements SdrfGraphNode {
 
     private final SdrfHelper helper;
 
@@ -41,6 +42,7 @@ public abstract class LimpopoBasedSdrfNode<T extends SDRFNode> implements SdrfGr
     private final Location location;
 
     protected LimpopoBasedSdrfNode(T node, SdrfHelper helper) {
+        super(helper);
         this.node = node;
         this.helper = helper;
         this.location = helper.getLocation(node);
@@ -67,11 +69,6 @@ public abstract class LimpopoBasedSdrfNode<T extends SDRFNode> implements SdrfGr
     }
 
     @Override
-    public Collection<? extends SdrfGraphAttribute> getAttributes() {
-        return helper.wrapAttributes(getRawAttributes());
-    }
-
-    @Override
     public int getLine() {
         return location.getLineNumber();
     }
@@ -86,26 +83,11 @@ public abstract class LimpopoBasedSdrfNode<T extends SDRFNode> implements SdrfGr
         return node.getNodeName();
     }
 
-    protected abstract Collection<SDRFAttribute> getRawAttributes();
-
-    @SuppressWarnings("unchecked")
-    protected <T extends SdrfGraphAttribute> Collection<T> getAttributes(Class<T> clazz) {
-        Collection<? extends SdrfGraphAttribute> allAttributes = getAttributes();
-        List<T> filtered = newArrayList();
-        for(SdrfGraphAttribute attr : allAttributes) {
-            if(clazz.isAssignableFrom(attr.getClass())) {
-                filtered.add((T)attr);
-            }
-        }
-        return filtered;
-    }
-
-    protected <T extends SdrfGraphAttribute> T getAttribute(Class<T> clazz) {
-        Collection<T> attributes = getAttributes(clazz);
-        return attributes.isEmpty() ? null : attributes.iterator().next();
-    }
-
     protected T node() {
         return node;
+    }
+
+    protected TermSource termSource(String termSourceRef) {
+        return helper.termSource(termSourceRef);
     }
 }

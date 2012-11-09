@@ -16,33 +16,24 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.sdrf;
 
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.CharacteristicsAttribute;
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.ParameterValueAttribute;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
-import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfCharacteristicAttribute;
+import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfParameterValueAttribute;
+import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfUnitAttribute;
 
 import java.util.Collection;
+import java.util.List;
 
-import static java.util.Collections.emptyList;
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedCharacteristicAttribute extends LimpopoBasedSdrfAttribute<CharacteristicsAttribute>
-        implements SdrfCharacteristicAttribute {
+public class LimpopoBasedParameterValueAttribute extends LimpopoBasedSdrfAttribute<ParameterValueAttribute>
+        implements SdrfParameterValueAttribute {
 
-    protected LimpopoBasedCharacteristicAttribute(CharacteristicsAttribute attribute, SdrfHelper helper) {
+    public LimpopoBasedParameterValueAttribute(ParameterValueAttribute attribute, SdrfHelper helper) {
         super(attribute, helper);
-    }
-
-    @Override
-    public String getTermSourceRef() {
-        return attr().termSourceREF;
-    }
-
-    @Override
-    public TermSource getTermSource() {
-        return termSource(attr().termSourceREF);
     }
 
     @Override
@@ -51,7 +42,14 @@ public class LimpopoBasedCharacteristicAttribute extends LimpopoBasedSdrfAttribu
     }
 
     @Override
+    public SdrfUnitAttribute getUnit() {
+        return getAttribute(SdrfUnitAttribute.class);
+    }
+
+    @Override
     protected Collection<SDRFAttribute> getRawAttributes() {
-        return emptyList();
+        List<SDRFAttribute> attributes = newArrayList();
+        attributes.add(attr().unit);
+        return attributes;
     }
 }

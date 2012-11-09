@@ -18,11 +18,20 @@ package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.sdrf;
 
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
 
+import java.util.Collection;
+
+import static java.util.Collections.emptyList;
+
 /**
  * @author Olga Melnichuk
  */
 public class LimpopoBasedUnknownAttribute extends LimpopoBasedSdrfAttribute<SDRFAttribute> {
     protected LimpopoBasedUnknownAttribute(SDRFAttribute attribute, SdrfHelper helper) {
         super(attribute, helper);
+    }
+
+    @Override
+    protected Collection<SDRFAttribute> getRawAttributes() {
+        return emptyList();
     }
 }

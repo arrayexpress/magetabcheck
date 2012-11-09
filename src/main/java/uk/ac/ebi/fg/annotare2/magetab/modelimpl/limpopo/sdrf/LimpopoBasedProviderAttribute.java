@@ -17,7 +17,12 @@
 package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.sdrf;
 
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.ProviderAttribute;
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfProviderAttribute;
+
+import java.util.Collection;
+
+import static java.util.Collections.emptyList;
 
 /**
  * @author Olga Melnichuk
@@ -27,5 +32,10 @@ public class LimpopoBasedProviderAttribute extends LimpopoBasedSdrfAttribute<Pro
 
     public LimpopoBasedProviderAttribute(ProviderAttribute attribute, SdrfHelper helper) {
         super(attribute, helper);
+    }
+
+    @Override
+    protected Collection<SDRFAttribute> getRawAttributes() {
+        return emptyList();
     }
 }

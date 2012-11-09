@@ -18,12 +18,10 @@ package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.sdrf;
 
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.SDRF;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.layout.Location;
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.ProtocolApplicationNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SDRFNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SourceNode;
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.CharacteristicsAttribute;
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.MaterialTypeAttribute;
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.ProviderAttribute;
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.*;
 import uk.ac.ebi.fg.annotare2.magetab.model.Identity;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
@@ -98,8 +96,14 @@ public class SdrfHelper {
             wrappedAttr = new LimpopoBasedCharacteristicAttribute((CharacteristicsAttribute) attr, this);
         } else if (attr instanceof ProviderAttribute) {
             wrappedAttr = new LimpopoBasedProviderAttribute((ProviderAttribute) attr, this);
+        } else if (attr instanceof PerformerAttribute) {
+            wrappedAttr = new LimpopoBasedPerformerAttribute((PerformerAttribute) attr, this);
+        } else if (attr instanceof ParameterValueAttribute) {
+            wrappedAttr = new LimpopoBasedParameterValueAttribute((ParameterValueAttribute) attr, this);
+        } else if (attr instanceof UnitAttribute) {
+            wrappedAttr = new LimpopoBasedUnitAttribute((UnitAttribute) attr, this);
         } else {
-           wrappedAttr = new LimpopoBasedUnknownAttribute(attr, this);
+            wrappedAttr = new LimpopoBasedUnknownAttribute(attr, this);
         }
         mappedAttributes.put(id, wrappedAttr);
         return wrappedAttr;
@@ -114,6 +118,8 @@ public class SdrfHelper {
 
         if (node instanceof SourceNode) {
             wrappedNode = new LimpopoBasedSourceNode((SourceNode) node, this);
+        } else if (node instanceof ProtocolApplicationNode) {
+            wrappedNode = new LimpopoBasedProtocolNode((ProtocolApplicationNode) node, this);
         } else {
             wrappedNode = new LimpopoBasedUnknownNode(node, this);
         }
