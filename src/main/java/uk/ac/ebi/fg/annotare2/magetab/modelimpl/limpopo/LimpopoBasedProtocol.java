@@ -32,7 +32,7 @@ import static uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.IdfTags.*;
  */
 public class LimpopoBasedProtocol extends LimpopoBasedIdfObject implements Protocol {
 
-    public LimpopoBasedProtocol(@Nonnull LimpopoIdfHelper helper, int index) {
+    public LimpopoBasedProtocol(@Nonnull IdfHelper helper, int index) {
         super(helper, index);
     }
 

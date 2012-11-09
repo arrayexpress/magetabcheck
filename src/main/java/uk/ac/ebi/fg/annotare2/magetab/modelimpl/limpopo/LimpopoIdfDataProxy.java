@@ -16,7 +16,6 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo;
 
-import com.google.common.primitives.Ints;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.IDF;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;
 
@@ -31,10 +30,10 @@ import static com.google.common.primitives.Ints.max;
  */
 public class LimpopoIdfDataProxy implements IdfData {
 
-    private final LimpopoIdfHelper idfHelper;
+    private final IdfHelper idfHelper;
 
     public LimpopoIdfDataProxy(@Nonnull IDF idf) {
-        this.idfHelper = new LimpopoIdfHelper(idf);
+        this.idfHelper = new IdfHelper(idf);
     }
 
     @Override

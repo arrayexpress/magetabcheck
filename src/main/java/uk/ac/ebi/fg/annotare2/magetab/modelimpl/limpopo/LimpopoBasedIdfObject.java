@@ -27,15 +27,15 @@ import java.util.List;
  */
 public abstract class LimpopoBasedIdfObject {
 
-    private final LimpopoIdfHelper helper;
+    private final IdfHelper helper;
 
     private final int index;
 
-    public LimpopoBasedIdfObject(@Nonnull LimpopoIdfHelper helper) {
+    public LimpopoBasedIdfObject(@Nonnull IdfHelper helper) {
         this(helper, 0);
     }
 
-    public LimpopoBasedIdfObject(@Nonnull LimpopoIdfHelper helper, int index) {
+    public LimpopoBasedIdfObject(@Nonnull IdfHelper helper, int index) {
         this.helper = helper;
         this.index = index;
     }

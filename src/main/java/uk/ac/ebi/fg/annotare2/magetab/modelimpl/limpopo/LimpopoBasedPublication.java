@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
  */
 public class LimpopoBasedPublication extends LimpopoBasedIdfObject implements Publication {
 
-    public LimpopoBasedPublication(@Nonnull LimpopoIdfHelper helper, int index) {
+    public LimpopoBasedPublication(@Nonnull IdfHelper helper, int index) {
         super(helper, index);
     }
 

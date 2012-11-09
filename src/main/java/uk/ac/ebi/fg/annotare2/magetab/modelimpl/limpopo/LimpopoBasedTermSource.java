@@ -24,7 +24,7 @@ import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
  */
 public class LimpopoBasedTermSource extends LimpopoBasedIdfObject implements TermSource {
 
-    public LimpopoBasedTermSource(LimpopoIdfHelper helper, int index) {
+    public LimpopoBasedTermSource(IdfHelper helper, int index) {
         super(helper, index);
     }
 

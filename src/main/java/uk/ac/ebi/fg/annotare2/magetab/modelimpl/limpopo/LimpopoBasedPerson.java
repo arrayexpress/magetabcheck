@@ -34,7 +34,7 @@ import static uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.IdfTags.*;
  */
 public class LimpopoBasedPerson extends LimpopoBasedIdfObject implements Person {
 
-    public LimpopoBasedPerson(LimpopoIdfHelper idf, int index) {
+    public LimpopoBasedPerson(IdfHelper idf, int index) {
         super(idf, index);
     }
 

@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
  */
 public class LimpopoBasedExperimentalDesign extends LimpopoBasedIdfObject implements ExperimentalDesign {
 
-    public LimpopoBasedExperimentalDesign(@Nonnull LimpopoIdfHelper helper, int index) {
+    public LimpopoBasedExperimentalDesign(@Nonnull IdfHelper helper, int index) {
         super(helper, index);
     }
 

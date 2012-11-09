@@ -28,13 +28,13 @@ import java.util.Map;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoIdfHelper {
+public class IdfHelper {
 
     private final IDF idf;
 
     private final Map<String, TermSource> termSources = new HashMap<String, TermSource>();
 
-    public LimpopoIdfHelper(@Nonnull IDF idf) {
+    public IdfHelper(@Nonnull IDF idf) {
         this.idf = idf;
 
         int size = this.idf.termSourceName.size();
