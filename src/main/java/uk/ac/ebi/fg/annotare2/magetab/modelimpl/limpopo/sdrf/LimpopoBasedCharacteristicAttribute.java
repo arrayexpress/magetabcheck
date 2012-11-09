@@ -34,4 +34,9 @@ public class LimpopoBasedCharacteristicAttribute extends LimpopoBasedSdrfAttribu
     public TermSource getTermSource() {
         return termSource(attr().termSourceREF);
     }
+
+    @Override
+    public String getType() {
+        return attr().type;
+    }
 }

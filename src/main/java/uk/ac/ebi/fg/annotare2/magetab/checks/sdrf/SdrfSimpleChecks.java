@@ -71,9 +71,9 @@ public class SdrfSimpleChecks {
 
     private SdrfCharacteristicAttribute getOrganism(Collection<SdrfCharacteristicAttribute> characteristics) {
         for (SdrfCharacteristicAttribute attr : characteristics) {
-            if ("Organism".equalsIgnoreCase(attr.getName())) {
+            if ("Organism".equalsIgnoreCase(attr.getType())) {
                 TermSource ts = attr.getTermSource();
-                if (ts != null && NCBI_TAXONOMY.equalsTo(ts.getFile().getValue())) {
+                if (ts != null && NCBI_TAXONOMY.matches(ts.getFile().getValue())) {
                     return attr;
                 }
             }

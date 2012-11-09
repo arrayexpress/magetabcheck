@@ -16,52 +16,33 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.extension;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import static com.google.common.io.Closeables.closeQuietly;
+import java.util.regex.Pattern;
 
 /**
  * @author Olga Melnichuk
  */
 public enum KnownTermSource {
 
-    NCBI_TAXONOMY("NCBI Taxonomy", "http://www.ncbi.nlm.nih.gov/taxonomy"),
+    NCBI_TAXONOMY("NCBI Taxonomy", "http://www.ncbi.nlm.nih.gov/[tT]axonomy/?"),
 
     EFO("EFO", "http://www.ebi.ac.uk/efo/"),
 
     ARRAY_EXPRESS("ArrayExpress", "http://www.ebi.ac.uk/arrayexpress");
 
-    private static final Logger log = LoggerFactory.getLogger(KnownTermSource.class);
-
     private String name;
 
-    private String url;
+    private Pattern urlPattern;
 
-    private KnownTermSource(String name, String url) {
+    private KnownTermSource(String name, String pattern) {
         this.name = name;
-        this.url = url;
+        this.urlPattern = Pattern.compile(pattern);
     }
 
-    public boolean equalsTo(String url) {
-        InputStream is = null;
-        try {
-            HttpURLConnection conn = (HttpURLConnection) (new URL(url)).openConnection();
-            //conn.setInstanceFollowRedirects(false);
-            conn.connect();
-            is = conn.getInputStream();
-            String originalUrl = conn.getURL().toString();
-            return this.url.equalsIgnoreCase(originalUrl);
-        } catch (IOException e) {
-            log.info("Can't open connection for url: " + url, e);
-        }  finally {
-            closeQuietly(is);
-        }
-        return false;
+    public boolean matches(String url) {
+        return urlPattern.matcher(url).matches();
+    }
+
+    public String getName() {
+        return name;
     }
 }
