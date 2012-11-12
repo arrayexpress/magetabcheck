@@ -21,9 +21,9 @@ import java.util.Collection;
 /**
  * @author Olga Melnichuk
  */
-public interface SdrfSourceNode extends SdrfMaterialNode {
+public interface SdrfMaterialNode extends SdrfGraphNode {
 
-    String getDescription();
+    Collection<SdrfCharacteristicAttribute> getCharacteristics();
 
-    SdrfProviderAttribute getProvider();
+    SdrfMaterialTypeAttribute getMaterialType();
 }

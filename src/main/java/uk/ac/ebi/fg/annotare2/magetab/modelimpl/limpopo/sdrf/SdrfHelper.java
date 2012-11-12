@@ -20,6 +20,7 @@ import uk.ac.ebi.arrayexpress2.magetab.datamodel.SDRF;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.layout.Location;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.ProtocolApplicationNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SDRFNode;
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SampleNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SourceNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.*;
 import uk.ac.ebi.fg.annotare2.magetab.model.Identity;
@@ -118,6 +119,8 @@ public class SdrfHelper {
 
         if (node instanceof SourceNode) {
             wrappedNode = new LimpopoBasedSourceNode((SourceNode) node, this);
+        } else if (node instanceof SampleNode) {
+            wrappedNode = new LimpopoBasedSampleNode((SampleNode) node, this);
         } else if (node instanceof ProtocolApplicationNode) {
             wrappedNode = new LimpopoBasedProtocolNode((ProtocolApplicationNode) node, this);
         } else {

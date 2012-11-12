@@ -16,14 +16,10 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.model.sdrf;
 
-import java.util.Collection;
-
 /**
  * @author Olga Melnichuk
  */
-public interface SdrfSourceNode extends SdrfMaterialNode {
+public interface SdrfSampleNode extends SdrfMaterialNode {
 
     String getDescription();
-
-    SdrfProviderAttribute getProvider();
 }

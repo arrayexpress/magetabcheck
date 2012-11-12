@@ -16,12 +16,10 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.sdrf;
 
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SampleNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SourceNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
-import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfCharacteristicAttribute;
-import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfMaterialTypeAttribute;
-import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfProviderAttribute;
-import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfSourceNode;
+import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfSampleNode;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,28 +29,22 @@ import static com.google.common.collect.Lists.newArrayList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedSourceNode extends LimpopoBasedMaterialNode<SourceNode> implements SdrfSourceNode {
+public class LimpopoBasedSampleNode extends LimpopoBasedMaterialNode<SampleNode> implements SdrfSampleNode {
 
-    public LimpopoBasedSourceNode(SourceNode node, SdrfHelper helper) {
+    protected LimpopoBasedSampleNode(SampleNode node, SdrfHelper helper) {
         super(node, helper);
-    }
-
-    @Override
-    public String getDescription() {
-        return node().description;
-    }
-
-    @Override
-    public SdrfProviderAttribute getProvider() {
-        return getAttribute(SdrfProviderAttribute.class);
     }
 
     @Override
     protected Collection<SDRFAttribute> getRawAttributes() {
         List<SDRFAttribute> attributes = newArrayList();
         attributes.add(node().materialType);
-        attributes.add(node().provider);
         attributes.addAll(node().characteristics);
         return attributes;
+    }
+
+    @Override
+    public String getDescription() {
+        return node().description;
     }
 }

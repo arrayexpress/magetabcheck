@@ -84,19 +84,24 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(value = "A source node should be described by a protocol", modality = WARNING)
     public void sourceNodeShouldBeDescribedByProtocol(SdrfSourceNode sourceNode) {
-        Collection<? extends SdrfGraphNode> parents = sourceNode.getParentNodes();
-        if (parents.isEmpty()) {
-            return;
-        }
-        setPosition(sourceNode);
-        SdrfGraphNode protocolNode = null;
-        for (SdrfGraphNode p : parents) {
-            if (SdrfProtocolNode.class.isAssignableFrom(p.getClass())) {
-                protocolNode = p;
-                break;
-            }
-        }
-        assertNotNull(protocolNode);
+        assertHasProtocolParent(sourceNode);
+    }
+
+    @MageTabCheck("A sample node must have name specified")
+    public void sampleNodeMustHaveName(SdrfSampleNode sampleNode) {
+        setPosition(sampleNode);
+        assertNotEmptyString(sampleNode.getName());
+    }
+
+    @MageTabCheck(value = "A sample node should have Material Type attribute specified", modality = WARNING)
+    public void sampleNodeShouldHaveMaterialTypeAttribute(SdrfSampleNode sampleNode) {
+        setPosition(sampleNode);
+        assertNotNull(sampleNode.getMaterialType());
+    }
+
+    @MageTabCheck(value = "A sample node should be described by a protocol", modality = WARNING)
+    public void sampleNodeShouldBeDescribedByProtocol(SdrfSampleNode sampleNode) {
+        assertHasProtocolParent(sampleNode);
     }
 
     @MageTabCheck(value = "A material type attribute should have name specified", modality = WARNING)
@@ -126,6 +131,22 @@ public class SdrfSimpleChecks {
 
     private static void assertNotEmptyString(String str) {
         assertThat(str, not(isEmptyOrNullString()));
+    }
+
+    private void assertHasProtocolParent(SdrfMaterialNode node) {
+        Collection<? extends SdrfGraphNode> parents = node.getParentNodes();
+        if (parents.isEmpty()) {
+            return;
+        }
+        setPosition(node);
+        SdrfGraphNode protocolNode = null;
+        for (SdrfGraphNode p : parents) {
+            if (SdrfProtocolNode.class.isAssignableFrom(p.getClass())) {
+                protocolNode = p;
+                break;
+            }
+        }
+        assertNotNull(protocolNode);
     }
 
     private static <T extends HasLocation> void setPosition(T t) {
