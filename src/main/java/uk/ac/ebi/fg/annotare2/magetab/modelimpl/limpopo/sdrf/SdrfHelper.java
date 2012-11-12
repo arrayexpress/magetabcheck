@@ -102,6 +102,12 @@ public class SdrfHelper {
             wrappedAttr = new LimpopoBasedUnitAttribute((UnitAttribute) attr, this);
         } else if (attr instanceof LabelAttribute) {
             wrappedAttr = new LimpopoBasedLabelAttribute((LabelAttribute) attr, this);
+        } else if (attr instanceof TechnologyTypeAttribute) {
+            wrappedAttr = new LimpopoBasedTechnologyTypeAttribute((TechnologyTypeAttribute) attr, this);
+        } else if (attr instanceof FactorValueAttribute) {
+            wrappedAttr = new LimpopoBasedFactorValueAttribute((FactorValueAttribute) attr, this);
+        } else if (attr instanceof ArrayDesignAttribute) {
+            wrappedAttr = new LimpopoBasedArrayDesignAttribute((ArrayDesignAttribute) attr, this);
         } else {
             wrappedAttr = new LimpopoBasedUnknownAttribute(attr, this);
         }
@@ -126,6 +132,8 @@ public class SdrfHelper {
             wrappedNode = new LimpopoBasedLabeledExtractNode((LabeledExtractNode) node, this);
         } else if (node instanceof ProtocolApplicationNode) {
             wrappedNode = new LimpopoBasedProtocolNode((ProtocolApplicationNode) node, this);
+        } else if (node instanceof AssayNode) {
+            wrappedNode = new LimpopoBasedAssayNode((AssayNode) node, this);
         } else {
             wrappedNode = new LimpopoBasedUnknownNode(node, this);
         }

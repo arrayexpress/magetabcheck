@@ -218,6 +218,36 @@ public class SdrfSimpleChecks {
         assertThat(date, isDateString(DATE_FORMAT));
     }
 
+    @MageTabCheck("An assay node must have a name")
+    public void assayNodeMustHaveName(SdrfAssayNode assayNode) {
+        setPosition(assayNode);
+        assertNotEmptyString(assayNode.getName());
+    }
+
+    @MageTabCheck("An assay node must have Technology Type attribute specified")
+    public void assayNodeMustHaveTechnologyTypeAttribute(SdrfAssayNode assayNode) {
+        setPosition(assayNode);
+        assertNotNull(assayNode.getTechnologyType());
+    }
+
+    @MageTabCheck("Technology type attribute must have a name")
+    public void technologyTypeMustHaveName(SdrfTechnologyTypeAttribute technologyTypeAttribute) {
+        setPosition(technologyTypeAttribute);
+        assertNotEmptyString(technologyTypeAttribute.getName());
+    }
+
+    @MageTabCheck(value = "Technology type attribute should have TermSource specified")
+    public void technologyTypeShouldHaveTermSource(SdrfTechnologyTypeAttribute technologyTypeAttribute) {
+        setPosition(technologyTypeAttribute);
+        assertNotEmptyString(technologyTypeAttribute.getTermSourceRef());
+    }
+
+    @MageTabCheck("TermSource of a technology type attribute must be defined in IDF")
+    public void termSourceOfTechnologyTypeMustBeValied(SdrfTechnologyTypeAttribute technologyTypeAttribute) {
+        setPosition(technologyTypeAttribute);
+        assertTermSourceIsValid(technologyTypeAttribute);
+    }
+
     @MageTabCheck(value = "A parameter value attribute (of a protocol) should have name specified", modality = WARNING)
     public void parameterValueAttributeShouldHaveName(SdrfParameterValueAttribute parameterValueAttribute) {
         setPosition(parameterValueAttribute);
