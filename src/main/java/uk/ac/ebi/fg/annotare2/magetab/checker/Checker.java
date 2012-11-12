@@ -24,6 +24,7 @@ import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SDRFNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.MaterialTypeAttribute;
 import uk.ac.ebi.fg.annotare2.magetab.model.Identity;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;
+import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.HasAttributes;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraph;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraphAttribute;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraphNode;
@@ -87,8 +88,13 @@ public class Checker {
 
     private void checkNode(SdrfGraphNode node, Map<Class<?>, Object> context) {
         checkOne(node, context);
-        for (SdrfGraphAttribute attr : node.getAttributes()) {
+        checkAttributes(node, context);
+    }
+
+    private void checkAttributes(HasAttributes obj, Map<Class<?>, Object> context) {
+        for (SdrfGraphAttribute attr : obj.getAttributes()) {
             checkOne(attr, context);
+            checkAttributes(attr, context);
         }
     }
 
