@@ -17,6 +17,8 @@
 package uk.ac.ebi.fg.annotare2.magetab.checks.sdrf;
 
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.Info;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.*;
 
@@ -27,6 +29,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality.WARNING;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.setCheckPosition;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.matchers.IsDateString.isDateString;
+import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.DATE_FORMAT;
 import static uk.ac.ebi.fg.annotare2.magetab.extension.KnownTermSource.NCBI_TAXONOMY;
 
 /**
@@ -178,6 +182,70 @@ public class SdrfSimpleChecks {
     public void termSourceOfMaterialTypeAttributeMustBeValid(SdrfMaterialTypeAttribute mta) {
         setPosition(mta);
         assertTermSourceIsValid(mta);
+    }
+
+    @MageTabCheck("A protocol node must have name specified")
+    public void protocolNodeMustHaveName(SdrfProtocolNode protocolNode) {
+        setPosition(protocolNode);
+        assertNotEmptyString(protocolNode.getName());
+    }
+
+    @MageTabCheck(value = "A protocol node should have date specified", modality = WARNING)
+    public void protocolNodeShouldHaveDate(SdrfProtocolNode protocolNode) {
+        setPosition(protocolNode);
+        assertNotEmptyString(protocolNode.getDate());
+    }
+
+    @MageTabCheck(value = "A protocol node should have TermSource specified", modality = WARNING)
+    public void protocolNodeShouldHaveTermSource(SdrfProtocolNode protocolNode) {
+        setPosition(protocolNode);
+        assertNotEmptyString(protocolNode.getTermSourceRef());
+    }
+
+    @MageTabCheck("TermSource value of protocol node must be defined in IDF")
+    public void termSourceOfProtocolMustBeValid(SdrfProtocolNode protocolNode) {
+        setPosition(protocolNode);
+        assertTermSourceIsValid(protocolNode);
+    }
+
+    @MageTabCheck("A protocol's date must be in 'YYYY-MM-DD' format")
+    public void protocolNodeDateFormat(SdrfProtocolNode protocolNode) {
+        String date = protocolNode.getDate();
+        if (isNullOrEmpty(date)) {
+            return;
+        }
+        setPosition(protocolNode);
+        assertThat(date, isDateString(DATE_FORMAT));
+    }
+
+    @MageTabCheck(value = "A parameter value attribute (of a protocol) should have name specified", modality = WARNING)
+    public void parameterValueAttributeShouldHaveName(SdrfParameterValueAttribute parameterValueAttribute) {
+        setPosition(parameterValueAttribute);
+        assertNotEmptyString(parameterValueAttribute.getType());
+    }
+
+    @MageTabCheck(value = "A parameter value attribute (of a protocol) should have unit specified", modality = WARNING)
+    public void parameterValueAttributeShouldHaveUnit(SdrfParameterValueAttribute parameterValueAttribute) {
+        setPosition(parameterValueAttribute);
+        assertNotNull(parameterValueAttribute.getUnit());
+    }
+
+    @MageTabCheck(value = "A Unit attribute should have TermSource specified", modality = WARNING)
+    public void unitAttributeShouldHaveName(SdrfUnitAttribute unitAttribute) {
+        setPosition(unitAttribute);
+        assertNotEmptyString(unitAttribute.getType());
+    }
+
+    @MageTabCheck(value = "A Unit attribute should have TermSource specified", modality = WARNING)
+    public void unitAttributeShouldHaveTermSource(SdrfUnitAttribute unitAttribute) {
+        setPosition(unitAttribute);
+        assertNotEmptyString(unitAttribute.getTermSourceRef());
+    }
+
+    @MageTabCheck("TermSource value of a unit attribute must be declared in IDF")
+    public void termSourceOfUnitAttributeMustBeValid(SdrfUnitAttribute unitAttribute) {
+        setPosition(unitAttribute);
+        assertTermSourceIsValid(unitAttribute);
     }
 
     private static <T> void assertNotNull(T obj) {

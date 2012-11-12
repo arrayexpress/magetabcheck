@@ -57,6 +57,11 @@ public class LimpopoBasedProtocolNode extends LimpopoBasedSdrfNode<ProtocolAppli
     }
 
     @Override
+    public String getDate() {
+        return node().date;
+    }
+
+    @Override
     public String getProtocol() {
         return node().protocol;
     }

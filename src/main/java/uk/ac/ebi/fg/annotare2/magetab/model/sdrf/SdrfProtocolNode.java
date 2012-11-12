@@ -23,6 +23,8 @@ import java.util.Collection;
  */
 public interface SdrfProtocolNode extends SdrfGraphNode, HasTermSource {
 
+    String getDate();
+
     String getProtocol ();
 
     SdrfPerformerAttribute getPerformer();
