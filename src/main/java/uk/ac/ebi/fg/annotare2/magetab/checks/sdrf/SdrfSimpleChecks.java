@@ -16,6 +16,7 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checks.sdrf;
 
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.UnitAttribute;
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Info;
@@ -260,13 +261,13 @@ public class SdrfSimpleChecks {
         assertNotNull(parameterValueAttribute.getUnit());
     }
 
-    @MageTabCheck(value = "A Unit attribute should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "A unit attribute should have name specified", modality = WARNING)
     public void unitAttributeShouldHaveName(SdrfUnitAttribute unitAttribute) {
         setPosition(unitAttribute);
         assertNotEmptyString(unitAttribute.getType());
     }
 
-    @MageTabCheck(value = "A Unit attribute should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "A unit attribute should have TermSource specified", modality = WARNING)
     public void unitAttributeShouldHaveTermSource(SdrfUnitAttribute unitAttribute) {
         setPosition(unitAttribute);
         assertNotEmptyString(unitAttribute.getTermSourceRef());
@@ -276,6 +277,24 @@ public class SdrfSimpleChecks {
     public void termSourceOfUnitAttributeMustBeValid(SdrfUnitAttribute unitAttribute) {
         setPosition(unitAttribute);
         assertTermSourceIsValid(unitAttribute);
+    }
+
+    @MageTabCheck(value = "A characteristic attribute should have name specified", modality = WARNING)
+    public void characteristicAttributeShouldHaveName(SdrfCharacteristicAttribute attribute) {
+        setPosition(attribute);
+        assertNotEmptyString(attribute.getType());
+    }
+
+    @MageTabCheck(value = "A characteristic attribute should have TermSource specified", modality = WARNING)
+    public void characteristicAttributeShouldHaveTermSource(SdrfCharacteristicAttribute attribute){
+        setPosition(attribute);
+        assertNotEmptyString(attribute.getTermSourceRef());
+    }
+
+    @MageTabCheck("TermSource value of a characteristic attribute must be declared in IDF")
+    public void termSourceOfCharacteristicAttributeMustBeValid(SdrfCharacteristicAttribute attribute) {
+        setPosition(attribute);
+        assertTermSourceIsValid(attribute);
     }
 
     private static <T> void assertNotNull(T obj) {
