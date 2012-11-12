@@ -84,7 +84,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(value = "A source node should be described by a protocol", modality = WARNING)
     public void sourceNodeShouldBeDescribedByProtocol(SdrfSourceNode sourceNode) {
-        assertHasProtocolParent(sourceNode);
+        assertDescribedByProtocol(sourceNode);
     }
 
     @MageTabCheck("A sample node must have name specified")
@@ -101,7 +101,24 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(value = "A sample node should be described by a protocol", modality = WARNING)
     public void sampleNodeShouldBeDescribedByProtocol(SdrfSampleNode sampleNode) {
-        assertHasProtocolParent(sampleNode);
+        assertDescribedByProtocol(sampleNode);
+    }
+
+    @MageTabCheck("An extract node must have name specified")
+    public void extractNodeMustHaveName(SdrfExtractNode extractNode) {
+        setPosition(extractNode);
+        assertNotEmptyString(extractNode.getName());
+    }
+
+    @MageTabCheck(value = "An extract node should have Material Type attribute specified", modality = WARNING)
+    public void extractNodeShouldHaveMaterialTypeAttribute(SdrfExtractNode extractNode) {
+        setPosition(extractNode);
+        assertNotNull(extractNode.getMaterialType());
+    }
+
+    @MageTabCheck(value = "An extract node should be described by a protocol", modality = WARNING)
+    public void extractNodeShouldBeDescribedByProtocol(SdrfExtractNode extractNode) {
+        assertDescribedByProtocol(extractNode);
     }
 
     @MageTabCheck(value = "A material type attribute should have name specified", modality = WARNING)
@@ -133,7 +150,7 @@ public class SdrfSimpleChecks {
         assertThat(str, not(isEmptyOrNullString()));
     }
 
-    private void assertHasProtocolParent(SdrfMaterialNode node) {
+    private static void assertDescribedByProtocol(SdrfMaterialNode node) {
         Collection<? extends SdrfGraphNode> parents = node.getParentNodes();
         if (parents.isEmpty()) {
             return;
