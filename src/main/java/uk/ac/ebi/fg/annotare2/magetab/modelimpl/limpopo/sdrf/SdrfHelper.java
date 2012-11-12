@@ -136,6 +136,8 @@ public class SdrfHelper {
             wrappedNode = new LimpopoBasedAssayNode((AssayNode) node, this);
         } else if (node instanceof ScanNode) {
             wrappedNode = new LimpopoBasedScanNode((ScanNode) node, this);
+        } else if (node instanceof NormalizationNode) {
+            wrappedNode = new LimpopoBasedNormalizationNode((NormalizationNode) node, this);
         } else {
             wrappedNode = new LimpopoBasedUnknownNode(node, this);
         }
