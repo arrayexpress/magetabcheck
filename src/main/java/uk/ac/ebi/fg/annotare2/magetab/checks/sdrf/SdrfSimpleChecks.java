@@ -297,6 +297,24 @@ public class SdrfSimpleChecks {
         assertTermSourceIsValid(attribute);
     }
 
+    @MageTabCheck(value = "A factor value attribute should have name specified", modality = WARNING)
+    public void factorValueAttributeShouldHaveName(SdrfFactorValueAttribute fvAttribute) {
+        setPosition(fvAttribute);
+        assertNotEmptyString(fvAttribute.getType());
+    }
+
+    @MageTabCheck(value = "A factor value attribute should have TermSource specified", modality = WARNING)
+    public void factorValueAttributeShouldHaveTermSource(SdrfFactorValueAttribute fvAttribute) {
+        setPosition(fvAttribute);
+        assertNotEmptyString(fvAttribute.getTermSourceRef());
+    }
+
+    @MageTabCheck("TermSource value of a factor value attribute must be declared in IDF")
+    public void termSourceOfFactorValueAttributeMustBeValid(SdrfFactorValueAttribute fvAttribute) {
+        setPosition(fvAttribute);
+        assertTermSourceIsValid(fvAttribute);
+    }
+
     private static <T> void assertNotNull(T obj) {
         assertThat(obj, notNullValue());
     }
