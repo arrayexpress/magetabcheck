@@ -286,7 +286,7 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(value = "A characteristic attribute should have TermSource specified", modality = WARNING)
-    public void characteristicAttributeShouldHaveTermSource(SdrfCharacteristicAttribute attribute){
+    public void characteristicAttributeShouldHaveTermSource(SdrfCharacteristicAttribute attribute) {
         setPosition(attribute);
         assertNotEmptyString(attribute.getTermSourceRef());
     }
@@ -313,6 +313,24 @@ public class SdrfSimpleChecks {
     public void termSourceOfFactorValueAttributeMustBeValid(SdrfFactorValueAttribute fvAttribute) {
         setPosition(fvAttribute);
         assertTermSourceIsValid(fvAttribute);
+    }
+
+    @MageTabCheck("An array design attribute must have name specified")
+    public void arrayDesignAttributeMustHaveName(SdrfArrayDesignAttribute adAttribute) {
+        setPosition(adAttribute);
+        assertNotEmptyString(adAttribute.getName());
+    }
+
+    @MageTabCheck(value = "An array design should have TermSource specified", modality = WARNING)
+    public void arrayDesignAttributeShouldHaveTermSource(SdrfArrayDesignAttribute adAttribute) {
+        setPosition(adAttribute);
+        assertNotEmptyString(adAttribute.getTermSourceRef());
+    }
+
+    @MageTabCheck("TermSource value of an array design attribute must be declared in IDF")
+    public void termSourceOfArrayDesignAttributeMustBeValid(SdrfArrayDesignAttribute adAttribute) {
+        setPosition(adAttribute);
+        assertTermSourceIsValid(adAttribute);
     }
 
     private static <T> void assertNotNull(T obj) {
