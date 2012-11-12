@@ -18,10 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.sdrf;
 
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.SDRF;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.layout.Location;
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.ProtocolApplicationNode;
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SDRFNode;
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SampleNode;
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SourceNode;
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.*;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.*;
 import uk.ac.ebi.fg.annotare2.magetab.model.Identity;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
@@ -103,6 +100,8 @@ public class SdrfHelper {
             wrappedAttr = new LimpopoBasedParameterValueAttribute((ParameterValueAttribute) attr, this);
         } else if (attr instanceof UnitAttribute) {
             wrappedAttr = new LimpopoBasedUnitAttribute((UnitAttribute) attr, this);
+        } else if (attr instanceof LabelAttribute) {
+            wrappedAttr = new LimpopoBasedLabelAttribute((LabelAttribute) attr, this);
         } else {
             wrappedAttr = new LimpopoBasedUnknownAttribute(attr, this);
         }
@@ -121,6 +120,10 @@ public class SdrfHelper {
             wrappedNode = new LimpopoBasedSourceNode((SourceNode) node, this);
         } else if (node instanceof SampleNode) {
             wrappedNode = new LimpopoBasedSampleNode((SampleNode) node, this);
+        } else if (node instanceof ExtractNode) {
+            wrappedNode = new LimpopoBasedExtractNode((ExtractNode) node, this);
+        } else if (node instanceof LabeledExtractNode) {
+            wrappedNode = new LimpopoBasedLabeledExtractNode((LabeledExtractNode) node, this);
         } else if (node instanceof ProtocolApplicationNode) {
             wrappedNode = new LimpopoBasedProtocolNode((ProtocolApplicationNode) node, this);
         } else {

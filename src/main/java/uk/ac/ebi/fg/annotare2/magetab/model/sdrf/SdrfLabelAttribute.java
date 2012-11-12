@@ -19,7 +19,5 @@ package uk.ac.ebi.fg.annotare2.magetab.model.sdrf;
 /**
  * @author Olga Melnichuk
  */
-public interface SdrfCharacteristicAttribute extends SdrfGraphAttribute, HasTermSource {
-
-    String getType();
+public interface SdrfLabelAttribute  extends SdrfGraphAttribute, HasTermSource {
 }

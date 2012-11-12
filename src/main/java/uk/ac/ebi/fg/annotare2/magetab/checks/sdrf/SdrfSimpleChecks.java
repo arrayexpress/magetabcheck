@@ -121,6 +121,47 @@ public class SdrfSimpleChecks {
         assertDescribedByProtocol(extractNode);
     }
 
+    @MageTabCheck("A labeled extract node must have name specified")
+    public void labeledExtractNodeMustHaveName(SdrfLabeledExtractNode labeledExtractNode) {
+        setPosition(labeledExtractNode);
+        assertNotEmptyString(labeledExtractNode.getName());
+    }
+
+    @MageTabCheck(value = "A labeled extract node should have Material Type attribute specified", modality = WARNING)
+    public void labeledExtractNodeShouldHaveMaterialTypeAttribute(SdrfLabeledExtractNode labeledExtractNode) {
+        setPosition(labeledExtractNode);
+        assertNotNull(labeledExtractNode.getMaterialType());
+    }
+
+    @MageTabCheck("A labeled extract node must have label attribute specified")
+    public void labeledExtractNodeMustHaveLabelAttribute(SdrfLabeledExtractNode labeledExtractNode) {
+        setPosition(labeledExtractNode);
+        assertNotNull(labeledExtractNode.getLabel());
+    }
+
+    @MageTabCheck(value = "A labeled extract node should be described by a protocol", modality = WARNING)
+    public void labeledExtractNodeShouldBeDescribedByProtocol(SdrfLabeledExtractNode labeledExtractNode) {
+        assertDescribedByProtocol(labeledExtractNode);
+    }
+
+    @MageTabCheck(value = "A label attribute should have name specified", modality = WARNING)
+    public void labelAttributeShouldHaveName(SdrfLabelAttribute la) {
+        setPosition(la);
+        assertNotEmptyString(la.getName());
+    }
+
+    @MageTabCheck(value = "A label attribute should have TermSource specified", modality = WARNING)
+    public void labelAttributeShouldHaveTermSource(SdrfLabelAttribute la) {
+        setPosition(la);
+        assertNotEmptyString(la.getTermSourceRef());
+    }
+
+    @MageTabCheck("TermSource value of label attribute must be defined in IDF")
+    public void termSourceOfLabelAttributeMustBeValid(SdrfLabelAttribute la) {
+        setPosition(la);
+        assertTermSourceIsValid(la);
+    }
+
     @MageTabCheck(value = "A material type attribute should have name specified", modality = WARNING)
     public void materialTypeAttributeShouldHaveName(SdrfMaterialTypeAttribute mta) {
         setPosition(mta);
@@ -135,11 +176,8 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck("TermSource value of material type attribute must be defined in IDF")
     public void termSourceOfMaterialTypeAttributeMustBeValid(SdrfMaterialTypeAttribute mta) {
-        if (isNullOrEmpty(mta.getTermSourceRef())) {
-            return;
-        }
         setPosition(mta);
-        assertNotNull(mta.getTermSource());
+        assertTermSourceIsValid(mta);
     }
 
     private static <T> void assertNotNull(T obj) {
@@ -148,6 +186,13 @@ public class SdrfSimpleChecks {
 
     private static void assertNotEmptyString(String str) {
         assertThat(str, not(isEmptyOrNullString()));
+    }
+
+    private static void assertTermSourceIsValid(HasTermSource t) {
+        if (isNullOrEmpty(t.getTermSourceRef())) {
+            return;
+        }
+        assertNotNull(t.getTermSource());
     }
 
     private static void assertDescribedByProtocol(SdrfMaterialNode node) {
