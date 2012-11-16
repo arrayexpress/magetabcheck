@@ -17,8 +17,8 @@
 package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo;
 
 import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.FileLocation;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Info;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.Location;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -67,10 +67,10 @@ public class LimpopoBasedInfo extends LimpopoBasedIdfObject implements Info {
     }
 
     @Override
-    public Cell<Location> getSdrfFile() {
+    public Cell<FileLocation> getSdrfFile() {
         List<String> sdrfFiles = idf().sdrfFile;
-        return new Cell<Location>(
-                new Location(idf().getLocation(),
+        return new Cell<FileLocation>(
+                new FileLocation(idf().getLocation(),
                         (sdrfFiles == null || sdrfFiles.isEmpty()) ? null : sdrfFiles.get(0)),
                 idf().getLayout().getLineNumberForHeader(SDRF_FILE),
                 getColumn());

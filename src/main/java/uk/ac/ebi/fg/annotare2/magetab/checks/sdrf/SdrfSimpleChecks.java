@@ -31,6 +31,7 @@ import static org.hamcrest.Matchers.*;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality.WARNING;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.setCheckPosition;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.matchers.IsDateString.isDateString;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.matchers.IsValidFileLocation.isValidFileLocation;
 import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.DATE_FORMAT;
 import static uk.ac.ebi.fg.annotare2.magetab.extension.KnownTermSource.NCBI_TAXONOMY;
 
@@ -345,6 +346,28 @@ public class SdrfSimpleChecks {
         assertNotEmptyString(scanNode.getName());
     }
 
+    @MageTabCheck(value = "An array data node should have a name", modality = WARNING)
+    public void arrayDataNodeSouldHaveName(SdrfArrayDataNode arrayDataNode) {
+        setPosition(arrayDataNode);
+        assertNotEmptyString(arrayDataNode.getName());
+    }
+
+    @MageTabCheck("Name of an array data node must be a valid file location")
+    public void nameOfArrayDataNodeMustBeValidFileLocation(SdrfArrayDataNode arrayDataNode) {
+        String name = arrayDataNode.getName();
+        if (isNullOrEmpty(name)) {
+            return;
+        }
+        setPosition(arrayDataNode);
+        assertThat(arrayDataNode.getLocation(), isValidFileLocation());
+    }
+
+    @MageTabCheck(value = "An array data node should be described by a protocol", modality = WARNING)
+    public void arrayDataNodeShouldBeDescribedByProtocol(SdrfArrayDataNode arrayDataNode) {
+        setPosition(arrayDataNode);
+        assertDescribedByProtocol(arrayDataNode);
+    }
+
     private static <T> void assertNotNull(T obj) {
         assertThat(obj, notNullValue());
     }
@@ -360,7 +383,7 @@ public class SdrfSimpleChecks {
         assertNotNull(t.getTermSource());
     }
 
-    private static void assertDescribedByProtocol(SdrfMaterialNode node) {
+    private static void assertDescribedByProtocol(SdrfGraphNode node) {
         Collection<? extends SdrfGraphNode> parents = node.getParentNodes();
         if (parents.isEmpty()) {
             return;

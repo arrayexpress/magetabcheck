@@ -20,7 +20,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.Location;
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.FileLocation;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -30,10 +30,10 @@ import java.net.URL;
 /**
  * @author Olga Melnichuk
  */
-public class IsValidFileLocation extends TypeSafeMatcher<Location> {
+public class IsValidFileLocation extends TypeSafeMatcher<FileLocation> {
 
     @Override
-    protected boolean matchesSafely(Location loc) {
+    protected boolean matchesSafely(FileLocation loc) {
         if (loc == null || loc.isEmpty()) {
             return false;
         }
@@ -63,7 +63,7 @@ public class IsValidFileLocation extends TypeSafeMatcher<Location> {
     }
 
     @Factory
-    public static <T> Matcher<Location> isValidFileLocation() {
+    public static <T> Matcher<FileLocation> isValidFileLocation() {
         return new IsValidFileLocation();
     }
 }

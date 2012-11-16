@@ -16,20 +16,33 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.model.idf;
 
-import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * @author Olga Melnichuk
  */
-public interface Info {
+public class FileLocation {
 
-    Cell<String> getTitle();
+    private final URL context;
 
-    Cell<String> getExperimentDescription();
+    private final String path;
 
-    Cell<String> getDateOfExperiment();
+    public FileLocation(URL context, String path) {
+        this.context = context;
+        this.path = path;
+    }
 
-    Cell<String> getPublicReleaseDate();
+    public boolean isEmpty() {
+        return isNullOrEmpty(path);
+    }
 
-    Cell<FileLocation> getSdrfFile();
+    public URL toURL() throws MalformedURLException {
+        return isEmpty() ? null :
+                context == null ? new URL(path) :
+                        new URL(context, path);
+    }
+
 }

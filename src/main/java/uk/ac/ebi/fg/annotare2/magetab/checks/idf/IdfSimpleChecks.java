@@ -82,7 +82,7 @@ public class IdfSimpleChecks {
 
     @MageTabCheck("SDRF File must be specified")
     public void sdrfFileMustBeSpecified(Info info) {
-        Cell<Location> cell = info.getSdrfFile();
+        Cell<FileLocation> cell = info.getSdrfFile();
         setPosition(cell);
         assertThat(cell.getValue(), notNullValue());
         assertThat(cell.getValue().isEmpty(), is(FALSE));
@@ -90,8 +90,8 @@ public class IdfSimpleChecks {
 
     @MageTabCheck("SDRF File must be valid location")
     public void sdrfFileMustBeValidLocation(Info info) {
-        Cell<Location> cell = info.getSdrfFile();
-        Location loc = cell.getValue();
+        Cell<FileLocation> cell = info.getSdrfFile();
+        FileLocation loc = cell.getValue();
         if (loc == null || loc.isEmpty()) {
             return;
         }

@@ -26,6 +26,7 @@ import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraphAttribute;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraphNode;
 
+import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -138,6 +139,8 @@ public class SdrfHelper {
             wrappedNode = new LimpopoBasedScanNode((ScanNode) node, this);
         } else if (node instanceof NormalizationNode) {
             wrappedNode = new LimpopoBasedNormalizationNode((NormalizationNode) node, this);
+        } else if (node instanceof ArrayDataNode) {
+            wrappedNode = new LimpopoBasedArrayDataNode((ArrayDataNode) node, this);
         } else {
             wrappedNode = new LimpopoBasedUnknownNode(node, this);
         }
@@ -147,5 +150,9 @@ public class SdrfHelper {
 
     public TermSource termSource(String termSourceRef) {
         return idf.getTermSource(termSourceRef);
+    }
+
+    public URL getFileRoot() {
+        return sdrf.getLocation();
     }
 }

@@ -14,33 +14,14 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.model.idf;
+package uk.ac.ebi.fg.annotare2.magetab.model.sdrf;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.FileLocation;
 
 /**
  * @author Olga Melnichuk
  */
-public class Location {
+public interface SdrfArrayDataNode extends SdrfGraphNode {
 
-    private final URL context;
-
-    private final String path;
-
-    public Location(URL context, String path) {
-        this.context = context;
-        this.path = path;
-    }
-
-    public boolean isEmpty() {
-        return isNullOrEmpty(path);
-    }
-
-    public URL toURL() throws MalformedURLException {
-        return isEmpty() ? null : new URL(context, path);
-    }
-
+    FileLocation getLocation();
 }
