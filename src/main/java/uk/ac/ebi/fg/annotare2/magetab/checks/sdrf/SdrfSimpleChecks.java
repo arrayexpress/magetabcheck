@@ -333,6 +333,12 @@ public class SdrfSimpleChecks {
         assertTermSourceIsValid(adAttribute);
     }
 
+    @MageTabCheck(value = "A normalization node should have a name", modality = WARNING)
+    public void normalizationNodeShouldHaveName(SdrfNormalizationNode normalizationNode) {
+        setPosition(normalizationNode);
+        assertNotEmptyString(normalizationNode.getName());
+    }
+
     private static <T> void assertNotNull(T obj) {
         assertThat(obj, notNullValue());
     }
