@@ -20,6 +20,7 @@ import org.hamcrest.Matchers;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType;
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
+import uk.ac.ebi.fg.annotare2.magetab.model.FileLocation;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;
 
 import static com.google.common.base.Strings.isNullOrEmpty;

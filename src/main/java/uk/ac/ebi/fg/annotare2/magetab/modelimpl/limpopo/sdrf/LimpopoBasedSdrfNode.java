@@ -19,7 +19,7 @@ package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.sdrf;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.graph.Node;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.layout.Location;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SDRFNode;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.FileLocation;
+import uk.ac.ebi.fg.annotare2.magetab.model.FileLocation;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraphNode;
 

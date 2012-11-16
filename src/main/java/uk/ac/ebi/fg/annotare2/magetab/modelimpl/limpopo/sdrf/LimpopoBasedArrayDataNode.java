@@ -18,7 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.sdrf;
 
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.ArrayDataNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.FileLocation;
+import uk.ac.ebi.fg.annotare2.magetab.model.FileLocation;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfArrayDataNode;
 
 import java.util.Collection;

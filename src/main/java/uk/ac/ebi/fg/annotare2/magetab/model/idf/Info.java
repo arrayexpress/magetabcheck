@@ -17,6 +17,7 @@
 package uk.ac.ebi.fg.annotare2.magetab.model.idf;
 
 import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
+import uk.ac.ebi.fg.annotare2.magetab.model.FileLocation;
 
 /**
  * @author Olga Melnichuk

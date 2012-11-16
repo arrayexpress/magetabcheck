@@ -20,7 +20,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.FileLocation;
+import uk.ac.ebi.fg.annotare2.magetab.model.FileLocation;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

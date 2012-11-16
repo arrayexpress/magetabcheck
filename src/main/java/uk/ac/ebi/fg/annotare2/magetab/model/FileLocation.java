@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.model.idf;
+package uk.ac.ebi.fg.annotare2.magetab.model;
 
 import java.net.MalformedURLException;
 import java.net.URL;
