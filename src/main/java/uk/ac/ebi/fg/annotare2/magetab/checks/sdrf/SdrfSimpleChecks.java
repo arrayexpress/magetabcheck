@@ -16,10 +16,7 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checks.sdrf;
 
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.UnitAttribute;
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.Info;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.*;
 
@@ -30,8 +27,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality.WARNING;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.setCheckPosition;
-import static uk.ac.ebi.fg.annotare2.magetab.checker.matchers.IsDateString.isDateString;
-import static uk.ac.ebi.fg.annotare2.magetab.checker.matchers.IsValidFileLocation.isValidFileLocation;
+import static uk.ac.ebi.fg.annotare2.magetab.checks.matchers.IsDateString.isDateString;
+import static uk.ac.ebi.fg.annotare2.magetab.checks.matchers.IsValidFileLocation.isValidFileLocation;
 import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.DATE_FORMAT;
 import static uk.ac.ebi.fg.annotare2.magetab.extension.KnownTermSource.NCBI_TAXONOMY;
 

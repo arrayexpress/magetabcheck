@@ -30,9 +30,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.setCheckPosition;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality.WARNING;
-import static uk.ac.ebi.fg.annotare2.magetab.checker.matchers.IsDateString.isDateString;
-import static uk.ac.ebi.fg.annotare2.magetab.checker.matchers.IsValidFileLocation.isValidFileLocation;
-import static uk.ac.ebi.fg.annotare2.magetab.checker.matchers.RegExpMatcher.matches;
+import static uk.ac.ebi.fg.annotare2.magetab.checks.matchers.IsDateString.isDateString;
+import static uk.ac.ebi.fg.annotare2.magetab.checks.matchers.IsValidFileLocation.isValidFileLocation;
+import static uk.ac.ebi.fg.annotare2.magetab.checks.matchers.RegExpMatcher.matches;
 import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.DATE_FORMAT;
 import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.SUBMITTER_ROLE;
 

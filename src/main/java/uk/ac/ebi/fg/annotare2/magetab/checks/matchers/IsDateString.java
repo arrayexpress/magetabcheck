@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.checker.matchers;
+package uk.ac.ebi.fg.annotare2.magetab.checks.matchers;
 
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
