@@ -339,6 +339,12 @@ public class SdrfSimpleChecks {
         assertNotEmptyString(normalizationNode.getName());
     }
 
+    @MageTabCheck(value = "A scan node should have a name", modality = WARNING)
+    public void scanNodeShouldHaveName(SdrfScanNode scanNode) {
+        setPosition(scanNode);
+        assertNotEmptyString(scanNode.getName());
+    }
+
     private static <T> void assertNotNull(T obj) {
         assertThat(obj, notNullValue());
     }
