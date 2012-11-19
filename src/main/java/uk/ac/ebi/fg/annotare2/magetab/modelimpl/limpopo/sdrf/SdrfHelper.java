@@ -145,6 +145,8 @@ public class SdrfHelper {
             wrappedNode = new LimpopoBasedDerivedArrayDataNode((DerivedArrayDataNode) node, this);
         } else if (node instanceof ArrayDataMatrixNode) {
             wrappedNode = new LimpopoBasedArrayDataMatrixNode((ArrayDataMatrixNode) node, this);
+        } else if (node instanceof DerivedArrayDataMatrixNode) {
+            wrappedNode = new LimpopoBasedDerivedArrayDataMatrixNode((DerivedArrayDataMatrixNode) node, this);
         } else {
             wrappedNode = new LimpopoBasedUnknownNode(node, this);
         }
