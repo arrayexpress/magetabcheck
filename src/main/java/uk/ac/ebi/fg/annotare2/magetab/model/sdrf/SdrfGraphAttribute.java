@@ -19,9 +19,7 @@ package uk.ac.ebi.fg.annotare2.magetab.model.sdrf;
 /**
  * @author Olga Melnichuk
  */
-public interface SdrfGraphAttribute extends HasLocation, HasAttributes {
-
-    String getName();
+public interface SdrfGraphAttribute extends SdrfGraphEntity {
 
     String getValue();
 }

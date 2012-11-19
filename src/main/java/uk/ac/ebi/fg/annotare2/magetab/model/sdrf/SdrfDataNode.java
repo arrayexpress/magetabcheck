@@ -16,8 +16,12 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.model.sdrf;
 
+import uk.ac.ebi.fg.annotare2.magetab.model.FileLocation;
+
 /**
  * @author Olga Melnichuk
  */
-public interface SdrfArrayDataNode extends SdrfDataNode {
+public interface SdrfDataNode extends SdrfGraphNode {
+
+    FileLocation getLocation();
 }

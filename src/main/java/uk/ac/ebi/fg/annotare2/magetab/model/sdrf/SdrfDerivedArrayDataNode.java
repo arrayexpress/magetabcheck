@@ -19,5 +19,5 @@ package uk.ac.ebi.fg.annotare2.magetab.model.sdrf;
 /**
  * @author Olga Melnichuk
  */
-public interface SdrfArrayDataNode extends SdrfDataNode {
+public interface SdrfDerivedArrayDataNode extends SdrfDataNode {
 }

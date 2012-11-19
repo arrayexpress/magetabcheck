@@ -17,6 +17,7 @@
 package uk.ac.ebi.fg.annotare2.magetab.checks.sdrf;
 
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetab.model.FileLocation;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.*;
 
@@ -27,9 +28,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality.WARNING;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.setCheckPosition;
+import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.DATE_FORMAT;
 import static uk.ac.ebi.fg.annotare2.magetab.checks.matchers.IsDateString.isDateString;
 import static uk.ac.ebi.fg.annotare2.magetab.checks.matchers.IsValidFileLocation.isValidFileLocation;
-import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.DATE_FORMAT;
 import static uk.ac.ebi.fg.annotare2.magetab.extension.KnownTermSource.NCBI_TAXONOMY;
 
 /**
@@ -39,8 +40,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck("A source node must have name specified")
     public void sourceNodeMustHaveName(SdrfSourceNode sourceNode) {
-        setPosition(sourceNode);
-        assertNotEmptyString(sourceNode.getName());
+        assertNotEmptyName(sourceNode);
     }
 
     @MageTabCheck(value = "A source node should have Material Type attribute specified", modality = WARNING)
@@ -87,13 +87,12 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(value = "A source node should be described by a protocol", modality = WARNING)
     public void sourceNodeShouldBeDescribedByProtocol(SdrfSourceNode sourceNode) {
-        assertDescribedByProtocol(sourceNode);
+        assertNodeIsDescribedByProtocol(sourceNode);
     }
 
     @MageTabCheck("A sample node must have name specified")
     public void sampleNodeMustHaveName(SdrfSampleNode sampleNode) {
-        setPosition(sampleNode);
-        assertNotEmptyString(sampleNode.getName());
+        assertNotEmptyName(sampleNode);
     }
 
     @MageTabCheck(value = "A sample node should have Material Type attribute specified", modality = WARNING)
@@ -104,13 +103,12 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(value = "A sample node should be described by a protocol", modality = WARNING)
     public void sampleNodeShouldBeDescribedByProtocol(SdrfSampleNode sampleNode) {
-        assertDescribedByProtocol(sampleNode);
+        assertNodeIsDescribedByProtocol(sampleNode);
     }
 
     @MageTabCheck("An extract node must have name specified")
     public void extractNodeMustHaveName(SdrfExtractNode extractNode) {
-        setPosition(extractNode);
-        assertNotEmptyString(extractNode.getName());
+        assertNotEmptyName(extractNode);
     }
 
     @MageTabCheck(value = "An extract node should have Material Type attribute specified", modality = WARNING)
@@ -121,13 +119,12 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(value = "An extract node should be described by a protocol", modality = WARNING)
     public void extractNodeShouldBeDescribedByProtocol(SdrfExtractNode extractNode) {
-        assertDescribedByProtocol(extractNode);
+        assertNodeIsDescribedByProtocol(extractNode);
     }
 
     @MageTabCheck("A labeled extract node must have name specified")
     public void labeledExtractNodeMustHaveName(SdrfLabeledExtractNode labeledExtractNode) {
-        setPosition(labeledExtractNode);
-        assertNotEmptyString(labeledExtractNode.getName());
+        assertNotEmptyName(labeledExtractNode);
     }
 
     @MageTabCheck(value = "A labeled extract node should have Material Type attribute specified", modality = WARNING)
@@ -144,13 +141,12 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(value = "A labeled extract node should be described by a protocol", modality = WARNING)
     public void labeledExtractNodeShouldBeDescribedByProtocol(SdrfLabeledExtractNode labeledExtractNode) {
-        assertDescribedByProtocol(labeledExtractNode);
+        assertNodeIsDescribedByProtocol(labeledExtractNode);
     }
 
     @MageTabCheck(value = "A label attribute should have name specified", modality = WARNING)
-    public void labelAttributeShouldHaveName(SdrfLabelAttribute la) {
-        setPosition(la);
-        assertNotEmptyString(la.getName());
+    public void labelAttributeShouldHaveName(SdrfLabelAttribute labelAttribute) {
+        assertNotEmptyName(labelAttribute);
     }
 
     @MageTabCheck(value = "A label attribute should have TermSource specified", modality = WARNING)
@@ -166,9 +162,8 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(value = "A material type attribute should have name specified", modality = WARNING)
-    public void materialTypeAttributeShouldHaveName(SdrfMaterialTypeAttribute mta) {
-        setPosition(mta);
-        assertNotEmptyString(mta.getName());
+    public void materialTypeAttributeShouldHaveName(SdrfMaterialTypeAttribute materialTypeAttribute) {
+        assertNotEmptyName(materialTypeAttribute);
     }
 
     @MageTabCheck(value = "A material type attribute should have TermSource specified", modality = WARNING)
@@ -185,8 +180,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck("A protocol node must have name specified")
     public void protocolNodeMustHaveName(SdrfProtocolNode protocolNode) {
-        setPosition(protocolNode);
-        assertNotEmptyString(protocolNode.getName());
+        assertNotEmptyName(protocolNode);
     }
 
     @MageTabCheck(value = "A protocol node should have date specified", modality = WARNING)
@@ -219,8 +213,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck("An assay node must have a name")
     public void assayNodeMustHaveName(SdrfAssayNode assayNode) {
-        setPosition(assayNode);
-        assertNotEmptyString(assayNode.getName());
+        assertNotEmptyName(assayNode);
     }
 
     @MageTabCheck("An assay node must have Technology Type attribute specified")
@@ -231,8 +224,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck("Technology type attribute must have a name")
     public void technologyTypeMustHaveName(SdrfTechnologyTypeAttribute technologyTypeAttribute) {
-        setPosition(technologyTypeAttribute);
-        assertNotEmptyString(technologyTypeAttribute.getName());
+        assertNotEmptyName(technologyTypeAttribute);
     }
 
     @MageTabCheck(value = "Technology type attribute should have TermSource specified")
@@ -315,8 +307,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck("An array design attribute must have name specified")
     public void arrayDesignAttributeMustHaveName(SdrfArrayDesignAttribute adAttribute) {
-        setPosition(adAttribute);
-        assertNotEmptyString(adAttribute.getName());
+        assertNotEmptyName(adAttribute);
     }
 
     @MageTabCheck(value = "An array design should have TermSource specified", modality = WARNING)
@@ -333,36 +324,43 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(value = "A normalization node should have a name", modality = WARNING)
     public void normalizationNodeShouldHaveName(SdrfNormalizationNode normalizationNode) {
-        setPosition(normalizationNode);
-        assertNotEmptyString(normalizationNode.getName());
+        assertNotEmptyName(normalizationNode);
     }
 
     @MageTabCheck(value = "A scan node should have a name", modality = WARNING)
     public void scanNodeShouldHaveName(SdrfScanNode scanNode) {
-        setPosition(scanNode);
-        assertNotEmptyString(scanNode.getName());
+        assertNotEmptyName(scanNode);
     }
 
     @MageTabCheck(value = "An array data node should have a name", modality = WARNING)
     public void arrayDataNodeSouldHaveName(SdrfArrayDataNode arrayDataNode) {
-        setPosition(arrayDataNode);
-        assertNotEmptyString(arrayDataNode.getName());
+        assertNotEmptyName(arrayDataNode);
     }
 
     @MageTabCheck("Name of an array data node must be a valid file location")
     public void nameOfArrayDataNodeMustBeValidFileLocation(SdrfArrayDataNode arrayDataNode) {
-        String name = arrayDataNode.getName();
-        if (isNullOrEmpty(name)) {
-            return;
-        }
-        setPosition(arrayDataNode);
-        assertThat(arrayDataNode.getLocation(), isValidFileLocation());
+        assertFileLocationIsValid(arrayDataNode);
     }
 
     @MageTabCheck(value = "An array data node should be described by a protocol", modality = WARNING)
     public void arrayDataNodeShouldBeDescribedByProtocol(SdrfArrayDataNode arrayDataNode) {
         setPosition(arrayDataNode);
-        assertDescribedByProtocol(arrayDataNode);
+        assertNodeIsDescribedByProtocol(arrayDataNode);
+    }
+
+    @MageTabCheck("A derived array data node must have a name")
+    public void derivedArrayDataNodeMustHaveName(SdrfDerivedArrayDataNode derivedArrayDataNode) {
+        assertNotEmptyName(derivedArrayDataNode);
+    }
+
+    @MageTabCheck("Name of a derived array data node must be a valid file location")
+    public void nameOfDerivedArrayDataNodeMustBeValidFileLocation(SdrfDerivedArrayDataNode derivedArrayDataNode) {
+        assertFileLocationIsValid(derivedArrayDataNode);
+    }
+
+    @MageTabCheck(value ="A derived array data node should be described by a protocol", modality = WARNING)
+    public void derivedArrayDataNodeShouldBeDescribedByProtocol(SdrfDerivedArrayDataNode derivedArrayDataNode) {
+        assertNodeIsDescribedByProtocol(derivedArrayDataNode);
     }
 
     private static <T> void assertNotNull(T obj) {
@@ -380,7 +378,12 @@ public class SdrfSimpleChecks {
         assertNotNull(t.getTermSource());
     }
 
-    private static void assertDescribedByProtocol(SdrfGraphNode node) {
+    private static void assertNotEmptyName(SdrfGraphEntity node) {
+        setPosition(node);
+        assertNotEmptyString(node.getName());
+    }
+
+    private static void assertNodeIsDescribedByProtocol(SdrfGraphNode node) {
         Collection<? extends SdrfGraphNode> parents = node.getParentNodes();
         if (parents.isEmpty()) {
             return;
@@ -394,6 +397,14 @@ public class SdrfSimpleChecks {
             }
         }
         assertNotNull(protocolNode);
+    }
+
+    private static void assertFileLocationIsValid(SdrfDataNode dataNode) {
+        FileLocation location = dataNode.getLocation();
+        if (!location.isEmpty()) {
+            setPosition(dataNode);
+            assertThat(location, isValidFileLocation());
+        }
     }
 
     private static <T extends HasLocation> void setPosition(T t) {
