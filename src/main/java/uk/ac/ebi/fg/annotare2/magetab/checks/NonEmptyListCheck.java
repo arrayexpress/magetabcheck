@@ -14,16 +14,27 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
+package uk.ac.ebi.fg.annotare2.magetab.checks;
 
-import uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality;
-import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetab.checks.NonEmptyListCheck;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.NormalizationType;
+import uk.ac.ebi.fg.annotare2.magetab.checker.GlobalCheck;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck(value = "List of normalization types should be non empty", modality = CheckModality.WARNING)
-public class ListOfNormalizationTypesShouldBeNonEmpty extends NonEmptyListCheck<NormalizationType> {
+public class NonEmptyListCheck <T> implements GlobalCheck<T> {
+
+    private int count;
+
+    @Override
+    public void visit(T t) {
+        count++;
+    }
+
+    @Override
+    public void check() {
+        assertThat(count, greaterThan(0));
+    }
 }

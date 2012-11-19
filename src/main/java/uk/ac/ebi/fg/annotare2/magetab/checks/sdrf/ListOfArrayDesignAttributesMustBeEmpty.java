@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
+package uk.ac.ebi.fg.annotare2.magetab.checks.sdrf;
 
-import uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality;
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.ArrayDesignAttribute;
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetab.checks.NonEmptyListCheck;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.NormalizationType;
+import uk.ac.ebi.fg.annotare2.magetab.checks.EmptyListCheck;
+
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType.HTS_ONLY;
 
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck(value = "List of normalization types should be non empty", modality = CheckModality.WARNING)
-public class ListOfNormalizationTypesShouldBeNonEmpty extends NonEmptyListCheck<NormalizationType> {
+@MageTabCheck(value = "There are must not be any array design attributes in HTS submissions", application = HTS_ONLY)
+public class ListOfArrayDesignAttributesMustBeEmpty extends EmptyListCheck<ArrayDesignAttribute> {
 }

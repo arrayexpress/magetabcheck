@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
+package uk.ac.ebi.fg.annotare2.magetab.checks.sdrf;
 
-import uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality;
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetab.checks.NonEmptyListCheck;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.NormalizationType;
+import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfScanNode;
+
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType.HTS_ONLY;
 
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck(value = "List of normalization types should be non empty", modality = CheckModality.WARNING)
-public class ListOfNormalizationTypesShouldBeNonEmpty extends NonEmptyListCheck<NormalizationType> {
+@MageTabCheck(value = "List of scan nodes must not be non empty", application = HTS_ONLY)
+public class ListOfScanNodesMustNotBeEmpty extends NonEmptyListCheck<SdrfScanNode> {
 }

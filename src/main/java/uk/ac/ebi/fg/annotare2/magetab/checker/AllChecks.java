@@ -19,6 +19,8 @@ package uk.ac.ebi.fg.annotare2.magetab.checker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.fg.annotare2.magetab.checks.idf.*;
+import uk.ac.ebi.fg.annotare2.magetab.checks.sdrf.ListOfArrayDesignAttributesMustBeEmpty;
+import uk.ac.ebi.fg.annotare2.magetab.checks.sdrf.ListOfScanNodesMustNotBeEmpty;
 import uk.ac.ebi.fg.annotare2.magetab.checks.sdrf.SdrfSimpleChecks;
 
 import java.lang.reflect.Method;
@@ -58,6 +60,9 @@ public class AllChecks {
             add(ListOfNormalizationTypesShouldBeNonEmpty.class);
             add(ListOfProtocolsMustBeNonEmpty.class);
             add(TermSourcesMustBeUniqueByName.class);
+
+            add(ListOfScanNodesMustNotBeEmpty.class);
+            add(ListOfArrayDesignAttributesMustBeEmpty.class);
         }
     };
 

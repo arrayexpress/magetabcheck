@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
+package uk.ac.ebi.fg.annotare2.magetab.checks;
 
 import uk.ac.ebi.fg.annotare2.magetab.checker.GlobalCheck;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.equalTo;
 
 /**
  * @author Olga Melnichuk
  */
-public class NonEmptyListCheck <T> implements GlobalCheck<T> {
+public class EmptyListCheck<T> implements GlobalCheck<T> {
 
     private int count;
 
@@ -35,6 +35,6 @@ public class NonEmptyListCheck <T> implements GlobalCheck<T> {
 
     @Override
     public void check() {
-        assertThat(count, greaterThan(0));
+        assertThat(count, equalTo(0));
     }
 }
