@@ -348,7 +348,7 @@ public class SdrfSimpleChecks {
         assertNodeIsDescribedByProtocol(arrayDataNode);
     }
 
-    @MageTabCheck("A derived array data node must have a name")
+    @MageTabCheck("A derived array data node must have name specified")
     public void derivedArrayDataNodeMustHaveName(SdrfDerivedArrayDataNode derivedArrayDataNode) {
         assertNotEmptyName(derivedArrayDataNode);
     }
@@ -358,9 +358,24 @@ public class SdrfSimpleChecks {
         assertFileLocationIsValid(derivedArrayDataNode);
     }
 
-    @MageTabCheck(value ="A derived array data node should be described by a protocol", modality = WARNING)
+    @MageTabCheck(value = "A derived array data node should be described by a protocol", modality = WARNING)
     public void derivedArrayDataNodeShouldBeDescribedByProtocol(SdrfDerivedArrayDataNode derivedArrayDataNode) {
         assertNodeIsDescribedByProtocol(derivedArrayDataNode);
+    }
+
+    @MageTabCheck("An array data matrix node must have name specified")
+    public void arrayDataMatrixNodeMustHaveName(SdrfArrayDataMatrixNode arrayDataMatrixNode) {
+        assertNotEmptyName(arrayDataMatrixNode);
+    }
+
+    @MageTabCheck("Name of an array data matrix node must be valid file location")
+    public void nameOfArrayDataMatrixNodeMustBeValidFileLocation(SdrfArrayDataMatrixNode arrayDataMatrixNode) {
+        assertFileLocationIsValid(arrayDataMatrixNode);
+    }
+
+    @MageTabCheck(value = "An array data matrix node should be described by a protocol", modality = WARNING)
+    public void arrayDataMatrixNodeShouldBeDescribedByProtocol(SdrfArrayDataMatrixNode arrayDataMatrixNode) {
+       assertNodeIsDescribedByProtocol(arrayDataMatrixNode);
     }
 
     private static <T> void assertNotNull(T obj) {
