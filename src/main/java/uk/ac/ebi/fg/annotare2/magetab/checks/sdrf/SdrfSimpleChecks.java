@@ -69,7 +69,7 @@ public class SdrfSimpleChecks {
         for (SdrfCharacteristicAttribute attr : characteristics) {
             if ("Organism".equalsIgnoreCase(attr.getType())) {
                 TermSource ts = attr.getTermSource();
-                if (ts != null && NCBI_TAXONOMY.matches(ts.getFile().getValue())) {
+                if (ts == null || NCBI_TAXONOMY.matches(ts.getFile().getValue())) {
                     return attr;
                 }
             }
@@ -227,7 +227,7 @@ public class SdrfSimpleChecks {
         assertNotEmptyName(technologyTypeAttribute);
     }
 
-    @MageTabCheck(value = "Technology type attribute should have TermSource specified")
+    @MageTabCheck(value = "Technology type attribute should have TermSource specified", modality = WARNING)
     public void technologyTypeShouldHaveTermSource(SdrfTechnologyTypeAttribute technologyTypeAttribute) {
         setPosition(technologyTypeAttribute);
         assertNotEmptyString(technologyTypeAttribute.getTermSourceRef());
