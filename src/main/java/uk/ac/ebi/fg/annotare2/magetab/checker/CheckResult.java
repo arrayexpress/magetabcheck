@@ -19,10 +19,7 @@ package uk.ac.ebi.fg.annotare2.magetab.checker;
 
 import javax.annotation.Nonnull;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
-
+import static com.google.common.base.Throwables.getStackTraceAsString;
 import static com.google.common.collect.Ordering.natural;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPosition.unknownPosition;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckResultType.*;
@@ -125,15 +122,9 @@ public class CheckResult implements Comparable<CheckResult> {
 
         if (exception != null) {
             sb.append("\n")
-                    .append(getStackTrace(exception));
+                    .append(getStackTraceAsString(exception));
         }
         return sb.toString();
-    }
-
-    public static String getStackTrace(Throwable t) {
-        final Writer w = new StringWriter();
-        t.printStackTrace(new PrintWriter(w));
-        return w.toString();
     }
 }
 
