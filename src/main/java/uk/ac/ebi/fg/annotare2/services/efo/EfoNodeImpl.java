@@ -34,12 +34,12 @@ class EfoNodeImpl implements EfoNode {
 
     private final List<String> alternativeTerms = newArrayList();
 
-    private final List<EfoNode> parents = newArrayList();
+    private final List<EfoNodeImpl> parents = newArrayList();
 
-    private final List<EfoNode> children = newArrayList();
+    private final List<EfoNodeImpl> children = newArrayList();
 
 
-    private boolean organisational;
+    private boolean organizational;
 
     EfoNodeImpl(String id) {
         this.id = id;
@@ -66,33 +66,53 @@ class EfoNodeImpl implements EfoNode {
     }
 
     @Override
-    public Collection<EfoNode> getParents() {
+    public Collection<? extends EfoNode> getParents() {
         return unmodifiableCollection(parents);
     }
 
     @Override
-    public Collection<EfoNode> getChildren() {
+    public Collection<? extends EfoNode> getChildren() {
         return unmodifiableCollection(children);
     }
-
 
     void setTerm(String term) {
         this.term = term;
     }
 
-    void addChild(EfoNode child) {
+    void addChild(EfoNodeImpl child) {
         children.add(child);
     }
 
-    void addParent(EfoNode parent) {
+    void addParent(EfoNodeImpl parent) {
         parents.add(parent);
     }
 
     void setOrganizational(Boolean bool) {
-       this.organisational = bool;
+       this.organizational = bool;
     }
 
-    boolean isOrganisational() {
-        return organisational;
+    boolean isOrganizational() {
+        return organizational;
+    }
+
+    void addParents(Collection<EfoNodeImpl> moreParents) {
+        parents.addAll(moreParents);
+    }
+
+    void addChildren(Collection<EfoNodeImpl> moreChildren) {
+        children.addAll(moreChildren);
+    }
+
+    public boolean remove() {
+        if (!isOrganizational()) {
+            return false;
+        }
+        for(EfoNodeImpl p : parents) {
+            p.addChildren(children);
+        }
+        for(EfoNodeImpl ch : children) {
+            ch.addParents(parents);
+        }
+        return true;
     }
 }

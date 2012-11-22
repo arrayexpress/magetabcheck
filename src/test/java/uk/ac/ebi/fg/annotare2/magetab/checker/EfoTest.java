@@ -31,7 +31,7 @@ public class EfoTest {
     @Test
     public void test() {
         try {
-            (new EfoLoader(new File("/tmp"))).load();
+            (new EfoLoader(new File("/Users/olkin/Projects/ebi/annotare"))).load();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (OWLOntologyCreationException e) {

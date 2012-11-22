@@ -29,7 +29,7 @@ public interface EfoNode {
 
     public Collection<String> getAlternativeTerms();
 
-    public Collection<EfoNode> getParents();
+    public Collection<? extends EfoNode> getParents();
 
-    public Collection<EfoNode> getChildren();
+    public Collection<? extends EfoNode> getChildren();
 }
