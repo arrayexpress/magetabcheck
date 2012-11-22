@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo;
+package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.idf;
 
 import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
 import uk.ac.ebi.fg.annotare2.magetab.model.FileLocation;
@@ -23,7 +23,7 @@ import uk.ac.ebi.fg.annotare2.magetab.model.idf.Info;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-import static uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.IdfTags.*;
+import static uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.idf.IdfTags.*;
 
 /**
  * @author Olga Melnichuk

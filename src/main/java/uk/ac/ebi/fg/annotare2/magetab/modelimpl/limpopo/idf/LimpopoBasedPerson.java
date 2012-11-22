@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo;
+package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.idf;
 
 import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Person;
@@ -27,7 +27,7 @@ import java.util.List;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Arrays.asList;
-import static uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.IdfTags.*;
+import static uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.idf.IdfTags.*;
 
 /**
  * @author Olga Melnichuk

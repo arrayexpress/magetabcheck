@@ -14,41 +14,44 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo;
+package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.idf;
 
 import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.NormalizationType;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedTermSource extends LimpopoBasedIdfObject implements TermSource {
+public class LimpopoBasedNormalizationType extends LimpopoBasedIdfObject implements NormalizationType {
 
-    public LimpopoBasedTermSource(IdfHelper helper, int index) {
+    public LimpopoBasedNormalizationType(@Nonnull IdfHelper helper, int index) {
         super(helper, index);
     }
 
     @Override
     public Cell<String> getName() {
         return new Cell<String>(
-                get(idf().termSourceName),
-                idf().getLayout().getLineNumberForHeader(IdfTags.TERM_SOURCE_NAME),
+                get(idf().normalizationType),
+                idf().getLayout().getLineNumberForHeader(IdfTags.NORMALIZATION_TYPE),
                 getColumn());
     }
 
     @Override
-    public Cell<String> getVersion() {
+    public Cell<String> getAccession() {
         return new Cell<String>(
-                get(idf().termSourceVersion),
-                idf().getLayout().getLineNumberForHeader(IdfTags.TERM_SOURCE_VERSION),
+                get(idf().normalizationTermAccession),
+                idf().getLayout().getLineNumberForHeader(IdfTags.NORMALIZATION_TERM_ACCESSION_NUMBER),
                 getColumn());
     }
 
     @Override
-    public Cell<String> getFile() {
-        return new Cell<String>(
-                get(idf().termSourceFile),
-                idf().getLayout().getLineNumberForHeader(IdfTags.TERM_SOURCE_FILE),
+    public Cell<TermSource> getSource() {
+        return new Cell<TermSource>(
+                termSource(get(idf().normalizationTermSourceREF)),
+                idf().getLayout().getLineNumberForHeader(IdfTags.NORMALIZATION_TERM_SOURCE_REF),
                 getColumn());
     }
 }

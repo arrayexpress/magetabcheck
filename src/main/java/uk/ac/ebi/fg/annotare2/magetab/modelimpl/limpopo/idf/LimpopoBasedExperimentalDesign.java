@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo;
+package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.idf;
 
 import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.ReplicateType;
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.ExperimentalDesign;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 
 import javax.annotation.Nonnull;
@@ -25,33 +25,33 @@ import javax.annotation.Nonnull;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedReplicateType extends LimpopoBasedIdfObject implements ReplicateType {
+public class LimpopoBasedExperimentalDesign extends LimpopoBasedIdfObject implements ExperimentalDesign {
 
-    public LimpopoBasedReplicateType(@Nonnull IdfHelper helper, int index) {
+    public LimpopoBasedExperimentalDesign(@Nonnull IdfHelper helper, int index) {
         super(helper, index);
     }
 
     @Override
     public Cell<String> getName() {
         return new Cell<String>(
-                get(idf().replicateType),
-                idf().getLayout().getLineNumberForHeader(IdfTags.REPLICATE_TYPE),
+                get(idf().experimentalDesign),
+                idf().getLayout().getLineNumberForHeader(IdfTags.EXPERIMENTAL_DESIGN),
                 getColumn());
     }
 
     @Override
     public Cell<String> getAccession() {
         return new Cell<String>(
-                get(idf().replicateTermAccession),
-                idf().getLayout().getLineNumberForHeader(IdfTags.REPLICATE_TERM_ACCESSION_NUMBER),
+                get(idf().experimentalDesignTermAccession),
+                idf().getLayout().getLineNumberForHeader(IdfTags.EXPERIMENTAL_DESIGN_TERM_ACCESSION_NUMBER),
                 getColumn());
     }
 
     @Override
     public Cell<TermSource> getSource() {
         return new Cell<TermSource>(
-                termSource(get(idf().replicateTermSourceREF)),
-                idf().getLayout().getLineNumberForHeader(IdfTags.REPLICATE_TERM_SOURCE_REF),
+                termSource(get(idf().experimentalDesignTermSourceREF)),
+                idf().getLayout().getLineNumberForHeader(IdfTags.EXPERIMENTAL_DESIGN_TERM_SOURCE_REF),
                 getColumn());
     }
 }
