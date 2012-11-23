@@ -21,6 +21,8 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -32,6 +34,8 @@ import static com.google.common.collect.Maps.newHashMap;
  * @author Olga Melnichuk
  */
 public class EfoGraph {
+
+    private static final Logger log = LoggerFactory.getLogger(EfoGraph.class);
 
     private Map<String, EfoNodeImpl> efoMap = newHashMap();
 
@@ -53,21 +57,26 @@ public class EfoGraph {
         public EfoGraph build() {
             EfoGraph graph = new EfoGraph();
 
+            log.debug("Building EFO graph: loading all classes..");
+
             Map<String, EfoNodeImpl> efoMap = graph.efoMap;
             for (OWLClass cls : ontology.getClassesInSignature(true)) {
                 loadClass(cls, efoMap);
             }
+            log.debug("Building EFO graph: {} classes are loaded", efoMap.size());
 
             List<String> toBeRemoved = newArrayList();
-            for(Map.Entry<String, EfoNodeImpl> entry: efoMap.entrySet()) {
+            for (Map.Entry<String, EfoNodeImpl> entry : efoMap.entrySet()) {
                 if (entry.getValue().remove()) {
                     toBeRemoved.add(entry.getKey());
                 }
             }
 
-            for(String key : toBeRemoved) {
+            for (String key : toBeRemoved) {
                 efoMap.remove(key);
             }
+            log.debug("Building EFO graph: nodes with 'organizational_class' annotation removed", efoMap.size());
+            log.debug("Building EFO graph: done [total number of nodes = {}]", efoMap.size());
             return graph;
         }
 
@@ -105,7 +114,6 @@ public class EfoGraph {
         private String getId(OWLClass cls) {
             return cls.getIRI().toString().replaceAll("^.*?([^#/=?]+)$", "$1");
         }
-
     }
 
     public static EfoGraph build(OWLOntology ontology, OWLReasoner reasoner) {

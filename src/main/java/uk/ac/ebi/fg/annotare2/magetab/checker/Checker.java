@@ -16,12 +16,9 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
+import com.google.inject.Injector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.SDRF;
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.graph.Node;
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SDRFNode;
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.MaterialTypeAttribute;
 import uk.ac.ebi.fg.annotare2.magetab.model.Identity;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.HasAttributes;
@@ -29,13 +26,12 @@ import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraph;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraphAttribute;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraphNode;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Queues.newArrayDeque;
 import static com.google.common.collect.Sets.newHashSet;
-import static uk.ac.ebi.fg.annotare2.magetab.checker.AllChecks.checkRunnersFor;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.AllChecks.getCheckRunnersFor;
 
 /**
  * @author Olga Melnichuk
@@ -48,8 +44,11 @@ public class Checker {
 
     private List<CheckResult> results = new ArrayList<CheckResult>();
 
-    public Checker(InvestigationType invType) {
-        this.invType = invType;
+    private final Injector injector;
+
+    public Checker(Injector injector, InvestigationType type) {
+        this.injector = injector;
+        this.invType = type;
     }
 
     public void check(IdfData idf) {
@@ -99,7 +98,7 @@ public class Checker {
     }
 
     private <T> void checkAll(Collection<T> collection, Class<T> itemClass) {
-        List<CheckRunner<T>> checkRunners = checkRunnersFor(itemClass, invType);
+        List<CheckRunner<T>> checkRunners = getCheckRunnersFor(itemClass, invType);
         if (checkRunners.isEmpty()) {
             return;
         }
@@ -115,7 +114,7 @@ public class Checker {
 
     @SuppressWarnings("unchecked")
     private <T> void checkOne(T item, Map<Class<?>, Object> context) {
-        List<CheckRunner<T>> checkRunners = checkRunnersFor((Class<T>) item.getClass(), invType);
+        List<CheckRunner<T>> checkRunners = getCheckRunnersFor((Class<T>) item.getClass(), invType);
         if (checkRunners.isEmpty()) {
             return;
         }

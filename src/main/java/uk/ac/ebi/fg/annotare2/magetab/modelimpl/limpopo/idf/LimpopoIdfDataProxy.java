@@ -21,6 +21,8 @@ import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.primitives.Ints.max;
@@ -129,6 +131,18 @@ public class LimpopoIdfDataProxy implements IdfData {
     @Override
     public List<TermSource> getTermSources() {
         return idfHelper.getTermSources();
+    }
+
+    @Override
+    public List<Comment> getComments(String type) {
+        Map<String, Set<String>> allComments = idfHelper.idf().getComments();
+        Set<String> values = allComments.get(type);
+        List<Comment> comments = newArrayList();
+        int i = 0;
+        for(String value : values) {
+            comments.add(new LimpopoBasedComment(idfHelper, i++, type, value));
+        }
+        return comments;
     }
 
     @Override

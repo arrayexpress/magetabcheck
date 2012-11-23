@@ -14,36 +14,14 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.model.idf;
-
-import java.util.List;
+package uk.ac.ebi.fg.annotare2.magetab;
 
 /**
  * @author Olga Melnichuk
  */
-public interface IdfData {
+public class UndefinedInvestigationTypeException extends Exception {
 
-    Info getInfo();
-
-    List<Person> getContacts();
-
-    List<ExperimentalDesign> getExperimentDesigns();
-
-    List<ExperimentalFactor> getExperimentalFactors();
-
-    List<QualityControlType> getQualityControlTypes();
-
-    List<ReplicateType> getReplicateTypes();
-
-    List<NormalizationType> getNormalizationTypes();
-
-    List<Publication> getPublications();
-
-    List<Protocol> getProtocols();
-
-    List<TermSource> getTermSources();
-
-    List<Comment> getComments(String name);
-
-    TermSource getTermSource(String ref);
+    public UndefinedInvestigationTypeException(String message) {
+        super(message);
+    }
 }

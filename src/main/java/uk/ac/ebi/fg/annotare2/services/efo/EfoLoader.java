@@ -27,6 +27,8 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.reasoner.InferenceType;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URL;
@@ -37,6 +39,8 @@ import static com.google.common.io.Closeables.closeQuietly;
  * @author Olga Melnichuk
  */
 public class EfoLoader {
+
+    private static final Logger log = LoggerFactory.getLogger(EfoLoader.class);
 
     private static final String EFO_URL = "http://www.ebi.ac.uk/efo/efo.owl";
 
@@ -49,6 +53,8 @@ public class EfoLoader {
     public EfoLoader(File cacheDir) {
         this.cacheDir = (cacheDir == null) ?
                 Files.createTempDir() : cacheDir;
+
+        log.debug("EFO loader created [cacheDir={}]", cacheDir);
     }
 
     public EfoGraph load() throws IOException, OWLOntologyCreationException {
@@ -58,10 +64,12 @@ public class EfoLoader {
     public EfoGraph load(final URL url) throws IOException, OWLOntologyCreationException {
         File cacheFile = getCacheFile(url);
         if (!cacheFile.exists()) {
+            log.debug("The cache file doesn't exist; creating one [file={}]", cacheFile);
             if (!cacheDir.exists() && !cacheDir.mkdirs()) {
                 throw new IOException("Can't create EFO cache directory: " + cacheDir.getAbsolutePath());
             }
 
+            log.debug("Downloading EFO file [url={}]", url);
             OutputSupplier<FileOutputStream> out = Files.newOutputStreamSupplier(cacheFile);
             ByteStreams.copy(new InputSupplier<InputStream>() {
                 @Override
@@ -69,6 +77,9 @@ public class EfoLoader {
                     return url.openStream();
                 }
             }, out);
+            log.debug("EFO file download successfully completed.");
+        } else {
+            log.debug("Loading EFO graph from cache [file={}]", cacheFile);
         }
         return load(cacheFile);
     }
@@ -99,6 +110,7 @@ public class EfoLoader {
             // is not enough to load EFO
             System.setProperty("entityExpansionLimit", "128000");
 
+            log.debug("Reading the ontology...");
             OWLOntology ontology = manager.loadOntologyFromOntologyDocument(in);
             reasoner = new Reasoner.ReasonerFactory().createReasoner(ontology);
             reasoner.precomputeInferences(InferenceType.CLASS_HIERARCHY);

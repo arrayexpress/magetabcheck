@@ -68,7 +68,7 @@ public class AllChecks {
         }
     };
 
-    public static <T> List<CheckRunner<T>> checkRunnersFor(Class<T> itemClass, InvestigationType invType) {
+    public static <T> List<CheckRunner<T>> getCheckRunnersFor(Class<T> itemClass, InvestigationType invType) {
         List<CheckRunner<T>> runners = new ArrayList<CheckRunner<T>>();
 
         for (Class clazz : classBasedChecks) {
