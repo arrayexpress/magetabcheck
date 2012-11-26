@@ -67,6 +67,7 @@ public class AllChecks {
             add(ListOfArrayDesignAttributesMustBeEmpty.class);
             add(ListOfLabeledExtractNodesMustBeEmpty.class);
             add(LibraryConstructionProtocolRequired.class);
+            add(SequencingProtocolRequired.class);
         }
     };
 

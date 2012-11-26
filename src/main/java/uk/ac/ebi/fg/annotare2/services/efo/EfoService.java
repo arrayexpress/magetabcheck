@@ -44,6 +44,8 @@ public class EfoService {
 
     private static final String LIBRARY_CONSTRUCTION_PROTOCOL = "EFO_0004184";
 
+    private static final String SEQUENCING_PROTOCOL = "EFO_0004170";
+
     private final EfoGraph graph;
 
     @Inject
@@ -62,25 +64,16 @@ public class EfoService {
         graph = g;
     }
 
-    public EfoGraph getGraph() {
-        return graph;
-    }
-
     public EfoNode findHtsInvestigationType(String term) {
-        return findByTerm(HTS_EXPERIMENT_TYPES, term);
+        return findNodeByTerm(HTS_EXPERIMENT_TYPES, term);
     }
 
     public EfoNode findMaInvestigationType(String term) {
-        return findByTerm(MA_EXPERIMENT_TYPES, term);
+        return findNodeByTerm(MA_EXPERIMENT_TYPES, term);
     }
 
-    private EfoNode findByTerm(String startEfo, final String term) {
-        EfoNode node = graph.getNodeById(startEfo);
-        if (node == null) {
-            log.error("EFO node class " + startEfo + "not found");
-            return null;
-        }
-        return findDescendant(node, new Predicate<EfoNode>() {
+    private EfoNode findNodeByTerm(String startEfo, final String term) {
+        return findNode(startEfo, new Predicate<EfoNode>() {
             @Override
             public boolean apply(@Nullable EfoNode input) {
                 return term.equals(input.getTerm());
@@ -88,18 +81,46 @@ public class EfoService {
         });
     }
 
-    private EfoNode findById(String startEfo, final String id) {
-        EfoNode node = graph.getNodeById(startEfo);
-        if (node == null) {
-            log.error("EFO node class " + startEfo + "not found");
-            return null;
-        }
-        return findDescendant(node, new Predicate<EfoNode>() {
+    private EfoNode findNodeById(String startEfo, final String id) {
+        return findNode(startEfo, new Predicate<EfoNode>() {
             @Override
             public boolean apply(@Nullable EfoNode input) {
                 return id.equals(input.getId());
             }
         });
+    }
+
+    private EfoNode findByIdOrTerm(String startEfo, final String id, final String term) {
+        if (isNullOrEmpty(id)) {
+            if (!isNullOrEmpty(term)) {
+                EfoNode node = findNodeByTerm(startEfo, term);
+                if (node != null) {
+                    return node;
+                }
+            }
+        } else if (isNullOrEmpty(term)) {
+            if (!isNullOrEmpty(id)) {
+                EfoNode node = findNodeById(startEfo, id);
+                if (node != null) {
+                    return node;
+                }
+            }
+        } else {
+            EfoNode node = findNodeById(startEfo, id);
+            if (node != null && term.equals(node.getTerm())) {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    private EfoNode findNode(String startFromId, Predicate<EfoNode> predicate) {
+        EfoNode node = graph.getNodeById(startFromId);
+        if (node == null) {
+            log.error("EFO node class " + startFromId + "not found");
+            return null;
+        }
+        return findDescendant(node, predicate);
     }
 
     private EfoNode findDescendant(EfoNode node, Predicate<EfoNode> predicate) {
@@ -117,12 +138,10 @@ public class EfoService {
     }
 
     public boolean isLibraryConstructionProtocol(String accession, String term) {
-        if (isNullOrEmpty(accession) || isNullOrEmpty(term)) {
-            return false;
-        }
+        return findByIdOrTerm(LIBRARY_CONSTRUCTION_PROTOCOL, accession, term) != null;
+    }
 
-        EfoNode node = findById(LIBRARY_CONSTRUCTION_PROTOCOL, accession);
-        return node != null && term.equals(node.getTerm());
-
+    public boolean isSequencingProtocol(String accession, String term) {
+        return findByIdOrTerm(SEQUENCING_PROTOCOL, accession, term) != null;
     }
 }

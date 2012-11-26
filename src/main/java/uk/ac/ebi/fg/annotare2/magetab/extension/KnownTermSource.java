@@ -25,7 +25,7 @@ public enum KnownTermSource {
 
     NCBI_TAXONOMY("NCBI Taxonomy", "http://www.ncbi.nlm.nih.gov/[tT]axonomy/?"),
 
-    EFO("EFO", "http://www.ebi.ac.uk/efo/"),
+    EFO("EFO", "http://www.ebi.ac.uk/efo/?"),
 
     ARRAY_EXPRESS("ArrayExpress", "http://www.ebi.ac.uk/arrayexpress");
 

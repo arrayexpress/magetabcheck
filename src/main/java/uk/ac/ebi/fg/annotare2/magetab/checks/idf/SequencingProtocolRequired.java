@@ -20,30 +20,31 @@ import com.google.inject.Inject;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType;
 import uk.ac.ebi.fg.annotare2.magetab.checker.GlobalCheck;
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetab.extension.KnownTermSource;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Protocol;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.ProtocolType;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static uk.ac.ebi.fg.annotare2.magetab.extension.KnownProtocolHardware.isValidProtocolHardware;
 import static uk.ac.ebi.fg.annotare2.magetab.extension.KnownTermSource.EFO;
 
 /**
  * @author Olga Melnichuk
  */
 @MageTabCheck(
-        value = "Library construction protocol is required for HTS submissions",
+        value = "Sequencing protocol is required for HTS submissions",
         application = CheckApplicationType.HTS_ONLY)
-public class LibraryConstructionProtocolRequired implements GlobalCheck<Protocol> {
+public class SequencingProtocolRequired implements GlobalCheck<Protocol> {
 
     private final EfoService efo;
 
-    private int counter;
+    private int counter = 0;
 
     @Inject
-    public LibraryConstructionProtocolRequired(EfoService efo) {
+    public SequencingProtocolRequired(EfoService efo) {
         this.efo = efo;
     }
 
@@ -59,15 +60,27 @@ public class LibraryConstructionProtocolRequired implements GlobalCheck<Protocol
             return;
         }
 
-        if (!isLibraryConstructionProtocol(type)) {
+        if (!isSequencingProtocol(type)) {
+            return;
+        }
+
+        if (!hasSequencingHardware(protocol.getHardware().getValue())) {
             return;
         }
 
         counter++;
     }
 
-    private boolean isLibraryConstructionProtocol(ProtocolType type) {
-        return efo.isLibraryConstructionProtocol(type.getAccession().getValue(), type.getName().getValue());
+    private boolean hasSequencingHardware(String value) {
+        if (isNullOrEmpty(value)) {
+            return false;
+        }
+        String[] v = value.trim().split("\\s*,\\s*");
+        return isValidProtocolHardware(v);
+    }
+
+    private boolean isSequencingProtocol(ProtocolType type) {
+        return efo.isSequencingProtocol(type.getAccession().getValue(), type.getName().getValue());
     }
 
     private boolean isEfoTermSource(TermSource ts) {
@@ -78,5 +91,4 @@ public class LibraryConstructionProtocolRequired implements GlobalCheck<Protocol
     public void check() {
         assertThat(1, equalTo(counter));
     }
-
 }
