@@ -16,6 +16,7 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
+import com.google.inject.Injector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.fg.annotare2.magetab.checks.idf.*;
@@ -65,10 +66,17 @@ public class AllChecks {
             add(ListOfScanNodesMustNotBeEmpty.class);
             add(ListOfArrayDesignAttributesMustBeEmpty.class);
             add(ListOfLabeledExtractNodesMustBeEmpty.class);
+            add(LibraryConstructionProtocolRequired.class);
         }
     };
 
-    public static <T> List<CheckRunner<T>> getCheckRunnersFor(Class<T> itemClass, InvestigationType invType) {
+    private final Injector injector;
+
+    public AllChecks(Injector injector) {
+        this.injector = injector;
+    }
+
+    public <T> List<CheckRunner<T>> getCheckRunnersFor(Class<T> itemClass, InvestigationType invType) {
         List<CheckRunner<T>> runners = new ArrayList<CheckRunner<T>>();
 
         for (Class clazz : classBasedChecks) {
@@ -76,7 +84,7 @@ public class AllChecks {
             if (typeArg != null && (typeArg.isAssignableFrom(itemClass))) {
                 MageTabCheck annot = (MageTabCheck) clazz.getAnnotation(MageTabCheck.class);
                 if (isApplicable(annot, invType)) {
-                    runners.add(new ClassBasedCheckRunner<T>((Class<? extends GlobalCheck<T>>) clazz));
+                    runners.add(new ClassBasedCheckRunner<T>(injector, (Class<? extends GlobalCheck<T>>) clazz));
                 }
             }
         }
@@ -92,7 +100,7 @@ public class AllChecks {
                     continue;
                 }
                 if (isApplicable(annot, invType)) {
-                    runners.add(new MethodBasedCheckRunner<T>(clazz, method));
+                    runners.add(new MethodBasedCheckRunner<T>(injector, clazz, method));
                 }
             }
         }

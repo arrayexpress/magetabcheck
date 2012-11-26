@@ -16,6 +16,10 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
+import com.google.inject.ConfigurationException;
+import com.google.inject.Injector;
+import com.google.inject.ProvisionException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -35,10 +39,13 @@ class MethodBasedCheckRunner<T> extends CheckRunner<T> {
 
     private final Method method;
 
-    MethodBasedCheckRunner(Class<?> clazz, Method method) {
+    private final Injector injector;
+
+    MethodBasedCheckRunner(Injector injector, Class<?> clazz, Method method) {
         super(isNotNull(method.getAnnotation(MageTabCheck.class)));
         this.clazz = clazz;
         this.method = method;
+        this.injector = injector;
     }
 
     private static MageTabCheck isNotNull(MageTabCheck annotation) {
@@ -59,7 +66,7 @@ class MethodBasedCheckRunner<T> extends CheckRunner<T> {
         clearCheckPosition();
         try {
             Object[] params = getParams(method, add(context, item));
-            method.invoke(clazz.newInstance(), params);
+            method.invoke(injector.getInstance(clazz), params);
             success(getCheckPosition());
         } catch (InvocationTargetException e) {
             Throwable t = e.getCause();
@@ -68,9 +75,11 @@ class MethodBasedCheckRunner<T> extends CheckRunner<T> {
             } else {
                 error(t);
             }
-        } catch (InstantiationException e) {
-            error(e);
         } catch (IllegalAccessException e) {
+            error(e);
+        } catch (ConfigurationException e) {
+            error(e);
+        } catch (ProvisionException e) {
             error(e);
         }
     }

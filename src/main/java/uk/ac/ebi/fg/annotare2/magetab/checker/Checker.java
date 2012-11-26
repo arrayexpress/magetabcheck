@@ -31,7 +31,6 @@ import java.util.*;
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Queues.newArrayDeque;
 import static com.google.common.collect.Sets.newHashSet;
-import static uk.ac.ebi.fg.annotare2.magetab.checker.AllChecks.getCheckRunnersFor;
 
 /**
  * @author Olga Melnichuk
@@ -44,11 +43,11 @@ public class Checker {
 
     private List<CheckResult> results = new ArrayList<CheckResult>();
 
-    private final Injector injector;
+    private final AllChecks allChecks;
 
     public Checker(Injector injector, InvestigationType type) {
-        this.injector = injector;
         this.invType = type;
+        this.allChecks = new AllChecks(injector);
     }
 
     public void check(IdfData idf) {
@@ -98,7 +97,7 @@ public class Checker {
     }
 
     private <T> void checkAll(Collection<T> collection, Class<T> itemClass) {
-        List<CheckRunner<T>> checkRunners = getCheckRunnersFor(itemClass, invType);
+        List<CheckRunner<T>> checkRunners = allChecks.getCheckRunnersFor(itemClass, invType);
         if (checkRunners.isEmpty()) {
             return;
         }
@@ -114,7 +113,7 @@ public class Checker {
 
     @SuppressWarnings("unchecked")
     private <T> void checkOne(T item, Map<Class<?>, Object> context) {
-        List<CheckRunner<T>> checkRunners = getCheckRunnersFor((Class<T>) item.getClass(), invType);
+        List<CheckRunner<T>> checkRunners = allChecks.getCheckRunnersFor((Class<T>) item.getClass(), invType);
         if (checkRunners.isEmpty()) {
             return;
         }

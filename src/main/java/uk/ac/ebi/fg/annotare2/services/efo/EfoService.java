@@ -16,15 +16,19 @@
 
 package uk.ac.ebi.fg.annotare2.services.efo;
 
+import com.google.common.base.Predicate;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * @author Olga Melnichuk
@@ -32,6 +36,13 @@ import java.net.URL;
 public class EfoService {
 
     private static final Logger log = LoggerFactory.getLogger(EfoService.class);
+
+    //TODO move EFO_ID to properties
+    private static final String HTS_EXPERIMENT_TYPES = "EFO_0003740";
+
+    private static final String MA_EXPERIMENT_TYPES = "EFO_0002696";
+
+    private static final String LIBRARY_CONSTRUCTION_PROTOCOL = "EFO_0004184";
 
     private final EfoGraph graph;
 
@@ -55,31 +66,49 @@ public class EfoService {
         return graph;
     }
 
-    //TODO move EFO_ID to properties
     public EfoNode findHtsInvestigationType(String term) {
-        return findByTerm("EFO_0003740", term);
+        return findByTerm(HTS_EXPERIMENT_TYPES, term);
     }
 
-    //TODO move EFO_ID to proerties
     public EfoNode findMaInvestigationType(String term) {
-        return findByTerm("EFO_0002696", term);
+        return findByTerm(MA_EXPERIMENT_TYPES, term);
     }
 
-    private EfoNode findByTerm(String startEfo, String term) {
+    private EfoNode findByTerm(String startEfo, final String term) {
         EfoNode node = graph.getNodeById(startEfo);
         if (node == null) {
-            log.error("Can't find class " + startEfo + " in EFO");
+            log.error("EFO node class " + startEfo + "not found");
             return null;
         }
-        return findDescendant(node, term);
+        return findDescendant(node, new Predicate<EfoNode>() {
+            @Override
+            public boolean apply(@Nullable EfoNode input) {
+                return term.equals(input.getTerm());
+            }
+        });
     }
 
-    private EfoNode findDescendant(EfoNode node, String term) {
-        if (term.equals(node.getTerm())) {
+    private EfoNode findById(String startEfo, final String id) {
+        EfoNode node = graph.getNodeById(startEfo);
+        if (node == null) {
+            log.error("EFO node class " + startEfo + "not found");
+            return null;
+        }
+        return findDescendant(node, new Predicate<EfoNode>() {
+            @Override
+            public boolean apply(@Nullable EfoNode input) {
+                return id.equals(input.getId());
+            }
+        });
+    }
+
+    private EfoNode findDescendant(EfoNode node, Predicate<EfoNode> predicate) {
+        if (predicate.apply(node)) {
             return node;
         }
+
         for (EfoNode child : node.getChildren()) {
-            EfoNode found = findDescendant(child, term);
+            EfoNode found = findDescendant(child, predicate);
             if (found != null) {
                 return found;
             }
@@ -87,4 +116,13 @@ public class EfoService {
         return null;
     }
 
+    public boolean isLibraryConstructionProtocol(String accession, String term) {
+        if (isNullOrEmpty(accession) || isNullOrEmpty(term)) {
+            return false;
+        }
+
+        EfoNode node = findById(LIBRARY_CONSTRUCTION_PROTOCOL, accession);
+        return node != null && term.equals(node.getTerm());
+
+    }
 }

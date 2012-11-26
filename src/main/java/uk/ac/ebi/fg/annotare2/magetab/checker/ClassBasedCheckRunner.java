@@ -16,6 +16,10 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
+import com.google.inject.ConfigurationException;
+import com.google.inject.Injector;
+import com.google.inject.ProvisionException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -30,7 +34,7 @@ class ClassBasedCheckRunner<T> extends CheckRunner<T> {
 
     private final Method setContext;
 
-    ClassBasedCheckRunner(Class<? extends GlobalCheck<T>> targetClass) {
+    ClassBasedCheckRunner(Injector injector, Class<? extends GlobalCheck<T>> targetClass) {
         super(isNotNull(targetClass.getAnnotation(MageTabCheck.class)));
 
         Method contextSetter = null;
@@ -44,10 +48,10 @@ class ClassBasedCheckRunner<T> extends CheckRunner<T> {
 
         GlobalCheck<T> target = null;
         try {
-            target = targetClass.newInstance();
-        } catch (InstantiationException e) {
+            target = injector.getInstance(targetClass);
+        } catch (ConfigurationException e) {
             error(e);
-        } catch (IllegalAccessException e) {
+        } catch (ProvisionException e) {
             error(e);
         }
 
