@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.URL;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.io.Closeables.closeQuietly;
 
 /**

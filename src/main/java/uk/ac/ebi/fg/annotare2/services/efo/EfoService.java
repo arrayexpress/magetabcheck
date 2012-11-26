@@ -49,12 +49,13 @@ public class EfoService {
     private final EfoGraph graph;
 
     @Inject
-    public EfoService(@Named("efoCachePath") String cachePath,
+    public EfoService(@Named("efoCacheDir") String cacheDir,
                       @Named("efoUrl") String efoUrl) {
 
         EfoGraph g = null;
         try {
-            g = new EfoLoader(new File(cachePath)).load(new URL(efoUrl));
+            File dir = (cacheDir == null ? null : new File(cacheDir));
+            g = new EfoLoader(dir).load(new URL(efoUrl));
         } catch (IOException e) {
             log.error("Can't load EFO", e);
         } catch (OWLOntologyCreationException e) {

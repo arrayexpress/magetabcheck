@@ -27,14 +27,16 @@ import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
 public class CheckerModule extends AbstractModule  {
 
     //TODO move to config files
-    private static final String EFO_CACHE_PATH = "/Users/olkin/Work/annotare/efo-cache";
     private static final String EFO_URL = "http://www.ebi.ac.uk/efo/efo.owl";
 
     @Override
     protected void configure() {
-        bindConstant().annotatedWith(Names.named("efoCachePath")).to(EFO_CACHE_PATH);
+        bindConstant().annotatedWith(Names.named("efoCacheDir")).to(getEfoCachePath());
         bindConstant().annotatedWith(Names.named("efoUrl")).to(EFO_URL);
         bind(EfoService.class).in(Scopes.SINGLETON);
     }
 
+    private static String getEfoCachePath() {
+        return System.getProperty("efo.cachedir");
+    }
 }
