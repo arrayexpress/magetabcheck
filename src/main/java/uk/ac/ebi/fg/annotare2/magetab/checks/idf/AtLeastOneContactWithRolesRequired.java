@@ -35,7 +35,7 @@ public class AtLeastOneContactWithRolesRequired implements GlobalCheck<Person> {
     @Override
     public void visit(Person person) {
         TermList roles = person.getRoles();
-        if (roles != null && roles.isEmpty()) {
+        if (roles != null && !roles.isEmpty()) {
             roleCount++;
         }
     }
