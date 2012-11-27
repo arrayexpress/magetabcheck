@@ -46,7 +46,7 @@ public class MageTabChecker {
     }
 
     public Collection<CheckResult> check(IdfData idf, SdrfGraph sdrf, InvestigationType type) {
-        log.debug("Experiment type is '{}'; running the checks..", type);
+        log.debug("The experiment type is '{}'; running the checks..", type);
         Checker checker = new Checker(injector, type);
         checker.check(idf);
         checker.check(sdrf);
@@ -54,12 +54,12 @@ public class MageTabChecker {
     }
 
     public Collection<CheckResult> check(IdfData idf, SdrfGraph sdrf) throws UndefinedInvestigationTypeException {
-        log.debug("Experiment type is not given explicit");
+        log.debug("The experiment type is not given explicit");
         return check(idf, sdrf, guessType(idf));
     }
 
     private InvestigationType guessType(IdfData idf) throws UndefinedInvestigationTypeException {
-        log.debug("Looking for experiment type in 'Comment[{}]' IDF field...", AE_EXPERIMENT_TYPE_COMMENT);
+        log.debug("Looking for an experiment type in 'Comment[{}]' IDF field...", AE_EXPERIMENT_TYPE_COMMENT);
         Collection<Comment> comments = idf.getComments(AE_EXPERIMENT_TYPE_COMMENT);
         if (comments.isEmpty()) {
             throw new UndefinedInvestigationTypeException("IDF doesn't contain '" + AE_EXPERIMENT_TYPE_COMMENT +
@@ -69,7 +69,7 @@ public class MageTabChecker {
     }
 
     private InvestigationType findType(String type) throws UndefinedInvestigationTypeException {
-        log.debug("Comment[{}]='{}' has been found. Checking in EFO ...", AE_EXPERIMENT_TYPE_COMMENT, type);
+        log.debug("Comment[{}]='{}' has been found. Checking if it's defined in EFO...", AE_EXPERIMENT_TYPE_COMMENT, type);
         EfoService service = injector.getInstance(EfoService.class);
         EfoNode node = service.findMaInvestigationType(type);
         if (node != null) {

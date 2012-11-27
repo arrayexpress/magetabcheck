@@ -45,25 +45,43 @@ public class LimpopoBasedChecker {
 
     private static final Logger log = LoggerFactory.getLogger(LimpopoBasedChecker.class);
 
+    private final MageTabChecker checker;
+
+    private MAGETABParser parser;
+
+    private LimpopoBasedChecker() {
+        Injector injector = Guice.createInjector(new CheckerModule());
+        checker = new MageTabChecker(injector);
+        parser = new MAGETABParser();
+    }
+
     public static void main(String... args) {
         if (args.length == 0) {
             log.info("Usage: LimpopoBasedChecker /path/to/idf");
             exit(0);
         }
 
-        Injector injector = Guice.createInjector(new CheckerModule());
-        MageTabChecker checker = new MageTabChecker(injector);
+        (new LimpopoBasedChecker()).run(args);
+    }
 
-        MAGETABParser parser = new MAGETABParser();
+    private void run(String... idfPaths) {
+        for (String idfPath : idfPaths) {
+            run(new File(idfPath));
+        }
+    }
+
+    private void run(File idfPath) {
         try {
-            MAGETABInvestigation inv = parser.parse(new File(args[0]));
+            log.info("/* ");
+            log.info(" * Running checker for: " + idfPath);
+            log.info(" *\\");
+            MAGETABInvestigation inv = parser.parse(idfPath);
             IdfData idf = new LimpopoIdfDataProxy(inv.IDF);
             Collection<CheckResult> results = checker.check(idf, new LimpopoBasedSdrfGraph(inv.SDRF, idf));
             results = natural().sortedCopy(results);
 
             int success = 0, errors = 0, warnings = 0, exceptions = 0;
             for (CheckResult res : results) {
-                log.info(res.asString());
                 CheckResultStatus status = res.getStatus();
                 switch (status) {
                     case SUCCESS:
@@ -77,6 +95,9 @@ public class LimpopoBasedChecker {
                         break;
                     case EXCEPTION:
                         exceptions++;
+                }
+                if (status != CheckResultStatus.SUCCESS) {
+                    log.info(res.asString());
                 }
             }
             log.info("---");

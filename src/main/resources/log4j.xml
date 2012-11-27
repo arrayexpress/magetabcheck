@@ -26,7 +26,7 @@
     </appender>
 
     <logger name="uk.ac.ebi.arrayexpress2.magetab.parser.MAGETABParser" additivity="false">
-        <level value="DEBUG" />
+        <level value="INFO" />
         <appender-ref ref="console" />
     </logger>
 
@@ -36,7 +36,7 @@
     </logger>
 
     <root>
-        <priority value="DEBUG" />
+        <priority value="INFO" />
         <appender-ref ref="console" />
     </root>
 
