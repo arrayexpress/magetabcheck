@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.checker;
+package uk.ac.ebi.fg.annotare2.services.efo;
 
 import org.junit.Test;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
