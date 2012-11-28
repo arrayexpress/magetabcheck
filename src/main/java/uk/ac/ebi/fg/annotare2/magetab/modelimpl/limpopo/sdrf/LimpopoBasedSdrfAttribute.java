@@ -66,4 +66,21 @@ public abstract class LimpopoBasedSdrfAttribute<T extends SDRFAttribute> extends
     protected T attr() {
         return attribute;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LimpopoBasedSdrfAttribute that = (LimpopoBasedSdrfAttribute) o;
+
+        if (attribute != null ? !attribute.equals(that.attribute) : that.attribute != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return attribute != null ? attribute.hashCode() : 0;
+    }
 }

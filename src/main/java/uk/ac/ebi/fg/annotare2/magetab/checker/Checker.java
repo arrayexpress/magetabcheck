@@ -19,12 +19,8 @@ package uk.ac.ebi.fg.annotare2.magetab.checker;
 import com.google.inject.Injector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.fg.annotare2.magetab.model.Identity;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;
-import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.HasAttributes;
-import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraph;
-import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraphAttribute;
-import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraphNode;
+import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.*;
 
 import java.util.*;
 
@@ -64,35 +60,34 @@ public class Checker {
     }
 
     public void check(SdrfGraph graph) {
-        //TODO do we still need context?
+        //TODO do we still need a context?
         Map<Class<?>, Object> context = newHashMap();
 
-        Set<Identity> marks = newHashSet();
+        Set<SdrfGraphEntity> marks = newHashSet();
         Queue<SdrfGraphNode> queue = newArrayDeque();
         queue.addAll(graph.getRootNodes());
         while (!queue.isEmpty()) {
             SdrfGraphNode node = queue.poll();
-            Identity id = new Identity(node);
-            if (marks.contains(id)) {
+            if (marks.contains(node)) {
                 continue;
             }
-            checkNode(node, context);
-            marks.add(id);
+            checkOne(node, context);
+            checkAttributes(node, context, marks);
+            marks.add(node);
             for (SdrfGraphNode n : node.getChildNodes()) {
                 queue.add(n);
             }
         }
     }
 
-    private void checkNode(SdrfGraphNode node, Map<Class<?>, Object> context) {
-        checkOne(node, context);
-        checkAttributes(node, context);
-    }
-
-    private void checkAttributes(HasAttributes obj, Map<Class<?>, Object> context) {
+    private void checkAttributes(HasAttributes obj, Map<Class<?>, Object> context, Set<SdrfGraphEntity> marks) {
         for (SdrfGraphAttribute attr : obj.getAttributes()) {
+            if (marks.contains(attr)) {
+                continue;
+            }
             checkOne(attr, context);
-            checkAttributes(attr, context);
+            marks.add(attr);
+            checkAttributes(attr, context, marks);
         }
     }
 

@@ -93,4 +93,21 @@ public abstract class LimpopoBasedSdrfNode<T extends SDRFNode> extends ObjectWit
     protected FileLocation location(String file) {
         return new FileLocation(helper.getFileRoot(), file);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LimpopoBasedSdrfNode that = (LimpopoBasedSdrfNode) o;
+
+        if (node != null ? !node.equals(that.node) : that.node != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return node != null ? node.hashCode() : 0;
+    }
 }
