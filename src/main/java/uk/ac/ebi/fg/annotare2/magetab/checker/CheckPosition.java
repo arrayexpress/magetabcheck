@@ -16,9 +16,6 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
-import com.google.common.base.Strings;
-import com.google.common.primitives.Ints;
-
 import static com.google.common.primitives.Ints.compare;
 
 /**
@@ -26,7 +23,9 @@ import static com.google.common.primitives.Ints.compare;
  */
 public class CheckPosition implements Comparable<CheckPosition> {
 
-    private static final int NO_INDEX = -1;
+    static final int NO_INDEX = -1;
+
+    static final String NO_FILE_NAME = "NoFileName";
 
     private static final CheckPosition UNDEFINED = new CheckPosition(null, NO_INDEX, NO_INDEX);
 
@@ -37,7 +36,7 @@ public class CheckPosition implements Comparable<CheckPosition> {
     private final int column;
 
     private CheckPosition(String fileName, int line, int column) {
-        this.fileName = fileName == null ? "NoFileName" : fileName;
+        this.fileName = fileName == null ? NO_FILE_NAME : fileName;
         this.line = line;
         this.column = column;
     }
