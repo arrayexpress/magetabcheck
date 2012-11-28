@@ -40,66 +40,58 @@ public class LimpopoBasedPerson extends LimpopoBasedIdfObject implements Person 
 
     @Override
     public Cell<String> getFirstName() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().personFirstName),
-                idf().getLayout().getLineNumberForHeader(PERSON_FIRST_NAME),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(PERSON_FIRST_NAME));
     }
 
     @Override
     public Cell<String> getLastName() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().personLastName),
-                idf().getLayout().getLineNumberForHeader(PERSON_LAST_NAME),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(PERSON_LAST_NAME));
     }
 
     @Override
     public Cell<String> getMidInitials() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().personMidInitials),
-                idf().getLayout().getLineNumberForHeader(PERSON_MID_INITIALS),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(PERSON_MID_INITIALS));
     }
 
     @Override
     public Cell<String> getEmail() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().personEmail),
-                idf().getLayout().getLineNumberForHeader(PERSON_EMAIL),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(PERSON_EMAIL));
     }
 
     @Override
     public Cell<String> getPhone() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().personPhone),
-                idf().getLayout().getLineNumberForHeader(PERSON_PHONE),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(PERSON_PHONE));
     }
 
     @Override
     public Cell<String> getFax() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().personFax),
-                idf().getLayout().getLineNumberForHeader(PERSON_FAX),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(PERSON_FAX));
     }
 
     @Override
     public Cell<String> getAddress() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().personAddress),
-                idf().getLayout().getLineNumberForHeader(PERSON_ADDRESS),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(PERSON_ADDRESS));
     }
 
     @Override
     public Cell<String> getAffiliation() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().personAffiliation),
-                idf().getLayout().getLineNumberForHeader(PERSON_AFFILIATION),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(PERSON_AFFILIATION));
     }
 
     @Override
@@ -123,26 +115,23 @@ public class LimpopoBasedPerson extends LimpopoBasedIdfObject implements Person 
         return new TermList() {
             @Override
             public Cell<List<String>> getNames() {
-                return new Cell<List<String>>(
+                return  createCell(
                         Collections.unmodifiableList(names),
-                        idf().getLayout().getLineNumberForHeader(IdfTags.PERSON_ROLES),
-                        getColumn());
+                        idf().getLayout().getLineNumberForHeader(IdfTags.PERSON_ROLES));
             }
 
             @Override
             public Cell<List<String>> getAccessions() {
-                return new Cell<List<String>>(
+                return createCell(
                         Collections.unmodifiableList(accessions),
-                        idf().getLayout().getLineNumberForHeader(IdfTags.PERSON_ROLES_TERM_ACCESSION_NUMBER),
-                        getColumn());
+                        idf().getLayout().getLineNumberForHeader(IdfTags.PERSON_ROLES_TERM_ACCESSION_NUMBER));
             }
 
             @Override
             public Cell<TermSource> getSource() {
-                return new Cell<TermSource>(
+                return createCell(
                         termSource(roleTermSource),
-                        idf().getLayout().getLineNumberForHeader(IdfTags.PERSON_ROLES_TERM_SOURCE_REF),
-                        getColumn());
+                        idf().getLayout().getLineNumberForHeader(IdfTags.PERSON_ROLES_TERM_SOURCE_REF));
             }
 
             @Override

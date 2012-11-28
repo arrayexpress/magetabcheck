@@ -38,18 +38,16 @@ public class LimpopoBasedProtocol extends LimpopoBasedIdfObject implements Proto
 
     @Override
     public Cell<String> getName() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().protocolName),
-                idf().getLayout().getLineNumberForHeader(PROTOCOL_NAME),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(PROTOCOL_NAME));
     }
 
     @Override
     public Cell<String> getDescription() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().protocolDescription),
-                idf().getLayout().getLineNumberForHeader(PROTOCOL_DESCRIPTION),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(PROTOCOL_DESCRIPTION));
     }
 
     @Override
@@ -57,34 +55,30 @@ public class LimpopoBasedProtocol extends LimpopoBasedIdfObject implements Proto
         String paramString = get(idf().protocolParameters);
         paramString = paramString == null ? "" : paramString;
 
-        return new Cell<List<String>>(
+        return createCell(
                 asList(paramString.split(",")),
-                idf().getLayout().getLineNumberForHeader(PROTOCOL_PARAMETERS),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(PROTOCOL_PARAMETERS));
     }
 
     @Override
     public Cell<String> getHardware() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().protocolHardware),
-                idf().getLayout().getLineNumberForHeader(PROTOCOL_HARDWARE),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(PROTOCOL_HARDWARE));
     }
 
     @Override
     public Cell<String> getSoftware() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().protocolSoftware),
-                idf().getLayout().getLineNumberForHeader(PROTOCOL_SOFTWARE),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(PROTOCOL_SOFTWARE));
     }
 
     @Override
     public Cell<String> getContact() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().protocolContact),
-                idf().getLayout().getLineNumberForHeader(PROTOCOL_CONTACT),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(PROTOCOL_CONTACT));
     }
 
     @Override
@@ -92,26 +86,23 @@ public class LimpopoBasedProtocol extends LimpopoBasedIdfObject implements Proto
         return new ProtocolType() {
             @Override
             public Cell<String> getName() {
-                return new Cell<String>(
+                return createCell(
                         get(idf().protocolType),
-                        idf().getLayout().getLineNumberForHeader(PROTOCOL_TYPE),
-                        getColumn());
+                        idf().getLayout().getLineNumberForHeader(PROTOCOL_TYPE));
             }
 
             @Override
             public Cell<String> getAccession() {
-                return new Cell<String>(
+                return createCell(
                         get(idf().protocolTermAccession),
-                        idf().getLayout().getLineNumberForHeader(PROTOCOL_TERM_ACCESSION_NUMBER),
-                        getColumn());
+                        idf().getLayout().getLineNumberForHeader(PROTOCOL_TERM_ACCESSION_NUMBER));
             }
 
             @Override
             public Cell<TermSource> getSource() {
-                return new Cell<TermSource>(
+                return createCell(
                         termSource(get(idf().protocolTermSourceREF)),
-                        idf().getLayout().getLineNumberForHeader(PROTOCOL_TERM_SOURCE_REF),
-                        getColumn());
+                        idf().getLayout().getLineNumberForHeader(PROTOCOL_TERM_SOURCE_REF));
             }
         };
     }

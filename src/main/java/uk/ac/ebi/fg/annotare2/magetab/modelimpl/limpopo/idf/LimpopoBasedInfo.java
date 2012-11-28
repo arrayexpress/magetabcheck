@@ -36,43 +36,38 @@ public class LimpopoBasedInfo extends LimpopoBasedIdfObject implements Info {
 
     @Override
     public Cell<String> getTitle() {
-        return new Cell<String>(
+        return createCell(
                 idf().investigationTitle,
-                idf().getLayout().getLineNumberForHeader(INVESTIGATION_TITLE),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(INVESTIGATION_TITLE));
     }
 
     @Override
     public Cell<String> getExperimentDescription() {
-        return new Cell<String>(
+        return createCell(
                 idf().experimentDescription,
-                idf().getLayout().getLineNumberForHeader(EXPERIMENT_DESCRIPTION),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(EXPERIMENT_DESCRIPTION));
     }
 
     @Override
     public Cell<String> getDateOfExperiment() {
-        return new Cell<String>(
+        return createCell(
                 idf().dateOfExperiment,
-                idf().getLayout().getLineNumberForHeader(DATE_OF_EXPERIMENT),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(DATE_OF_EXPERIMENT));
     }
 
     @Override
     public Cell<String> getPublicReleaseDate() {
-        return new Cell<String>(
+        return createCell(
                 idf().publicReleaseDate,
-                idf().getLayout().getLineNumberForHeader(PUBLIC_RELEASE_DATE),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(PUBLIC_RELEASE_DATE));
     }
 
     @Override
     public Cell<FileLocation> getSdrfFile() {
         List<String> sdrfFiles = idf().sdrfFile;
-        return new Cell<FileLocation>(
+        return createCell(
                 new FileLocation(idf().getLocation(),
                         (sdrfFiles == null || sdrfFiles.isEmpty()) ? null : sdrfFiles.get(0)),
-                idf().getLayout().getLineNumberForHeader(SDRF_FILE),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(SDRF_FILE));
     }
 }

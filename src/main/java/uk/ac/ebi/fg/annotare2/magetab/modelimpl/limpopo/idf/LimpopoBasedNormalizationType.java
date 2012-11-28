@@ -33,25 +33,22 @@ public class LimpopoBasedNormalizationType extends LimpopoBasedIdfObject impleme
 
     @Override
     public Cell<String> getName() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().normalizationType),
-                idf().getLayout().getLineNumberForHeader(IdfTags.NORMALIZATION_TYPE),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.NORMALIZATION_TYPE));
     }
 
     @Override
     public Cell<String> getAccession() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().normalizationTermAccession),
-                idf().getLayout().getLineNumberForHeader(IdfTags.NORMALIZATION_TERM_ACCESSION_NUMBER),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.NORMALIZATION_TERM_ACCESSION_NUMBER));
     }
 
     @Override
     public Cell<TermSource> getSource() {
-        return new Cell<TermSource>(
+        return createCell(
                 termSource(get(idf().normalizationTermSourceREF)),
-                idf().getLayout().getLineNumberForHeader(IdfTags.NORMALIZATION_TERM_SOURCE_REF),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.NORMALIZATION_TERM_SOURCE_REF));
     }
 }

@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.model.sdrf;
+package uk.ac.ebi.fg.annotare2.magetab.utils;
+
+import java.net.URL;
 
 /**
  * @author Olga Melnichuk
  */
-public interface HasLocation {
+public abstract class Urls {
 
-    int getLine();
-
-    int getColumn();
-
-    String getFileName();
+    public static String getFileName(URL url) {
+        String path = url.getPath();
+        return path.substring(path.lastIndexOf('/') + 1, path.length());
+    }
 }

@@ -33,25 +33,22 @@ public class LimpopoBasedExperimentalDesign extends LimpopoBasedIdfObject implem
 
     @Override
     public Cell<String> getName() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().experimentalDesign),
-                idf().getLayout().getLineNumberForHeader(IdfTags.EXPERIMENTAL_DESIGN),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.EXPERIMENTAL_DESIGN));
     }
 
     @Override
     public Cell<String> getAccession() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().experimentalDesignTermAccession),
-                idf().getLayout().getLineNumberForHeader(IdfTags.EXPERIMENTAL_DESIGN_TERM_ACCESSION_NUMBER),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.EXPERIMENTAL_DESIGN_TERM_ACCESSION_NUMBER));
     }
 
     @Override
     public Cell<TermSource> getSource() {
-        return new Cell<TermSource>(
+        return createCell(
                 termSource(get(idf().experimentalDesignTermSourceREF)),
-                idf().getLayout().getLineNumberForHeader(IdfTags.EXPERIMENTAL_DESIGN_TERM_SOURCE_REF),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.EXPERIMENTAL_DESIGN_TERM_SOURCE_REF));
     }
 }

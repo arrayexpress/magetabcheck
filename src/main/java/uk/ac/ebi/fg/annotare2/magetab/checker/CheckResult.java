@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 
 import static com.google.common.base.Throwables.getStackTraceAsString;
 import static com.google.common.collect.Ordering.natural;
-import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPosition.unknownPosition;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPosition.undefinedPosition;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckResultType.*;
 
 /**
@@ -37,7 +37,7 @@ public class CheckResult implements Comparable<CheckResult> {
 
     private Throwable exception;
 
-    private CheckPosition position = unknownPosition();
+    private CheckPosition position = undefinedPosition();
 
     private CheckResult(@Nonnull CheckResultType type, @Nonnull CheckModality modality) {
         this.type = type;
@@ -55,7 +55,7 @@ public class CheckResult implements Comparable<CheckResult> {
     }
 
     private CheckResult setPosition(CheckPosition position) {
-        this.position = position == null ? unknownPosition() : position;
+        this.position = position == null ? undefinedPosition() : position;
         return this;
     }
 

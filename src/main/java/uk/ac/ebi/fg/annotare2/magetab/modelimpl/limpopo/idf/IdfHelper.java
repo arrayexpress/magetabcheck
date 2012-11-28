@@ -18,6 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.idf;
 
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.IDF;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
+import uk.ac.ebi.fg.annotare2.magetab.utils.Urls;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -34,8 +35,11 @@ public class IdfHelper {
 
     private final Map<String, TermSource> termSources = new HashMap<String, TermSource>();
 
+    private final String fileName;
+
     public IdfHelper(@Nonnull IDF idf) {
         this.idf = idf;
+        this.fileName = Urls.getFileName(idf.getLocation());
 
         int size = this.idf.termSourceName.size();
         for (int i = 0; i < size; i++) {
@@ -58,4 +62,7 @@ public class IdfHelper {
         return list;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
 }

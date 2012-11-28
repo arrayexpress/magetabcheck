@@ -38,9 +38,8 @@ public class LimpopoBasedComment extends LimpopoBasedIdfObject implements Commen
 
     @Override
     public Cell<String> getComment() {
-        return new Cell<String>(
+        return createCell(
                 value,
-                idf().getLayout().getLineNumberForComment(type),
-                getColumn());
+                idf().getLayout().getLineNumberForComment(type));
     }
 }

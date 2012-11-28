@@ -34,25 +34,22 @@ public class LimpopoBasedQualityControlType extends LimpopoBasedIdfObject implem
 
     @Override
     public Cell<String> getName() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().qualityControlType),
-                idf().getLayout().getLineNumberForHeader(IdfTags.QUALITY_CONTROL_TYPE),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.QUALITY_CONTROL_TYPE));
     }
 
     @Override
     public Cell<String> getAccession() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().qualityControlTermAccession),
-                idf().getLayout().getLineNumberForHeader(IdfTags.QUALITY_CONTROL_TERM_ACCESSION_NUMBER),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.QUALITY_CONTROL_TERM_ACCESSION_NUMBER));
     }
 
     @Override
     public Cell<TermSource> getSource() {
-        return new Cell<TermSource>(
+        return createCell(
                 termSource(get(idf().qualityControlTermSourceREF)),
-                idf().getLayout().getLineNumberForHeader(IdfTags.QUALITY_CONTROL_TERM_SOURCE_REF),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.QUALITY_CONTROL_TERM_SOURCE_REF));
     }
 }

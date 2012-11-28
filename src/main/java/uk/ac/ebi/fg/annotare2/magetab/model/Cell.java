@@ -23,16 +23,19 @@ public class Cell<T> {
 
     private final T value;
 
+    private final String fileName;
+
     private final int line;
 
     private final int column;
 
     public Cell(T value) {
-        this(value, -1, -1);
+        this(value, null, -1, -1);
     }
 
-    public Cell(T value, int line, int column) {
+    public Cell(T value, String fileName, int line, int column) {
         this.value = value;
+        this.fileName = fileName;
         this.line = line;
         this.column = column;
     }
@@ -47,5 +50,9 @@ public class Cell<T> {
 
     public int getColumn() {
         return column;
+    }
+
+    public String getFileName() {
+        return fileName;
     }
 }

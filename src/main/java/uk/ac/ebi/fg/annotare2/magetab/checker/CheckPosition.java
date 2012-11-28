@@ -16,25 +16,34 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
+import com.google.common.base.Strings;
 import com.google.common.primitives.Ints;
-import org.omg.CORBA.UNKNOWN;
+
+import static com.google.common.primitives.Ints.compare;
 
 /**
  * @author Olga Melnichuk
  */
 public class CheckPosition implements Comparable<CheckPosition> {
 
-    private static final int UNKNOWN_INDEX = -1;
+    private static final int NO_INDEX = -1;
 
-    private static final CheckPosition UNKNOWN = new CheckPosition(UNKNOWN_INDEX, UNKNOWN_INDEX);
+    private static final CheckPosition UNDEFINED = new CheckPosition(null, NO_INDEX, NO_INDEX);
+
+    private final String fileName;
 
     private final int line;
 
     private final int column;
 
-    private CheckPosition(int line, int column) {
+    private CheckPosition(String fileName, int line, int column) {
+        this.fileName = fileName == null ? "NoFileName" : fileName;
         this.line = line;
         this.column = column;
+    }
+
+    public String getFileName() {
+        return fileName;
     }
 
     public int getLine() {
@@ -46,11 +55,11 @@ public class CheckPosition implements Comparable<CheckPosition> {
     }
 
     public String asString() {
-        return "@(" + line + ", " + column + ")";
+        return isUndefined() ? "UNLOCATED" : fileName + "@(" + line + ", " + column + ")";
     }
 
-    public boolean isUnknown() {
-        return this == UNKNOWN;
+    public boolean isUndefined() {
+        return this == UNDEFINED;
     }
 
     @Override
@@ -63,27 +72,31 @@ public class CheckPosition implements Comparable<CheckPosition> {
 
     @Override
     public int compareTo(CheckPosition o) {
-        if (isUnknown() && o.isUnknown()) {
+        if (isUndefined() && o.isUndefined()) {
             return 0;
-        } else if (isUnknown()) {
+        } else if (isUndefined()) {
             return 1;
-        } else if (o.isUnknown()) {
+        } else if (o.isUndefined()) {
             return -1;
         }
 
-        int compareLines = Ints.compare(line, o.line);
-        if (compareLines != 0) {
-            return compareLines;
+        int compared;
+        if ((compared = fileName.compareTo(o.fileName)) != 0) {
+            return compared;
         }
 
-        return Ints.compare(column, o.column);
+        if ((compared = compare(line, o.line)) != 0) {
+            return compared;
+        }
+
+        return compare(column, o.column);
     }
 
-    public static CheckPosition newCheckPosition(int line, int column) {
-        return line == UNKNOWN_INDEX || column == UNKNOWN_INDEX ? UNKNOWN : new CheckPosition(line, column);
+    public static CheckPosition createPosition(String fileName, int line, int column) {
+        return line == NO_INDEX || column == NO_INDEX ? UNDEFINED : new CheckPosition(fileName, line, column);
     }
 
-    public static CheckPosition unknownPosition() {
-        return UNKNOWN;
+    public static CheckPosition undefinedPosition() {
+        return UNDEFINED;
     }
 }

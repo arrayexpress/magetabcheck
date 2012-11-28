@@ -17,6 +17,7 @@
 package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.idf;
 
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.IDF;
+import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 
 import javax.annotation.Nonnull;
@@ -54,5 +55,13 @@ public abstract class LimpopoBasedIdfObject {
 
     protected int getColumn() {
         return index < 0 ? index : index + 2;
+    }
+
+    protected <T> Cell<T> createCell(T value, int line) {
+        return new Cell<T>(
+                value,
+                helper.getFileName(),
+                line,
+                getColumn());
     }
 }

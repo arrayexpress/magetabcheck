@@ -290,6 +290,6 @@ public class IdfSimpleChecks {
     }
 
     private static <T> void setPosition(Cell<T> cell) {
-        setCheckPosition(cell.getLine(), cell.getColumn());
+        setCheckPosition(cell.getFileName(), cell.getLine(), cell.getColumn());
     }
 }

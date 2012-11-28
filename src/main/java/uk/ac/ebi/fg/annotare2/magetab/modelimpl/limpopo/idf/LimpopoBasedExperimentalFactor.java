@@ -34,10 +34,9 @@ public class LimpopoBasedExperimentalFactor extends LimpopoBasedIdfObject implem
 
     @Override
     public Cell<String> getName() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().experimentalFactorName),
-                idf().getLayout().getLineNumberForHeader(IdfTags.EXPERIMENTAL_FACTOR_NAME),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.EXPERIMENTAL_FACTOR_NAME));
     }
 
     @Override
@@ -45,26 +44,23 @@ public class LimpopoBasedExperimentalFactor extends LimpopoBasedIdfObject implem
         return new ExperimentalFactorType() {
             @Override
             public Cell<String> getName() {
-                return new Cell<String>(
+                return createCell(
                         get(idf().experimentalFactorType),
-                        idf().getLayout().getLineNumberForHeader(IdfTags.EXPERIMENTAL_FACTOR_TYPE),
-                        getColumn());
+                        idf().getLayout().getLineNumberForHeader(IdfTags.EXPERIMENTAL_FACTOR_TYPE));
             }
 
             @Override
             public Cell<String> getAccession() {
-                return new Cell<String>(
+                return createCell(
                         get(idf().experimentalFactorTermAccession),
-                        idf().getLayout().getLineNumberForHeader(IdfTags.EXPERIMENTAL_FACTOR_TERM_ACCESSION_NUMBER),
-                        getColumn());
+                        idf().getLayout().getLineNumberForHeader(IdfTags.EXPERIMENTAL_FACTOR_TERM_ACCESSION_NUMBER));
             }
 
             @Override
             public Cell<TermSource> getSource() {
-                return new Cell<TermSource>(
+                return createCell(
                         termSource(get(idf().experimentalFactorTermSourceREF)),
-                        idf().getLayout().getLineNumberForHeader(IdfTags.EXPERIMENTAL_FACTOR_TERM_SOURCE_REF),
-                        getColumn());
+                        idf().getLayout().getLineNumberForHeader(IdfTags.EXPERIMENTAL_FACTOR_TERM_SOURCE_REF));
             }
         };
     }

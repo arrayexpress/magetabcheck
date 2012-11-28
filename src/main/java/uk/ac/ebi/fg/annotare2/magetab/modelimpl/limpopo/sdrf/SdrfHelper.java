@@ -25,6 +25,7 @@ import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraphAttribute;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraphNode;
+import uk.ac.ebi.fg.annotare2.magetab.utils.Urls;
 
 import java.net.URL;
 import java.util.Collection;
@@ -33,6 +34,7 @@ import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
+import static uk.ac.ebi.fg.annotare2.magetab.utils.Urls.getFileName;
 
 /**
  * @author Olga Melnichuk
@@ -47,22 +49,21 @@ public class SdrfHelper {
 
     private final IdfData idf;
 
+    private final String fileName;
+
     public SdrfHelper(SDRF sdrf, IdfData idf) {
         this.sdrf = sdrf;
         this.idf = idf;
-    }
-
-    public SDRF sdrf() {
-        return sdrf;
+        this.fileName = Urls.getFileName(sdrf.getLocation());
     }
 
     public <T extends SDRFNode> Location getLocation(T node) {
-        Collection<Location> locations = sdrf().getLayout().getLocationsForNode(node);
+        Collection<Location> locations = sdrf.getLayout().getLocationsForNode(node);
         return locations.iterator().next();
     }
 
     public <T extends SDRFAttribute> Location getLocation(T attr) {
-        Collection<Location> locations = sdrf().getLayout().getLocationsForAttribute(attr);
+        Collection<Location> locations = sdrf.getLayout().getLocationsForAttribute(attr);
         return locations.iterator().next();
     }
 
@@ -160,5 +161,9 @@ public class SdrfHelper {
 
     public URL getFileRoot() {
         return sdrf.getLocation();
+    }
+
+    public String getFileName() {
+        return fileName;
     }
 }

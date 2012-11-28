@@ -30,25 +30,22 @@ public class LimpopoBasedTermSource extends LimpopoBasedIdfObject implements Ter
 
     @Override
     public Cell<String> getName() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().termSourceName),
-                idf().getLayout().getLineNumberForHeader(IdfTags.TERM_SOURCE_NAME),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.TERM_SOURCE_NAME));
     }
 
     @Override
     public Cell<String> getVersion() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().termSourceVersion),
-                idf().getLayout().getLineNumberForHeader(IdfTags.TERM_SOURCE_VERSION),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.TERM_SOURCE_VERSION));
     }
 
     @Override
     public Cell<String> getFile() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().termSourceFile),
-                idf().getLayout().getLineNumberForHeader(IdfTags.TERM_SOURCE_FILE),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.TERM_SOURCE_FILE));
     }
 }

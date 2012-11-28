@@ -440,6 +440,6 @@ public class SdrfSimpleChecks {
     }
 
     private static <T extends HasLocation> void setPosition(T t) {
-        setCheckPosition(t.getLine(), t.getColumn());
+        setCheckPosition(t.getFileName(), t.getLine(), t.getColumn());
     }
 }

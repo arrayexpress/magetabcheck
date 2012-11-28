@@ -78,6 +78,11 @@ public abstract class LimpopoBasedSdrfNode<T extends SDRFNode> extends ObjectWit
     }
 
     @Override
+    public String getFileName() {
+        return helper.getFileName();
+    }
+
+    @Override
     public String getName() {
         return node.getNodeName();
     }

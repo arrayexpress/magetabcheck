@@ -33,25 +33,22 @@ public class LimpopoBasedReplicateType extends LimpopoBasedIdfObject implements 
 
     @Override
     public Cell<String> getName() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().replicateType),
-                idf().getLayout().getLineNumberForHeader(IdfTags.REPLICATE_TYPE),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.REPLICATE_TYPE));
     }
 
     @Override
     public Cell<String> getAccession() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().replicateTermAccession),
-                idf().getLayout().getLineNumberForHeader(IdfTags.REPLICATE_TERM_ACCESSION_NUMBER),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.REPLICATE_TERM_ACCESSION_NUMBER));
     }
 
     @Override
     public Cell<TermSource> getSource() {
-        return new Cell<TermSource>(
+        return createCell(
                 termSource(get(idf().replicateTermSourceREF)),
-                idf().getLayout().getLineNumberForHeader(IdfTags.REPLICATE_TERM_SOURCE_REF),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.REPLICATE_TERM_SOURCE_REF));
     }
 }

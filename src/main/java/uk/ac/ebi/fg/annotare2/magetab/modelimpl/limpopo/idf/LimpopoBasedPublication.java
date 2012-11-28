@@ -34,34 +34,30 @@ public class LimpopoBasedPublication extends LimpopoBasedIdfObject implements Pu
 
     @Override
     public Cell<String> getPubMedId() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().pubMedId),
-                idf().getLayout().getLineNumberForHeader(IdfTags.PUBLICATION_PUB_MED_ID),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.PUBLICATION_PUB_MED_ID));
     }
 
     @Override
     public Cell<String> getPublicationDOI() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().publicationDOI),
-                idf().getLayout().getLineNumberForHeader(IdfTags.PUBLICATION_DOI),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.PUBLICATION_DOI));
     }
 
     @Override
     public Cell<String> getAuthorList() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().publicationAuthorList),
-                idf().getLayout().getLineNumberForHeader(IdfTags.PUBLICATION_AUTHOR_LIST),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.PUBLICATION_AUTHOR_LIST));
     }
 
     @Override
     public Cell<String> getTitle() {
-        return new Cell<String>(
+        return createCell(
                 get(idf().publicationTitle),
-                idf().getLayout().getLineNumberForHeader(IdfTags.PUBLICATION_TITLE),
-                getColumn());
+                idf().getLayout().getLineNumberForHeader(IdfTags.PUBLICATION_TITLE));
     }
 
     @Override
@@ -69,26 +65,23 @@ public class LimpopoBasedPublication extends LimpopoBasedIdfObject implements Pu
         return new PublicationStatus() {
             @Override
             public Cell<String> getName() {
-                return new Cell<String>(
+                return createCell(
                         get(idf().publicationStatus),
-                        idf().getLayout().getLineNumberForHeader(IdfTags.PUBLICATION_STATUS),
-                        getColumn());
+                        idf().getLayout().getLineNumberForHeader(IdfTags.PUBLICATION_STATUS));
             }
 
             @Override
             public Cell<String> getAccession() {
-                return new Cell<String>(
+                return createCell(
                         get(idf().publicationStatusTermAccession),
-                        idf().getLayout().getLineNumberForHeader(IdfTags.PUBLICATION_STATUS_TERM_ACCESSION_NUMBER),
-                        getColumn());
+                        idf().getLayout().getLineNumberForHeader(IdfTags.PUBLICATION_STATUS_TERM_ACCESSION_NUMBER));
             }
 
             @Override
             public Cell<TermSource> getSource() {
-                return new Cell<TermSource>(
+                return createCell(
                         termSource(get(idf().publicationStatusTermSourceREF)),
-                        idf().getLayout().getLineNumberForHeader(IdfTags.PUBLICATION_STATUS_TERM_SOURCE_REF),
-                        getColumn());
+                        idf().getLayout().getLineNumberForHeader(IdfTags.PUBLICATION_STATUS_TERM_SOURCE_REF));
             }
         };
     }

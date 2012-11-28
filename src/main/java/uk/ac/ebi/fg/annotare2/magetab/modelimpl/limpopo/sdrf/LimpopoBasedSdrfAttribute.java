@@ -59,6 +59,11 @@ public abstract class LimpopoBasedSdrfAttribute<T extends SDRFAttribute> extends
         return location.getColumn();
     }
 
+    @Override
+    public String getFileName() {
+        return helper.getFileName();
+    }
+
     protected TermSource termSource(String termSourceRef) {
         return helper.termSource(termSourceRef);
     }
