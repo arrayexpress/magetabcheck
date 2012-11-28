@@ -35,7 +35,7 @@ public enum CheckResultType {
     RUN_ERROR {
         @Override
         public CheckResultStatus status(CheckModality modality) {
-            return CheckResultStatus.EXCEPTION;
+            return CheckResultStatus.ERROR;
         }
     };
 

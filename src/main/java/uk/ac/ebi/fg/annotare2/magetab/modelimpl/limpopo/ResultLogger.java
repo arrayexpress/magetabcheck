@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.checker;
+package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Olga Melnichuk
  */
-public enum CheckResultStatus {
-    SUCCESS,
-    WARNING,
-    FAILURE,
-    ERROR
+abstract class ResultLogger {
+
+    private static final Logger log = LoggerFactory.getLogger(ResultLogger.class);
+
+    public static void logResult(String str) {
+        log.info(str);
+    }
 }

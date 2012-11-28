@@ -18,6 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.MAGETABInvestigation;
@@ -37,6 +38,7 @@ import java.util.Collection;
 
 import static com.google.common.collect.Ordering.natural;
 import static java.lang.System.exit;
+import static uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.ResultLogger.logResult;
 
 /**
  * @author Olga Melnichuk
@@ -61,7 +63,16 @@ public class LimpopoBasedChecker {
             exit(0);
         }
 
+        setLogLevel();
+
         (new LimpopoBasedChecker()).run(args);
+    }
+
+    private static void setLogLevel() {
+        String debug = System.getProperty("checker.debug");
+        if (debug != null && Boolean.parseBoolean(debug)) {
+           org.apache.log4j.Logger.getRootLogger().setLevel(Level.DEBUG);
+        }
     }
 
     private void run(String... idfPaths) {
@@ -72,15 +83,15 @@ public class LimpopoBasedChecker {
 
     private void run(File idfPath) {
         try {
-            log.info("/* ");
-            log.info(" * Running checker for: " + idfPath);
-            log.info(" *\\");
+            logResult("/* ");
+            logResult(" * Running checker for: " + idfPath);
+            logResult(" *\\");
             MAGETABInvestigation inv = parser.parse(idfPath);
             IdfData idf = new LimpopoIdfDataProxy(inv.IDF);
             Collection<CheckResult> results = checker.check(idf, new LimpopoBasedSdrfGraph(inv.SDRF, idf));
             results = natural().sortedCopy(results);
 
-            int success = 0, errors = 0, warnings = 0, exceptions = 0;
+            int success = 0, failures = 0, warnings = 0, errors = 0;
             for (CheckResult res : results) {
                 CheckResultStatus status = res.getStatus();
                 switch (status) {
@@ -90,22 +101,23 @@ public class LimpopoBasedChecker {
                     case WARNING:
                         warnings++;
                         break;
+                    case FAILURE:
+                        failures++;
+                        break;
                     case ERROR:
                         errors++;
-                        break;
-                    case EXCEPTION:
-                        exceptions++;
                 }
                 if (status != CheckResultStatus.SUCCESS) {
-                    log.info(res.asString());
+                    logResult(res.asString());
                 }
             }
-            log.info("---");
-            log.info("total=[" + results.size() + "]" +
-                    ", successes=[" + success + "]" +
-                    ", errors=[" + errors + "]" +
-                    ", warnings=[" + warnings + "]" +
-                    ", exceptions=[" + exceptions + "]");
+            logResult("---");
+            logResult("total=[" + results.size() + "]" +
+                    ", success=[" + success + "]" +
+                    ", failure=[" + failures + "]" +
+                    ", warning=[" + warnings + "]" +
+                    ", error=[" + errors + "]");
+            logResult("---");
         } catch (ParseException e) {
             log.error("MAGE-TAB parse error", e);
         } catch (UndefinedInvestigationTypeException e) {

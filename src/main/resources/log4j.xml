@@ -21,9 +21,21 @@
     <appender name="console" class="org.apache.log4j.ConsoleAppender">
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern"
+                   value="%d %-5p [%t] %C (%F:%L) %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="result-console" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
                    value="%m%n" />
         </layout>
     </appender>
+
+    <logger name="uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.ResultLogger" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="result-console" />
+    </logger>
 
     <logger name="uk.ac.ebi.arrayexpress2.magetab.parser.MAGETABParser" additivity="false">
         <level value="INFO" />
@@ -31,7 +43,7 @@
     </logger>
 
     <logger name="uk.ac.ebi.fg.annotare2.magetab" additivity="false">
-        <level value="DEBUG" />
+        <level value="INFO" />
         <appender-ref ref="console" />
     </logger>
 
