@@ -30,6 +30,10 @@ public class FileLocation {
 
     private final String path;
 
+    public FileLocation(String path) {
+        this(null, path);
+    }
+
     public FileLocation(URL context, String path) {
         this.context = context;
         this.path = path;
@@ -45,4 +49,11 @@ public class FileLocation {
                         new URL(context, path);
     }
 
+    @Override
+    public String toString() {
+        return "FileLocation{" +
+                "context=" + context +
+                ", path='" + path + '\'' +
+                '}';
+    }
 }

@@ -20,8 +20,11 @@ import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.fg.annotare2.magetab.model.FileLocation;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -32,6 +35,8 @@ import java.net.URL;
  */
 public class IsValidFileLocation extends TypeSafeMatcher<FileLocation> {
 
+    private static final Logger log = LoggerFactory.getLogger(IsValidFileLocation.class);
+
     @Override
     protected boolean matchesSafely(FileLocation loc) {
         if (loc == null || loc.isEmpty()) {
@@ -40,18 +45,24 @@ public class IsValidFileLocation extends TypeSafeMatcher<FileLocation> {
 
         try {
             URL location = loc.toURL();
-            if (location.getProtocol().equals("file")) {
-                location.openConnection();
-            }
-            else {
+            String protocol = location.getProtocol();
+            if ("file".equals(protocol)) {
+                File file = new File(location.getFile());
+                return file.exists();
+            } else if ("http".equals(protocol) || "https".equals(protocol)) {
                 int response = ((HttpURLConnection) location.openConnection()).getResponseCode();
                 if (response != HttpURLConnection.HTTP_OK) {
                     return false;
                 }
+            } else {
+                log.debug("unknown protocol: {}", protocol);
+                return false;
             }
         } catch (MalformedURLException e) {
+            log.debug("file location validate failure: " + loc, e);
             return false;
         } catch (IOException e) {
+            log.debug("file location validate failure: " + loc, e);
             return false;
         }
         return true;
