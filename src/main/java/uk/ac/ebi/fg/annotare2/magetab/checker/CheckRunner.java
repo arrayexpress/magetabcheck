@@ -16,89 +16,15 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.annotation.Nonnull;
-import java.lang.reflect.Method;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import static com.google.common.collect.Lists.newArrayList;
-import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult.*;
 
 /**
  * @author Olga Melnichuk
  */
-abstract class CheckRunner<T> {
+public interface CheckRunner <T> {
 
-    private static final Logger log = LoggerFactory.getLogger(CheckRunner.class);
+    List<CheckResult> sumUp();
 
-    private List<CheckResult> results = newArrayList();
-
-    private String checkTitle;
-
-    private CheckModality checkModality;
-
-    private boolean hasErrors = false;
-
-    protected CheckRunner(String checkTitle, CheckModality checkModality) {
-        this.checkTitle = checkTitle;
-        this.checkModality = checkModality;
-    }
-
-    protected CheckRunner(@Nonnull MageTabCheck annot) {
-        this(annot.value(), annot.modality());
-    }
-
-    protected void success() {
-        success(null);
-    }
-
-    protected void success(CheckPosition pos) {
-        results.add(checkSucceeded(checkTitle, checkModality, pos));
-    }
-
-    protected void failure() {
-        failure(null);
-    }
-
-    protected void failure(CheckPosition pos) {
-        results.add(checkFailed(checkTitle, checkModality, pos));
-    }
-
-    protected void error(Throwable e) {
-        log.error("Check running error(" + checkTitle + ")", e);
-        results.add(checkBroken(checkTitle, checkModality, e));
-        hasErrors = true;
-    }
-
-    protected boolean hasErrors() {
-        return hasErrors;
-    }
-
-    protected static Object[] getParams(Method method, Map<Class<?>, Object> context) throws IllegalAccessException {
-        Class<?>[] types = method.getParameterTypes();
-        List<Object> params = newArrayList();
-        for (int i = 0; i < types.length; i++) {
-            Class<?> type = types[i];
-            for (Class<?> keyType : context.keySet()) {
-                if (type.isAssignableFrom(keyType)) {
-                    params.add(context.get(keyType));
-                    break;
-                }
-            }
-            if (params.size() != i + 1) {
-                throw new IllegalAccessException("Can't find object of class " + type + " in the check context");
-            }
-        }
-        return params.toArray(new Object[params.size()]);
-    }
-
-    public List<CheckResult> sumUp() {
-        return Collections.unmodifiableList(results);
-    }
-
-    public abstract void runWith(T item, Map<Class<?>, Object> context);
+    void runWith(T item, Map<Class<?>, Object> context);
 }

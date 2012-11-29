@@ -17,8 +17,6 @@
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
 import com.google.inject.Injector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.*;
 
@@ -32,8 +30,6 @@ import static com.google.common.collect.Sets.newHashSet;
  * @author Olga Melnichuk
  */
 public class Checker {
-
-    private static final Logger log = LoggerFactory.getLogger(Checker.class);
 
     private final InvestigationType invType;
 

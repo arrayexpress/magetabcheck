@@ -30,6 +30,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -40,36 +41,31 @@ public class AllChecks {
     private static final Logger log = LoggerFactory.getLogger(AllChecks.class);
 
     //TODO make it automatically detected
-    private static final List<Class> methodBasedChecks = new ArrayList<Class>() {
-        {
-            add(IdfSimpleChecks.class);
-            add(SdrfSimpleChecks.class);
-        }
-    };
+    private static final List<Class> methodBasedChecks = Arrays.<Class>asList(
+            IdfSimpleChecks.class,
+            SdrfSimpleChecks.class);
 
     //TODO make it automatically detected
-    private static final List<Class> classBasedChecks = new ArrayList<Class>() {
-        {
-            add(AtLeastOneContactMustBeSubmitter.class);
-            add(AtLeastOneContactWithEmailRequired.class);
-            add(AtLeastOneContactWithRolesRequired.class);
-            add(AtLeastOneSubmitterMustHaveEmail.class);
-            add(ListOfContactsMustBeNonEmpty.class);
-            add(ListOfExperimentalDesignsShouldBeNonEmpty.class);
-            add(ListOfExperimentalFactorsMustBeNonEmpty.class);
-            add(ListOfQualityControlTypesShouldBeNonEmpty.class);
-            add(ListOfReplicateTypesShouldBeNonEmpty.class);
-            add(ListOfNormalizationTypesShouldBeNonEmpty.class);
-            add(ListOfProtocolsMustBeNonEmpty.class);
-            add(TermSourcesMustBeUniqueByName.class);
+    private static final List<Class> classBasedChecks = Arrays.<Class>asList(
+            AtLeastOneContactMustBeSubmitter.class,
+            AtLeastOneContactWithEmailRequired.class,
+            AtLeastOneContactWithRolesRequired.class,
+            AtLeastOneSubmitterMustHaveEmail.class,
+            ListOfContactsMustBeNonEmpty.class,
+            ListOfExperimentalDesignsShouldBeNonEmpty.class,
+            ListOfExperimentalFactorsMustBeNonEmpty.class,
+            ListOfQualityControlTypesShouldBeNonEmpty.class,
+            ListOfReplicateTypesShouldBeNonEmpty.class,
+            ListOfNormalizationTypesShouldBeNonEmpty.class,
+            ListOfProtocolsMustBeNonEmpty.class,
+            TermSourcesMustBeUniqueByName.class,
 
-            add(ListOfScanNodesMustNotBeEmpty.class);
-            add(ListOfArrayDesignAttributesMustBeEmpty.class);
-            add(ListOfLabeledExtractNodesMustBeEmpty.class);
-            add(LibraryConstructionProtocolRequired.class);
-            add(SequencingProtocolRequired.class);
-        }
-    };
+            ListOfScanNodesMustNotBeEmpty.class,
+            ListOfArrayDesignAttributesMustBeEmpty.class,
+            ListOfLabeledExtractNodesMustBeEmpty.class,
+            LibraryConstructionProtocolRequired.class,
+            SequencingProtocolRequired.class
+    );
 
     private final Injector injector;
 
@@ -77,6 +73,7 @@ public class AllChecks {
         this.injector = injector;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> List<CheckRunner<T>> getCheckRunnersFor(Class<T> itemClass, InvestigationType invType) {
         List<CheckRunner<T>> runners = new ArrayList<CheckRunner<T>>();
 
@@ -130,7 +127,7 @@ public class AllChecks {
 
     /**
      * Returns {@link ParameterizedType} for {@link GlobalCheck} interface if the given class implements it;
-     * otherswise <code>null</code>
+     * otherwise <code>null</code>
      *
      * @param clazz the class to check
      * @return a {@link ParameterizedType} for {@link GlobalCheck} interface or <code>null</code>

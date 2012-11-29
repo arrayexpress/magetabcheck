@@ -28,11 +28,11 @@ import java.util.Map;
 /**
  * @author Olga Melnichuk
  */
-class ClassBasedCheckRunner<T> extends CheckRunner<T> {
+class ClassBasedCheckRunner<T> extends AbstractCheckRunner<T> {
 
     private final GlobalCheck<T> target;
 
-    private final Method setContext;
+    private final Method contextSetter;
 
     ClassBasedCheckRunner(Injector injector, Class<? extends GlobalCheck<T>> targetClass) {
         super(isNotNull(targetClass.getAnnotation(MageTabCheck.class)));
@@ -44,7 +44,7 @@ class ClassBasedCheckRunner<T> extends CheckRunner<T> {
                 break;
             }
         }
-        this.setContext = contextSetter;
+        this.contextSetter = contextSetter;
 
         GlobalCheck<T> target = null;
         try {
@@ -69,8 +69,8 @@ class ClassBasedCheckRunner<T> extends CheckRunner<T> {
     @Override
     public void runWith(T item, Map<Class<?>, Object> context) {
         try {
-            if (setContext != null) {
-                setContext.invoke(target, getParams(setContext, context));
+            if (contextSetter != null) {
+                contextSetter.invoke(target, getParams(contextSetter, context));
             }
             target.visit(item);
         } catch (IllegalAccessException e) {

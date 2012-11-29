@@ -23,7 +23,6 @@ import com.google.inject.ProvisionException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Set;
 
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.newHashSet;
@@ -33,7 +32,7 @@ import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.getChec
 /**
  * @author Olga Melnichuk
  */
-class MethodBasedCheckRunner<T> extends CheckRunner<T> {
+class MethodBasedCheckRunner<T> extends AbstractCheckRunner<T> {
 
     private final Class<?> clazz;
 
