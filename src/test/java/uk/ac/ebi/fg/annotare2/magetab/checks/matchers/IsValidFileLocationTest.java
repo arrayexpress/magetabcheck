@@ -1,4 +1,4 @@
-package uk.ac.ebi.fg.annotare2.magetab.checks;
+package uk.ac.ebi.fg.annotare2.magetab.checks.matchers;
 
 import org.junit.Test;
 import uk.ac.ebi.fg.annotare2.magetab.model.FileLocation;
