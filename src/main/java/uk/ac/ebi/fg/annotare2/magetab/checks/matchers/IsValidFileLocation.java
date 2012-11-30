@@ -50,8 +50,10 @@ public class IsValidFileLocation extends TypeSafeMatcher<FileLocation> {
                 File file = new File(location.getFile());
                 return file.exists();
             } else if ("http".equals(protocol) || "https".equals(protocol)) {
-                int response = ((HttpURLConnection) location.openConnection()).getResponseCode();
+                HttpURLConnection conn = (HttpURLConnection) location.openConnection();
+                int response = conn.getResponseCode();
                 if (response != HttpURLConnection.HTTP_OK) {
+                    conn.disconnect();
                     return false;
                 }
             } else {
