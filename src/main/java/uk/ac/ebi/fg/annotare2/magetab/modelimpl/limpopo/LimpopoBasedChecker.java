@@ -34,6 +34,8 @@ import uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.idf.LimpopoIdfDataProxy;
 import uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.sdrf.LimpopoBasedSdrfGraph;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
 
 import static com.google.common.collect.Ordering.natural;
@@ -59,34 +61,35 @@ public class LimpopoBasedChecker {
 
     public static void main(String... args) {
         if (args.length == 0) {
-            log.info("Usage: LimpopoBasedChecker /path/to/idf");
-            exit(0);
+            log.info("Usage: LimpopoBasedChecker /path/to/idf1 /path/to/idf2 ...");
+            exit(1);
         }
 
         setLogLevel();
 
-        (new LimpopoBasedChecker()).run(args);
+        (new LimpopoBasedChecker()).runAll(args);
     }
 
     private static void setLogLevel() {
         String debug = System.getProperty("checker.debug");
         if (debug != null && Boolean.parseBoolean(debug)) {
-           org.apache.log4j.Logger.getRootLogger().setLevel(Level.DEBUG);
+            org.apache.log4j.Logger.getRootLogger().setLevel(Level.DEBUG);
         }
     }
 
-    private void run(String... idfPaths) {
+    private void runAll(String... idfPaths) {
         for (String idfPath : idfPaths) {
-            run(new File(idfPath));
+            run(idfPath);
         }
     }
 
-    private void run(File idfPath) {
+    private void run(String idfPath) {
         try {
             logResult("/* ");
             logResult(" * Running checker for: " + idfPath);
             logResult(" *\\");
-            MAGETABInvestigation inv = parser.parse(idfPath);
+
+            MAGETABInvestigation inv = parse(idfPath);
             IdfData idf = new LimpopoIdfDataProxy(inv.IDF);
             Collection<CheckResult> results = checker.check(idf, new LimpopoBasedSdrfGraph(inv.SDRF, idf));
             results = natural().sortedCopy(results);
@@ -122,6 +125,15 @@ public class LimpopoBasedChecker {
             log.error("MAGE-TAB parse error", e);
         } catch (UndefinedInvestigationTypeException e) {
             log.error("Can't run checker without knowing the experiment type", e);
+        } catch (MalformedURLException e) {
+            log.error("Can't create an URL", e);
         }
+    }
+
+    private MAGETABInvestigation parse(String idfPath) throws ParseException, MalformedURLException {
+        if (idfPath.startsWith("http")) {
+            return parser.parse(new URL(idfPath));
+        }
+        return parser.parse(new File(idfPath));
     }
 }
