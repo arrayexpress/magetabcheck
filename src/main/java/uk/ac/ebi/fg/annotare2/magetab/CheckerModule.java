@@ -16,15 +16,17 @@
 
 package uk.ac.ebi.fg.annotare2.magetab;
 
+import com.google.common.io.Files;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.name.Names;
+import com.google.inject.util.Providers;
 import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
 
 /**
  * @author Olga Melnichuk
  */
-public class CheckerModule extends AbstractModule  {
+public class CheckerModule extends AbstractModule {
 
     //TODO move to config files
     private static final String EFO_URL = "http://www.ebi.ac.uk/efo/efo.owl";
@@ -37,6 +39,8 @@ public class CheckerModule extends AbstractModule  {
     }
 
     private static String getEfoCachePath() {
-        return System.getProperty("efo.cachedir");
+        String dir = System.getProperty("efo.cachedir");
+        return dir == null ?
+                Files.createTempDir().getPath() : dir;
     }
 }
