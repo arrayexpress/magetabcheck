@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.*;
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck("At least one contact must have an email")
+@MageTabCheck("At least one contact must have email specified")
 public class AtLeastOneContactWithEmailRequired implements GlobalCheck<Person> {
 
     private int emailCount;

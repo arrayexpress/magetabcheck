@@ -16,16 +16,17 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
 
+import uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality;
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetab.checks.NonEmptyListCheck;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.ExperimentalDesign;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck(value = "List of experimental designs should be non empty", modality = CheckModality.WARNING)
+@MageTabCheck(value = "Micro-array experiment must have at least one experimental design specified",
+        application = CheckApplicationType.MICRO_ARRAY_ONLY,
+        modality = CheckModality.WARNING)
 public class ListOfExperimentalDesignsShouldBeNonEmpty extends NonEmptyListCheck<ExperimentalDesign> {
 }

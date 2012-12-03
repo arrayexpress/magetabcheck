@@ -24,6 +24,6 @@ import uk.ac.ebi.fg.annotare2.magetab.model.idf.ReplicateType;
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck(value = "List of replicate types should be non empty", modality = CheckModality.WARNING)
+@MageTabCheck(value = "An experiment should have at least one replicate type specified", modality = CheckModality.WARNING)
 public class ListOfReplicateTypesShouldBeNonEmpty extends NonEmptyListCheck<ReplicateType> {
 }

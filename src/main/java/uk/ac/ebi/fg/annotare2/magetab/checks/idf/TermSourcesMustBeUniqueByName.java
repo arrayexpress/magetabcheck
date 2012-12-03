@@ -17,6 +17,7 @@
 package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
 
 import uk.ac.ebi.fg.annotare2.magetab.checker.GlobalCheck;
+import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 
 import java.util.Set;
@@ -29,6 +30,7 @@ import static org.hamcrest.Matchers.is;
 /**
  * @author Olga Melnichuk
  */
+@MageTabCheck("Name of a term source must be unique")
 public class TermSourcesMustBeUniqueByName implements GlobalCheck<TermSource> {
 
     private final Set<String> names = newHashSet();

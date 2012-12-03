@@ -23,6 +23,6 @@ import uk.ac.ebi.fg.annotare2.magetab.model.idf.ExperimentalFactor;
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck("List of experimental factors must be non empty")
+@MageTabCheck(" An experiment must have at least one experimental factor specified")
 public class ListOfExperimentalFactorsMustBeNonEmpty extends NonEmptyListCheck<ExperimentalFactor> {
 }

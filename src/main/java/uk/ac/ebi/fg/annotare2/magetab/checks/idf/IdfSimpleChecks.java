@@ -28,6 +28,7 @@ import static java.lang.Boolean.FALSE;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType.MICRO_ARRAY_ONLY;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.setCheckPosition;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality.WARNING;
 import static uk.ac.ebi.fg.annotare2.magetab.checks.matchers.IsDateString.isDateString;
@@ -41,37 +42,22 @@ import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.SUBMITTER_R
  */
 public class IdfSimpleChecks {
 
-    @MageTabCheck("Investigation Title must be specified")
+    @MageTabCheck("Experiment title must be specified")
     public void investigationTitleRequired(final Info info) {
         assertNotEmptyString(info.getTitle());
     }
 
-    @MageTabCheck("Experiment Description must be specified")
+    @MageTabCheck("Experiment description must be specified")
     public void experimentDescriptionRequired(Info info) {
         assertNotEmptyString(info.getExperimentDescription());
     }
 
-    @MageTabCheck("Public Release Date must be specified")
-    public void publicReleaseDateRequired(Info info) {
-        assertNotEmptyString(info.getPublicReleaseDate());
-    }
-
-    @MageTabCheck("Public Release Date must be in 'YYYY-MM-DD' format")
-    public void publicReleaseDateFormat(Info info) {
-        Cell<String> cell = info.getPublicReleaseDate();
-        if (isNullOrEmpty(cell.getValue())) {
-            return;
-        }
-        setPosition(cell);
-        assertThat(cell.getValue(), isDateString(DATE_FORMAT));
-    }
-
-    @MageTabCheck(value = "Date Of Experiment should be specified", modality = WARNING)
+    @MageTabCheck(value = "Experiment date should be specified", modality = WARNING)
     public void dateOfExperimentShouldBeSpecified(Info info) {
         assertNotEmptyString(info.getDateOfExperiment());
     }
 
-    @MageTabCheck("Date Of Experiment must be in 'YYYY-MM-DD' format")
+    @MageTabCheck("Experiment date must be in 'YYYY-MM-DD' format")
     public void dateOfExperimentFormat(Info info) {
         Cell<String> cell = info.getDateOfExperiment();
         if (isNullOrEmpty(cell.getValue())) {
@@ -81,7 +67,22 @@ public class IdfSimpleChecks {
         assertThat(cell.getValue(), isDateString(DATE_FORMAT));
     }
 
-    @MageTabCheck("SDRF File must be specified")
+    @MageTabCheck("Experiment public release date must be specified")
+    public void publicReleaseDateRequired(Info info) {
+        assertNotEmptyString(info.getPublicReleaseDate());
+    }
+
+    @MageTabCheck("Experiment public release date must be in 'YYYY-MM-DD' format")
+    public void publicReleaseDateFormat(Info info) {
+        Cell<String> cell = info.getPublicReleaseDate();
+        if (isNullOrEmpty(cell.getValue())) {
+            return;
+        }
+        setPosition(cell);
+        assertThat(cell.getValue(), isDateString(DATE_FORMAT));
+    }
+
+    @MageTabCheck("Reference to the SDRF file must be specified")
     public void sdrfFileMustBeSpecified(Info info) {
         Cell<FileLocation> cell = info.getSdrfFile();
         setPosition(cell);
@@ -89,7 +90,7 @@ public class IdfSimpleChecks {
         assertThat(cell.getValue().isEmpty(), is(FALSE));
     }
 
-    @MageTabCheck("SDRF File must be valid location")
+    @MageTabCheck("Reference to the SDRF file must be valid file location")
     public void sdrfFileMustBeValidLocation(Info info) {
         Cell<FileLocation> cell = info.getSdrfFile();
         FileLocation loc = cell.getValue();
@@ -100,22 +101,22 @@ public class IdfSimpleChecks {
         assertThat(loc, isValidFileLocation());
     }
 
-    @MageTabCheck("A contact must have Last Name specified")
+    @MageTabCheck("A contact must have last name specified")
     public void contactMustHaveLastName(Person person) {
         assertNotEmptyString(person.getLastName());
     }
 
-    @MageTabCheck(value = "A contact should have First Name specified", modality = WARNING)
+    @MageTabCheck(value = " A contact should have first name specified", modality = WARNING)
     public void contactShouldHaveFirstName(Person person) {
         assertNotEmptyString(person.getFirstName());
     }
 
-    @MageTabCheck(value = "A contact should have Affiliation specified", modality = WARNING)
+    @MageTabCheck(value = "A contact should have an affiliation specified", modality = WARNING)
     public void contactShouldHaveAffiliation(Person person) {
         assertNotEmptyString(person.getAffiliation());
     }
 
-    @MageTabCheck(value = "A contact roles should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "A contact role(s) should have a term source specified", modality = WARNING)
     public void contactRolesShouldHaveTermSource(Person person) {
         TermList roles = person.getRoles();
         if (roles == null || roles.isEmpty()) {
@@ -125,7 +126,7 @@ public class IdfSimpleChecks {
     }
 
     @MageTabCheck(
-            value = "A contact with '" + SUBMITTER_ROLE + "' role must have Affiliation specified",
+            value = "A contact with '" + SUBMITTER_ROLE + "' role must have affiliation specified",
             application = CheckApplicationType.HTS_ONLY)
     public void submitterMustHaveAffiliation(Person person) {
         TermList roles = person.getRoles();
@@ -137,12 +138,12 @@ public class IdfSimpleChecks {
         }
     }
 
-    @MageTabCheck(value = "An experimental design should have name specified", modality = WARNING)
+    @MageTabCheck(value = "An experimental design should be defined by a term", modality = WARNING, application = MICRO_ARRAY_ONLY)
     public void experimentDesignShouldHaveName(ExperimentalDesign exd) {
         assertNotEmptyString(exd.getName());
     }
 
-    @MageTabCheck(value = "An experimental design should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "An experimental design term should have a term source", modality = WARNING, application = MICRO_ARRAY_ONLY)
     public void experimentalDesignShouldHaveTermSource(ExperimentalDesign exd) {
         assertNotNull(exd.getSource());
     }
@@ -152,54 +153,54 @@ public class IdfSimpleChecks {
         assertNotEmptyString(exf.getName());
     }
 
-    @MageTabCheck(value = "An experimental factor type should be specified")
+    @MageTabCheck(value = "An experimental factor should have a type specified")
     public void experimentalFactorShouldHaveType(ExperimentalFactor exf) {
         assertNotEmptyString(exf.getType().getName());
     }
 
-    @MageTabCheck(value = "An experimental factor type should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "An experimental factor type should have term source specified", modality = WARNING)
     public void experimentalFactorTypeShouldHaveSource(ExperimentalFactor exf) {
         assertNotNull(exf.getType().getSource());
     }
 
-    @MageTabCheck(value = "A quality control type should have name specified", modality = WARNING)
+    @MageTabCheck(value = "A quality control type should be defined by a term", modality = WARNING)
     public void qualityControlTypeShouldHaveName(QualityControlType qt) {
         assertNotEmptyString(qt.getName());
     }
 
-    @MageTabCheck(value = "A quality control type should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "A quality control type should have term source specified", modality = WARNING)
     public void qualityControlTypeShouldHaveSource(QualityControlType qt) {
         assertNotNull(qt.getSource());
     }
 
-    @MageTabCheck(value = "A replicate type should have name specified", modality = WARNING)
+    @MageTabCheck(value = "A replicate type should be defined by a term", modality = WARNING)
     public void replicateTypeShouldHaveName(ReplicateType rt) {
         assertNotEmptyString(rt.getName());
     }
 
-    @MageTabCheck(value = "A replicate type should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "A replicate type should have term source specified", modality = WARNING)
     public void replicateTypeShouldHaveSource(ReplicateType rt) {
         assertNotNull(rt.getSource());
     }
 
-    @MageTabCheck(value = "A normalization type should have name specified", modality = WARNING)
+    @MageTabCheck(value = "A normalization type should be defined by a term", modality = WARNING)
     public void normalizationTypeShouldHaveName(NormalizationType nt) {
         assertNotEmptyString(nt.getName());
     }
 
-    @MageTabCheck(value = "A normalization type should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "A normalization type should have term source specified", modality = WARNING)
     public void normalizationTypeShouldHaveSource(NormalizationType nt) {
         assertNotNull(nt.getSource());
     }
 
-    @MageTabCheck(value = "A publication should have least one of PubMed ID, Publication DOI specified", modality = WARNING)
+    @MageTabCheck(value = "A publication should have at least one of PubMed ID or Publication DOI specified", modality = WARNING)
     public void publicationShouldHavePubMedIDOrDOI(Publication pub) {
         setPosition(pub.getPubMedId());
         assertThat(asList(pub.getPubMedId().getValue(), pub.getPublicationDOI().getValue()),
                 Matchers.<String>hasItem(not(isEmptyOrNullString())));
     }
 
-    @MageTabCheck("PubMed ID value must be numeric")
+    @MageTabCheck("PubMed Id must be numeric")
     public void pubMedIdMustBeNumeric(Publication pub) {
         Cell<String> cell = pub.getPubMedId();
         if (isNullOrEmpty(cell.getValue())) {
@@ -209,47 +210,47 @@ public class IdfSimpleChecks {
         assertThat(pub.getPubMedId().getValue(), matches("[0-9]+"));
     }
 
-    @MageTabCheck(value = "A publication should have authors specified", modality = WARNING)
+    @MageTabCheck(value = "A publication authors should be specified", modality = WARNING)
     public void publicationShouldHaveAuthorsSpecified(Publication pub) {
         assertNotEmptyString(pub.getAuthorList());
     }
 
-    @MageTabCheck(value = "A publication should have publication specified", modality = WARNING)
+    @MageTabCheck(value = "A publication title should be specified", modality = WARNING)
     public void publicationShouldHaveTitleSpecified(Publication pub) {
         assertNotEmptyString(pub.getTitle());
     }
 
-    @MageTabCheck(value = "A publication should have status specified", modality = WARNING)
+    @MageTabCheck(value = "A publication status should be specified", modality = WARNING)
     public void publicationShouldHaveStatusSpecified(Publication pub) {
         assertNotEmptyString(pub.getStatus().getName());
     }
 
-    @MageTabCheck(value = "A publication status should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "A publication status should have term source specified", modality = WARNING)
     public void publicationStatusShouldHaveTermSourceSpecified(Publication pub) {
         assertNotNull(pub.getStatus().getSource());
     }
 
-    @MageTabCheck("A protocol name required")
+    @MageTabCheck("Name of a protocol must be specified")
     public void protocolMustHaveName(Protocol prot) {
         assertNotEmptyString(prot.getName());
     }
 
-    @MageTabCheck("A protocol type required")
+    @MageTabCheck("A protocol type must be specified")
     public void protocolMustHaveType(Protocol prot) {
         assertNotEmptyString(prot.getType().getName());
     }
 
-    @MageTabCheck(value = "A protocol type should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "A protocol type should have term source specified", modality = WARNING)
     public void protocolTypeShouldHaveSource(Protocol prot) {
         assertNotNull(prot.getType().getSource());
     }
 
-    @MageTabCheck(value = "A protocol should have description specified", modality = WARNING)
+    @MageTabCheck(value = "Description of a protocol should be specified", modality = WARNING)
     public void protocolShouldHaveDescription(Protocol prot) {
         assertNotEmptyString(prot.getDescription());
     }
 
-    @MageTabCheck(value = "A protocol description should be over 50 characters long", modality = WARNING)
+    @MageTabCheck(value = "Description of a protocol should be over 50 characters long", modality = WARNING)
     public void protocolDescriptionShouldBeOver50CharsLong(Protocol prot) {
         Cell<String> cell = prot.getDescription();
         if (isNullOrEmpty(cell.getValue())) {
@@ -259,24 +260,25 @@ public class IdfSimpleChecks {
         assertThat(cell.getValue().length(), greaterThan(50));
     }
 
-    @MageTabCheck(value = "A term source should have name", modality = WARNING)
-    public void termSourceShouldHaveName(TermSource ts) {
+    @MageTabCheck(value = "A protocol should have parameters", modality = WARNING)
+    public void protocolShouldHaveParameters(Protocol prot) {
+        setPosition(prot.getParameters());
+        assertThat(prot.getParameters().getValue(), is(not(empty())));
+    }
+
+    @MageTabCheck("Name of a term source must be specified")
+    public void termSourceMustHaveName(TermSource ts) {
         assertNotEmptyString(ts.getName());
     }
 
-    @MageTabCheck(value = "A term source should have file/url specified", modality = WARNING)
+    @MageTabCheck(value = "URL/File of a term source should be specified", modality = WARNING)
     public void termSourceShouldHaveFile(TermSource ts) {
         assertNotEmptyString(ts.getFile());
     }
 
-    @MageTabCheck(value = "A term source should have version specified", modality = WARNING)
+    @MageTabCheck(value = "Version of a term source should be specified", modality = WARNING)
     public void termSourceShouldHaveVersion(TermSource ts) {
         assertNotEmptyString(ts.getVersion());
-    }
-
-    public void protocolShouldHaveParameters(Protocol prot) {
-        setPosition(prot.getParameters());
-        assertThat(prot.getParameters().getValue(), is(not(empty())));
     }
 
     private static <T> void assertNotNull(Cell<T> cell) {

@@ -29,7 +29,7 @@ import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.SUBMITTER_R
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck("At least one contact with 'submitter' role must have an email specified")
+@MageTabCheck("At least one contact with '" + SUBMITTER_ROLE + "' role must have an email specified")
 public class AtLeastOneSubmitterMustHaveEmail implements GlobalCheck<Person> {
 
     private int emailCount;
