@@ -49,17 +49,6 @@ class ClassAnnotationVisitor extends OWLObjectVisitorAdapter {
                 node.setOrganizational(Boolean.valueOf(literal));
             }
         },
-        ARRAYEXPRESS_LABEL {
-            @Override
-            public boolean matches(OWLAnnotationProperty property) {
-                return "ArrayExpress_label".equals(property.getIRI().getFragment());
-            }
-
-            @Override
-            public void updateNode(String literal, EfoNodeImpl node) {
-                node.setTerm(literal);
-            }
-        },
         ALTERNATIVE_TERM {
             @Override
             public boolean matches(OWLAnnotationProperty property) {

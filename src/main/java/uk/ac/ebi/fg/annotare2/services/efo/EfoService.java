@@ -77,7 +77,7 @@ public class EfoService {
         return findNode(startEfo, new Predicate<EfoNode>() {
             @Override
             public boolean apply(@Nullable EfoNode input) {
-                return term.equals(input.getTerm());
+                return term.equalsIgnoreCase(input.getTerm());
             }
         });
     }
