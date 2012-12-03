@@ -21,7 +21,7 @@
 
     <groupId>uk.ac.ebi.fg.annotare2</groupId>
     <artifactId>magetabcheck</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
 
     <name>MAGE-TAB Checker</name>
