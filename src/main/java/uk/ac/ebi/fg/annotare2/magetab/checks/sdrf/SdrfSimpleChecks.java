@@ -16,6 +16,7 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checks.sdrf;
 
+import uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType;
 import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetab.model.FileLocation;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
@@ -26,6 +27,7 @@ import java.util.Collection;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType.MICRO_ARRAY_ONLY;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality.WARNING;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.setCheckPosition;
 import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.DATE_FORMAT;
@@ -43,20 +45,20 @@ public class SdrfSimpleChecks {
         assertNotEmptyName(sourceNode);
     }
 
-    @MageTabCheck(value = "A source node should have Material Type attribute specified", modality = WARNING)
+    @MageTabCheck(value = "A source node should have 'Material Type' attribute specified", modality = WARNING)
     public void sourceNodeShouldHaveMaterialTypeAttribute(SdrfSourceNode sourceNode) {
         setPosition(sourceNode);
         assertNotNull(sourceNode.getMaterialType());
     }
 
-    @MageTabCheck(value = "A source node should have Provider attribute specified", modality = WARNING)
+    @MageTabCheck(value = "A source node should have 'Provider' attribute specified", modality = WARNING)
     public void sourceNodeShouldHaveProviderAttribute(SdrfSourceNode sourceNode) {
         setPosition(sourceNode);
         assertNotNull(sourceNode.getProvider());
         assertNotEmptyString(sourceNode.getProvider().getValue());
     }
 
-    @MageTabCheck("A source node must have an Organism characteristic specified")
+    @MageTabCheck("A source node must have an 'Organism' characteristic specified")
     public void sourceNodeMustHaveOrganismCharacteristic(SdrfSourceNode sourceNode) {
         setPosition(sourceNode);
         Collection<SdrfCharacteristicAttribute> characteristics = sourceNode.getCharacteristics();
@@ -77,7 +79,7 @@ public class SdrfSimpleChecks {
         return null;
     }
 
-    @MageTabCheck(value = "A source node should have more than 2 characteristics", modality = WARNING)
+    @MageTabCheck(value = "A source node should have more than 2 characteristic attributes", modality = WARNING)
     public void sourceNodeShouldHaveMoreThan2Characteristics(SdrfSourceNode sourceNode) {
         setPosition(sourceNode);
         Collection<SdrfCharacteristicAttribute> characteristics = sourceNode.getCharacteristics();
@@ -95,7 +97,7 @@ public class SdrfSimpleChecks {
         assertNotEmptyName(sampleNode);
     }
 
-    @MageTabCheck(value = "A sample node should have Material Type attribute specified", modality = WARNING)
+    @MageTabCheck(value = "A sample node should have 'Material Type' attribute specified", modality = WARNING)
     public void sampleNodeShouldHaveMaterialTypeAttribute(SdrfSampleNode sampleNode) {
         setPosition(sampleNode);
         assertNotNull(sampleNode.getMaterialType());
@@ -111,7 +113,7 @@ public class SdrfSimpleChecks {
         assertNotEmptyName(extractNode);
     }
 
-    @MageTabCheck(value = "An extract node should have Material Type attribute specified", modality = WARNING)
+    @MageTabCheck(value = "An extract node should have 'Material Type' attribute specified", modality = WARNING)
     public void extractNodeShouldHaveMaterialTypeAttribute(SdrfExtractNode extractNode) {
         setPosition(extractNode);
         assertNotNull(extractNode.getMaterialType());
@@ -122,40 +124,40 @@ public class SdrfSimpleChecks {
         assertNodeIsDescribedByProtocol(extractNode);
     }
 
-    @MageTabCheck("A labeled extract node must have name specified")
+    @MageTabCheck(value = "A labeled extract node must have name specified", application = MICRO_ARRAY_ONLY)
     public void labeledExtractNodeMustHaveName(SdrfLabeledExtractNode labeledExtractNode) {
         assertNotEmptyName(labeledExtractNode);
     }
 
-    @MageTabCheck(value = "A labeled extract node should have Material Type attribute specified", modality = WARNING)
+    @MageTabCheck(value = "A labeled extract node should have 'Material Type' attribute specified", modality = WARNING, application = MICRO_ARRAY_ONLY)
     public void labeledExtractNodeShouldHaveMaterialTypeAttribute(SdrfLabeledExtractNode labeledExtractNode) {
         setPosition(labeledExtractNode);
         assertNotNull(labeledExtractNode.getMaterialType());
     }
 
-    @MageTabCheck("A labeled extract node must have label attribute specified")
+    @MageTabCheck(value = "A labeled extract node must have 'Label' attribute specified", application = MICRO_ARRAY_ONLY)
     public void labeledExtractNodeMustHaveLabelAttribute(SdrfLabeledExtractNode labeledExtractNode) {
         setPosition(labeledExtractNode);
         assertNotNull(labeledExtractNode.getLabel());
     }
 
-    @MageTabCheck(value = "A labeled extract node should be described by a protocol", modality = WARNING)
+    @MageTabCheck(value = "A labeled extract node should be described by a protocol", modality = WARNING, application = MICRO_ARRAY_ONLY)
     public void labeledExtractNodeShouldBeDescribedByProtocol(SdrfLabeledExtractNode labeledExtractNode) {
         assertNodeIsDescribedByProtocol(labeledExtractNode);
     }
 
-    @MageTabCheck(value = "A label attribute should have name specified", modality = WARNING)
+    @MageTabCheck(value = "A label attribute should have name specified", modality = WARNING, application = MICRO_ARRAY_ONLY)
     public void labelAttributeShouldHaveName(SdrfLabelAttribute labelAttribute) {
         assertNotEmptyName(labelAttribute);
     }
 
-    @MageTabCheck(value = "A label attribute should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "A label attribute should have term source specified", modality = WARNING, application = MICRO_ARRAY_ONLY)
     public void labelAttributeShouldHaveTermSource(SdrfLabelAttribute la) {
         setPosition(la);
         assertNotEmptyString(la.getTermSourceRef());
     }
 
-    @MageTabCheck("TermSource value of label attribute must be defined in IDF")
+    @MageTabCheck(value = "Term source of a label attribute must be defined in IDF", application = MICRO_ARRAY_ONLY)
     public void termSourceOfLabelAttributeMustBeValid(SdrfLabelAttribute la) {
         setPosition(la);
         assertTermSourceIsValid(la);
@@ -166,13 +168,13 @@ public class SdrfSimpleChecks {
         assertNotEmptyName(materialTypeAttribute);
     }
 
-    @MageTabCheck(value = "A material type attribute should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "A material type attribute should have term source specified", modality = WARNING)
     public void materialTypeAttributeShouldHaveTermSource(SdrfMaterialTypeAttribute mta) {
         setPosition(mta);
         assertNotEmptyString(mta.getTermSourceRef());
     }
 
-    @MageTabCheck("TermSource value of material type attribute must be defined in IDF")
+    @MageTabCheck("Term source of a material type attribute must be defined in IDF")
     public void termSourceOfMaterialTypeAttributeMustBeValid(SdrfMaterialTypeAttribute mta) {
         setPosition(mta);
         assertTermSourceIsValid(mta);
@@ -189,13 +191,13 @@ public class SdrfSimpleChecks {
         assertNotEmptyString(protocolNode.getDate());
     }
 
-    @MageTabCheck(value = "A protocol node should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "A protocol node should have term source specified", modality = WARNING)
     public void protocolNodeShouldHaveTermSource(SdrfProtocolNode protocolNode) {
         setPosition(protocolNode);
         assertNotEmptyString(protocolNode.getTermSourceRef());
     }
 
-    @MageTabCheck("TermSource value of protocol node must be defined in IDF")
+    @MageTabCheck("Term source value of a protocol node must be defined in IDF")
     public void termSourceOfProtocolMustBeValid(SdrfProtocolNode protocolNode) {
         setPosition(protocolNode);
         assertTermSourceIsValid(protocolNode);
@@ -211,29 +213,29 @@ public class SdrfSimpleChecks {
         assertThat(date, isDateString(DATE_FORMAT));
     }
 
-    @MageTabCheck("An assay node must have a name")
+    @MageTabCheck("An assay node must have name specified")
     public void assayNodeMustHaveName(SdrfAssayNode assayNode) {
         assertNotEmptyName(assayNode);
     }
 
-    @MageTabCheck("An assay node must have Technology Type attribute specified")
+    @MageTabCheck("An assay node must have 'Technology Type' attribute specified")
     public void assayNodeMustHaveTechnologyTypeAttribute(SdrfAssayNode assayNode) {
         setPosition(assayNode);
         assertNotNull(assayNode.getTechnologyType());
     }
 
-    @MageTabCheck("Technology type attribute must have a name")
+    @MageTabCheck("Technology type attribute must have name specified")
     public void technologyTypeMustHaveName(SdrfTechnologyTypeAttribute technologyTypeAttribute) {
         assertNotEmptyName(technologyTypeAttribute);
     }
 
-    @MageTabCheck(value = "Technology type attribute should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "Technology type attribute should have term source specified", modality = WARNING)
     public void technologyTypeShouldHaveTermSource(SdrfTechnologyTypeAttribute technologyTypeAttribute) {
         setPosition(technologyTypeAttribute);
         assertNotEmptyString(technologyTypeAttribute.getTermSourceRef());
     }
 
-    @MageTabCheck("TermSource of a technology type attribute must be defined in IDF")
+    @MageTabCheck("Term source of a technology type attribute must be defined in IDF")
     public void termSourceOfTechnologyTypeMustBeValied(SdrfTechnologyTypeAttribute technologyTypeAttribute) {
         setPosition(technologyTypeAttribute);
         assertTermSourceIsValid(technologyTypeAttribute);
@@ -257,13 +259,13 @@ public class SdrfSimpleChecks {
         assertNotEmptyString(unitAttribute.getType());
     }
 
-    @MageTabCheck(value = "A unit attribute should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "A unit attribute should have term source specified", modality = WARNING)
     public void unitAttributeShouldHaveTermSource(SdrfUnitAttribute unitAttribute) {
         setPosition(unitAttribute);
         assertNotEmptyString(unitAttribute.getTermSourceRef());
     }
 
-    @MageTabCheck("TermSource value of a unit attribute must be declared in IDF")
+    @MageTabCheck("Term source of a unit attribute must be declared in IDF")
     public void termSourceOfUnitAttributeMustBeValid(SdrfUnitAttribute unitAttribute) {
         setPosition(unitAttribute);
         assertTermSourceIsValid(unitAttribute);
@@ -275,13 +277,13 @@ public class SdrfSimpleChecks {
         assertNotEmptyString(attribute.getType());
     }
 
-    @MageTabCheck(value = "A characteristic attribute should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "A characteristic attribute should have term source specified", modality = WARNING)
     public void characteristicAttributeShouldHaveTermSource(SdrfCharacteristicAttribute attribute) {
         setPosition(attribute);
         assertNotEmptyString(attribute.getTermSourceRef());
     }
 
-    @MageTabCheck("TermSource value of a characteristic attribute must be declared in IDF")
+    @MageTabCheck("Term source of a characteristic attribute must be declared in IDF")
     public void termSourceOfCharacteristicAttributeMustBeValid(SdrfCharacteristicAttribute attribute) {
         setPosition(attribute);
         assertTermSourceIsValid(attribute);
@@ -293,13 +295,13 @@ public class SdrfSimpleChecks {
         assertNotEmptyString(fvAttribute.getType());
     }
 
-    @MageTabCheck(value = "A factor value attribute should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "A factor value attribute should have term source specified", modality = WARNING)
     public void factorValueAttributeShouldHaveTermSource(SdrfFactorValueAttribute fvAttribute) {
         setPosition(fvAttribute);
         assertNotEmptyString(fvAttribute.getTermSourceRef());
     }
 
-    @MageTabCheck("TermSource value of a factor value attribute must be declared in IDF")
+    @MageTabCheck("Term source of a factor value attribute must be declared in IDF")
     public void termSourceOfFactorValueAttributeMustBeValid(SdrfFactorValueAttribute fvAttribute) {
         setPosition(fvAttribute);
         assertTermSourceIsValid(fvAttribute);
@@ -310,13 +312,13 @@ public class SdrfSimpleChecks {
         assertNotEmptyName(adAttribute);
     }
 
-    @MageTabCheck(value = "An array design should have TermSource specified", modality = WARNING)
+    @MageTabCheck(value = "An array design should have term source specified", modality = WARNING)
     public void arrayDesignAttributeShouldHaveTermSource(SdrfArrayDesignAttribute adAttribute) {
         setPosition(adAttribute);
         assertNotEmptyString(adAttribute.getTermSourceRef());
     }
 
-    @MageTabCheck("TermSource value of an array design attribute must be declared in IDF")
+    @MageTabCheck("Term source of an array design attribute must be declared in IDF")
     public void termSourceOfArrayDesignAttributeMustBeValid(SdrfArrayDesignAttribute adAttribute) {
         setPosition(adAttribute);
         assertTermSourceIsValid(adAttribute);
@@ -327,13 +329,13 @@ public class SdrfSimpleChecks {
         assertNotEmptyName(normalizationNode);
     }
 
-    @MageTabCheck(value = "A scan node should have a name", modality = WARNING)
+    @MageTabCheck(value = "A scan node should have name specified", modality = WARNING)
     public void scanNodeShouldHaveName(SdrfScanNode scanNode) {
         assertNotEmptyName(scanNode);
     }
 
-    @MageTabCheck(value = "An array data node should have a name", modality = WARNING)
-    public void arrayDataNodeSouldHaveName(SdrfArrayDataNode arrayDataNode) {
+    @MageTabCheck("An array data node must have a name")
+    public void arrayDataNodeMustHaveName(SdrfArrayDataNode arrayDataNode) {
         assertNotEmptyName(arrayDataNode);
     }
 

@@ -25,6 +25,6 @@ import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType.HTS_ON
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck(value = "List of scan nodes must not be non empty", application = HTS_ONLY)
+@MageTabCheck(value = "An SDRF graph must have at least one scan node", application = HTS_ONLY)
 public class ListOfScanNodesMustNotBeEmpty extends NonEmptyListCheck<SdrfScanNode> {
 }
