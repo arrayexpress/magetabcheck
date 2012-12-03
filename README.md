@@ -5,6 +5,8 @@ This is a validation library for [MAGE-TAB](https://annotare.googlecode.com/file
 
 Magetabcheck is the next version of the validator.
 
+Please refer to the [Wiki](https://github.com/arrayexpress/magetabcheck/wiki) for further details and usage instructions. 
+
 License
 =======
 [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
