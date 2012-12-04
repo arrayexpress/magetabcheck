@@ -15,7 +15,9 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -26,13 +28,28 @@
 
     <name>MAGE-TAB Checker</name>
 
-    <properties>
-        <gwt.version>2.4.0</gwt.version>
-        <guava.version>12.0</guava.version>
-        <guice.version>3.0</guice.version>
-        <slf4j.version>1.6.4</slf4j.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <description>
+        This is a validation library for MAGE-TAB file format, which is used to describe functional
+        genomics experiments in ArrayExpress archive (http://www.ebi.ac.uk/arrayexpress).
+    </description>
+
+    <url>https://github.com/arrayexpress/magetabcheck</url>
+
+    <developers>
+        <developer>
+            <id>olgamelnichuk</id>
+            <name>Olga Melnichuk</name>
+            <email>olkin@ebi.ac.uk</email>
+            <organization>EBI</organization>
+            <organizationUrl>http://www.ebi.ac.uk</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>0</timezone>
+            <properties/>
+        </developer>
+    </developers>
 
     <licenses>
         <license>
@@ -47,6 +64,14 @@
         <connection>scm:git:git://github.com/arrayexpress/magetabcheck.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/arrayexpress/magetabcheck.git</developerConnection>
     </scm>
+
+    <properties>
+        <gwt.version>2.4.0</gwt.version>
+        <guava.version>12.0</guava.version>
+        <guice.version>3.0</guice.version>
+        <slf4j.version>1.6.4</slf4j.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <distributionManagement>
         <downloadUrl>https://oss.sonatype.org/content/groups/public</downloadUrl>
