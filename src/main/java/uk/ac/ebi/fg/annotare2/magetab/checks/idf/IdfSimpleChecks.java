@@ -52,12 +52,12 @@ public class IdfSimpleChecks {
         assertNotEmptyString(info.getExperimentDescription());
     }
 
-    @MageTabCheck(value = "Experiment date should be specified", modality = WARNING)
+    @MageTabCheck(value = "Date of Experiment should be specified", modality = WARNING)
     public void dateOfExperimentShouldBeSpecified(Info info) {
         assertNotEmptyString(info.getDateOfExperiment());
     }
 
-    @MageTabCheck("Experiment date must be in 'YYYY-MM-DD' format")
+    @MageTabCheck("Date of Experiment must be in 'YYYY-MM-DD' format")
     public void dateOfExperimentFormat(Info info) {
         Cell<String> cell = info.getDateOfExperiment();
         if (isNullOrEmpty(cell.getValue())) {
