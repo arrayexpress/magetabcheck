@@ -8,4 +8,3 @@ This is the first release of MageTabChecker.
  * Added a system property to set the EFO cache directory, `-Defo.cachedir=/efo/cache/directory`  
  * Added the CLI support
  * Added a system property to turn off/on the debug output, `-Dchecker.debug=true`
- * The usage instructions could be found in README.md 
