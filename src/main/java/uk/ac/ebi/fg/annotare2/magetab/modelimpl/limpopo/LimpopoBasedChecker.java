@@ -87,13 +87,10 @@ public class LimpopoBasedChecker {
                     natural().sortedCopy(
                             checker.check(new LimpopoBasedExperiment(inv)));
 
-            int success = 0, failures = 0, warnings = 0, errors = 0;
+            int failures = 0, warnings = 0, errors = 0;
             for (CheckResult res : results) {
                 CheckResultStatus status = res.getStatus();
                 switch (status) {
-                    case SUCCESS:
-                        success++;
-                        break;
                     case WARNING:
                         warnings++;
                         break;
@@ -107,12 +104,11 @@ public class LimpopoBasedChecker {
                     logResult(res.asString());
                 }
             }
-            logResult("---");
+            logResult("");
             logResult("total=[" + results.size() + "]" +
-                    ", success=[" + success + "]" +
-                    ", failure=[" + failures + "]" +
-                    ", warning=[" + warnings + "]" +
-                    ", error=[" + errors + "]");
+                    ", failures=[" + failures + "]" +
+                    ", warnings=[" + warnings + "]" +
+                    ", errors=[" + errors + "]");
             logResult("---");
         } catch (ParseException e) {
             log.error("MAGE-TAB parse error", e);
