@@ -20,15 +20,10 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult;
-import uk.ac.ebi.fg.annotare2.magetab.checker.Checker;
-import uk.ac.ebi.fg.annotare2.magetab.checker.ExperimentType;
-import uk.ac.ebi.fg.annotare2.magetab.checker.UndefinedIExperimentTypeException;
+import uk.ac.ebi.fg.annotare2.magetab.checker.*;
 import uk.ac.ebi.fg.annotare2.magetab.model.Experiment;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Comment;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
-import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraph;
-import uk.ac.ebi.fg.annotare2.services.efo.EfoNode;
 import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
 
 import java.util.Collection;
@@ -42,53 +37,55 @@ public class MageTabChecker {
 
     private static final String AE_EXPERIMENT_TYPE_COMMENT = "AEExperimentType";
 
-    private final Injector injector;
+    private final AllChecks allChecks;
+
+    private final EfoService efoService;
 
     public MageTabChecker() {
-        this.injector = Guice.createInjector(new CheckerModule());
+        this(Guice.createInjector(new CheckerModule()));
     }
 
     public MageTabChecker(Injector injector) {
-        this.injector = injector;
+        allChecks = new AllChecks(injector);
+        efoService = injector.getInstance(EfoService.class);
     }
 
     public Collection<CheckResult> check(Experiment exp, ExperimentType type) {
         log.info("The experiment type is '{}'; running the checks..", type);
-
-        Checker checker = new Checker(injector, type);
-        checker.check(exp.getIdfData());
-        checker.check(exp.getSdfGraph());
-        return checker.getResults();
+        return (new Checker(allChecks, type)).check(exp);
     }
 
-    public Collection<CheckResult> check(Experiment exp) throws UndefinedIExperimentTypeException {
+    public Collection<CheckResult> check(Experiment exp) throws UknownExperimentTypeException {
         log.debug("The experiment type is not given explicitly");
         return check(exp, guessType(exp.getIdfData()));
     }
 
-    private ExperimentType guessType(IdfData idf) throws UndefinedIExperimentTypeException {
+    private ExperimentType guessType(IdfData idf) throws UknownExperimentTypeException {
         log.info("Looking for an experiment type in 'Comment[{}]' IDF field...", AE_EXPERIMENT_TYPE_COMMENT);
         Collection<Comment> comments = idf.getComments(AE_EXPERIMENT_TYPE_COMMENT);
         if (comments.isEmpty()) {
-            throw new UndefinedIExperimentTypeException("IDF doesn't contain '" + AE_EXPERIMENT_TYPE_COMMENT +
-                    "' comment; can't recognize an experiment type.");
+            throw new UknownExperimentTypeException("IDF doesn't contain '" + AE_EXPERIMENT_TYPE_COMMENT +
+                    "' comment; can't find the experiment type.");
         }
-        return findType(comments.iterator().next().getComment().getValue());
+        return lookupTypeInEfo(comments.iterator().next().getComment().getValue());
     }
 
-    private ExperimentType findType(String type) throws UndefinedIExperimentTypeException {
+    private ExperimentType lookupTypeInEfo(String type) throws UknownExperimentTypeException {
         log.debug("Comment[{}]='{}' has been found. Checking if it's defined in EFO...", AE_EXPERIMENT_TYPE_COMMENT, type);
-        EfoService service = injector.getInstance(EfoService.class);
-        EfoNode node = service.findMaInvestigationType(type);
-        if (node != null) {
+        
+        if (isMicroArrayExperiment(type)) {
             return ExperimentType.MICRO_ARRAY;
-        }
-
-        node = service.findHtsInvestigationType(type);
-        if (node != null) {
+        } else if (isHtsExperiment(type)) {
             return ExperimentType.HTS;
         }
-        throw new UndefinedIExperimentTypeException("Unknown Comment[" +
-                AE_EXPERIMENT_TYPE_COMMENT + "] value: '" + type + "'");
+        throw new UknownExperimentTypeException("Can't find '" + type + "' in EFO");
+    }
+
+    private boolean isHtsExperiment(String type) {
+        return efoService.findHtsInvestigationType(type) != null;
+    }
+
+    private boolean isMicroArrayExperiment(String type) {
+        return efoService.findMaInvestigationType(type) != null;
     }
 }

@@ -16,7 +16,7 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
-import com.google.inject.Injector;
+import uk.ac.ebi.fg.annotare2.magetab.model.Experiment;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.*;
 
@@ -37,12 +37,18 @@ public class Checker {
 
     private final AllChecks allChecks;
 
-    public Checker(Injector injector, ExperimentType type) {
+    public Checker(AllChecks allChecks, ExperimentType type) {
         this.invType = type;
-        this.allChecks = new AllChecks(injector);
+        this.allChecks = allChecks;
     }
 
-    public void check(IdfData idf) {
+    public Collection<CheckResult> check(Experiment exp) {
+        check(exp.getIdfData());
+        check(exp.getSdfGraph());
+        return getResults();
+    }
+
+    private void check(IdfData idf) {
         checkOne(idf.getInfo());
         checkAll(idf.getContacts(), Person.class);
         checkAll(idf.getExperimentDesigns(), ExperimentalDesign.class);
@@ -55,7 +61,7 @@ public class Checker {
         checkAll(idf.getTermSources(), TermSource.class);
     }
 
-    public void check(SdrfGraph graph) {
+    private void check(SdrfGraph graph) {
         //TODO do we still need a context?
         Map<Class<?>, Object> context = newHashMap();
 

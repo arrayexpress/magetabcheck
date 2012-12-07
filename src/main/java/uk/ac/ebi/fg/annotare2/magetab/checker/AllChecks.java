@@ -40,7 +40,7 @@ public class AllChecks {
 
     private static final Logger log = LoggerFactory.getLogger(AllChecks.class);
 
-    //TODO make it automatically detected
+   //TODO make it automatically detected
     private static final List<Class> methodBasedChecks = Arrays.<Class>asList(
             IdfSimpleChecks.class,
             SdrfSimpleChecks.class);
@@ -98,7 +98,7 @@ public class AllChecks {
                     continue;
                 }
                 if (isApplicable(annot, invType)) {
-                    runners.add(new MethodBasedCheckRunner<T>(injector, clazz, method));
+                    runners.add(new MethodBasedCheckRunner<T>(injector, method));
                 }
             }
         }

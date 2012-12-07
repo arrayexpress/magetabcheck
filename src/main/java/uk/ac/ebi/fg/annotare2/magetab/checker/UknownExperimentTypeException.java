@@ -19,9 +19,9 @@ package uk.ac.ebi.fg.annotare2.magetab.checker;
 /**
  * @author Olga Melnichuk
  */
-public class UndefinedIExperimentTypeException extends Exception {
+public class UknownExperimentTypeException extends Exception {
 
-    public UndefinedIExperimentTypeException(String message) {
+    public UknownExperimentTypeException(String message) {
         super(message);
     }
 }

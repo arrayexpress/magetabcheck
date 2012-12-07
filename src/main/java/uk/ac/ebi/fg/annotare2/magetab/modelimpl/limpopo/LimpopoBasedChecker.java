@@ -25,7 +25,7 @@ import uk.ac.ebi.arrayexpress2.magetab.parser.MAGETABParser;
 import uk.ac.ebi.fg.annotare2.magetab.MageTabChecker;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckResultStatus;
-import uk.ac.ebi.fg.annotare2.magetab.checker.UndefinedIExperimentTypeException;
+import uk.ac.ebi.fg.annotare2.magetab.checker.UknownExperimentTypeException;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -112,7 +112,7 @@ public class LimpopoBasedChecker {
             logResult("---");
         } catch (ParseException e) {
             log.error("MAGE-TAB parse error", e);
-        } catch (UndefinedIExperimentTypeException e) {
+        } catch (UknownExperimentTypeException e) {
             log.error("Can't run checker without knowing the experiment type", e);
         } catch (MalformedURLException e) {
             log.error("Can't create an URL", e);

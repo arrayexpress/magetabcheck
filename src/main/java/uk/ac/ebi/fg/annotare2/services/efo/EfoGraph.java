@@ -57,7 +57,7 @@ public class EfoGraph {
         public EfoGraph build() {
             EfoGraph graph = new EfoGraph();
 
-            log.debug("Building EFO graph: loading all classes..");
+            log.debug("Building EFO graph: loading all classes...");
 
             Map<String, EfoNodeImpl> efoMap = graph.efoMap;
             for (OWLClass cls : ontology.getClassesInSignature(true)) {

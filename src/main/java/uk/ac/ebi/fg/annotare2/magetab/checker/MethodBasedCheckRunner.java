@@ -25,7 +25,6 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
-import static com.google.common.collect.Sets.newHashSet;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.clearCheckPosition;
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.getCheckPosition;
 
@@ -34,15 +33,12 @@ import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.getChec
  */
 class MethodBasedCheckRunner<T> extends AbstractCheckRunner<T> {
 
-    private final Class<?> clazz;
-
     private final Method method;
 
     private final Injector injector;
 
-    MethodBasedCheckRunner(Injector injector, Class<?> clazz, Method method) {
+    MethodBasedCheckRunner(Injector injector, Method method) {
         super(isNotNull(method.getAnnotation(MageTabCheck.class)));
-        this.clazz = clazz;
         this.method = method;
         this.injector = injector;
     }
@@ -65,7 +61,7 @@ class MethodBasedCheckRunner<T> extends AbstractCheckRunner<T> {
         clearCheckPosition();
         try {
             Object[] params = getParams(method, add(context, item));
-            method.invoke(injector.getInstance(clazz), params);
+            method.invoke(injector.getInstance(method.getDeclaringClass()), params);
             success(getCheckPosition());
         } catch (InvocationTargetException e) {
             Throwable t = e.getCause();
