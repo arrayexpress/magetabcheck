@@ -28,7 +28,7 @@ import static java.util.Collections.emptyList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedMaterialTypeAttribute extends LimpopoBasedSdrfAttribute<MaterialTypeAttribute>
+class LimpopoBasedMaterialTypeAttribute extends LimpopoBasedSdrfAttribute<MaterialTypeAttribute>
         implements SdrfMaterialTypeAttribute {
 
     public LimpopoBasedMaterialTypeAttribute(MaterialTypeAttribute attribute, SdrfHelper helper) {

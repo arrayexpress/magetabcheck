@@ -28,7 +28,7 @@ import static java.util.Collections.emptyList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedArrayDesignAttribute extends LimpopoBasedSdrfAttribute<ArrayDesignAttribute>
+class LimpopoBasedArrayDesignAttribute extends LimpopoBasedSdrfAttribute<ArrayDesignAttribute>
         implements SdrfArrayDesignAttribute {
 
     public LimpopoBasedArrayDesignAttribute(ArrayDesignAttribute attribute, SdrfHelper helper) {

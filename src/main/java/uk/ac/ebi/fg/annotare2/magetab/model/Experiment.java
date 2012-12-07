@@ -14,24 +14,18 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.sdrf;
+package uk.ac.ebi.fg.annotare2.magetab.model;
 
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
-
-import java.util.Collection;
-
-import static java.util.Collections.emptyList;
+import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
+import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraph;
 
 /**
  * @author Olga Melnichuk
  */
-class LimpopoBasedUnknownAttribute extends LimpopoBasedSdrfAttribute<SDRFAttribute> {
-    protected LimpopoBasedUnknownAttribute(SDRFAttribute attribute, SdrfHelper helper) {
-        super(attribute, helper);
-    }
+public interface Experiment {
 
-    @Override
-    protected Collection<SDRFAttribute> getRawAttributes() {
-        return emptyList();
-    }
+    IdfData getIdfData();
+
+    SdrfGraph getSdfGraph();
+
 }

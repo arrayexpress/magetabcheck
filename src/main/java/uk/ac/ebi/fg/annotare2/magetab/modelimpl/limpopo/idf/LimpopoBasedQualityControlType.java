@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedQualityControlType extends LimpopoBasedIdfObject implements QualityControlType {
+class LimpopoBasedQualityControlType extends LimpopoBasedIdfObject implements QualityControlType {
 
 
     public LimpopoBasedQualityControlType(@Nonnull IdfHelper helper, int index) {

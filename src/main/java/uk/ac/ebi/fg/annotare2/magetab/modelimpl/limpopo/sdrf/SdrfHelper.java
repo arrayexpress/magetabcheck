@@ -39,7 +39,7 @@ import static uk.ac.ebi.fg.annotare2.magetab.utils.Urls.getFileName;
 /**
  * @author Olga Melnichuk
  */
-public class SdrfHelper {
+class SdrfHelper {
 
     private final Map<Identity, SdrfGraphNode> mappedNodes = newHashMap();
 

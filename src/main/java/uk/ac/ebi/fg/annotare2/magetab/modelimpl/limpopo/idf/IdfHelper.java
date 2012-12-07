@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * @author Olga Melnichuk
  */
-public class IdfHelper {
+class IdfHelper {
 
     private final IDF idf;
 

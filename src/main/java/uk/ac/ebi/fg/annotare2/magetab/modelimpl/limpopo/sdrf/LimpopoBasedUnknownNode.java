@@ -26,7 +26,7 @@ import static java.util.Collections.emptyList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedUnknownNode extends LimpopoBasedSdrfNode<SDRFNode> {
+class LimpopoBasedUnknownNode extends LimpopoBasedSdrfNode<SDRFNode> {
 
     public LimpopoBasedUnknownNode(SDRFNode node, SdrfHelper helper) {
         super(node, helper);

@@ -31,7 +31,7 @@ import static com.google.common.collect.Lists.newArrayList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedSourceNode extends LimpopoBasedMaterialNode<SourceNode> implements SdrfSourceNode {
+class LimpopoBasedSourceNode extends LimpopoBasedMaterialNode<SourceNode> implements SdrfSourceNode {
 
     public LimpopoBasedSourceNode(SourceNode node, SdrfHelper helper) {
         super(node, helper);

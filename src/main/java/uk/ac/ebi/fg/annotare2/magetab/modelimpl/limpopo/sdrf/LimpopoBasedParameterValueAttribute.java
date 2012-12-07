@@ -29,7 +29,7 @@ import static com.google.common.collect.Lists.newArrayList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedParameterValueAttribute extends LimpopoBasedSdrfAttribute<ParameterValueAttribute>
+class LimpopoBasedParameterValueAttribute extends LimpopoBasedSdrfAttribute<ParameterValueAttribute>
         implements SdrfParameterValueAttribute {
 
     public LimpopoBasedParameterValueAttribute(ParameterValueAttribute attribute, SdrfHelper helper) {

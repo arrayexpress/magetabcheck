@@ -28,7 +28,7 @@ import static java.util.Collections.emptyList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedUnitAttribute extends LimpopoBasedSdrfAttribute<UnitAttribute> implements SdrfUnitAttribute {
+class LimpopoBasedUnitAttribute extends LimpopoBasedSdrfAttribute<UnitAttribute> implements SdrfUnitAttribute {
 
     public LimpopoBasedUnitAttribute(UnitAttribute attribute, SdrfHelper helper) {
         super(attribute, helper);

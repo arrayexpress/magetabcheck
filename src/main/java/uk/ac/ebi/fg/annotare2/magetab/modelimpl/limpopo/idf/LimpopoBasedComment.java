@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedComment extends LimpopoBasedIdfObject implements Comment {
+class LimpopoBasedComment extends LimpopoBasedIdfObject implements Comment {
 
     private final String type;
 

@@ -28,7 +28,7 @@ import static java.util.Collections.emptyList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedCharacteristicAttribute extends LimpopoBasedSdrfAttribute<CharacteristicsAttribute>
+class LimpopoBasedCharacteristicAttribute extends LimpopoBasedSdrfAttribute<CharacteristicsAttribute>
         implements SdrfCharacteristicAttribute {
 
     protected LimpopoBasedCharacteristicAttribute(CharacteristicsAttribute attribute, SdrfHelper helper) {

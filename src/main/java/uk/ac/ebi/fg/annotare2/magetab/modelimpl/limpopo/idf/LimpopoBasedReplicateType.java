@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedReplicateType extends LimpopoBasedIdfObject implements ReplicateType {
+class LimpopoBasedReplicateType extends LimpopoBasedIdfObject implements ReplicateType {
 
     public LimpopoBasedReplicateType(@Nonnull IdfHelper helper, int index) {
         super(helper, index);

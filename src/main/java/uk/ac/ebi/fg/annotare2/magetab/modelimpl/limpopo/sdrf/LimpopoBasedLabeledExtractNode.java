@@ -29,7 +29,7 @@ import static com.google.common.collect.Lists.newArrayList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedLabeledExtractNode extends LimpopoBasedMaterialNode<LabeledExtractNode>
+class LimpopoBasedLabeledExtractNode extends LimpopoBasedMaterialNode<LabeledExtractNode>
         implements SdrfLabeledExtractNode {
 
     protected LimpopoBasedLabeledExtractNode(LabeledExtractNode node, SdrfHelper helper) {

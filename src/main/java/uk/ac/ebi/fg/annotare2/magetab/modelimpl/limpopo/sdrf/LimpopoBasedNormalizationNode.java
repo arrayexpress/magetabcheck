@@ -27,7 +27,7 @@ import static java.util.Collections.emptyList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedNormalizationNode extends LimpopoBasedSdrfNode<NormalizationNode>
+class LimpopoBasedNormalizationNode extends LimpopoBasedSdrfNode<NormalizationNode>
         implements SdrfNormalizationNode {
 
     public LimpopoBasedNormalizationNode(NormalizationNode node, SdrfHelper helper) {

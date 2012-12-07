@@ -22,7 +22,7 @@ import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedTermSource extends LimpopoBasedIdfObject implements TermSource {
+class LimpopoBasedTermSource extends LimpopoBasedIdfObject implements TermSource {
 
     public LimpopoBasedTermSource(IdfHelper helper, int index) {
         super(helper, index);

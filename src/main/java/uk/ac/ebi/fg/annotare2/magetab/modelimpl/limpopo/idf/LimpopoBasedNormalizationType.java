@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedNormalizationType extends LimpopoBasedIdfObject implements NormalizationType {
+class LimpopoBasedNormalizationType extends LimpopoBasedIdfObject implements NormalizationType {
 
     public LimpopoBasedNormalizationType(@Nonnull IdfHelper helper, int index) {
         super(helper, index);

@@ -26,7 +26,7 @@ import java.util.Collection;
 /**
  * @author Olga Melnichuk
  */
-public abstract class LimpopoBasedMaterialNode<T extends SDRFNode> extends LimpopoBasedSdrfNode<T> implements SdrfMaterialNode {
+abstract class LimpopoBasedMaterialNode<T extends SDRFNode> extends LimpopoBasedSdrfNode<T> implements SdrfMaterialNode {
 
     protected LimpopoBasedMaterialNode(T node, SdrfHelper helper) {
         super(node, helper);

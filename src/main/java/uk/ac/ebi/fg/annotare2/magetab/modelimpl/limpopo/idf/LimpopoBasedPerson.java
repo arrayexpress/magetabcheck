@@ -32,7 +32,7 @@ import static uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.idf.IdfTags.*;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedPerson extends LimpopoBasedIdfObject implements Person {
+class LimpopoBasedPerson extends LimpopoBasedIdfObject implements Person {
 
     public LimpopoBasedPerson(IdfHelper idf, int index) {
         super(idf, index);

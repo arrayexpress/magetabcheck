@@ -31,7 +31,7 @@ import static com.google.common.collect.Lists.newArrayList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedAssayNode extends LimpopoBasedSdrfNode<AssayNode> implements SdrfAssayNode {
+class LimpopoBasedAssayNode extends LimpopoBasedSdrfNode<AssayNode> implements SdrfAssayNode {
 
     protected LimpopoBasedAssayNode(AssayNode node, SdrfHelper helper) {
         super(node, helper);

@@ -28,7 +28,7 @@ import static java.util.Collections.emptyList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedArrayDataNode extends LimpopoBasedSdrfNode <ArrayDataNode> implements SdrfArrayDataNode {
+class LimpopoBasedArrayDataNode extends LimpopoBasedSdrfNode <ArrayDataNode> implements SdrfArrayDataNode {
 
     public LimpopoBasedArrayDataNode(ArrayDataNode node, SdrfHelper helper) {
         super(node, helper);

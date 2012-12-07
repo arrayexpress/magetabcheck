@@ -24,7 +24,7 @@ import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraphAttribute;
 /**
  * @author Olga Melnichuk
  */
-public abstract class LimpopoBasedSdrfAttribute<T extends SDRFAttribute> extends ObjectWithAttributes implements SdrfGraphAttribute {
+abstract class LimpopoBasedSdrfAttribute<T extends SDRFAttribute> extends ObjectWithAttributes implements SdrfGraphAttribute {
 
     private final SdrfHelper helper;
 

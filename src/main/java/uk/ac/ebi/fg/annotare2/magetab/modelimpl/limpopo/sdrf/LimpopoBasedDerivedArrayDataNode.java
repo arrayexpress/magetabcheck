@@ -28,7 +28,7 @@ import static java.util.Collections.emptyList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedDerivedArrayDataNode extends LimpopoBasedSdrfNode<DerivedArrayDataNode>
+class LimpopoBasedDerivedArrayDataNode extends LimpopoBasedSdrfNode<DerivedArrayDataNode>
         implements SdrfDerivedArrayDataNode {
 
     protected LimpopoBasedDerivedArrayDataNode(DerivedArrayDataNode node, SdrfHelper helper) {

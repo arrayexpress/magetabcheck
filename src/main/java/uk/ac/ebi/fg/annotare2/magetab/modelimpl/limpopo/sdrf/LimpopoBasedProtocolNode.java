@@ -31,7 +31,7 @@ import static com.google.common.collect.Lists.newArrayList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedProtocolNode extends LimpopoBasedSdrfNode<ProtocolApplicationNode>
+class LimpopoBasedProtocolNode extends LimpopoBasedSdrfNode<ProtocolApplicationNode>
         implements SdrfProtocolNode {
 
     public LimpopoBasedProtocolNode(ProtocolApplicationNode node, SdrfHelper helper) {

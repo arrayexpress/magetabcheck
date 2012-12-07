@@ -30,7 +30,7 @@ import static com.google.common.collect.Lists.newArrayList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedFactorValueAttribute extends LimpopoBasedSdrfAttribute<FactorValueAttribute>
+class LimpopoBasedFactorValueAttribute extends LimpopoBasedSdrfAttribute<FactorValueAttribute>
         implements SdrfFactorValueAttribute {
 
     protected LimpopoBasedFactorValueAttribute(FactorValueAttribute attribute, SdrfHelper helper) {

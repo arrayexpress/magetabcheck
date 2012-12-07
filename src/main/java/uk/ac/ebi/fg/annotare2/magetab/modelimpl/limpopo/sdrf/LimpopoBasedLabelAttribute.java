@@ -27,7 +27,7 @@ import java.util.Collections;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedLabelAttribute extends LimpopoBasedSdrfAttribute<LabelAttribute> implements SdrfLabelAttribute {
+class LimpopoBasedLabelAttribute extends LimpopoBasedSdrfAttribute<LabelAttribute> implements SdrfLabelAttribute {
 
     public LimpopoBasedLabelAttribute(LabelAttribute attribute, SdrfHelper helper) {
         super(attribute, helper);

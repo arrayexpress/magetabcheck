@@ -27,7 +27,7 @@ import static java.util.Collections.emptyList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedPerformerAttribute extends LimpopoBasedSdrfAttribute<PerformerAttribute>
+class LimpopoBasedPerformerAttribute extends LimpopoBasedSdrfAttribute<PerformerAttribute>
         implements SdrfPerformerAttribute {
 
     protected LimpopoBasedPerformerAttribute(PerformerAttribute attribute, SdrfHelper helper) {

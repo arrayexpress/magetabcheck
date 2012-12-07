@@ -23,12 +23,9 @@ import uk.ac.ebi.arrayexpress2.magetab.datamodel.MAGETABInvestigation;
 import uk.ac.ebi.arrayexpress2.magetab.exception.ParseException;
 import uk.ac.ebi.arrayexpress2.magetab.parser.MAGETABParser;
 import uk.ac.ebi.fg.annotare2.magetab.MageTabChecker;
-import uk.ac.ebi.fg.annotare2.magetab.checker.UndefinedIExperimentTypeException;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckResultStatus;
-import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
-import uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.idf.LimpopoIdfDataProxy;
-import uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.sdrf.LimpopoBasedSdrfGraph;
+import uk.ac.ebi.fg.annotare2.magetab.checker.UndefinedIExperimentTypeException;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -86,9 +83,9 @@ public class LimpopoBasedChecker {
             logResult(" *\\");
 
             MAGETABInvestigation inv = parse(idfPath);
-            IdfData idf = new LimpopoIdfDataProxy(inv.IDF);
-            Collection<CheckResult> results = checker.check(idf, new LimpopoBasedSdrfGraph(inv.SDRF, idf));
-            results = natural().sortedCopy(results);
+            Collection<CheckResult> results =
+                    natural().sortedCopy(
+                            checker.check(new LimpopoBasedExperiment(inv)));
 
             int success = 0, failures = 0, warnings = 0, errors = 0;
             for (CheckResult res : results) {

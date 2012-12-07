@@ -24,6 +24,7 @@ import uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult;
 import uk.ac.ebi.fg.annotare2.magetab.checker.Checker;
 import uk.ac.ebi.fg.annotare2.magetab.checker.ExperimentType;
 import uk.ac.ebi.fg.annotare2.magetab.checker.UndefinedIExperimentTypeException;
+import uk.ac.ebi.fg.annotare2.magetab.model.Experiment;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Comment;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraph;
@@ -51,17 +52,18 @@ public class MageTabChecker {
         this.injector = injector;
     }
 
-    public Collection<CheckResult> check(IdfData idf, SdrfGraph sdrf, ExperimentType type) {
+    public Collection<CheckResult> check(Experiment exp, ExperimentType type) {
         log.info("The experiment type is '{}'; running the checks..", type);
+
         Checker checker = new Checker(injector, type);
-        checker.check(idf);
-        checker.check(sdrf);
+        checker.check(exp.getIdfData());
+        checker.check(exp.getSdfGraph());
         return checker.getResults();
     }
 
-    public Collection<CheckResult> check(IdfData idf, SdrfGraph sdrf) throws UndefinedIExperimentTypeException {
-        log.debug("The experiment type is not given explicit");
-        return check(idf, sdrf, guessType(idf));
+    public Collection<CheckResult> check(Experiment exp) throws UndefinedIExperimentTypeException {
+        log.debug("The experiment type is not given explicitly");
+        return check(exp, guessType(exp.getIdfData()));
     }
 
     private ExperimentType guessType(IdfData idf) throws UndefinedIExperimentTypeException {

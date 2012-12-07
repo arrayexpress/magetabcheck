@@ -28,7 +28,7 @@ import static java.util.Collections.emptyList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedTechnologyTypeAttribute extends LimpopoBasedSdrfAttribute<TechnologyTypeAttribute>
+class LimpopoBasedTechnologyTypeAttribute extends LimpopoBasedSdrfAttribute<TechnologyTypeAttribute>
         implements SdrfTechnologyTypeAttribute {
 
     public LimpopoBasedTechnologyTypeAttribute(TechnologyTypeAttribute attribute, SdrfHelper helper) {

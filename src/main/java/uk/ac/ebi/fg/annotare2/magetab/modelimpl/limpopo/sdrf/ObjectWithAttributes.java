@@ -12,7 +12,7 @@ import static com.google.common.collect.Lists.newArrayList;
 /**
  * @author Olga Melnichuk
  */
-public abstract class ObjectWithAttributes implements HasAttributes {
+abstract class ObjectWithAttributes implements HasAttributes {
 
     private final SdrfHelper helper;
 

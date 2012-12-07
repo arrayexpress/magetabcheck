@@ -32,7 +32,7 @@ import static com.google.common.collect.Lists.newArrayList;
 /**
  * @author Olga Melnichuk
  */
-public abstract class LimpopoBasedSdrfNode<T extends SDRFNode> extends ObjectWithAttributes implements SdrfGraphNode {
+abstract class LimpopoBasedSdrfNode<T extends SDRFNode> extends ObjectWithAttributes implements SdrfGraphNode {
 
     private final SdrfHelper helper;
 

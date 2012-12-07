@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * @author Olga Melnichuk
  */
-public abstract class LimpopoBasedIdfObject {
+abstract class LimpopoBasedIdfObject {
 
     private final IdfHelper helper;
 

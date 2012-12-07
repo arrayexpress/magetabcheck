@@ -27,7 +27,7 @@ import static java.util.Collections.emptyList;
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedProviderAttribute extends LimpopoBasedSdrfAttribute<ProviderAttribute>
+class LimpopoBasedProviderAttribute extends LimpopoBasedSdrfAttribute<ProviderAttribute>
         implements SdrfProviderAttribute {
 
     public LimpopoBasedProviderAttribute(ProviderAttribute attribute, SdrfHelper helper) {

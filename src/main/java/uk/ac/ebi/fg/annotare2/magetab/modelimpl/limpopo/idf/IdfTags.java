@@ -19,7 +19,7 @@ package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.idf;
 /**
  * @author Olga Melnichuk
  */
-public abstract class IdfTags {
+abstract class IdfTags {
 
     public static final String INVESTIGATION_TITLE = "Investigation Title";
 
