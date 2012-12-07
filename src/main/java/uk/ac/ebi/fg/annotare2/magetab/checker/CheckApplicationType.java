@@ -20,23 +20,23 @@ import java.util.EnumSet;
 
 import static java.util.EnumSet.allOf;
 import static java.util.EnumSet.of;
-import static uk.ac.ebi.fg.annotare2.magetab.checker.InvestigationType.*;
+import static uk.ac.ebi.fg.annotare2.magetab.checker.ExperimentType.*;
 
 /**
  * @author Olga Melnichuk
  */
 public enum CheckApplicationType {
-    ANY(allOf(InvestigationType.class)),
+    ANY(allOf(ExperimentType.class)),
     HTS_ONLY(of(HTS)),
     MICRO_ARRAY_ONLY(of(MICRO_ARRAY));
 
-    private final EnumSet<InvestigationType> enumSet;
+    private final EnumSet<ExperimentType> enumSet;
 
-    private CheckApplicationType(EnumSet<InvestigationType> enumSet) {
+    private CheckApplicationType(EnumSet<ExperimentType> enumSet) {
         this.enumSet = enumSet;
     }
 
-    public boolean appliesTo(InvestigationType type) {
+    public boolean appliesTo(ExperimentType type) {
         return enumSet.contains(type);
     }
 }

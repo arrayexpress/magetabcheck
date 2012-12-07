@@ -19,7 +19,9 @@ package uk.ac.ebi.fg.annotare2.magetab.checker;
 /**
  * @author Olga Melnichuk
  */
-public enum InvestigationType {
-    HTS,
-    MICRO_ARRAY
+public class UndefinedIExperimentTypeException extends Exception {
+
+    public UndefinedIExperimentTypeException(String message) {
+        super(message);
+    }
 }

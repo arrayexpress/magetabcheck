@@ -31,13 +31,13 @@ import static com.google.common.collect.Sets.newHashSet;
  */
 public class Checker {
 
-    private final InvestigationType invType;
+    private final ExperimentType invType;
 
     private List<CheckResult> results = new ArrayList<CheckResult>();
 
     private final AllChecks allChecks;
 
-    public Checker(Injector injector, InvestigationType type) {
+    public Checker(Injector injector, ExperimentType type) {
         this.invType = type;
         this.allChecks = new AllChecks(injector);
     }

@@ -74,7 +74,7 @@ public class AllChecks {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> List<CheckRunner<T>> getCheckRunnersFor(Class<T> itemClass, InvestigationType invType) {
+    public <T> List<CheckRunner<T>> getCheckRunnersFor(Class<T> itemClass, ExperimentType invType) {
         List<CheckRunner<T>> runners = new ArrayList<CheckRunner<T>>();
 
         for (Class clazz : classBasedChecks) {
@@ -105,7 +105,7 @@ public class AllChecks {
         return runners;
     }
 
-    private static boolean isApplicable(MageTabCheck annot, InvestigationType type) {
+    private static boolean isApplicable(MageTabCheck annot, ExperimentType type) {
         return annot != null && annot.application().appliesTo(type);
     }
 

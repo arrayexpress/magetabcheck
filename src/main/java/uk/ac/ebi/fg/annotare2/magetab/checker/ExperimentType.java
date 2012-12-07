@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab;
+package uk.ac.ebi.fg.annotare2.magetab.checker;
 
 /**
  * @author Olga Melnichuk
  */
-public class UndefinedInvestigationTypeException extends Exception {
-
-    public UndefinedInvestigationTypeException(String message) {
-        super(message);
-    }
+public enum ExperimentType {
+    HTS,
+    MICRO_ARRAY
 }

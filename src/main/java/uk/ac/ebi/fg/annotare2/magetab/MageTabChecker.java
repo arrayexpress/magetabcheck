@@ -16,12 +16,14 @@
 
 package uk.ac.ebi.fg.annotare2.magetab;
 
+import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult;
 import uk.ac.ebi.fg.annotare2.magetab.checker.Checker;
-import uk.ac.ebi.fg.annotare2.magetab.checker.InvestigationType;
+import uk.ac.ebi.fg.annotare2.magetab.checker.ExperimentType;
+import uk.ac.ebi.fg.annotare2.magetab.checker.UndefinedIExperimentTypeException;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Comment;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfGraph;
@@ -41,11 +43,15 @@ public class MageTabChecker {
 
     private final Injector injector;
 
+    public MageTabChecker() {
+        this.injector = Guice.createInjector(new CheckerModule());
+    }
+
     public MageTabChecker(Injector injector) {
         this.injector = injector;
     }
 
-    public Collection<CheckResult> check(IdfData idf, SdrfGraph sdrf, InvestigationType type) {
+    public Collection<CheckResult> check(IdfData idf, SdrfGraph sdrf, ExperimentType type) {
         log.info("The experiment type is '{}'; running the checks..", type);
         Checker checker = new Checker(injector, type);
         checker.check(idf);
@@ -53,34 +59,34 @@ public class MageTabChecker {
         return checker.getResults();
     }
 
-    public Collection<CheckResult> check(IdfData idf, SdrfGraph sdrf) throws UndefinedInvestigationTypeException {
+    public Collection<CheckResult> check(IdfData idf, SdrfGraph sdrf) throws UndefinedIExperimentTypeException {
         log.debug("The experiment type is not given explicit");
         return check(idf, sdrf, guessType(idf));
     }
 
-    private InvestigationType guessType(IdfData idf) throws UndefinedInvestigationTypeException {
+    private ExperimentType guessType(IdfData idf) throws UndefinedIExperimentTypeException {
         log.info("Looking for an experiment type in 'Comment[{}]' IDF field...", AE_EXPERIMENT_TYPE_COMMENT);
         Collection<Comment> comments = idf.getComments(AE_EXPERIMENT_TYPE_COMMENT);
         if (comments.isEmpty()) {
-            throw new UndefinedInvestigationTypeException("IDF doesn't contain '" + AE_EXPERIMENT_TYPE_COMMENT +
+            throw new UndefinedIExperimentTypeException("IDF doesn't contain '" + AE_EXPERIMENT_TYPE_COMMENT +
                     "' comment; can't recognize an experiment type.");
         }
         return findType(comments.iterator().next().getComment().getValue());
     }
 
-    private InvestigationType findType(String type) throws UndefinedInvestigationTypeException {
+    private ExperimentType findType(String type) throws UndefinedIExperimentTypeException {
         log.debug("Comment[{}]='{}' has been found. Checking if it's defined in EFO...", AE_EXPERIMENT_TYPE_COMMENT, type);
         EfoService service = injector.getInstance(EfoService.class);
         EfoNode node = service.findMaInvestigationType(type);
         if (node != null) {
-            return InvestigationType.MICRO_ARRAY;
+            return ExperimentType.MICRO_ARRAY;
         }
 
         node = service.findHtsInvestigationType(type);
         if (node != null) {
-            return InvestigationType.HTS;
+            return ExperimentType.HTS;
         }
-        throw new UndefinedInvestigationTypeException("Unknown Comment[" +
+        throw new UndefinedIExperimentTypeException("Unknown Comment[" +
                 AE_EXPERIMENT_TYPE_COMMENT + "] value: '" + type + "'");
     }
 }

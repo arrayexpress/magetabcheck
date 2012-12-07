@@ -16,17 +16,14 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.MAGETABInvestigation;
 import uk.ac.ebi.arrayexpress2.magetab.exception.ParseException;
 import uk.ac.ebi.arrayexpress2.magetab.parser.MAGETABParser;
-import uk.ac.ebi.fg.annotare2.magetab.CheckerModule;
 import uk.ac.ebi.fg.annotare2.magetab.MageTabChecker;
-import uk.ac.ebi.fg.annotare2.magetab.UndefinedInvestigationTypeException;
+import uk.ac.ebi.fg.annotare2.magetab.checker.UndefinedIExperimentTypeException;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckResultStatus;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
@@ -54,8 +51,7 @@ public class LimpopoBasedChecker {
     private MAGETABParser parser;
 
     private LimpopoBasedChecker() {
-        Injector injector = Guice.createInjector(new CheckerModule());
-        checker = new MageTabChecker(injector);
+        checker = new MageTabChecker();
         parser = new MAGETABParser();
     }
 
@@ -123,7 +119,7 @@ public class LimpopoBasedChecker {
             logResult("---");
         } catch (ParseException e) {
             log.error("MAGE-TAB parse error", e);
-        } catch (UndefinedInvestigationTypeException e) {
+        } catch (UndefinedIExperimentTypeException e) {
             log.error("Can't run checker without knowing the experiment type", e);
         } catch (MalformedURLException e) {
             log.error("Can't create an URL", e);
