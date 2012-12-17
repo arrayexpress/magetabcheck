@@ -17,21 +17,22 @@
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
 import com.google.inject.Injector;
+import org.reflections.Reflections;
+import org.reflections.scanners.MethodAnnotationsScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.fg.annotare2.magetab.checks.idf.*;
-import uk.ac.ebi.fg.annotare2.magetab.checks.sdrf.ListOfArrayDesignAttributesMustBeEmpty;
-import uk.ac.ebi.fg.annotare2.magetab.checks.sdrf.ListOfLabeledExtractNodesMustBeEmpty;
-import uk.ac.ebi.fg.annotare2.magetab.checks.sdrf.ListOfScanNodesMustNotBeEmpty;
-import uk.ac.ebi.fg.annotare2.magetab.checks.sdrf.SdrfSimpleChecks;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * @author Olga Melnichuk
@@ -40,42 +41,36 @@ public class AllChecks {
 
     private static final Logger log = LoggerFactory.getLogger(AllChecks.class);
 
-   //TODO make it automatically detected
-    private static final List<Class> methodBasedChecks = Arrays.<Class>asList(
-            IdfSimpleChecks.class,
-            SdrfSimpleChecks.class);
+    private final Collection<Method> methodBasedChecks;
 
-    //TODO make it automatically detected
-    private static final List<Class> classBasedChecks = Arrays.<Class>asList(
-            AtLeastOneContactMustBeSubmitter.class,
-            AtLeastOneContactWithEmailRequired.class,
-            AtLeastOneContactWithRolesRequired.class,
-            AtLeastOneSubmitterMustHaveEmail.class,
-            ListOfContactsMustBeNonEmpty.class,
-            ListOfExperimentalDesignsShouldBeNonEmpty.class,
-            ListOfExperimentalFactorsMustBeNonEmpty.class,
-            ListOfQualityControlTypesShouldBeNonEmpty.class,
-            ListOfReplicateTypesShouldBeNonEmpty.class,
-            ListOfNormalizationTypesShouldBeNonEmpty.class,
-            ListOfProtocolsMustBeNonEmpty.class,
-            TermSourcesMustBeUniqueByName.class,
-
-            ListOfScanNodesMustNotBeEmpty.class,
-            ListOfArrayDesignAttributesMustBeEmpty.class,
-            ListOfLabeledExtractNodesMustBeEmpty.class,
-            LibraryConstructionProtocolRequired.class,
-            SequencingProtocolRequired.class
-    );
+    private final Collection<Class<?>> classBasedChecks;
 
     private final Injector injector;
 
     public AllChecks(Injector injector) {
         this.injector = injector;
+        Reflections reflections = new Reflections(
+                new ConfigurationBuilder()
+                        .setUrls(ClasspathHelper.forJavaClassPath())
+                        .setScanners(new TypeAnnotationsScanner(), new MethodAnnotationsScanner())
+        );
+
+        classBasedChecks = reflections.getTypesAnnotatedWith(MageTabCheck.class);
+        methodBasedChecks = reflections.getMethodsAnnotatedWith(MageTabCheck.class);
+
+        log.debug("found [{}] class-based checks, [{}] method-based checks",
+                classBasedChecks.size(), methodBasedChecks.size());
+        for (Class<?> clazz : classBasedChecks) {
+            log.debug("class-based check: {}", clazz);
+        }
+        for (Method m : methodBasedChecks) {
+            log.debug("method-based check: ({}, {})", m.getName(),  m.getDeclaringClass());
+        }
     }
 
     @SuppressWarnings("unchecked")
     public <T> List<CheckRunner<T>> getCheckRunnersFor(Class<T> itemClass, ExperimentType invType) {
-        List<CheckRunner<T>> runners = new ArrayList<CheckRunner<T>>();
+        List<CheckRunner<T>> runners = newArrayList();
 
         for (Class clazz : classBasedChecks) {
             Class typeArg = getGlobalCheckTypeArgument(clazz);
@@ -87,19 +82,13 @@ public class AllChecks {
             }
         }
 
-        for (Class clazz : methodBasedChecks) {
-            for (Method method : clazz.getMethods()) {
-                MageTabCheck annot = method.getAnnotation(MageTabCheck.class);
-                if (annot == null) {
-                    continue;
-                }
-                Class[] types = method.getParameterTypes();
-                if (types != null && !types[0].isAssignableFrom(itemClass)) {
-                    continue;
-                }
-                if (isApplicable(annot, invType)) {
-                    runners.add(new MethodBasedCheckRunner<T>(injector, method));
-                }
+        for (Method method : methodBasedChecks) {
+            Class[] types = method.getParameterTypes();
+            if (types != null && !types[0].isAssignableFrom(itemClass)) {
+                continue;
+            }
+            if (isApplicable(method.getAnnotation(MageTabCheck.class), invType)) {
+                runners.add(new MethodBasedCheckRunner<T>(injector, method));
             }
         }
         return runners;
