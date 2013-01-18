@@ -27,7 +27,9 @@ public enum KnownTermSource {
 
     EFO("EFO", "http://www.ebi.ac.uk/efo/?"),
 
-    ARRAY_EXPRESS("ArrayExpress", "http://www.ebi.ac.uk/arrayexpress");
+    ARRAY_EXPRESS("ArrayExpress", "http://www.ebi.ac.uk/arrayexpress"),
+
+    MGED_ONTOLOGY("MGED Ontology", "http://mged.sourceforge.net/ontologies/MGEDontology.php");
 
     private String name;
 
