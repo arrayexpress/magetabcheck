@@ -178,7 +178,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.LimpopoBasedChecker</mainClass>
+                            <mainClass>uk.ac.ebi.fg.annotare2.magetabcheck.modelimpl.limpopo.LimpopoBasedChecker</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

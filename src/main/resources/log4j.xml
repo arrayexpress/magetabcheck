@@ -32,7 +32,7 @@
         </layout>
     </appender>
 
-    <logger name="uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo.ResultLogger" additivity="false">
+    <logger name="uk.ac.ebi.fg.annotare2.magetabcheck.modelimpl.limpopo.ResultLogger" additivity="false">
         <level value="INFO" />
         <appender-ref ref="result-console" />
     </logger>
@@ -42,7 +42,7 @@
         <appender-ref ref="console" />
     </logger>
 
-    <logger name="uk.ac.ebi.fg.annotare2.magetab" additivity="false">
+    <logger name="uk.ac.ebi.fg.annotare2.magetabcheck" additivity="false">
         <level value="INFO" />
         <appender-ref ref="console" />
     </logger>
