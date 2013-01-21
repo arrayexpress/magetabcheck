@@ -19,9 +19,17 @@ package uk.ac.ebi.fg.annotare2.magetab;
 import com.google.common.io.Files;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
+import com.google.inject.TypeLiteral;
+import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.google.inject.assistedinject.FactoryProvider;
 import com.google.inject.name.Names;
-import com.google.inject.util.Providers;
+import uk.ac.ebi.fg.annotare2.magetab.checker.CheckDefinition;
+import uk.ac.ebi.fg.annotare2.magetab.checker.CheckListProvider;
+import uk.ac.ebi.fg.annotare2.magetab.checker.Checker;
+import uk.ac.ebi.fg.annotare2.magetab.checker.CheckerFactory;
 import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
+
+import java.util.List;
 
 /**
  * @author Olga Melnichuk
@@ -36,6 +44,11 @@ public class CheckerModule extends AbstractModule {
         bindConstant().annotatedWith(Names.named("efoCacheDir")).to(getEfoCachePath());
         bindConstant().annotatedWith(Names.named("efoUrl")).to(EFO_URL);
         bind(EfoService.class).in(Scopes.SINGLETON);
+
+        bind(new TypeLiteral<List<CheckDefinition>>() {
+        }).toProvider(CheckListProvider.class);
+
+        install(new FactoryModuleBuilder().build(CheckerFactory.class));
     }
 
     private static String getEfoCachePath() {

@@ -16,12 +16,15 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import uk.ac.ebi.fg.annotare2.magetab.model.Experiment;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;
 import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.*;
 
 import java.util.*;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Queues.newArrayDeque;
 import static com.google.common.collect.Sets.newHashSet;
@@ -35,11 +38,12 @@ public class Checker {
 
     private List<CheckResult> results = new ArrayList<CheckResult>();
 
-    private final AllChecks allChecks;
+    private final List<CheckDefinition> allChecks = newArrayList();
 
-    public Checker(AllChecks allChecks, ExperimentType type) {
+    @Inject
+    public Checker(List<CheckDefinition> allChecks, @Assisted ExperimentType type) {
         this.invType = type;
-        this.allChecks = allChecks;
+        this.allChecks.addAll(allChecks);
     }
 
     public Collection<CheckResult> check(Experiment exp) {
@@ -94,7 +98,7 @@ public class Checker {
     }
 
     private <T> void checkAll(Collection<T> collection, Class<T> itemClass) {
-        List<CheckRunner<T>> checkRunners = allChecks.getCheckRunnersFor(itemClass, invType);
+        List<CheckRunner<T>> checkRunners = getCheckRunnersFor(itemClass, invType);
         if (checkRunners.isEmpty()) {
             return;
         }
@@ -110,7 +114,7 @@ public class Checker {
 
     @SuppressWarnings("unchecked")
     private <T> void checkOne(T item, Map<Class<?>, Object> context) {
-        List<CheckRunner<T>> checkRunners = allChecks.getCheckRunnersFor((Class<T>) item.getClass(), invType);
+        List<CheckRunner<T>> checkRunners = getCheckRunnersFor((Class<T>) item.getClass(), invType);
         if (checkRunners.isEmpty()) {
             return;
         }
@@ -129,6 +133,18 @@ public class Checker {
             results.addAll(runner.sumUp());
         }
     }
+
+    public <T> List<CheckRunner<T>> getCheckRunnersFor(Class<T> itemClass, ExperimentType invType) {
+        List<CheckRunner<T>> runners = newArrayList();
+
+        for (CheckDefinition def : allChecks) {
+            if (def.isApplicable(itemClass, invType)) {
+                runners.add(def.newRunner(itemClass));
+            }
+        }
+        return runners;
+    }
+
 
     public Collection<CheckResult> getResults() {
         return Collections.unmodifiableList(results);

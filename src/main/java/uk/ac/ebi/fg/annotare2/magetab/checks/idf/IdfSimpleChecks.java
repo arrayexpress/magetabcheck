@@ -18,7 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
 
 import org.hamcrest.Matchers;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType;
-import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetab.model.Cell;
 import uk.ac.ebi.fg.annotare2.magetab.model.FileLocation;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.*;

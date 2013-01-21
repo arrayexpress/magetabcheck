@@ -18,9 +18,9 @@ package uk.ac.ebi.fg.annotare2.magetab.checker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.MageTabCheck;
 
 import javax.annotation.Nonnull;
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -76,24 +76,6 @@ abstract class AbstractCheckRunner<T> implements CheckRunner<T> {
 
     protected boolean hasErrors() {
         return hasErrors;
-    }
-
-    protected static Object[] getParams(Method method, Map<Class<?>, Object> context) throws IllegalAccessException {
-        Class<?>[] types = method.getParameterTypes();
-        List<Object> params = newArrayList();
-        for (int i = 0; i < types.length; i++) {
-            Class<?> type = types[i];
-            for (Class<?> keyType : context.keySet()) {
-                if (type.isAssignableFrom(keyType)) {
-                    params.add(context.get(keyType));
-                    break;
-                }
-            }
-            if (params.size() != i + 1) {
-                throw new IllegalAccessException("Can't find object of class " + type + " in the check context");
-            }
-        }
-        return params.toArray(new Object[params.size()]);
     }
 
     public List<CheckResult> sumUp() {

@@ -16,7 +16,8 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checks;
 
-import uk.ac.ebi.fg.annotare2.magetab.checker.GlobalCheck;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.Check;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.Visit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
@@ -24,16 +25,16 @@ import static org.hamcrest.Matchers.greaterThan;
 /**
  * @author Olga Melnichuk
  */
-public class NonEmptyListCheck <T> implements GlobalCheck<T> {
+public class NonEmptyListCheck <T> {
 
     private int count;
 
-    @Override
+    @Visit
     public void visit(T t) {
         count++;
     }
 
-    @Override
+    @Check
     public void check() {
         assertThat(count, greaterThan(0));
     }

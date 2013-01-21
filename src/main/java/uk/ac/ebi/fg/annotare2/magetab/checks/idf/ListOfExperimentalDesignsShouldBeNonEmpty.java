@@ -18,7 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
 
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality;
-import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetab.checks.NonEmptyListCheck;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.ExperimentalDesign;
 

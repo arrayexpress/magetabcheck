@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.checks.sdrf;
+package uk.ac.ebi.fg.annotare2.magetab.checker.annotation;
 
-import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetab.checks.EmptyListCheck;
-import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfLabeledExtractNode;
-
-import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType.HTS_ONLY;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck(value = "There are must not be any Labeled Extract nodes in HTS experiments", application = HTS_ONLY)
-public class ListOfLabeledExtractNodesMustBeEmpty extends EmptyListCheck<SdrfLabeledExtractNode>{
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD})
+public @interface Check {
 }

@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.checks.sdrf;
-
-import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetab.checks.EmptyListCheck;
-import uk.ac.ebi.fg.annotare2.magetab.model.sdrf.SdrfLabeledExtractNode;
-
-import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType.HTS_ONLY;
+package uk.ac.ebi.fg.annotare2.magetab.checker;
 
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck(value = "There are must not be any Labeled Extract nodes in HTS experiments", application = HTS_ONLY)
-public class ListOfLabeledExtractNodesMustBeEmpty extends EmptyListCheck<SdrfLabeledExtractNode>{
+interface InstanceProvider {
+
+    <T> T newInstance(Class<T> clazz);
 }

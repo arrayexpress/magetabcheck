@@ -17,45 +17,37 @@
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
 import com.google.inject.ConfigurationException;
-import com.google.inject.Injector;
 import com.google.inject.ProvisionException;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.MageTabCheck;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+
+import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.getCheckPosition;
 
 /**
  * @author Olga Melnichuk
  */
 class ClassBasedCheckRunner<T> extends AbstractCheckRunner<T> {
 
-    private final GlobalCheck<T> target;
+    private final ClassBasedCheckDefinition classDef;
 
-    private final Method contextSetter;
+    private Object target;
 
-    ClassBasedCheckRunner(Injector injector, Class<? extends GlobalCheck<T>> targetClass) {
-        super(isNotNull(targetClass.getAnnotation(MageTabCheck.class)));
+    @SuppressWarnings("unchecked")
+    ClassBasedCheckRunner(ClassBasedCheckDefinition classDef) {
+        super(isNotNull(classDef.getAnnotation()));
 
-        Method contextSetter = null;
-        for(Method m : targetClass.getMethods()) {
-            if (m.getAnnotation(CheckContext.class) != null) {
-                contextSetter = m;
-                break;
-            }
-        }
-        this.contextSetter = contextSetter;
+        this.classDef = classDef;
 
-        GlobalCheck<T> target = null;
         try {
-            target = injector.getInstance(targetClass);
+            target = classDef.getInstance();
         } catch (ConfigurationException e) {
             error(e);
         } catch (ProvisionException e) {
             error(e);
         }
-
-        this.target = target;
     }
 
     private static MageTabCheck isNotNull(MageTabCheck annotation) {
@@ -69,10 +61,8 @@ class ClassBasedCheckRunner<T> extends AbstractCheckRunner<T> {
     @Override
     public void runWith(T item, Map<Class<?>, Object> context) {
         try {
-            if (contextSetter != null) {
-                contextSetter.invoke(target, getParams(contextSetter, context));
-            }
-            target.visit(item);
+            classDef.invokeSetContext(target, context);
+            classDef.invokeVisit(target, item);
         } catch (IllegalAccessException e) {
             error(e);
         } catch (InvocationTargetException e) {
@@ -84,10 +74,19 @@ class ClassBasedCheckRunner<T> extends AbstractCheckRunner<T> {
     public List<CheckResult> sumUp() {
         if (!hasErrors()) {
             try {
-                target.check();
+                classDef.invokeCheck(target);
                 success();
             } catch (AssertionError e) {
                 failure();
+            } catch (IllegalAccessException e) {
+                error(e);
+            } catch (InvocationTargetException e) {
+                Throwable t = e.getCause();
+                if (t instanceof AssertionError) {
+                    failure(getCheckPosition());
+                } else {
+                    error(t);
+                }
             }
         }
         return super.sumUp();

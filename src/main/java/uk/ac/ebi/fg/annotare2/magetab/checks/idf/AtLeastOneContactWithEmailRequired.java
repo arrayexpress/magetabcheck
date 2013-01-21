@@ -16,8 +16,9 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
 
-import uk.ac.ebi.fg.annotare2.magetab.checker.GlobalCheck;
-import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.Check;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.Visit;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Person;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -28,18 +29,18 @@ import static org.hamcrest.Matchers.*;
  * @author Olga Melnichuk
  */
 @MageTabCheck("At least one contact must have email specified")
-public class AtLeastOneContactWithEmailRequired implements GlobalCheck<Person> {
+public class AtLeastOneContactWithEmailRequired {
 
     private int emailCount;
 
-    @Override
+    @Visit
     public void visit(Person person) {
         if (!isNullOrEmpty(person.getEmail().getValue())) {
             emailCount++;
         }
     }
 
-    @Override
+    @Check
     public void check() {
         assertThat(emailCount, greaterThan(0));
     }

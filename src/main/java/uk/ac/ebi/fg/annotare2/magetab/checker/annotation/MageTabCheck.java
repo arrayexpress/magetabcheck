@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.magetab.checker;
+package uk.ac.ebi.fg.annotare2.magetab.checker.annotation;
+
+import uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType;
+import uk.ac.ebi.fg.annotare2.magetab.checker.CheckModality;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

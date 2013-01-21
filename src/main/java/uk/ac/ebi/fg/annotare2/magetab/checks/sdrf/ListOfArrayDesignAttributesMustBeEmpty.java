@@ -17,7 +17,7 @@
 package uk.ac.ebi.fg.annotare2.magetab.checks.sdrf;
 
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.ArrayDesignAttribute;
-import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetab.checks.EmptyListCheck;
 
 import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType.HTS_ONLY;

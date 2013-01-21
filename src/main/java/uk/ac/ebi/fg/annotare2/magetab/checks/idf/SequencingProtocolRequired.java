@@ -18,8 +18,9 @@ package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
 
 import com.google.inject.Inject;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckApplicationType;
-import uk.ac.ebi.fg.annotare2.magetab.checker.GlobalCheck;
-import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.Check;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.Visit;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Protocol;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.ProtocolType;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
@@ -37,7 +38,7 @@ import static uk.ac.ebi.fg.annotare2.magetab.extension.KnownTermSource.EFO;
 @MageTabCheck(
         value = "Sequencing protocol is required for HTS submissions",
         application = CheckApplicationType.HTS_ONLY)
-public class SequencingProtocolRequired implements GlobalCheck<Protocol> {
+public class SequencingProtocolRequired {
 
     private final EfoService efo;
 
@@ -48,7 +49,7 @@ public class SequencingProtocolRequired implements GlobalCheck<Protocol> {
         this.efo = efo;
     }
 
-    @Override
+    @Visit
     public void visit(Protocol protocol) {
         ProtocolType type = protocol.getType();
         TermSource ts = type.getSource().getValue();
@@ -87,7 +88,7 @@ public class SequencingProtocolRequired implements GlobalCheck<Protocol> {
         return EFO.matches(ts.getFile().getValue());
     }
 
-    @Override
+    @Check
     public void check() {
         assertThat(1, equalTo(counter));
     }

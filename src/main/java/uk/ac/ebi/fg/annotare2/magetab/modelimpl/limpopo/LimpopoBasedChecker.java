@@ -16,12 +16,15 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.modelimpl.limpopo;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.MAGETABInvestigation;
 import uk.ac.ebi.arrayexpress2.magetab.exception.ParseException;
 import uk.ac.ebi.arrayexpress2.magetab.parser.MAGETABParser;
+import uk.ac.ebi.fg.annotare2.magetab.CheckerModule;
 import uk.ac.ebi.fg.annotare2.magetab.MageTabChecker;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult;
 import uk.ac.ebi.fg.annotare2.magetab.checker.CheckResultStatus;
@@ -48,7 +51,8 @@ public class LimpopoBasedChecker {
     private MAGETABParser parser;
 
     private LimpopoBasedChecker() {
-        checker = new MageTabChecker();
+        Injector injector = Guice.createInjector(new CheckerModule());
+        checker = injector.getInstance(MageTabChecker.class);
         parser = new MAGETABParser();
     }
 

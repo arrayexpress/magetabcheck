@@ -16,11 +16,13 @@
 
 package uk.ac.ebi.fg.annotare2.magetab;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.fg.annotare2.magetab.checker.*;
+import uk.ac.ebi.fg.annotare2.magetab.checker.CheckResult;
+import uk.ac.ebi.fg.annotare2.magetab.checker.CheckerFactory;
+import uk.ac.ebi.fg.annotare2.magetab.checker.ExperimentType;
+import uk.ac.ebi.fg.annotare2.magetab.checker.UknownExperimentTypeException;
 import uk.ac.ebi.fg.annotare2.magetab.model.Experiment;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Comment;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.IdfData;
@@ -37,22 +39,20 @@ public class MageTabChecker {
 
     private static final String AE_EXPERIMENT_TYPE_COMMENT = "AEExperimentType";
 
-    private final AllChecks allChecks;
-
     private final EfoService efoService;
 
-    public MageTabChecker() {
-        this(Guice.createInjector(new CheckerModule()));
-    }
+    private final CheckerFactory checkerFactory;
 
-    public MageTabChecker(Injector injector) {
-        allChecks = new AllChecks(injector);
-        efoService = injector.getInstance(EfoService.class);
+    @Inject
+    public MageTabChecker(EfoService efoService,
+                          CheckerFactory checkerFactory) {
+        this.efoService = efoService;
+        this.checkerFactory = checkerFactory;
     }
 
     public Collection<CheckResult> check(Experiment exp, ExperimentType type) {
         log.info("The experiment type is '{}'; running the checks..", type);
-        return (new Checker(allChecks, type)).check(exp);
+        return (checkerFactory.create(type).check(exp));
     }
 
     public Collection<CheckResult> check(Experiment exp) throws UknownExperimentTypeException {
@@ -72,7 +72,7 @@ public class MageTabChecker {
 
     private ExperimentType lookupTypeInEfo(String type) throws UknownExperimentTypeException {
         log.debug("Comment[{}]='{}' has been found. Checking if it's defined in EFO...", AE_EXPERIMENT_TYPE_COMMENT, type);
-        
+
         if (isMicroArrayExperiment(type)) {
             return ExperimentType.MICRO_ARRAY;
         } else if (isHtsExperiment(type)) {

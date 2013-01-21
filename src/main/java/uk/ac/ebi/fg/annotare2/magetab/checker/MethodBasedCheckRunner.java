@@ -17,11 +17,10 @@
 package uk.ac.ebi.fg.annotare2.magetab.checker;
 
 import com.google.inject.ConfigurationException;
-import com.google.inject.Injector;
 import com.google.inject.ProvisionException;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.MageTabCheck;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
@@ -33,19 +32,16 @@ import static uk.ac.ebi.fg.annotare2.magetab.checker.CheckPositionKeeper.getChec
  */
 class MethodBasedCheckRunner<T> extends AbstractCheckRunner<T> {
 
-    private final Method method;
+    private final MethodBasedCheckDefinition methodDef;
 
-    private final Injector injector;
-
-    MethodBasedCheckRunner(Injector injector, Method method) {
-        super(isNotNull(method.getAnnotation(MageTabCheck.class)));
-        this.method = method;
-        this.injector = injector;
+    MethodBasedCheckRunner(MethodBasedCheckDefinition def) {
+        super(isNotNull(def.getAnnotation()));
+        this.methodDef = def;
     }
 
     private static MageTabCheck isNotNull(MageTabCheck annotation) {
         if (annotation == null) {
-            throw new NullPointerException("Method based MageTab check must be annotated with MageTabCheck annotation");
+            throw new NullPointerException("Method-based MageTab check must be annotated with MageTabCheck annotation");
         }
         return annotation;
     }
@@ -60,8 +56,7 @@ class MethodBasedCheckRunner<T> extends AbstractCheckRunner<T> {
     public void runWith(T item, Map<Class<?>, Object> context) {
         clearCheckPosition();
         try {
-            Object[] params = getParams(method, add(context, item));
-            method.invoke(injector.getInstance(method.getDeclaringClass()), params);
+            methodDef.invoke(add(context, item));
             success(getCheckPosition());
         } catch (InvocationTargetException e) {
             Throwable t = e.getCause();

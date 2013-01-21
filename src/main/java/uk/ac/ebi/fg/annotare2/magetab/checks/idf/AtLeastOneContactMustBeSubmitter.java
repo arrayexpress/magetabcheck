@@ -16,8 +16,9 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
 
-import uk.ac.ebi.fg.annotare2.magetab.checker.GlobalCheck;
-import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.Check;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.Visit;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.Person;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermList;
 
@@ -29,11 +30,11 @@ import static uk.ac.ebi.fg.annotare2.magetab.checks.idf.IdfConstants.SUBMITTER_R
  * @author Olga Melnichuk
  */
 @MageTabCheck("At least one contact must have '" + SUBMITTER_ROLE + "' role specified ")
-public class AtLeastOneContactMustBeSubmitter implements GlobalCheck<Person> {
+public class AtLeastOneContactMustBeSubmitter {
 
     private int submitterCount;
 
-    @Override
+    @Visit
     public void visit(Person person) {
         TermList roles = person.getRoles();
         if (roles == null || roles.isEmpty()) {
@@ -44,7 +45,7 @@ public class AtLeastOneContactMustBeSubmitter implements GlobalCheck<Person> {
         }
     }
 
-    @Override
+    @Check
     public void check() {
         assertThat(submitterCount, greaterThan(0));
     }

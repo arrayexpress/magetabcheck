@@ -16,8 +16,9 @@
 
 package uk.ac.ebi.fg.annotare2.magetab.checks.idf;
 
-import uk.ac.ebi.fg.annotare2.magetab.checker.GlobalCheck;
-import uk.ac.ebi.fg.annotare2.magetab.checker.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.Check;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetab.checker.annotation.Visit;
 import uk.ac.ebi.fg.annotare2.magetab.model.idf.TermSource;
 
 import java.util.Set;
@@ -31,13 +32,13 @@ import static org.hamcrest.Matchers.is;
  * @author Olga Melnichuk
  */
 @MageTabCheck("Name of a term source must be unique")
-public class TermSourcesMustBeUniqueByName implements GlobalCheck<TermSource> {
+public class TermSourcesMustBeUniqueByName {
 
     private final Set<String> names = newHashSet();
 
     private boolean hasDuplicates = false;
 
-    @Override
+    @Visit
     public void visit(TermSource termSource) {
         String name = termSource.getName().getValue();
         if (isNullOrEmpty(name) || hasDuplicates) {
@@ -46,7 +47,7 @@ public class TermSourcesMustBeUniqueByName implements GlobalCheck<TermSource> {
         hasDuplicates = names.contains(name);
     }
 
-    @Override
+    @Check
     public void check() {
         assertThat(hasDuplicates, is(Boolean.FALSE));
     }
