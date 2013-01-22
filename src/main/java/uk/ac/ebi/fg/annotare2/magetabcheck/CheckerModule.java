@@ -26,6 +26,7 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDefinition;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckListProvider;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckerFactory;
 import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
+import uk.ac.ebi.fg.annotare2.services.efo.EfoServiceImpl;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class CheckerModule extends AbstractModule {
     protected void configure() {
         bindConstant().annotatedWith(Names.named("efoCacheDir")).to(getEfoCachePath());
         bindConstant().annotatedWith(Names.named("efoUrl")).to(EFO_URL);
-        bind(EfoService.class).in(Scopes.SINGLETON);
+        bind(EfoService.class).to(EfoServiceImpl.class).in(Scopes.SINGLETON);
 
         bind(new TypeLiteral<List<CheckDefinition>>() {
         }).toProvider(CheckListProvider.class);

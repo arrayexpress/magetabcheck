@@ -16,133 +16,70 @@
 
 package uk.ac.ebi.fg.annotare2.services.efo;
 
-import com.google.common.base.Predicate;
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.annotation.Nullable;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
+import java.util.Collection;
 
 /**
  * @author Olga Melnichuk
  */
-public class EfoService {
+public interface EfoService {
 
-    private static final Logger log = LoggerFactory.getLogger(EfoService.class);
+    public static final String HTS_EXPERIMENT_TYPES = "EFO_0003740";
 
-    //TODO move EFO_ID to properties
-    private static final String HTS_EXPERIMENT_TYPES = "EFO_0003740";
+    public static final String MA_EXPERIMENT_TYPES = "EFO_0002696";
 
-    private static final String MA_EXPERIMENT_TYPES = "EFO_0002696";
+    public static final String LIBRARY_CONSTRUCTION_PROTOCOL = "EFO_0004184";
 
-    private static final String LIBRARY_CONSTRUCTION_PROTOCOL = "EFO_0004184";
+    public static final String SEQUENCING_PROTOCOL = "EFO_0004170";
 
-    private static final String SEQUENCING_PROTOCOL = "EFO_0004170";
+    public static final String BIOLOGICAL_VARIATION_DESINGS = "EFO_0004667";
 
-    private final EfoGraph graph;
+    public static final String METHODOLOGICAL_VARIATION_DESIGNS = "EFO_0004669";
 
-    @Inject
-    public EfoService(@Named("efoCacheDir") String cacheDir,
-                      @Named("efoUrl") String efoUrl) {
+    public static final String BIOMOLECULAR_ANNOTATION_DESIGNS = "EFO_0004665";
 
-        EfoGraph g = null;
-        try {
-            File dir = (cacheDir == null ? null : new File(cacheDir));
-            g = new EfoLoader(dir).load(new URL(efoUrl));
-        } catch (IOException e) {
-            log.error("Can't load EFO", e);
-        } catch (OWLOntologyCreationException e) {
-            log.error("Can't load EFO", e);
-        }
+    /**
+     * Looks through the all descendants of {@see HTS_EXPERIMENT_TYPES} term and returns
+     * accession of the term which name equals to the given one.
+     *
+     * @param name name of the term to find
+     * @return term accession or <code>null</code> if term was not found
+     */
+    String findHtsInvestigationType(String name);
 
-        graph = g;
-    }
+    /**
+     * Looks through the all descendants of {@value #MA_EXPERIMENT_TYPES} term and returns
+     * accession of the term which name equals to the given one.
+     *
+     * @param name name of the term to find
+     * @return term accession or <code>null</code> if term was not found
+     */
+    String findMaInvestigationType(String name);
 
-    public EfoNode findHtsInvestigationType(String term) {
-        return findNodeByTerm(HTS_EXPERIMENT_TYPES, term);
-    }
+    /**
+     * Checks if the given term accession and name correspond to the existed EFO term located in the
+     * {@value #LIBRARY_CONSTRUCTION_PROTOCOL} branch. At least on of arguments (accession or name) should be not null.
+     *
+     * @param accession a term accession
+     * @param name      a term name
+     * @return <code>true</code> if
+     */
+    boolean isLibraryConstructionProtocol(String accession, String name);
 
-    public EfoNode findMaInvestigationType(String term) {
-        return findNodeByTerm(MA_EXPERIMENT_TYPES, term);
-    }
+    /**
+     * Checks if the given term accession and name correspond to the existed EFO term located in the
+     * {@value #LIBRARY_CONSTRUCTION_PROTOCOL} branch. At least on of arguments (accession or name) should be not null.
+     *
+     * @param accession a term accession
+     * @param name      a term name
+     * @return <code>true</code> if
+     */
+    boolean isSequencingProtocol(String accession, String name);
 
-    private EfoNode findNodeByTerm(String startEfo, final String term) {
-        return findNode(startEfo, new Predicate<EfoNode>() {
-            @Override
-            public boolean apply(@Nullable EfoNode input) {
-                return term.equalsIgnoreCase(input.getTerm());
-            }
-        });
-    }
-
-    private EfoNode findNodeById(String startEfo, final String id) {
-        return findNode(startEfo, new Predicate<EfoNode>() {
-            @Override
-            public boolean apply(@Nullable EfoNode input) {
-                return id.equals(input.getId());
-            }
-        });
-    }
-
-    private EfoNode findByIdOrTerm(String startEfo, final String id, final String term) {
-        if (isNullOrEmpty(id)) {
-            if (!isNullOrEmpty(term)) {
-                EfoNode node = findNodeByTerm(startEfo, term);
-                if (node != null) {
-                    return node;
-                }
-            }
-        } else if (isNullOrEmpty(term)) {
-            if (!isNullOrEmpty(id)) {
-                EfoNode node = findNodeById(startEfo, id);
-                if (node != null) {
-                    return node;
-                }
-            }
-        } else {
-            EfoNode node = findNodeById(startEfo, id);
-            if (node != null && term.equals(node.getTerm())) {
-                return node;
-            }
-        }
-        return null;
-    }
-
-    private EfoNode findNode(String startFromId, Predicate<EfoNode> predicate) {
-        EfoNode node = graph.getNodeById(startFromId);
-        if (node == null) {
-            log.error("EFO node class " + startFromId + "not found");
-            return null;
-        }
-        return findDescendant(node, predicate);
-    }
-
-    private EfoNode findDescendant(EfoNode node, Predicate<EfoNode> predicate) {
-        if (predicate.apply(node)) {
-            return node;
-        }
-
-        for (EfoNode child : node.getChildren()) {
-            EfoNode found = findDescendant(child, predicate);
-            if (found != null) {
-                return found;
-            }
-        }
-        return null;
-    }
-
-    public boolean isLibraryConstructionProtocol(String accession, String term) {
-        return findByIdOrTerm(LIBRARY_CONSTRUCTION_PROTOCOL, accession, term) != null;
-    }
-
-    public boolean isSequencingProtocol(String accession, String term) {
-        return findByIdOrTerm(SEQUENCING_PROTOCOL, accession, term) != null;
-    }
+    /**
+     * Returns names of all child terms.
+     *
+     * @param accession a term accession to get children from
+     * @return a collection of term names
+     */
+    Collection<String> getSubTermsOf(String accession);
 }

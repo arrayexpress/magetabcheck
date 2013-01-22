@@ -23,11 +23,11 @@ import java.util.Collection;
  */
 public interface EfoNode {
 
-    public String getId();
+    public String getAccession();
 
-    public String getTerm();
+    public String getName();
 
-    public Collection<String> getAlternativeTerms();
+    public Collection<String> getAlternativeNames();
 
     public Collection<? extends EfoNode> getParents();
 

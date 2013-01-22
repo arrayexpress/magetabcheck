@@ -51,17 +51,17 @@ class EfoNodeImpl implements EfoNode {
         }
     }
 
-    public String getId() {
+    public String getAccession() {
         return id;
     }
 
     @Override
-    public String getTerm() {
+    public String getName() {
         return term;
     }
 
     @Override
-    public Collection<String> getAlternativeTerms() {
+    public Collection<String> getAlternativeNames() {
         return unmodifiableCollection(alternativeTerms);
     }
 
