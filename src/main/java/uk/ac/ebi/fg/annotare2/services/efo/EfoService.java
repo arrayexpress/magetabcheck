@@ -38,7 +38,7 @@ public interface EfoService {
     public static final String BIOMOLECULAR_ANNOTATION_DESIGNS = "EFO_0004665";
 
     /**
-     * Looks through the all descendants of {@see HTS_EXPERIMENT_TYPES} term and returns
+     * Looks through the all descendants of {@value #HTS_EXPERIMENT_TYPES} term and returns
      * accession of the term which name equals to the given one.
      *
      * @param name name of the term to find
