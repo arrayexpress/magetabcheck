@@ -1,18 +1,23 @@
+## Release 1.3
+
+* Core code was refactored with proper guice injections
+* EfoService: Extracted interface
+* EfoService: Added a feature to get list of child term names by a given term accession
+* Added MGED Ontology to the list of known term sources
+* [#17](https://github.com/arrayexpress/magetabcheck/issues/23) Add check: Experiment description should be at least 50 characters long
+
 ## Release 1.2
 
 Fixed bugs:
 
 * [#24](https://github.com/arrayexpress/magetabcheck/issues/24) Staging POM validation issues
-
 * [#23](https://github.com/arrayexpress/magetabcheck/issues/23) Missing Signature for maven staging release
-
 
 ## Release 1.1
 
 Fixed bugs:
 
 * [#16](https://github.com/arrayexpress/magetabcheck/issues/16) Checker does not run on experiments with type 'transcription profiling by array'
-
 * [#15](https://github.com/arrayexpress/magetabcheck/issues/16) Without -Defo.cachedir option the CL checker throws and error
 
 ## Release 1.0
