@@ -52,7 +52,7 @@ public class IdfSimpleChecks {
         assertNotEmptyString(info.getExperimentDescription());
     }
 
-    @MageTabCheck("Experiment description should be at least 50 characters long")
+    @MageTabCheck(value = "Experiment description should be at least 50 characters long", modality = WARNING)
     public void experimentDescriptionShouldBe50CharsLong(Info info) {
         Cell<String> cell = info.getExperimentDescription();
         if (isNullOrEmpty(cell.getValue())) {
