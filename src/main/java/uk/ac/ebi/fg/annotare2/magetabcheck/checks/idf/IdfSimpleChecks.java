@@ -29,13 +29,13 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.MICRO_ARRAY_ONLY;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionKeeper.setCheckPosition;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.WARNING;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionKeeper.setCheckPosition;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfConstants.DATE_FORMAT;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfConstants.SUBMITTER_ROLE;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.matchers.IsDateString.isDateString;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.matchers.IsValidFileLocation.isValidFileLocation;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.matchers.RegExpMatcher.matches;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfConstants.DATE_FORMAT;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfConstants.SUBMITTER_ROLE;
 
 /**
  * @author Olga Melnichuk
@@ -50,6 +50,16 @@ public class IdfSimpleChecks {
     @MageTabCheck("Experiment description must be specified")
     public void experimentDescriptionRequired(Info info) {
         assertNotEmptyString(info.getExperimentDescription());
+    }
+
+    @MageTabCheck("Experiment description should be at least 50 characters long")
+    public void experimentDescriptionShouldBe50CharsLong(Info info) {
+        Cell<String> cell = info.getExperimentDescription();
+        if (isNullOrEmpty(cell.getValue())) {
+            return;
+        }
+        setPosition(cell);
+        assertThat(cell.getValue().length(), greaterThan(50));
     }
 
     @MageTabCheck(value = "Date of Experiment should be specified", modality = WARNING)
