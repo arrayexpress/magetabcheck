@@ -23,20 +23,44 @@ import java.util.regex.Pattern;
  */
 public enum KnownTermSource {
 
-    NCBI_TAXONOMY("NCBI Taxonomy", "http://www.ncbi.nlm.nih.gov/[tT]axonomy/?"),
+    ARRAY_EXPRESS("ArrayExpress",
+            "The ArrayExpress Archive is a database of functional genomics experiments including gene expression " +
+                    "where you can query and download data collected to MIAME and MINSEQE standards",
+            "http://www.ebi.ac.uk/arrayexpress/",
+            "http://www.ebi.ac.uk/arrayexpress/?"),
 
-    EFO("EFO", "http://www.ebi.ac.uk/efo/?"),
+    NCBI_TAXONOMY("NCBI Taxonomy",
+            "The Taxonomy Database is a curated classification and nomenclature for all of the organisms in the " +
+                    "public sequence databases",
+            "http://www.ncbi.nlm.nih.gov/taxonomy",
+            "http://www.ncbi.nlm.nih.gov/[tT]axonomy/?"),
 
-    ARRAY_EXPRESS("ArrayExpress", "http://www.ebi.ac.uk/arrayexpress"),
+    EFO("EFO",
+            "The Experimental Factor Ontology (EFO) provides a systematic description of many experimental " +
+                    "variables available in EBI databases, and for external projects such as the NHGRI GWAS catalogue",
+            "http://www.ebi.ac.uk/efo/",
+            "http://www.ebi.ac.uk/efo/?"),
 
-    MGED_ONTOLOGY("MGED Ontology", "http://mged.sourceforge.net/ontologies/MGEDontology.php");
+    MGED_ONTOLOGY("MGED Ontology",
+            "An ontology for microarray experiments in support of MAGE v.1",
+            "http://mged.sourceforge.net/ontologies/index.php",
+            "http://mged.sourceforge.net/ontologies/MGEDontology.php");
 
     private String name;
 
+    private String description;
+
+    private String url;
+
     private Pattern urlPattern;
 
-    private KnownTermSource(String name, String pattern) {
+    private KnownTermSource(String name,
+                            String description,
+                            String url,
+                            String pattern) {
         this.name = name;
+        this.description = description;
+        this.url = url;
         this.urlPattern = Pattern.compile(pattern);
     }
 
@@ -46,5 +70,13 @@ public enum KnownTermSource {
 
     public String getName() {
         return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getUrl() {
+        return url;
     }
 }
