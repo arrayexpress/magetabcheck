@@ -45,7 +45,7 @@ public class CheckerModule extends AbstractModule {
         bind(EfoService.class).to(EfoServiceImpl.class).in(Scopes.SINGLETON);
 
         bind(new TypeLiteral<List<CheckDefinition>>() {
-        }).toProvider(CheckListProvider.class);
+        }).toProvider(CheckListProvider.class).in(Scopes.SINGLETON);
 
         install(new FactoryModuleBuilder().build(CheckerFactory.class));
     }
