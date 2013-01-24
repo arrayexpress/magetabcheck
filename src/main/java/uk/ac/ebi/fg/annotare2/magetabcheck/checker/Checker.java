@@ -36,7 +36,7 @@ public class Checker {
 
     private final ExperimentType invType;
 
-    private List<CheckResult> results = new ArrayList<CheckResult>();
+    private List<CheckResult> results = newArrayList();
 
     private final List<CheckDefinition> allChecks = newArrayList();
 
