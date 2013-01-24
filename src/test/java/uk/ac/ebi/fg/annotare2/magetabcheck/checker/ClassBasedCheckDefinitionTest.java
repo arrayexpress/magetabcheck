@@ -7,7 +7,6 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Visit;
 
 import static org.junit.Assert.*;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.MICRO_ARRAY_ONLY;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.WARNING;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.ClassInstanceProvider.DEFAULT_CLASS_INSTANCE_PROVIDER;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.ExperimentType.HTS;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.ExperimentType.MICRO_ARRAY;
