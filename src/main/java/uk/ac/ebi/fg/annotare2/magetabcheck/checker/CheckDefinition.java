@@ -34,15 +34,8 @@ public abstract class CheckDefinition {
 
     private final MageTabCheck annotation;
 
-    private final List<Class> subjectTypes = newArrayList();
-
-    protected CheckDefinition(MageTabCheck annotation, Class subjectType) {
-        this(annotation, Arrays.asList(subjectType));
-    }
-
-    protected CheckDefinition(MageTabCheck annotation, Collection<Class> subjectTypes) {
+    protected CheckDefinition(MageTabCheck annotation) {
         this.annotation = annotation;
-        this.subjectTypes.addAll(subjectTypes);
     }
 
     public MageTabCheck getAnnotation() {
@@ -55,15 +48,6 @@ public abstract class CheckDefinition {
 
     private boolean isAnnotApplicableTo(ExperimentType expType) {
         return annotation != null && annotation.application().appliesTo(expType);
-    }
-
-    private boolean isSubjectTypeAssignableFrom(Class objType) {
-        for (Class<?> type : subjectTypes) {
-            if (type != null && type.isAssignableFrom(objType)){
-                return true;
-            }
-        }
-        return false;
     }
 
     protected static Object[] getParams(Method method, Map<Class<?>, Object> context) throws IllegalAccessException {
@@ -85,4 +69,6 @@ public abstract class CheckDefinition {
     }
 
     public abstract <T> CheckRunner<T> newRunner(Class<T> itemClass);
+
+    protected abstract boolean isSubjectTypeAssignableFrom(Class objType);
 }

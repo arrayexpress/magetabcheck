@@ -22,9 +22,7 @@ import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDefinition;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckListProvider;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckerFactory;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checker.*;
 import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
 import uk.ac.ebi.fg.annotare2.services.efo.EfoServiceImpl;
 
@@ -44,8 +42,10 @@ public class CheckerModule extends AbstractModule {
         bindConstant().annotatedWith(Names.named("efoUrl")).to(EFO_URL);
         bind(EfoService.class).to(EfoServiceImpl.class).in(Scopes.SINGLETON);
 
+        bind(AllChecks.class).to(AllChecksImpl.class).in(Scopes.SINGLETON);
+
         bind(new TypeLiteral<List<CheckDefinition>>() {
-        }).toProvider(CheckListProvider.class).in(Scopes.SINGLETON);
+        }).toProvider(CheckListProvider.class);
 
         install(new FactoryModuleBuilder().build(CheckerFactory.class));
     }

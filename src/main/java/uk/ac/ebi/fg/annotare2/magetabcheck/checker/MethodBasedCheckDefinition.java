@@ -29,10 +29,10 @@ class MethodBasedCheckDefinition extends CheckDefinition {
 
     private final Method method;
 
-    private final InstanceProvider instanceProvider;
+    private final ClassInstanceProvider instanceProvider;
 
-    public MethodBasedCheckDefinition(Method method, InstanceProvider instanceProvider) {
-        super(method.getAnnotation(MageTabCheck.class), getFirstParameter(method));
+    public MethodBasedCheckDefinition(Method method, ClassInstanceProvider instanceProvider) {
+        super(method.getAnnotation(MageTabCheck.class));
         this.method = method;
         this.instanceProvider = instanceProvider;
     }
@@ -40,6 +40,12 @@ class MethodBasedCheckDefinition extends CheckDefinition {
     @Override
     public <T> CheckRunner<T> newRunner(Class<T> itemClass) {
         return new MethodBasedCheckRunner<T>(this);
+    }
+
+    @Override
+    protected boolean isSubjectTypeAssignableFrom(Class objType) {
+        Class<?> subjectType = getFirstParameter(method);
+        return subjectType != null && subjectType.isAssignableFrom(objType);
     }
 
     private static Class<?> getFirstParameter(Method method) {

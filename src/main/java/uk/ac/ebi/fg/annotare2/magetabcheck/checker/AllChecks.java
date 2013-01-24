@@ -16,32 +16,15 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.checker;
 
-import com.google.inject.Inject;
-
-import java.util.List;
-
-import static com.google.common.collect.Lists.newArrayList;
+import java.lang.reflect.Method;
+import java.util.Set;
 
 /**
  * @author Olga Melnichuk
  */
-public class AllChecks {
+public interface AllChecks {
 
-    private final List<CheckDefinition> allChecks = newArrayList();
+    Set<Class<?>> getClassBasedChecks();
 
-    @Inject
-    public AllChecks(List<CheckDefinition> checks) {
-        allChecks.addAll(checks);
-    }
-
-    public <T> List<CheckRunner<T>> getCheckRunnersFor(Class<T> itemClass, ExperimentType invType) {
-        List<CheckRunner<T>> runners = newArrayList();
-
-        for (CheckDefinition def : allChecks) {
-            if (def.isApplicable(itemClass, invType)) {
-                runners.add(def.newRunner(itemClass));
-            }
-        }
-        return runners;
-    }
+    Set<Method> getMethodBasedChecks();
 }

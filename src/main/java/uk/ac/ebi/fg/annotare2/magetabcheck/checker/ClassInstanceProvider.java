@@ -19,7 +19,20 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.checker;
 /**
  * @author Olga Melnichuk
  */
-interface InstanceProvider {
+interface ClassInstanceProvider {
+
+    static ClassInstanceProvider DEFAULT_CLASS_INSTANCE_PROVIDER = new ClassInstanceProvider() {
+        @Override
+        public <T> T newInstance(Class<T> clazz) {
+            try {
+                return clazz.newInstance();
+            } catch (InstantiationException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    };
 
     <T> T newInstance(Class<T> clazz);
 }

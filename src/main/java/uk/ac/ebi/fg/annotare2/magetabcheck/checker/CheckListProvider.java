@@ -19,16 +19,9 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.checker;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
-import org.reflections.Reflections;
-import org.reflections.scanners.MethodAnnotationsScanner;
-import org.reflections.scanners.TypeAnnotationsScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Set;
 
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -39,31 +32,18 @@ public class CheckListProvider implements Provider<List<CheckDefinition>> {
 
     private final List<CheckDefinition> checks = newArrayList();
 
-    private final InstanceProvider instanceProvider;
-
     @Inject
-    public CheckListProvider(final Injector injector) {
-
-        instanceProvider = new InstanceProvider() {
+    public CheckListProvider(final Injector injector, AllChecks allChecks) {
+        ClassInstanceProvider instanceProvider = new ClassInstanceProvider() {
             @Override
             public <T> T newInstance(Class<T> clazz) {
                 return injector.getInstance(clazz);
             }
         };
-
-        Reflections reflections = new Reflections(
-                new ConfigurationBuilder()
-                        .setUrls(ClasspathHelper.forJavaClassPath())
-                        .setScanners(new TypeAnnotationsScanner(), new MethodAnnotationsScanner())
-        );
-
-        Set<Class<?>> classBasedChecks = reflections.getTypesAnnotatedWith(MageTabCheck.class);
-        for (final Class<?> clazz : classBasedChecks) {
+        for (final Class<?> clazz : allChecks.getClassBasedChecks()) {
             checks.add(new ClassBasedCheckDefinition(clazz, instanceProvider));
         }
-
-        Set<Method> methodBasedChecks = reflections.getMethodsAnnotatedWith(MageTabCheck.class);
-        for (Method method : methodBasedChecks) {
+        for (Method method : allChecks.getMethodBasedChecks()) {
             checks.add(new MethodBasedCheckDefinition(method, instanceProvider));
         }
     }
@@ -72,5 +52,4 @@ public class CheckListProvider implements Provider<List<CheckDefinition>> {
     public List<CheckDefinition> get() {
         return checks;
     }
-
 }
