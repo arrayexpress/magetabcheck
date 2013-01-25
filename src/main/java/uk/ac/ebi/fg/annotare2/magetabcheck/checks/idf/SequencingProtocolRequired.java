@@ -40,9 +40,9 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.EFO;
         application = CheckApplicationType.HTS_ONLY)
 public class SequencingProtocolRequired {
 
-    private final EfoService efo;
-
     private int counter = 0;
+
+    private final EfoService efo;
 
     @Inject
     public SequencingProtocolRequired(EfoService efo) {
@@ -51,41 +51,28 @@ public class SequencingProtocolRequired {
 
     @Visit
     public void visit(Protocol protocol) {
-        ProtocolType type = protocol.getType();
-        TermSource ts = type.getSource().getValue();
-        if (ts == null) {
-            return;
+        if (isSequencingProtocol(protocol.getType())
+                && hasSequencingHardware(protocol)) {
+            counter++;
         }
-
-        if (!isEfoTermSource(ts)) {
-            return;
-        }
-
-        if (!isSequencingProtocol(type)) {
-            return;
-        }
-
-        if (!hasSequencingHardware(protocol.getHardware().getValue())) {
-            return;
-        }
-
-        counter++;
     }
 
-    private boolean hasSequencingHardware(String value) {
-        if (isNullOrEmpty(value)) {
+    private boolean hasSequencingHardware(Protocol protocol) {
+        String hardware = protocol.getHardware().getValue();
+        if (isNullOrEmpty(hardware)) {
             return false;
         }
-        String[] v = value.trim().split("\\s*,\\s*");
+        String[] v = hardware.trim().split("\\s*,\\s*");
         return isValidProtocolHardware(v);
     }
 
     private boolean isSequencingProtocol(ProtocolType type) {
-        return efo.isSequencingProtocol(type.getAccession().getValue(), type.getName().getValue());
+        return isEfoTermSource(type.getSource().getValue())
+                && efo.isSequencingProtocol(type.getAccession().getValue(), type.getName().getValue());
     }
 
     private boolean isEfoTermSource(TermSource ts) {
-        return EFO.matches(ts.getFile().getValue());
+        return ts != null && EFO.matches(ts.getFile().getValue());
     }
 
     @Check

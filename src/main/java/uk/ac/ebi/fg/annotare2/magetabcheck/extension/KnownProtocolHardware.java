@@ -19,10 +19,12 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.extension;
 import com.google.common.base.Function;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.transform;
+import static java.util.Collections.unmodifiableList;
 
 /**
  * @author Olga Melnichuk
@@ -30,7 +32,7 @@ import static com.google.common.collect.Lists.transform;
 public class KnownProtocolHardware {
 
     //TODO put it into property file
-    private static final List<String> LIST = transform(newArrayList(
+    public static final List<String> LIST = unmodifiableList(transform(newArrayList(
             "Illumina Genome Analyzer",
             "Illumina Genome Analyzer II",
             "Illumina Genome Analyzer IIx",
@@ -56,7 +58,7 @@ public class KnownProtocolHardware {
         public String apply(@Nullable String input) {
             return input.toLowerCase();
         }
-    });
+    }));
 
     public static boolean isValidProtocolHardware(String... hardware) {
         for (String h : hardware) {
