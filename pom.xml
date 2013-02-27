@@ -21,7 +21,7 @@
 
     <groupId>uk.ac.ebi.fg.annotare2</groupId>
     <artifactId>magetabcheck</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.4</version>
     <packaging>jar</packaging>
 
     <name>MAGE-TAB Checker</name>
@@ -60,7 +60,7 @@
         <url>https://github.com/arrayexpress/magetabcheck</url>
         <connection>scm:git:git://github.com/arrayexpress/magetabcheck.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/arrayexpress/magetabcheck.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>magetabcheck-1.4</tag>
   </scm>
 
     <profiles>
