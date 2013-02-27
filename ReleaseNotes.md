@@ -1,3 +1,9 @@
+## Release 1.4
+
+* Fixed a major bug in the checker core, which was introduced by the previous release refactorings; the wrong set of checks were run for a target object.
+* [#39](https://github.com/arrayexpress/magetabcheck/issues/39) NPE when IDF and SDRF has no location set
+* Added unit tests for SequencingProtocolRequired and LibraryConstructionProtocolRequired checks.
+
 ## Release 1.3
 
 * Core code was refactored with proper guice injections
