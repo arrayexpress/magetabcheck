@@ -61,37 +61,19 @@ public class LimpopoBasedChecker {
         parser = new MAGETABParser();
     }
 
-    public static void main(String... args) {
-        if (args.length == 0) {
-            log.info("Usage: LimpopoBasedChecker /path/to/idf1 /path/to/idf2 ...");
-            exit(1);
-        }
-
-        setLogLevel();
-
-        (new LimpopoBasedChecker()).runAll(args);
-    }
-
-    private static void setLogLevel() {
-        String debug = System.getProperty("checker.debug");
-        if (debug != null && Boolean.parseBoolean(debug)) {
-            org.apache.log4j.Logger.getRootLogger().setLevel(Level.DEBUG);
-        }
-    }
-
-    private void runAll(String... idfPaths) {
+    void runAll(String... idfPaths) {
         for (String idfPath : idfPaths) {
             run(idfPath);
         }
     }
 
-    private void run(String idfPath) {
+    void run(String idfPath) {
         try {
             logResult("/* ");
             logResult(" * Running checker for: " + idfPath);
             logResult(" *\\");
 
-            Collection<CheckResult> results =check(parse(idfPath));
+            Collection<CheckResult> results = check(idfPath);
             int failures = 0, warnings = 0, errors = 0;
             for (CheckResult res : results) {
                 CheckResultStatus status = res.getStatus();
@@ -124,7 +106,11 @@ public class LimpopoBasedChecker {
         }
     }
 
-    public Collection<CheckResult> check(MAGETABInvestigation inv) throws UknownExperimentTypeException {
+    public final Collection<CheckResult> check(String idfFilePath) throws MalformedURLException, ParseException, UknownExperimentTypeException {
+        return check(parse(idfFilePath));
+    }
+
+    public final  Collection<CheckResult> check(MAGETABInvestigation inv) throws UknownExperimentTypeException {
         return natural().sortedCopy(checker.check(new LimpopoBasedExperiment(inv)));
     }
 
@@ -133,5 +119,23 @@ public class LimpopoBasedChecker {
             return parser.parse(new URL(idfPath));
         }
         return parser.parse(new File(idfPath));
+    }
+
+    public static void main(String... args) {
+        if (args.length == 0) {
+            log.info("Usage: LimpopoBasedChecker /path/to/idf1 /path/to/idf2 ...");
+            exit(1);
+        }
+
+        setLogLevel();
+
+        (new LimpopoBasedChecker()).runAll(args);
+    }
+
+    private static void setLogLevel() {
+        String debug = System.getProperty("checker.debug");
+        if (debug != null && Boolean.parseBoolean(debug)) {
+            org.apache.log4j.Logger.getRootLogger().setLevel(Level.DEBUG);
+        }
     }
 }
