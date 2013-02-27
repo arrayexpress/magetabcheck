@@ -62,7 +62,7 @@ class IdfHelper {
         return list;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getSourceName() {
+        return fileName == null ? "IDF" : fileName;
     }
 }

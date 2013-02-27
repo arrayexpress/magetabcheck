@@ -48,12 +48,12 @@ class SdrfHelper {
 
     private final IdfData idf;
 
-    private final String fileName;
+    private final String sourceName;
 
     public SdrfHelper(SDRF sdrf, IdfData idf) {
         this.sdrf = sdrf;
         this.idf = idf;
-        this.fileName = Urls.getFileName(sdrf.getLocation());
+        this.sourceName = Urls.getFileName(sdrf.getLocation());
     }
 
     public <T extends SDRFNode> Location getLocation(T node) {
@@ -158,11 +158,11 @@ class SdrfHelper {
         return idf.getTermSource(termSourceRef);
     }
 
-    public URL getFileRoot() {
+    public URL getSourceUrl() {
         return sdrf.getLocation();
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getSourceName() {
+        return sourceName == null ? "SDRF" : sourceName;
     }
 }

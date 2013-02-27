@@ -61,7 +61,7 @@ abstract class LimpopoBasedSdrfAttribute<T extends SDRFAttribute> extends Object
 
     @Override
     public String getFileName() {
-        return helper.getFileName();
+        return helper.getSourceName();
     }
 
     protected TermSource termSource(String termSourceRef) {

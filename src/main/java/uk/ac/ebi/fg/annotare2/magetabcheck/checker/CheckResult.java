@@ -81,6 +81,10 @@ public class CheckResult implements Comparable<CheckResult> {
         return type.status(modality);
     }
 
+    public final CheckPosition getPosition() {
+        return position;
+    }
+
     @Override
     public String toString() {
         return "CheckResult{" +

@@ -18,6 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.modelimpl.limpopo;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,8 +51,12 @@ public class LimpopoBasedChecker {
 
     private MAGETABParser parser;
 
-    private LimpopoBasedChecker() {
-        Injector injector = Guice.createInjector(new CheckerModule());
+    public LimpopoBasedChecker() {
+        this(new CheckerModule());
+    }
+
+    public LimpopoBasedChecker(Module module) {
+        Injector injector = Guice.createInjector(module);
         checker = injector.getInstance(MageTabChecker.class);
         parser = new MAGETABParser();
     }
@@ -86,11 +91,7 @@ public class LimpopoBasedChecker {
             logResult(" * Running checker for: " + idfPath);
             logResult(" *\\");
 
-            MAGETABInvestigation inv = parse(idfPath);
-            Collection<CheckResult> results =
-                    natural().sortedCopy(
-                            checker.check(new LimpopoBasedExperiment(inv)));
-
+            Collection<CheckResult> results =check(parse(idfPath));
             int failures = 0, warnings = 0, errors = 0;
             for (CheckResult res : results) {
                 CheckResultStatus status = res.getStatus();
@@ -121,6 +122,10 @@ public class LimpopoBasedChecker {
         } catch (MalformedURLException e) {
             log.error("Can't create an URL", e);
         }
+    }
+
+    public Collection<CheckResult> check(MAGETABInvestigation inv) throws UknownExperimentTypeException {
+        return natural().sortedCopy(checker.check(new LimpopoBasedExperiment(inv)));
     }
 
     private MAGETABInvestigation parse(String idfPath) throws ParseException, MalformedURLException {

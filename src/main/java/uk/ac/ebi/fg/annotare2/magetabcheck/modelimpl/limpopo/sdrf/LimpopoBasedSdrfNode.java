@@ -79,7 +79,7 @@ abstract class LimpopoBasedSdrfNode<T extends SDRFNode> extends ObjectWithAttrib
 
     @Override
     public String getFileName() {
-        return helper.getFileName();
+        return helper.getSourceName();
     }
 
     @Override
@@ -96,7 +96,7 @@ abstract class LimpopoBasedSdrfNode<T extends SDRFNode> extends ObjectWithAttrib
     }
 
     protected FileLocation location(String file) {
-        return new FileLocation(helper.getFileRoot(), file);
+        return new FileLocation(helper.getSourceUrl(), file);
     }
 
     @Override

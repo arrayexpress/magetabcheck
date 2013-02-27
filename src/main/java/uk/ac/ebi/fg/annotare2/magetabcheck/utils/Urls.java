@@ -24,6 +24,9 @@ import java.net.URL;
 public abstract class Urls {
 
     public static String getFileName(URL url) {
+        if (url == null) {
+            return null;
+        }
         String path = url.getPath();
         return path.substring(path.lastIndexOf('/') + 1, path.length());
     }

@@ -60,7 +60,7 @@ abstract class LimpopoBasedIdfObject {
     protected <T> Cell<T> createCell(T value, int line) {
         return new Cell<T>(
                 value,
-                helper.getFileName(),
+                helper.getSourceName(),
                 line,
                 getColumn());
     }
