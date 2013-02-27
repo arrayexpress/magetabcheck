@@ -31,21 +31,21 @@ import static org.easymock.EasyMock.*;
 /**
  * @author Olga Melnichuk
  */
-public class SequencingProtocolRequiredTest extends AbstractCheckTest {
+public class LibraryConstructionProtocolRequiredTest extends AbstractCheckTest {
 
-    private static final String SEQUENCING_PROTOCOL_TYPE = "sequencing protocol";
+    private static final String LIBRARY_CONSTRUCTION_TYPE = "library construction protocol";
 
     @Test
-    public void testValidSeqProtocol() {
-        SequencingProtocolRequired rule = new SequencingProtocolRequired(efoServiceMock());
+    public void testValidLibraryProtocol() {
+        LibraryConstructionProtocolRequired rule = new LibraryConstructionProtocolRequired(efoServiceMock());
         rule.visit(createProtocol(
                 "name",
                 "description",
                 Collections.<String>emptyList(),
                 KnownProtocolHardware.LIST.get(0),
-                "software",
-                "contact",
-                SEQUENCING_PROTOCOL_TYPE,
+                "",
+                "",
+                LIBRARY_CONSTRUCTION_TYPE,
                 createTermSource(
                         KnownTermSource.EFO.name(),
                         KnownTermSource.EFO.getUrl())));
@@ -54,7 +54,7 @@ public class SequencingProtocolRequiredTest extends AbstractCheckTest {
 
     @Test(expected = AssertionError.class)
     public void testInvalidProtocolType() {
-        SequencingProtocolRequired rule = new SequencingProtocolRequired(efoServiceMock());
+        LibraryConstructionProtocolRequired rule = new LibraryConstructionProtocolRequired(efoServiceMock());
         rule.visit(createProtocol(
                 "name",
                 "description",
@@ -70,33 +70,16 @@ public class SequencingProtocolRequiredTest extends AbstractCheckTest {
     }
 
     @Test(expected = AssertionError.class)
-    public void testInvalidHardware() {
-        SequencingProtocolRequired rule = new SequencingProtocolRequired(efoServiceMock());
-        rule.visit(createProtocol(
-                "name",
-                "description",
-                Collections.<String>emptyList(),
-                "invalid hardware name",
-                "software",
-                "contact",
-                SEQUENCING_PROTOCOL_TYPE,
-                createTermSource(
-                        KnownTermSource.EFO.name(),
-                        KnownTermSource.EFO.getUrl())));
-        rule.check();
-    }
-
-    @Test(expected = AssertionError.class)
     public void testInvalidProtocolTypeSource() {
-        SequencingProtocolRequired rule = new SequencingProtocolRequired(efoServiceMock());
+        LibraryConstructionProtocolRequired rule = new LibraryConstructionProtocolRequired(efoServiceMock());
         rule.visit(createProtocol(
                 "name",
                 "description",
                 Collections.<String>emptyList(),
                 KnownProtocolHardware.LIST.get(0),
-                "software",
-                "contact",
-                SEQUENCING_PROTOCOL_TYPE,
+                "",
+                "",
+                LIBRARY_CONSTRUCTION_TYPE,
                 createTermSource(
                         "not efo",
                         "unknown url")));
@@ -106,16 +89,17 @@ public class SequencingProtocolRequiredTest extends AbstractCheckTest {
     private EfoService efoServiceMock() {
         EfoService mock = EasyMock.createMock(EfoService.class);
         final Capture<String> argCapture = new Capture<String>();
-        expect(mock.isSequencingProtocol((String) anyObject(), capture(argCapture))).andAnswer(
+        expect(mock.isLibraryConstructionProtocol((String) anyObject(), capture(argCapture))).andAnswer(
                 new IAnswer<Boolean>() {
                     @Override
                     public Boolean answer() throws Throwable {
                         String value = argCapture.getValue();
-                        return value != null && value.equals("sequencing protocol");
+                        return value != null && value.equals("library construction protocol");
                     }
                 }
         );
         replay(mock);
         return mock;
     }
+
 }

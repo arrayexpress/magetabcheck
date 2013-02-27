@@ -49,29 +49,18 @@ public class LibraryConstructionProtocolRequired {
 
     @Visit
     public void visit(Protocol protocol) {
-        ProtocolType type = protocol.getType();
-        TermSource ts = type.getSource().getValue();
-        if (ts == null) {
-            return;
+        if (isLibraryConstructionProtocol(protocol.getType())) {
+            counter++;
         }
-
-        if (!isEfoTermSource(ts)) {
-            return;
-        }
-
-        if (!isLibraryConstructionProtocol(type)) {
-            return;
-        }
-
-        counter++;
     }
 
     private boolean isLibraryConstructionProtocol(ProtocolType type) {
-        return efo.isLibraryConstructionProtocol(type.getAccession().getValue(), type.getName().getValue());
+        return isEfoTermSource(type.getSource().getValue())
+                && efo.isLibraryConstructionProtocol(type.getAccession().getValue(), type.getName().getValue());
     }
 
     private boolean isEfoTermSource(TermSource ts) {
-        return EFO.matches(ts.getFile().getValue());
+        return ts != null && EFO.matches(ts.getFile().getValue());
     }
 
     @Check
