@@ -111,15 +111,22 @@ public class LimpopoBasedChecker {
      *
      * @param idfFilePath path to IDF file
      * @return a collection of check results
-     * @throws MalformedURLException if given string is not a file path
-     * @throws ParseException if IDF can not be parsed by Limpopo MAGE-TAB parser
-     * @throws UknownExperimentTypeException if IDF doesn't contain Comment[AEExperimentType] or it is not from EFO
+     * @throws MalformedURLException         if given string is not a file path
+     * @throws ParseException                if IDF can not be parsed by Limpopo MAGE-TAB parser
+     * @throws UknownExperimentTypeException if IDF doesn't contain Comment[AEExperimentType] or its value is not from EFO
      */
     public final Collection<CheckResult> check(String idfFilePath) throws MalformedURLException, ParseException, UknownExperimentTypeException {
         return check(parse(idfFilePath));
     }
 
-    public final  Collection<CheckResult> check(MAGETABInvestigation inv) throws UknownExperimentTypeException {
+    /**
+     * Run checker on MAGETABInvestigation object (already parsed by Limpopo MAGE-TAB parser).
+     *
+     * @param inv an MAGETABInvestigation object
+     * @return a collection of check results
+     * @throws UknownExperimentTypeException if MAGETABInvestigation.IDF doesn't contain Comment[AEExperimentType] or its value is not from EFO
+     */
+    public final Collection<CheckResult> check(MAGETABInvestigation inv) throws UknownExperimentTypeException {
         return natural().sortedCopy(checker.check(new LimpopoBasedExperiment(inv)));
     }
 
