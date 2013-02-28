@@ -106,6 +106,15 @@ public class LimpopoBasedChecker {
         }
     }
 
+    /**
+     * Run checker on IDF file path.
+     *
+     * @param idfFilePath path to IDF file
+     * @return a collection of check results
+     * @throws MalformedURLException if given string is not a file path
+     * @throws ParseException if IDF can not be parsed by Limpopo MAGE-TAB parser
+     * @throws UknownExperimentTypeException if IDF doesn't contain Comment[AEExperimentType] or it is not from EFO
+     */
     public final Collection<CheckResult> check(String idfFilePath) throws MalformedURLException, ParseException, UknownExperimentTypeException {
         return check(parse(idfFilePath));
     }
