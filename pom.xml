@@ -61,7 +61,7 @@
         <connection>scm:git:git://github.com/arrayexpress/magetabcheck.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/arrayexpress/magetabcheck.git</developerConnection>
       <tag>HEAD</tag>
-  </scm>
+    </scm>
 
     <profiles>
         <profile>
