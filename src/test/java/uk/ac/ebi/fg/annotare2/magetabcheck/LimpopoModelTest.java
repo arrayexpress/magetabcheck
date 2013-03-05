@@ -22,18 +22,21 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 import org.junit.Test;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.MAGETABInvestigation;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.*;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.AtLeastOneContactWithEmailRequired;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfSimpleChecks;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Info;
 import uk.ac.ebi.fg.annotare2.magetabcheck.modelimpl.limpopo.LimpopoBasedChecker;
 import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertTrue;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDefinitionsFactory.singleMethodCheck;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckResultStatus.SUCCESS;
 
 /**
@@ -48,14 +51,22 @@ public class LimpopoModelTest {
         MAGETABInvestigation inv = new MAGETABInvestigation();
         inv.IDF.getComments().put("AEExperimentType", new HashSet<String>(asList(RNA_SEQ_TYPE)));
         inv.IDF.investigationTitle = "Test";
+        inv.IDF.personEmail.add(0, "user@ebi.ac.uk");
 
         Collection<CheckResult> results = (new LimpopoBasedChecker(new RnaSeqModule())).check(inv);
-        assertEquals(1, results.size());
+        assertEquals(2, results.size());
 
-        CheckResult result = results.iterator().next();
+        Iterator<CheckResult> iterator = results.iterator();
+        CheckResult result = iterator.next();
         assertEquals(SUCCESS, result.getStatus());
 
         CheckPosition pos = result.getPosition();
+        assertTrue(pos.isUndefined());
+
+        result = iterator.next();
+        assertEquals(SUCCESS, result.getStatus());
+
+        pos = result.getPosition();
         assertTrue(pos.isUndefined());
     }
 
@@ -71,8 +82,12 @@ public class LimpopoModelTest {
 
             bind(EfoService.class).toInstance(service);
 
+            CheckDefinitionListBuilder builder = new CheckDefinitionListBuilder();
+            builder.addMethodBasedCheck(IdfSimpleChecks.class, "investigationTitleRequired", Info.class);
+            builder.addClassBasedCheck(AtLeastOneContactWithEmailRequired.class);
+
             bind(new TypeLiteral<List<CheckDefinition>>() {
-            }).toInstance(singleMethodCheck());
+            }).toInstance(builder.build());
 
             install(new FactoryModuleBuilder().build(CheckerFactory.class));
         }

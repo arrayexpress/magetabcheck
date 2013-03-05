@@ -16,27 +16,42 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.checker;
 
-import uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfSimpleChecks;
-import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Info;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Olga Melnichuk
  */
-public class CheckDefinitionsFactory {
+public class CheckDefinitionListBuilder {
 
-    public static List<CheckDefinition> singleMethodCheck() {
+    private final ClassInstanceProvider instanceProvider;
+
+    private final List<CheckDefinition> list = new ArrayList<CheckDefinition>();
+
+    public CheckDefinitionListBuilder(ClassInstanceProvider instanceProvider) {
+        this.instanceProvider = instanceProvider;
+    }
+
+    public CheckDefinitionListBuilder() {
+        this(ClassInstanceProvider.DEFAULT_CLASS_INSTANCE_PROVIDER);
+    }
+
+    public List<CheckDefinition> build() {
+      return list;
+    }
+
+    public void addMethodBasedCheck(Class<?> source, String methodName, Class<?> target) {
         try {
-            List<CheckDefinition> list = new ArrayList<CheckDefinition>();
             list.add(new MethodBasedCheckDefinition(
-                    IdfSimpleChecks.class.getMethod("investigationTitleRequired", Info.class),
-                    ClassInstanceProvider.DEFAULT_CLASS_INSTANCE_PROVIDER
+                    source.getMethod(methodName, target),
+                    instanceProvider
             ));
-            return list;
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void addClassBasedCheck(Class<?> clazz) {
+        list.add(new ClassBasedCheckDefinition(clazz, instanceProvider));
     }
 }

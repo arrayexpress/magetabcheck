@@ -45,7 +45,16 @@ public class LimpopoIdfDataProxy implements IdfData {
 
     @Override
     public List<Person> getContacts() {
-        int size = size(idfHelper.idf().personFirstName);
+        IDF idf = idfHelper.idf();
+        int size = max(size(idf.personFirstName),
+                size(idf.personLastName),
+                size(idf.personEmail),
+                size(idf.personAddress),
+                size(idf.personAffiliation),
+                size(idf.personPhone),
+                size(idf.personMidInitials),
+                size(idf.personFax),
+                size(idf.personRoles));
         List<Person> contacts = newArrayList();
         for (int i = 0; i < size; i++) {
             contacts.add(new LimpopoBasedPerson(idfHelper, i));
