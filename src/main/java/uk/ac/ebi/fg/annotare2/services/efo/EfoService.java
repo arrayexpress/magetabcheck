@@ -16,6 +16,8 @@
 
 package uk.ac.ebi.fg.annotare2.services.efo;
 
+import uk.ac.ebi.fg.annotare2.magetabcheck.ServiceUnavailableException;
+
 import java.util.Collection;
 
 /**
@@ -36,6 +38,37 @@ public interface EfoService {
     public static final String METHODOLOGICAL_VARIATION_DESIGNS = "EFO_0004669";
 
     public static final String BIOMOLECULAR_ANNOTATION_DESIGNS = "EFO_0004665";
+
+    public static final EfoService UNAVAILABLE = new EfoService() {
+        @Override
+        public String findHtsInvestigationType(String name) {
+            throw unavailable();
+        }
+
+        @Override
+        public String findMaInvestigationType(String name) {
+            throw unavailable();
+        }
+
+        @Override
+        public boolean isLibraryConstructionProtocol(String accession, String name) {
+            throw unavailable();
+        }
+
+        @Override
+        public boolean isSequencingProtocol(String accession, String name) {
+            throw unavailable();
+        }
+
+        @Override
+        public Collection<String> getSubTermsOf(String accession) {
+            throw unavailable();
+        }
+
+        private ServiceUnavailableException unavailable() {
+            throw unavailable();
+        }
+    };
 
     /**
      * Looks through the all descendants of {@value #HTS_EXPERIMENT_TYPES} term and returns

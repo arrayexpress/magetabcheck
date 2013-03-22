@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.URL;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.io.Closeables.closeQuietly;
 
 /**
@@ -43,26 +42,33 @@ public class EfoLoader {
 
     private static final Logger log = LoggerFactory.getLogger(EfoLoader.class);
 
-    private static final String EFO_URL = "http://www.ebi.ac.uk/efo/efo.owl";
-
     private File cacheDir;
+    private final URL defaultEfoUrl;
+    private final int entityExpansionLimit;
 
-    public EfoLoader() {
-        this(null);
-    }
+    public EfoLoader(EfoServiceProperties properties) {
+        if (properties == null) {
+            throw new IllegalArgumentException("EfoServiceProperties == null");
+        }
 
-    public EfoLoader(File cacheDir) {
-        this.cacheDir = (cacheDir == null) ?
+        defaultEfoUrl = properties.getEfoUrl();
+        entityExpansionLimit = properties.getOwlEntityExpansionLimit();
+        cacheDir = properties.getCacheDir();
+        cacheDir = (cacheDir == null) ?
                 Files.createTempDir() : cacheDir;
-
-        log.debug("EFO loader created [cacheDir={}]", cacheDir);
+        log.debug("EFO cache dir used {}", cacheDir);
     }
 
     public EfoGraph load() throws IOException, OWLOntologyCreationException {
-        return load(new URL(EFO_URL));
+        return load(defaultEfoUrl);
     }
 
     public EfoGraph load(final URL url) throws IOException, OWLOntologyCreationException {
+        if (url == null) {
+            log.error("Given EFO url is null; please use the config file to specify the proper one");
+            return null;
+        }
+
         File cacheFile = getCacheFile(url);
         if (!cacheFile.exists()) {
             log.debug("The cache file doesn't exist; creating one [file={}]", cacheFile);
@@ -109,7 +115,7 @@ public class EfoLoader {
         try {
             // The default entityExpansionLimit=64000 defined in RDFXMLParser
             // is not enough to load EFO
-            System.setProperty("entityExpansionLimit", "128000");
+            System.setProperty("entityExpansionLimit", Integer.toString(entityExpansionLimit));
 
             log.debug("Reading the ontology...");
             OWLOntology ontology = manager.loadOntologyFromOntologyDocument(in);

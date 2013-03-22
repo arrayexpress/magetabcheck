@@ -16,15 +16,12 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck;
 
-import com.google.common.io.Files;
-import com.google.inject.AbstractModule;
-import com.google.inject.Scopes;
-import com.google.inject.TypeLiteral;
+import com.google.inject.*;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
-import com.google.inject.name.Names;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.*;
 import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
-import uk.ac.ebi.fg.annotare2.services.efo.EfoServiceImpl;
+import uk.ac.ebi.fg.annotare2.services.efo.EfoServiceProperties;
+import uk.ac.ebi.fg.annotare2.services.efo.EfoServiceProvider;
 
 import java.util.List;
 
@@ -33,14 +30,10 @@ import java.util.List;
  */
 public class CheckerModule extends AbstractModule {
 
-    //TODO move to config files
-    private static final String EFO_URL = "http://www.ebi.ac.uk/efo/efo.owl";
-
     @Override
     protected void configure() {
-        bindConstant().annotatedWith(Names.named("efoCacheDir")).to(getEfoCachePath());
-        bindConstant().annotatedWith(Names.named("efoUrl")).to(EFO_URL);
-        bind(EfoService.class).to(EfoServiceImpl.class).in(Scopes.SINGLETON);
+        bind(EfoServiceProperties.class).to(MageTabCheckProperties.class);
+        bind(EfoService.class).toProvider(EfoServiceProvider.class).in(Scopes.SINGLETON);
 
         bind(AllChecks.class).to(AllChecksImpl.class).in(Scopes.SINGLETON);
 
@@ -50,9 +43,10 @@ public class CheckerModule extends AbstractModule {
         install(new FactoryModuleBuilder().build(CheckerFactory.class));
     }
 
-    private static String getEfoCachePath() {
-        String dir = System.getProperty("efo.cachedir");
-        return dir == null ?
-                Files.createTempDir().getPath() : dir;
+    @Provides
+    @Singleton
+    public MageTabCheckProperties getProperties() {
+        return MageTabCheckProperties.load();
     }
 }
+

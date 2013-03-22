@@ -17,16 +17,10 @@
 package uk.ac.ebi.fg.annotare2.services.efo;
 
 import com.google.common.base.Predicate;
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
@@ -42,21 +36,11 @@ public class EfoServiceImpl implements EfoService {
 
     private final EfoGraph graph;
 
-    @Inject
-    public EfoServiceImpl(@Named("efoCacheDir") String cacheDir,
-                          @Named("efoUrl") String efoUrl) {
-
-        EfoGraph g = null;
-        try {
-            File dir = (cacheDir == null ? null : new File(cacheDir));
-            g = new EfoLoader(dir).load(new URL(efoUrl));
-        } catch (IOException e) {
-            log.error("Can't load EFO", e);
-        } catch (OWLOntologyCreationException e) {
-            log.error("Can't load EFO", e);
+    public EfoServiceImpl(EfoGraph graph) {
+        if (graph == null) {
+            throw new IllegalArgumentException("EfoGraph == null");
         }
-
-        graph = g;
+        this.graph = graph;
     }
 
     @Override
