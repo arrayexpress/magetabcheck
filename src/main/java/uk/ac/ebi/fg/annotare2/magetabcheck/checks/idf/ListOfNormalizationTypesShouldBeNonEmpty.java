@@ -24,6 +24,9 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.NormalizationType;
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck(value = "An experiment should have at least one normalization type specified", modality = CheckModality.WARNING)
+@MageTabCheck(
+        ref = "NT01",
+        value = "An experiment should have at least one normalization type specified",
+        modality = CheckModality.WARNING)
 public class ListOfNormalizationTypesShouldBeNonEmpty extends NonEmptyListCheck<NormalizationType> {
 }

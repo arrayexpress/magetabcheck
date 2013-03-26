@@ -34,6 +34,7 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.EFO;
  * @author Olga Melnichuk
  */
 @MageTabCheck(
+        ref = "PR08",
         value = "Library construction protocol is required for HTS submissions",
         application = CheckApplicationType.HTS_ONLY)
 public class LibraryConstructionProtocolRequired {

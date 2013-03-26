@@ -25,7 +25,9 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.ExperimentalDesign;
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck(value = "Micro-array experiment must have at least one experimental design specified",
+@MageTabCheck(
+        ref = "ED01",
+        value = "Micro-array experiment must have at least one experimental design specified",
         application = CheckApplicationType.MICRO_ARRAY_ONLY,
         modality = CheckModality.WARNING)
 public class ListOfExperimentalDesignsShouldBeNonEmpty extends NonEmptyListCheck<ExperimentalDesign> {

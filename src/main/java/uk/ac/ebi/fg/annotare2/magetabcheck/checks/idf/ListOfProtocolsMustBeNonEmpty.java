@@ -23,6 +23,8 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck("At least one protocol must be used in an experiment")
+@MageTabCheck(
+        ref = "PR01",
+        value = "At least one protocol must be used in an experiment")
 public class ListOfProtocolsMustBeNonEmpty extends NonEmptyListCheck<Protocol> {
 }

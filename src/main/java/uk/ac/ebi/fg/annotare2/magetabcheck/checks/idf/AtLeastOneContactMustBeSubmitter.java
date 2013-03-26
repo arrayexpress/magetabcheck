@@ -29,7 +29,9 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfConstants.SUBMIT
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck("At least one contact must have '" + SUBMITTER_ROLE + "' role specified ")
+@MageTabCheck(
+        ref = "C05",
+        value = "At least one contact must have '" + SUBMITTER_ROLE + "' role specified ")
 public class AtLeastOneContactMustBeSubmitter {
 
     private int submitterCount;

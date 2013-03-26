@@ -22,12 +22,12 @@ import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.Set;
 
 import static com.google.common.io.CharStreams.newWriterSupplier;
@@ -72,11 +72,8 @@ public class CheckListGenerator {
     }
 
     private String markdown() {
-        Reflections reflections = new Reflections(
-                new ConfigurationBuilder()
-                        .setUrls(ClasspathHelper.forPackage(packageName))
-                        .setScanners(new TypeAnnotationsScanner(), new MethodAnnotationsScanner())
-        );
+        Reflections reflections = new Reflections(packageName,
+                new TypeAnnotationsScanner(), new MethodAnnotationsScanner());
 
         Set<Class<?>> classBasedChecks = reflections.getTypesAnnotatedWith(MageTabCheck.class);
         Set<Method> methodBasedChecks = reflections.getMethodsAnnotatedWith(MageTabCheck.class);
@@ -145,7 +142,7 @@ public class CheckListGenerator {
         REF("Ref") {
             @Override
             String getValue(MageTabCheck annot) {
-                return "TBA";
+                return annot.ref();
             }
         },
         MODALITY("Modality") {

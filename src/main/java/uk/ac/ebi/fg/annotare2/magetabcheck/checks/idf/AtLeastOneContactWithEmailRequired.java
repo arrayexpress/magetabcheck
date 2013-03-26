@@ -28,7 +28,9 @@ import static org.hamcrest.Matchers.*;
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck("At least one contact must have email specified")
+@MageTabCheck(
+        ref = "C03",
+        value = "At least one contact must have email specified")
 public class AtLeastOneContactWithEmailRequired {
 
     private int emailCount;

@@ -36,6 +36,7 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.EFO;
  * @author Olga Melnichuk
  */
 @MageTabCheck(
+        ref = "PR09",
         value = "Sequencing protocol is required for HTS submissions",
         application = CheckApplicationType.HTS_ONLY)
 public class SequencingProtocolRequired {

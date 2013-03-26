@@ -25,6 +25,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck("At least one contact must be specified")
+@MageTabCheck(
+        ref = "C01",
+        value = "At least one contact must be specified")
 public class ListOfContactsMustBeNonEmpty extends NonEmptyListCheck<Person> {
 }

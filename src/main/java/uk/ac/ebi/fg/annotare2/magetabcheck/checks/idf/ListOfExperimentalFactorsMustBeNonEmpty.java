@@ -23,6 +23,8 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.ExperimentalFactor;
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck(" An experiment must have at least one experimental factor specified")
+@MageTabCheck(
+        ref = "EF01",
+        value = "An experiment must have at least one experimental factor specified")
 public class ListOfExperimentalFactorsMustBeNonEmpty extends NonEmptyListCheck<ExperimentalFactor> {
 }

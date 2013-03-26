@@ -33,6 +33,8 @@ public @interface MageTabCheck {
 
     String value();
 
+    String ref() default "TBA";
+
     CheckModality modality() default uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.ERROR;
 
     CheckApplicationType application() default uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.ANY;

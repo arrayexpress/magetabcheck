@@ -24,6 +24,9 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.QualityControlType;
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck(value = "An experiment should have at least one quality control type specified", modality = CheckModality.WARNING)
+@MageTabCheck(
+        ref = "QC01",
+        value = "An experiment should have at least one quality control type specified",
+        modality = CheckModality.WARNING)
 public class ListOfQualityControlTypesShouldBeNonEmpty extends NonEmptyListCheck<QualityControlType> {
 }

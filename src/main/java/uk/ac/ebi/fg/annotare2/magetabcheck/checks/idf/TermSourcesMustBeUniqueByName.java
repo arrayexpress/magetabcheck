@@ -31,7 +31,9 @@ import static org.hamcrest.Matchers.is;
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck("Name of a term source must be unique")
+@MageTabCheck(
+        ref = "TS02",
+        value = "Name of a term source must be unique")
 public class TermSourcesMustBeUniqueByName {
 
     private final Set<String> names = newHashSet();
