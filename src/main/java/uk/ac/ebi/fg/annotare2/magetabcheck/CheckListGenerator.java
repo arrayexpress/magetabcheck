@@ -16,11 +16,15 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck;
 
+import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
-import com.google.common.io.Files;
 
 import java.io.File;
 import java.io.IOException;
+
+import static com.google.common.io.CharStreams.newWriterSupplier;
+import static com.google.common.io.CharStreams.write;
+import static com.google.common.io.Files.newOutputStreamSupplier;
 
 /**
  * @author Olga Melnichuk
@@ -36,7 +40,7 @@ public class CheckListGenerator {
         this.title = title;
     }
 
-    public static void main() {
+    public static void main(String... args) {
         toMarkdown("uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf", "IDF checks", "./doc/idf-checks.md");
         toMarkdown("uk.ac.ebi.fg.annotare2.magetabcheck.checks.sdrf", "SDRF checks", "./doc/sdrf-checks.md");
     }
@@ -49,8 +53,14 @@ public class CheckListGenerator {
         }
     }
 
-    private void generateMarkdown(File out) throws IOException {
-        CharStreams.write(markdown(), Files.newOutputStreamSupplier(out));
+    private void generateMarkdown(final File out) throws IOException {
+        if (!out.exists()) {
+            File parent = out.getParentFile();
+            if (!parent.exists() && !parent.mkdirs()) {
+                throw new IllegalStateException("Can't create directories " + parent);
+            }
+        }
+        write(markdown(), newWriterSupplier(newOutputStreamSupplier(out), Charsets.UTF_8));
     }
 
     private String markdown() {
