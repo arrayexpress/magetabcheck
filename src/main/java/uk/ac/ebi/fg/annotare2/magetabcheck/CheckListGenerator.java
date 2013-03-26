@@ -17,14 +17,22 @@
 package uk.ac.ebi.fg.annotare2.magetabcheck;
 
 import com.google.common.base.Charsets;
-import com.google.common.io.CharStreams;
+import org.reflections.Reflections;
+import org.reflections.scanners.MethodAnnotationsScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.Set;
 
 import static com.google.common.io.CharStreams.newWriterSupplier;
 import static com.google.common.io.CharStreams.write;
 import static com.google.common.io.Files.newOutputStreamSupplier;
+import static java.lang.String.format;
 
 /**
  * @author Olga Melnichuk
@@ -64,8 +72,119 @@ public class CheckListGenerator {
     }
 
     private String markdown() {
-        StringBuilder sb = new StringBuilder();
-        //TODO
-        return sb.toString();
+        Reflections reflections = new Reflections(
+                new ConfigurationBuilder()
+                        .setUrls(ClasspathHelper.forPackage(packageName))
+                        .setScanners(new TypeAnnotationsScanner(), new MethodAnnotationsScanner())
+        );
+
+        Set<Class<?>> classBasedChecks = reflections.getTypesAnnotatedWith(MageTabCheck.class);
+        Set<Method> methodBasedChecks = reflections.getMethodsAnnotatedWith(MageTabCheck.class);
+
+        MarkdownChecks markdown = new MarkdownChecks();
+        markdown.header1(title);
+        markdown.checksStart();
+        for (Method method : methodBasedChecks) {
+            markdown.addCheck(method);
+        }
+        for (Class<?> clazz : classBasedChecks) {
+            markdown.addCheck(clazz);
+        }
+        return markdown.toString();
+    }
+
+    private static class MarkdownChecks {
+        private final StringBuilder sb = new StringBuilder();
+
+        public void header1(String title) {
+            sb.append("## ")
+                    .append(title)
+                    .append("\n");
+        }
+
+        public void checksStart() {
+            for (Column c : Column.values()) {
+                sb.append("|");
+                sb.append(c.getTitle());
+
+            }
+            sb.append("|\n");
+        }
+
+        public void addCheck(Method method) {
+            for (Column c : Column.values()) {
+                sb.append("|");
+                sb.append(c.getValue(method));
+
+            }
+            sb.append("|\n");
+        }
+
+        public void addCheck(Class<?> clazz) {
+            for (Column c : Column.values()) {
+                sb.append("|");
+                sb.append(c.getValue(clazz));
+
+            }
+            sb.append("|\n");
+        }
+
+        @Override
+        public String toString() {
+            return sb.toString();
+        }
+    }
+
+    private static enum Column {
+        REF("Ref") {
+            @Override
+            String getValue(MageTabCheck annot) {
+                return "TBA";
+            }
+        },
+        MODALITY("Modality") {
+            @Override
+            String getValue(MageTabCheck annot) {
+                return annot.modality().toString();
+            }
+        },
+        TYPE("Type") {
+            @Override
+            String getValue(MageTabCheck annot) {
+                return annot.application().toString();
+            }
+        },
+        TITLE("Title") {
+            @Override
+            String getValue(MageTabCheck annot) {
+                return annot.value();
+            }
+        },
+        DETAILS("Details") {
+            @Override
+            String getValue(MageTabCheck annot) {
+                return "TBA";
+            }
+        };
+
+        private final String title;
+
+        private Column(String title) {
+            this.title = title;
+        }
+
+        private String getTitle() {
+            return title;
+        }
+
+        public String getValue(Method method) {
+            return getValue(method.getAnnotation(MageTabCheck.class));
+        }
+
+        public String getValue(Class<?> clazz) {
+            return getValue(clazz.getAnnotation(MageTabCheck.class));
+        }
+
+        abstract String getValue(MageTabCheck annot);
     }
 }
