@@ -18,6 +18,8 @@ package uk.ac.ebi.fg.annotare2.magetabcheck;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Ordering;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
@@ -28,7 +30,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static com.google.common.io.CharStreams.newWriterSupplier;
 import static com.google.common.io.CharStreams.write;
@@ -75,35 +78,46 @@ public class CheckListGenerator {
         Reflections reflections = new Reflections(packageName,
                 new TypeAnnotationsScanner(), new MethodAnnotationsScanner());
 
-        Set<Class<?>> classBasedChecks = reflections.getTypesAnnotatedWith(MageTabCheck.class);
-        Set<Method> methodBasedChecks = reflections.getMethodsAnnotatedWith(MageTabCheck.class);
+        List<MageTabCheck> checks = new ArrayList<MageTabCheck>();
+        for (Class<?> clazz : reflections.getTypesAnnotatedWith(MageTabCheck.class)) {
+            checks.add(clazz.getAnnotation(MageTabCheck.class));
+        }
+        for (Method method : reflections.getMethodsAnnotatedWith(MageTabCheck.class)) {
+            checks.add(method.getAnnotation(MageTabCheck.class));
+        }
+
+        checks = Ordering.from(new Comparator<MageTabCheck>() {
+            @Override
+            public int compare(MageTabCheck o1, MageTabCheck o2) {
+                return o1.ref().compareTo(o2.ref());
+            }
+        }).sortedCopy(checks);
 
         MarkdownChecks markdown = new MarkdownChecks();
         markdown.header1(title);
         markdown.checksStart();
-        for (Method method : methodBasedChecks) {
-            markdown.addCheck(method);
-        }
-        for (Class<?> clazz : classBasedChecks) {
-            markdown.addCheck(clazz);
+        for (MageTabCheck check : checks) {
+            markdown.addCheck(check);
         }
         return markdown.toString();
     }
 
     private static class MarkdownChecks {
+        private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         private final StringBuilder sb = new StringBuilder();
 
         public void header1(String title) {
             sb.append("## ")
                     .append(title)
-                    .append("\n");
+                    .append("\n(updated: ")
+                    .append(dateFormat.format(new Date()))
+                    .append(")\n\n");
         }
 
         public void checksStart() {
             for (Column c : Column.values()) {
                 sb.append("|");
                 sb.append(c.getTitle());
-
             }
             sb.append("|\n");
 
@@ -114,19 +128,10 @@ public class CheckListGenerator {
             sb.append("|\n");
         }
 
-        public void addCheck(Method method) {
+        public void addCheck(MageTabCheck check) {
             for (Column c : Column.values()) {
                 sb.append("|");
-                sb.append(c.getValue(method));
-
-            }
-            sb.append("|\n");
-        }
-
-        public void addCheck(Class<?> clazz) {
-            for (Column c : Column.values()) {
-                sb.append("|");
-                sb.append(c.getValue(clazz));
+                sb.append(c.getValue(check));
 
             }
             sb.append("|\n");
@@ -178,14 +183,6 @@ public class CheckListGenerator {
 
         private String getTitle() {
             return title;
-        }
-
-        public String getValue(Method method) {
-            return getValue(method.getAnnotation(MageTabCheck.class));
-        }
-
-        public String getValue(Class<?> clazz) {
-            return getValue(clazz.getAnnotation(MageTabCheck.class));
         }
 
         abstract String getValue(MageTabCheck annot);

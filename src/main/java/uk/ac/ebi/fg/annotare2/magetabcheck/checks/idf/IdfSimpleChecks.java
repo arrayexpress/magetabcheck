@@ -271,7 +271,7 @@ public class IdfSimpleChecks {
     }
 
     @MageTabCheck(
-            ref = "BP01",
+            ref = "PB01",
             value = "A publication should have at least one of PubMed ID or Publication DOI specified",
             modality = WARNING)
     public void publicationShouldHavePubMedIDOrDOI(Publication pub) {

@@ -1,6 +1,11 @@
 ## SDRF checks
+(generated: 26/03/2013 16:23)
+
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
+|TBA|ERROR|HTS_ONLY|There are must not be any array design attributes in HTS experiment|TBA|
+|TBA|ERROR|HTS_ONLY|There are must not be any Labeled Extract nodes in HTS experiments|TBA|
+|TBA|ERROR|HTS_ONLY|An SDRF graph must have at least one scan node|TBA|
 |TBA|ERROR|ANY|Term source of a unit attribute must be declared in IDF|TBA|
 |TBA|WARNING|MICRO_ARRAY_ONLY|A label attribute should have term source specified|TBA|
 |TBA|WARNING|ANY|A characteristic attribute should have name specified|TBA|
@@ -61,6 +66,3 @@
 |TBA|ERROR|MICRO_ARRAY_ONLY|A labeled extract node must have name specified|TBA|
 |TBA|WARNING|ANY|Technology type attribute should have term source specified|TBA|
 |TBA|WARNING|ANY|A factor value attribute should have term source specified|TBA|
-|TBA|ERROR|HTS_ONLY|There are must not be any Labeled Extract nodes in HTS experiments|TBA|
-|TBA|ERROR|HTS_ONLY|An SDRF graph must have at least one scan node|TBA|
-|TBA|ERROR|HTS_ONLY|There are must not be any array design attributes in HTS experiment|TBA|
