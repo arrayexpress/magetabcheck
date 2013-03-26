@@ -1,5 +1,6 @@
 ## IDF checks
 |Ref|Modality|Type|Title|Details|
+|---|--------|----|-----|-------|
 |TBA|WARNING|ANY|A quality control type should be defined by a term|TBA|
 |TBA|WARNING|ANY|A characteristic attribute should have name specified|TBA|
 |TBA|WARNING|ANY|A factor value attribute should have name specified|TBA|
@@ -100,20 +101,20 @@
 |TBA|WARNING|ANY|URL/File of a term source should be specified|TBA|
 |TBA|ERROR|ANY|A protocol type must be specified|TBA|
 |TBA|WARNING|ANY|Date of Experiment should be specified|TBA|
-|TBA|WARNING|MICRO_ARRAY_ONLY|Micro-array experiment must have at least one experimental design specified|TBA|
-|TBA|WARNING|ANY|An experiment should have at least one normalization type specified|TBA|
 |TBA|ERROR|HTS_ONLY|An SDRF graph must have at least one scan node|TBA|
-|TBA|ERROR|ANY|At least one protocol must be used in an experiment|TBA|
-|TBA|ERROR|ANY|At least one contact must have a role specified|TBA|
-|TBA|ERROR|HTS_ONLY|Library construction protocol is required for HTS submissions|TBA|
-|TBA|ERROR|ANY|Name of a term source must be unique|TBA|
 |TBA|ERROR|ANY|At least one contact with 'submitter' role must have an email specified|TBA|
-|TBA|ERROR|ANY|At least one contact must be specified|TBA|
-|TBA|WARNING|ANY|An experiment should have at least one replicate type specified|TBA|
 |TBA|ERROR|ANY|At least one contact must have email specified|TBA|
+|TBA|WARNING|ANY|An experiment should have at least one quality control type specified|TBA|
+|TBA|WARNING|MICRO_ARRAY_ONLY|Micro-array experiment must have at least one experimental design specified|TBA|
 |TBA|ERROR|HTS_ONLY|There are must not be any Labeled Extract nodes in HTS experiments|TBA|
 |TBA|ERROR|ANY|At least one contact must have 'submitter' role specified |TBA|
-|TBA|WARNING|ANY|An experiment should have at least one quality control type specified|TBA|
+|TBA|ERROR|HTS_ONLY|Library construction protocol is required for HTS submissions|TBA|
+|TBA|ERROR|HTS_ONLY|There are must not be any array design attributes in HTS experiment|TBA|
+|TBA|WARNING|ANY|An experiment should have at least one replicate type specified|TBA|
+|TBA|ERROR|ANY|At least one contact must be specified|TBA|
+|TBA|ERROR|ANY|At least one contact must have a role specified|TBA|
 |TBA|ERROR|HTS_ONLY|Sequencing protocol is required for HTS submissions|TBA|
 |TBA|ERROR|ANY| An experiment must have at least one experimental factor specified|TBA|
-|TBA|ERROR|HTS_ONLY|There are must not be any array design attributes in HTS experiment|TBA|
+|TBA|WARNING|ANY|An experiment should have at least one normalization type specified|TBA|
+|TBA|ERROR|ANY|Name of a term source must be unique|TBA|
+|TBA|ERROR|ANY|At least one protocol must be used in an experiment|TBA|

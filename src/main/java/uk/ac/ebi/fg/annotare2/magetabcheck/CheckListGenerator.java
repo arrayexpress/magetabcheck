@@ -17,6 +17,7 @@
 package uk.ac.ebi.fg.annotare2.magetabcheck;
 
 import com.google.common.base.Charsets;
+import com.google.common.base.Strings;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
@@ -32,7 +33,6 @@ import java.util.Set;
 import static com.google.common.io.CharStreams.newWriterSupplier;
 import static com.google.common.io.CharStreams.write;
 import static com.google.common.io.Files.newOutputStreamSupplier;
-import static java.lang.String.format;
 
 /**
  * @author Olga Melnichuk
@@ -107,6 +107,12 @@ public class CheckListGenerator {
                 sb.append("|");
                 sb.append(c.getTitle());
 
+            }
+            sb.append("|\n");
+
+            for (Column c : Column.values()) {
+                sb.append("|");
+                sb.append(Strings.repeat("-", c.getTitle().length()));
             }
             sb.append("|\n");
         }
