@@ -1,12 +1,12 @@
 # SDRF checks
-(updated: 27/03/2013 15:56)
+(updated: 27/03/2013 15:59)
 
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
 |TBA|**error**|HTS|An SDRF graph must have at least one scan node||
-|TBA|**error**|HTS|There are must not be any array design attributes in HTS experiment||
 |TBA|**error**|HTS|There are must not be any Labeled Extract nodes in HTS experiments||
+|TBA|**error**|HTS|There are must not be any array design attributes in HTS experiment||
 |TBA|**error**|Both|Term source of a unit attribute must be declared in IDF||
 |TBA|**error**|Micro-array|A labeled extract node must have 'Label' attribute specified||
 |TBA|**error**|Both|A protocol node must have name specified||
