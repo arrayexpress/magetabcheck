@@ -40,8 +40,8 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.EFO;
         value = "Sequencing protocol is required for HTS submissions",
         application = CheckApplicationType.HTS_ONLY,
         details = "1. A `Protocol Type` field must be the name of " +
-                "[[EFO Sequencing Protocols | http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004170]] " +
-                "class or one of its children;<br/>2. `Protocol Term Source REF` must be \"EFO\"" +
+                "'sequencing protocols class' in [EFO](http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004170) " +
+                "or one of its children;<br/>2. `Protocol Term Source REF` must be \"EFO\" ([full list](#term-source-list))" +
                 "<br/>3. `Protocol Hardware` field must contain a comma separated list of protocol hardware used ([full-list](#protocol-hardware-list));")
 public class SequencingProtocolRequired {
 

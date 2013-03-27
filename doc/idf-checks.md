@@ -1,5 +1,5 @@
 # IDF checks
-(updated: 27/03/2013 15:46)
+(updated: 27/03/2013 15:56)
 
 + [Contact Checks](#contact-checks)
 + [Experimental Design Checks](#experimental-design-checks)
@@ -12,6 +12,7 @@
 + [Replicate Type Checks](#replicate-type-checks)
 + [Term Source Checks](#term-source-checks)
 + [Supported protocol hardware list](#supported-protocol-hardware-list)
++ [Term source list](#term-source-list)
 
 ## Contact Checks
 
@@ -85,8 +86,8 @@
 |PR01|**error**|Both|At least one protocol must be used in an experiment||
 |PR02|**error**|Both|Name of a protocol must be specified||
 |PR03|**error**|Both|A protocol type must be specified||
-|PR08|**error**|HTS|Library construction protocol is required for HTS submissions|1. A `Protocol Type` field must be the name of [[EFO Library Construction Protocols| http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004184 ]] class or one of its children; <br/> 2. `Protocol Term Source REF` must be "EFO";|
-|PR09|**error**|HTS|Sequencing protocol is required for HTS submissions|1. A `Protocol Type` field must be the name of [[EFO Sequencing Protocols | http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004170]] class or one of its children;<br/>2. `Protocol Term Source REF` must be "EFO"<br/>3. `Protocol Hardware` field must contain a comma separated list of protocol hardware used ([full-list](#supported-protocol-hardware-list));|
+|PR08|**error**|HTS|Library construction protocol is required for HTS submissions|1. A `Protocol Type` field must be the name of 'library construction protocols' class in [EFO](http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004184) or one of its children; <br/> 2. `Protocol Term Source REF` must be "EFO" ([full list](#term-source-list));|
+|PR09|**error**|HTS|Sequencing protocol is required for HTS submissions|1. A `Protocol Type` field must be the name of 'sequencing protocols class' in [EFO](http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004170) or one of its children;<br/>2. `Protocol Term Source REF` must be "EFO" ([full list](#term-source-list))<br/>3. `Protocol Hardware` field must contain a comma separated list of protocol hardware used ([full-list](#supported-protocol-hardware-list));|
 |PR04|warning|Both|A protocol type should have term source specified||
 |PR05|warning|Both|Description of a protocol should be specified||
 |PR06|warning|Both|Description of a protocol should be over 50 characters long||
@@ -138,3 +139,9 @@
 * ab solid 5500
 * ab solid 5500xl
 * complete genomics
+
+## Term source list
+* ArrayExpress http://www.ebi.ac.uk/arrayexpress/
+* NCBI Taxonomy http://www.ncbi.nlm.nih.gov/taxonomy
+* EFO http://www.ebi.ac.uk/efo/
+* MGED Ontology http://mged.sourceforge.net/ontologies/index.php
