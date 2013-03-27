@@ -207,14 +207,20 @@ public class CheckListGenerator {
             @Override
             String getValue(MageTabCheck annot) {
                 CheckModality m = annot.modality();
-                String str = m.toString();
+                String str = m.toString().toLowerCase();
                 return m.isError() ? "**" + str + "**" : str;
             }
         },
         TYPE("Type") {
             @Override
             String getValue(MageTabCheck annot) {
-                return annot.application().toString();
+                switch(annot.application()) {
+                    case MICRO_ARRAY_ONLY: return "micro-array";
+                    case ANY: return  "all";
+                    case HTS_ONLY: return "hts";
+                    default:
+                        return annot.application().toString();
+                }
             }
         },
         TITLE("Title") {
