@@ -147,7 +147,6 @@ public class CheckListGenerator {
         private final StringBuilder title = new StringBuilder();
         private final StringBuilder text = new StringBuilder();
         private final StringBuilder toc = new StringBuilder();
-        private int hc = 0;
 
         public void header1(String header) {
             title.append("# ")
@@ -158,11 +157,14 @@ public class CheckListGenerator {
         }
 
         public void header2(String header) {
-            hc++;
-            text.append("\n## <a id=\"head").append(hc).append("\"></a>")
+            text.append("\n## ")
                     .append(header)
                     .append("\n");
-            toc.append("+ [").append(header).append("](#head").append(hc).append(")\n");
+            String anchor = header
+                    .toLowerCase()
+                    .replaceAll("\\s+", " ")
+                    .replaceAll("\\s", "-");
+            toc.append("+ [").append(header).append("](#").append(anchor).append(")\n");
         }
 
         public void checksStart() {

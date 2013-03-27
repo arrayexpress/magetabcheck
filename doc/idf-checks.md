@@ -1,18 +1,18 @@
 # IDF checks
-(updated: 27/03/2013 14:21)
+(updated: 27/03/2013 14:28)
 
-+ [Contact Checks](#head1)
-+ [Experimental Design Checks](#head2)
-+ [Experimental Factor Checks](#head3)
-+ [General Checks](#head4)
-+ [Normalization Type Checks](#head5)
-+ [Publication Checks](#head6)
-+ [Protocol Checks](#head7)
-+ [Quality Control Type Checks](#head8)
-+ [Replicate Type Checks](#head9)
-+ [Term Source Checks](#head10)
++ [Contact Checks](#contact-checks)
++ [Experimental Design Checks](#experimental-design-checks)
++ [Experimental Factor Checks](#experimental-factor-checks)
++ [General Checks](#general-checks)
++ [Normalization Type Checks](#normalization-type-checks)
++ [Publication Checks](#publication-checks)
++ [Protocol Checks](#protocol-checks)
++ [Quality Control Type Checks](#quality-control-type-checks)
++ [Replicate Type Checks](#replicate-type-checks)
++ [Term Source Checks](#term-source-checks)
 
-## <a id="head1"></a>Contact Checks
+## Contact Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
@@ -27,7 +27,7 @@
 |C09|WARNING|ANY|A contact should have an affiliation specified|TBA|
 |C10|WARNING|ANY|A contact role(s) should have a term source specified|TBA|
 
-## <a id="head2"></a>Experimental Design Checks
+## Experimental Design Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
@@ -35,7 +35,7 @@
 |ED02|WARNING|MICRO_ARRAY_ONLY|An experimental design should be defined by a term|TBA|
 |ED03|WARNING|MICRO_ARRAY_ONLY|An experimental design term should have a term source|TBA|
 
-## <a id="head3"></a>Experimental Factor Checks
+## Experimental Factor Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
@@ -44,7 +44,7 @@
 |EF03|WARNING|ANY|An experimental factor should have a type specified|TBA|
 |EF04|WARNING|ANY|An experimental factor type should have term source specified|TBA|
 
-## <a id="head4"></a>General Checks
+## General Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
@@ -58,7 +58,7 @@
 |G03|WARNING|ANY|Date of Experiment should be specified|TBA|
 |G09|WARNING|ANY|Experiment description should be at least 50 characters long|TBA|
 
-## <a id="head5"></a>Normalization Type Checks
+## Normalization Type Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
@@ -66,7 +66,7 @@
 |NT02|WARNING|ANY|A normalization type should be defined by a term|TBA|
 |NT03|WARNING|ANY|A normalization type should have term source specified|TBA|
 
-## <a id="head6"></a>Publication Checks
+## Publication Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
@@ -77,7 +77,7 @@
 |PB05|WARNING|ANY|A publication status should be specified|TBA|
 |PB06|WARNING|ANY|A publication status should have term source specified|TBA|
 
-## <a id="head7"></a>Protocol Checks
+## Protocol Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
@@ -91,7 +91,7 @@
 |PR06|WARNING|ANY|Description of a protocol should be over 50 characters long|TBA|
 |PR07|WARNING|ANY|A protocol should have parameters|TBA|
 
-## <a id="head8"></a>Quality Control Type Checks
+## Quality Control Type Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
@@ -99,7 +99,7 @@
 |QC02|WARNING|ANY|A quality control type should be defined by a term|TBA|
 |QC03|WARNING|ANY|A quality control type should have term source specified|TBA|
 
-## <a id="head9"></a>Replicate Type Checks
+## Replicate Type Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
@@ -107,7 +107,7 @@
 |RT02|WARNING|ANY|A replicate type should be defined by a term|TBA|
 |RT03|WARNING|ANY|A replicate type should have term source specified|TBA|
 
-## <a id="head10"></a>Term Source Checks
+## Term Source Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
