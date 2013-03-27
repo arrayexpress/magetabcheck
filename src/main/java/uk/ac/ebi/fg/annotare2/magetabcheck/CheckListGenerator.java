@@ -135,7 +135,7 @@ public class CheckListGenerator {
         }).sortedCopy(checks);
 
         MarkdownChecks markdown = new MarkdownChecks(refs);
-        markdown.header1(title);
+        markdown.header1(title + " (" + checks.size() + ")");
         String prefix = null;
         for (MageTabCheck check : checks) {
             if (prefix == null || !check.ref().startsWith(prefix)) {
