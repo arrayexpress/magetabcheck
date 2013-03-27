@@ -18,20 +18,22 @@ package uk.ac.ebi.fg.annotare2.magetabcheck;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
-import org.reflections.util.ClasspathHelper;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.google.common.io.CharStreams.newWriterSupplier;
 import static com.google.common.io.CharStreams.write;
@@ -41,6 +43,8 @@ import static com.google.common.io.Files.newOutputStreamSupplier;
  * @author Olga Melnichuk
  */
 public class CheckListGenerator {
+
+    private static final Pattern REF_PATTERN = Pattern.compile("([a-zA-Z]+)[0-9]*");
 
     private final String packageName;
 
@@ -89,14 +93,33 @@ public class CheckListGenerator {
         checks = Ordering.from(new Comparator<MageTabCheck>() {
             @Override
             public int compare(MageTabCheck o1, MageTabCheck o2) {
-                return o1.ref().compareTo(o2.ref());
+                int prefixDiff = prefix(o1.ref()).compareTo(prefix(o2.ref()));
+                if (prefixDiff != 0) {
+                    return prefixDiff;
+                }
+                int modalityDiff = o1.modality().compareTo(o2.modality());
+                return modalityDiff == 0 ? o1.ref().compareTo(o2.ref()) : modalityDiff;
+            }
+
+            private String prefix(String str) {
+                Matcher m = REF_PATTERN.matcher(str);
+                return (m.matches()) ? m.group(1) : str;
             }
         }).sortedCopy(checks);
 
         MarkdownChecks markdown = new MarkdownChecks();
         markdown.header1(title);
-        markdown.checksStart();
+        String prefix = null;
         for (MageTabCheck check : checks) {
+            if (prefix == null || !check.ref().startsWith(prefix)) {
+                Matcher m = REF_PATTERN.matcher(check.ref());
+                if (m.matches()) {
+                    prefix = m.group(1);
+                    markdown.checksStart();
+                } else {
+                    throw new IllegalStateException("Wrong REF format: " + check.ref());
+                }
+            }
             markdown.addCheck(check);
         }
         return markdown.toString();
@@ -111,16 +134,16 @@ public class CheckListGenerator {
                     .append(title)
                     .append("\n(updated: ")
                     .append(dateFormat.format(new Date()))
-                    .append(")\n\n");
+                    .append(")\n");
         }
 
         public void checksStart() {
+            sb.append("\n");
             for (Column c : Column.values()) {
                 sb.append("|");
                 sb.append(c.getTitle());
             }
             sb.append("|\n");
-
             for (Column c : Column.values()) {
                 sb.append("|");
                 sb.append(Strings.repeat("-", c.getTitle().length()));
