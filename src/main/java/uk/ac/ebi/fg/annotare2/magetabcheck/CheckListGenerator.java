@@ -18,12 +18,15 @@ package uk.ac.ebi.fg.annotare2.magetabcheck;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownProtocolHardware;
+import uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +36,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.google.common.collect.ImmutableList.copyOf;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.io.CharStreams.newWriterSupplier;
 import static com.google.common.io.CharStreams.write;
 import static com.google.common.io.Files.newOutputStreamSupplier;
@@ -58,6 +64,13 @@ public class CheckListGenerator {
         prefixes.put("QC", "Quality Control Type");
         prefixes.put("NT", "Normalization Type");
         prefixes.put("RT", "Replicate Type");
+    }
+
+    private static final Map<String, RefList> refs = newHashMap();
+
+    static {
+        refs.put("#protocol-hardware-list", new ProtocolHardwareList("Supported protocol hardware list"));
+        refs.put("#term-source-list", new TermSourceList("Term source list"));
     }
 
     private final String packageName;
@@ -121,7 +134,7 @@ public class CheckListGenerator {
             }
         }).sortedCopy(checks);
 
-        MarkdownChecks markdown = new MarkdownChecks();
+        MarkdownChecks markdown = new MarkdownChecks(refs);
         markdown.header1(title);
         String prefix = null;
         for (MageTabCheck check : checks) {
@@ -147,6 +160,13 @@ public class CheckListGenerator {
         private final StringBuilder title = new StringBuilder();
         private final StringBuilder text = new StringBuilder();
         private final StringBuilder toc = new StringBuilder();
+        private final Set<RefList> refLists = newHashSet();
+
+        private final Map<String, RefList> refs;
+
+        private MarkdownChecks(Map<String, RefList> refs) {
+            this.refs = refs;
+        }
 
         public void header1(String header) {
             title.append("# ")
@@ -160,11 +180,7 @@ public class CheckListGenerator {
             text.append("\n## ")
                     .append(header)
                     .append("\n");
-            String anchor = header
-                    .toLowerCase()
-                    .replaceAll("\\s+", " ")
-                    .replaceAll("\\s", "-");
-            toc.append("+ [").append(header).append("](#").append(anchor).append(")\n");
+            toc.append("+ [").append(header).append("](").append(ref(header)).append(")\n");
         }
 
         public void checksStart() {
@@ -184,14 +200,39 @@ public class CheckListGenerator {
         public void addCheck(MageTabCheck check) {
             for (Column c : Column.values()) {
                 text.append("|");
-                text.append(c.getValue(check));
+                text.append(filter(c.getValue(check)));
 
             }
             text.append("|\n");
         }
 
+        private void addRefList(RefList refList) {
+            header2(refList.getTitle());
+            for (String item : refList.getItems()) {
+                text.append("* ").append(item).append("\n");
+            }
+        }
+
+        private String filter(String v) {
+            for (String key : refs.keySet()) {
+                if (v.contains(key)) {
+                    RefList refList = refs.get(key);
+                    v = v.replaceAll(key, ref(refList.getTitle()));
+                    refLists.add(refList);
+                }
+            }
+            return v;
+        }
+
+        private String ref(String title) {
+            return "#" + title.toLowerCase().replaceAll("\\s+", " ").replaceAll("\\s", "-");
+        }
+
         @Override
         public String toString() {
+            for (RefList list : refLists) {
+                addRefList(list);
+            }
             return title.toString() + toc.toString() + text.toString();
         }
     }
@@ -214,10 +255,13 @@ public class CheckListGenerator {
         TYPE("Type") {
             @Override
             String getValue(MageTabCheck annot) {
-                switch(annot.application()) {
-                    case MICRO_ARRAY_ONLY: return "micro-array";
-                    case ANY: return  "all";
-                    case HTS_ONLY: return "hts";
+                switch (annot.application()) {
+                    case MICRO_ARRAY_ONLY:
+                        return "Micro-array";
+                    case ANY:
+                        return "Both";
+                    case HTS_ONLY:
+                        return "HTS";
                     default:
                         return annot.application().toString();
                 }
@@ -232,7 +276,7 @@ public class CheckListGenerator {
         DETAILS("Details") {
             @Override
             String getValue(MageTabCheck annot) {
-                return "TBA";
+                return annot.details();
             }
         };
 
@@ -247,5 +291,48 @@ public class CheckListGenerator {
         }
 
         abstract String getValue(MageTabCheck annot);
+    }
+
+    private static class RefList {
+        private final String title;
+        private final List<String> items = newArrayList();
+
+        private RefList(String title) {
+            this.title = title;
+        }
+
+        private List<String> getItems() {
+            return copyOf(items);
+        }
+
+        private String getTitle() {
+            return title;
+        }
+
+        public void addAll(Collection<String> items) {
+            for (String item : items) {
+                add(item);
+            }
+        }
+
+        public void add(String item) {
+            items.add(item);
+        }
+    }
+
+    private static class ProtocolHardwareList extends RefList {
+        private ProtocolHardwareList(String title) {
+            super(title);
+            addAll(KnownProtocolHardware.LIST);
+        }
+    }
+
+    private static class TermSourceList extends RefList {
+        private TermSourceList(String title) {
+            super(title);
+            for (KnownTermSource ts : KnownTermSource.values()) {
+                add(ts.getName() + " " + ts.getUrl());
+            }
+        }
     }
 }

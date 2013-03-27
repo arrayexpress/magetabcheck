@@ -36,7 +36,10 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.EFO;
 @MageTabCheck(
         ref = "PR08",
         value = "Library construction protocol is required for HTS submissions",
-        application = CheckApplicationType.HTS_ONLY)
+        application = CheckApplicationType.HTS_ONLY,
+        details = "1. A `Protocol Type` field must be the name of " +
+                "[[EFO Library Construction Protocols| http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004184 ]] " +
+                "class or one of its children; <br/> 2. `Protocol Term Source REF` must be \"EFO\";")
 public class LibraryConstructionProtocolRequired {
 
     private final EfoService efo;

@@ -1,5 +1,5 @@
 # IDF checks
-(updated: 27/03/2013 14:34)
+(updated: 27/03/2013 15:46)
 
 + [Contact Checks](#contact-checks)
 + [Experimental Design Checks](#experimental-design-checks)
@@ -11,107 +11,130 @@
 + [Quality Control Type Checks](#quality-control-type-checks)
 + [Replicate Type Checks](#replicate-type-checks)
 + [Term Source Checks](#term-source-checks)
++ [Supported protocol hardware list](#supported-protocol-hardware-list)
 
 ## Contact Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
-|C01|**error**|all|At least one contact must be specified|TBA|
-|C02|**error**|all|A contact must have last name specified|TBA|
-|C03|**error**|all|At least one contact must have email specified|TBA|
-|C04|**error**|all|At least one contact must have a role specified|TBA|
-|C05|**error**|all|At least one contact must have 'submitter' role specified |TBA|
-|C06|**error**|ht|A contact with 'submitter' role must have affiliation specified|TBA|
-|C07|**error**|all|At least one contact with 'submitter' role must have an email specified|TBA|
-|C08|warning|all|A contact should have first name specified|TBA|
-|C09|warning|all|A contact should have an affiliation specified|TBA|
-|C10|warning|all|A contact role(s) should have a term source specified|TBA|
+|C01|**error**|Both|At least one contact must be specified||
+|C02|**error**|Both|A contact must have last name specified||
+|C03|**error**|Both|At least one contact must have email specified||
+|C04|**error**|Both|At least one contact must have a role specified||
+|C05|**error**|Both|At least one contact must have 'submitter' role specified ||
+|C06|**error**|HTS|A contact with 'submitter' role must have affiliation specified||
+|C07|**error**|Both|At least one contact with 'submitter' role must have an email specified||
+|C08|warning|Both|A contact should have first name specified||
+|C09|warning|Both|A contact should have an affiliation specified||
+|C10|warning|Both|A contact role(s) should have a term source specified||
 
 ## Experimental Design Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
-|ED01|warning|micro-array|Micro-array experiment must have at least one experimental design specified|TBA|
-|ED02|warning|micro-array|An experimental design should be defined by a term|TBA|
-|ED03|warning|micro-array|An experimental design term should have a term source|TBA|
+|ED01|warning|Micro-array|Micro-array experiment must have at least one experimental design specified||
+|ED02|warning|Micro-array|An experimental design should be defined by a term||
+|ED03|warning|Micro-array|An experimental design term should have a term source||
 
 ## Experimental Factor Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
-|EF01|**error**|all|An experiment must have at least one experimental factor specified|TBA|
-|EF02|**error**|all|An experimental factor must have name specified|TBA|
-|EF03|warning|all|An experimental factor should have a type specified|TBA|
-|EF04|warning|all|An experimental factor type should have term source specified|TBA|
+|EF01|**error**|Both|An experiment must have at least one experimental factor specified||
+|EF02|**error**|Both|An experimental factor must have name specified||
+|EF03|warning|Both|An experimental factor should have a type specified||
+|EF04|warning|Both|An experimental factor type should have term source specified||
 
 ## General Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
-|G01|**error**|all|Experiment title must be specified|TBA|
-|G02|**error**|all|Experiment description must be specified|TBA|
-|G04|**error**|all|Date of Experiment must be in 'YYYY-MM-DD' format|TBA|
-|G05|**error**|all|Experiment public release date must be specified|TBA|
-|G06|**error**|all|Experiment public release date must be in 'YYYY-MM-DD' format|TBA|
-|G07|**error**|all|Reference to the SDRF file must be specified|TBA|
-|G08|**error**|all|Reference to the SDRF file must be valid file location|TBA|
-|G03|warning|all|Date of Experiment should be specified|TBA|
-|G09|warning|all|Experiment description should be at least 50 characters long|TBA|
+|G01|**error**|Both|Experiment title must be specified||
+|G02|**error**|Both|Experiment description must be specified||
+|G04|**error**|Both|Date of Experiment must be in 'YYYY-MM-DD' format||
+|G05|**error**|Both|Experiment public release date must be specified||
+|G06|**error**|Both|Experiment public release date must be in 'YYYY-MM-DD' format||
+|G07|**error**|Both|Reference to the SDRF file must be specified||
+|G08|**error**|Both|Reference to the SDRF file must be valid file location||
+|G03|warning|Both|Date of Experiment should be specified||
+|G09|warning|Both|Experiment description should be at least 50 characters long||
 
 ## Normalization Type Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
-|NT01|warning|all|An experiment should have at least one normalization type specified|TBA|
-|NT02|warning|all|A normalization type should be defined by a term|TBA|
-|NT03|warning|all|A normalization type should have term source specified|TBA|
+|NT01|warning|Both|An experiment should have at least one normalization type specified||
+|NT02|warning|Both|A normalization type should be defined by a term||
+|NT03|warning|Both|A normalization type should have term source specified||
 
 ## Publication Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
-|PB02|**error**|all|PubMed Id must be numeric|TBA|
-|PB01|warning|all|A publication should have at least one of PubMed ID or Publication DOI specified|TBA|
-|PB03|warning|all|A publication authors should be specified|TBA|
-|PB04|warning|all|A publication title should be specified|TBA|
-|PB05|warning|all|A publication status should be specified|TBA|
-|PB06|warning|all|A publication status should have term source specified|TBA|
+|PB02|**error**|Both|PubMed Id must be numeric||
+|PB01|warning|Both|A publication should have at least one of PubMed ID or Publication DOI specified||
+|PB03|warning|Both|A publication authors should be specified||
+|PB04|warning|Both|A publication title should be specified||
+|PB05|warning|Both|A publication status should be specified||
+|PB06|warning|Both|A publication status should have term source specified||
 
 ## Protocol Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
-|PR01|**error**|all|At least one protocol must be used in an experiment|TBA|
-|PR02|**error**|all|Name of a protocol must be specified|TBA|
-|PR03|**error**|all|A protocol type must be specified|TBA|
-|PR08|**error**|ht|Library construction protocol is required for HTS submissions|TBA|
-|PR09|**error**|ht|Sequencing protocol is required for HTS submissions|TBA|
-|PR04|warning|all|A protocol type should have term source specified|TBA|
-|PR05|warning|all|Description of a protocol should be specified|TBA|
-|PR06|warning|all|Description of a protocol should be over 50 characters long|TBA|
-|PR07|warning|all|A protocol should have parameters|TBA|
+|PR01|**error**|Both|At least one protocol must be used in an experiment||
+|PR02|**error**|Both|Name of a protocol must be specified||
+|PR03|**error**|Both|A protocol type must be specified||
+|PR08|**error**|HTS|Library construction protocol is required for HTS submissions|1. A `Protocol Type` field must be the name of [[EFO Library Construction Protocols| http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004184 ]] class or one of its children; <br/> 2. `Protocol Term Source REF` must be "EFO";|
+|PR09|**error**|HTS|Sequencing protocol is required for HTS submissions|1. A `Protocol Type` field must be the name of [[EFO Sequencing Protocols | http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004170]] class or one of its children;<br/>2. `Protocol Term Source REF` must be "EFO"<br/>3. `Protocol Hardware` field must contain a comma separated list of protocol hardware used ([full-list](#supported-protocol-hardware-list));|
+|PR04|warning|Both|A protocol type should have term source specified||
+|PR05|warning|Both|Description of a protocol should be specified||
+|PR06|warning|Both|Description of a protocol should be over 50 characters long||
+|PR07|warning|Both|A protocol should have parameters||
 
 ## Quality Control Type Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
-|QC01|warning|all|An experiment should have at least one quality control type specified|TBA|
-|QC02|warning|all|A quality control type should be defined by a term|TBA|
-|QC03|warning|all|A quality control type should have term source specified|TBA|
+|QC01|warning|Both|An experiment should have at least one quality control type specified||
+|QC02|warning|Both|A quality control type should be defined by a term||
+|QC03|warning|Both|A quality control type should have term source specified||
 
 ## Replicate Type Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
-|RT01|warning|all|An experiment should have at least one replicate type specified|TBA|
-|RT02|warning|all|A replicate type should be defined by a term|TBA|
-|RT03|warning|all|A replicate type should have term source specified|TBA|
+|RT01|warning|Both|An experiment should have at least one replicate type specified||
+|RT02|warning|Both|A replicate type should be defined by a term||
+|RT03|warning|Both|A replicate type should have term source specified||
 
 ## Term Source Checks
 
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
-|TS01|**error**|all|Name of a term source must be specified|TBA|
-|TS02|**error**|all|Name of a term source must be unique|TBA|
-|TS03|warning|all|URL/File of a term source should be specified|TBA|
-|TS04|warning|all|Version of a term source should be specified|TBA|
+|TS01|**error**|Both|Name of a term source must be specified||
+|TS02|**error**|Both|Name of a term source must be unique||
+|TS03|warning|Both|URL/File of a term source should be specified||
+|TS04|warning|Both|Version of a term source should be specified||
+
+## Supported protocol hardware list
+* illumina genome analyzer
+* illumina genome analyzer ii
+* illumina genome analyzer iix
+* illumina hiseq 2000
+* illumina hiseq 1000
+* illumina miseq
+* 454 gs
+* 454 gs 20
+* 454 gs flx
+* 454 gs flx titanium
+* 454 gs junior
+* ab solid system
+* ab solid system 2.0
+* ab solid system 3.0
+* ab solid 4 system
+* ab solid 4hq system
+* ab solid pi system
+* ab solid 5500
+* ab solid 5500xl
+* complete genomics
