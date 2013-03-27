@@ -22,22 +22,21 @@ import com.google.common.collect.Ordering;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.google.common.io.CharStreams.newWriterSupplier;
 import static com.google.common.io.CharStreams.write;
 import static com.google.common.io.Files.newOutputStreamSupplier;
+import static com.google.inject.internal.util.$Maps.newHashMap;
 
 /**
  * @author Olga Melnichuk
@@ -45,6 +44,21 @@ import static com.google.common.io.Files.newOutputStreamSupplier;
 public class CheckListGenerator {
 
     private static final Pattern REF_PATTERN = Pattern.compile("([a-zA-Z]+)[0-9]*");
+
+    private static final Map<String, String> prefixes = newHashMap();
+
+    static {
+        prefixes.put("G", "General");
+        prefixes.put("TS", "Term Source");
+        prefixes.put("PR", "Protocol");
+        prefixes.put("PB", "Publication");
+        prefixes.put("C", "Contact");
+        prefixes.put("EF", "Experimental Factor");
+        prefixes.put("ED", "Experimental Design");
+        prefixes.put("QC", "Quality Control Type");
+        prefixes.put("NT", "Normalization Type");
+        prefixes.put("RT", "Replicate Type");
+    }
 
     private final String packageName;
 
@@ -115,6 +129,9 @@ public class CheckListGenerator {
                 Matcher m = REF_PATTERN.matcher(check.ref());
                 if (m.matches()) {
                     prefix = m.group(1);
+                    if (prefixes.containsKey(prefix)) {
+                        markdown.header2(prefixes.get(prefix) + " Checks");
+                    }
                     markdown.checksStart();
                 } else {
                     throw new IllegalStateException("Wrong REF format: " + check.ref());
@@ -127,42 +144,53 @@ public class CheckListGenerator {
 
     private static class MarkdownChecks {
         private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        private final StringBuilder sb = new StringBuilder();
+        private final StringBuilder title = new StringBuilder();
+        private final StringBuilder text = new StringBuilder();
+        private final StringBuilder toc = new StringBuilder();
+        private int hc = 0;
 
-        public void header1(String title) {
-            sb.append("## ")
-                    .append(title)
+        public void header1(String header) {
+            title.append("# ")
+                    .append(header)
                     .append("\n(updated: ")
                     .append(dateFormat.format(new Date()))
-                    .append(")\n");
+                    .append(")\n\n");
+        }
+
+        public void header2(String header) {
+            hc++;
+            text.append("\n## <a id=\"head").append(hc).append("\"></a>")
+                    .append(header)
+                    .append("\n");
+            toc.append("+ [").append(header).append("](#head").append(hc).append(")\n");
         }
 
         public void checksStart() {
-            sb.append("\n");
+            text.append("\n");
             for (Column c : Column.values()) {
-                sb.append("|");
-                sb.append(c.getTitle());
+                text.append("|");
+                text.append(c.getTitle());
             }
-            sb.append("|\n");
+            text.append("|\n");
             for (Column c : Column.values()) {
-                sb.append("|");
-                sb.append(Strings.repeat("-", c.getTitle().length()));
+                text.append("|");
+                text.append(Strings.repeat("-", c.getTitle().length()));
             }
-            sb.append("|\n");
+            text.append("|\n");
         }
 
         public void addCheck(MageTabCheck check) {
             for (Column c : Column.values()) {
-                sb.append("|");
-                sb.append(c.getValue(check));
+                text.append("|");
+                text.append(c.getValue(check));
 
             }
-            sb.append("|\n");
+            text.append("|\n");
         }
 
         @Override
         public String toString() {
-            return sb.toString();
+            return title.toString() + toc.toString() + text.toString();
         }
     }
 
@@ -176,7 +204,9 @@ public class CheckListGenerator {
         MODALITY("Modality") {
             @Override
             String getValue(MageTabCheck annot) {
-                return annot.modality().toString();
+                CheckModality m = annot.modality();
+                String str = m.toString();
+                return m.isError() ? "**" + str + "**" : str;
             }
         },
         TYPE("Type") {
