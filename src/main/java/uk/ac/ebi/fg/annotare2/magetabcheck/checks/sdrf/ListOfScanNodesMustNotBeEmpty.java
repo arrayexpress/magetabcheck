@@ -25,6 +25,9 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.H
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck(value = "An SDRF graph must have at least one scan node", application = HTS_ONLY)
+@MageTabCheck(
+        ref = "SC02",
+        value = "An SDRF graph must have at least one scan node",
+        application = HTS_ONLY)
 public class ListOfScanNodesMustNotBeEmpty extends NonEmptyListCheck<SdrfScanNode> {
 }

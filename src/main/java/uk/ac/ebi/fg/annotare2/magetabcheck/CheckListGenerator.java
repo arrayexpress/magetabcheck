@@ -18,7 +18,6 @@ package uk.ac.ebi.fg.annotare2.magetabcheck;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
@@ -64,6 +63,27 @@ public class CheckListGenerator {
         prefixes.put("QC", "Quality Control Type");
         prefixes.put("NT", "Normalization Type");
         prefixes.put("RT", "Replicate Type");
+
+        prefixes.put("SR", "Source Node");
+        prefixes.put("SM", "Sample Node");
+        prefixes.put("EX", "Extract Node");
+        prefixes.put("LE", "Labeled Extract Node");
+        prefixes.put("MT", "Material Type Attribute");
+        prefixes.put("CA", "Characteristic Attribute");
+        prefixes.put("UA", "Unit Attribute");
+        prefixes.put("L", "Label Attribute");
+        prefixes.put("PN", "Protocol Node");
+        prefixes.put("PV", "Parameter Value Attribute");
+        prefixes.put("FV", "Factor Value Attribute");
+        prefixes.put("AN", "Assay Node");
+        prefixes.put("TT", "Technology type");
+        prefixes.put("SC", "Scan Node");
+        prefixes.put("NN", "Normalization Node");
+        prefixes.put("AD", "Array Design Attribute");
+        prefixes.put("ADN", "Array Data Node");
+        prefixes.put("DADN", "Derived Array Data Node");
+        prefixes.put("ADMN", "Array Data Matrix Node");
+        prefixes.put("DADMN", "Derived Array Data Matrix Node");
     }
 
     private static final Map<String, RefList> refs = newHashMap();

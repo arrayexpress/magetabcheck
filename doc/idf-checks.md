@@ -1,5 +1,5 @@
 # IDF checks (54)
-(updated: 27/03/2013 16:05)
+(updated: 27/03/2013 17:06)
 
 + [Contact Checks](#contact-checks)
 + [Experimental Design Checks](#experimental-design-checks)
@@ -11,8 +11,8 @@
 + [Quality Control Type Checks](#quality-control-type-checks)
 + [Replicate Type Checks](#replicate-type-checks)
 + [Term Source Checks](#term-source-checks)
-+ [Supported protocol hardware list](#supported-protocol-hardware-list)
 + [Term source list](#term-source-list)
++ [Supported protocol hardware list](#supported-protocol-hardware-list)
 
 ## Contact Checks
 
@@ -118,6 +118,12 @@
 |TS03|warning|Both|URL/File of a term source should be specified||
 |TS04|warning|Both|Version of a term source should be specified||
 
+## Term source list
+* ArrayExpress http://www.ebi.ac.uk/arrayexpress/
+* NCBI Taxonomy http://www.ncbi.nlm.nih.gov/taxonomy
+* EFO http://www.ebi.ac.uk/efo/
+* MGED Ontology http://mged.sourceforge.net/ontologies/index.php
+
 ## Supported protocol hardware list
 * illumina genome analyzer
 * illumina genome analyzer ii
@@ -139,9 +145,3 @@
 * ab solid 5500
 * ab solid 5500xl
 * complete genomics
-
-## Term source list
-* ArrayExpress http://www.ebi.ac.uk/arrayexpress/
-* NCBI Taxonomy http://www.ncbi.nlm.nih.gov/taxonomy
-* EFO http://www.ebi.ac.uk/efo/
-* MGED Ontology http://mged.sourceforge.net/ontologies/index.php

@@ -25,6 +25,9 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.H
 /**
  * @author Olga Melnichuk
  */
-@MageTabCheck(value = "There are must not be any array design attributes in HTS experiment", application = HTS_ONLY)
+@MageTabCheck(
+        ref = "AD04",
+        value = "There are must not be any array design attributes in HTS experiment",
+        application = HTS_ONLY)
 public class ListOfArrayDesignAttributesMustBeEmpty extends EmptyListCheck<ArrayDesignAttribute> {
 }
