@@ -1,7 +1,9 @@
 # SDRF checks (63)
-(updated: 27/03/2013 17:06)
+(updated: 28/03/2013 09:34)
 
 + [Array Design Attribute Checks](#array-design-attribute-checks)
++ [Array Data Matrix Node Checks](#array-data-matrix-node-checks)
++ [Array Data Node Checks](#array-data-node-checks)
 + [Assay Node Checks](#assay-node-checks)
 + [Characteristic Attribute Checks](#characteristic-attribute-checks)
 + [Derived Array Data Matrix Node Checks](#derived-array-data-matrix-node-checks)
@@ -9,6 +11,7 @@
 + [Extract Node Checks](#extract-node-checks)
 + [Factor Value Attribute Checks](#factor-value-attribute-checks)
 + [Label Attribute Checks](#label-attribute-checks)
++ [Labeled Extract Node Checks](#labeled-extract-node-checks)
 + [Material Type Attribute Checks](#material-type-attribute-checks)
 + [Normalization Node Checks](#normalization-node-checks)
 + [Protocol Node Checks](#protocol-node-checks)
@@ -27,9 +30,19 @@
 |AD03|**error**|Both|Term source of an array design attribute must be declared in IDF||
 |AD04|**error**|HTS|There are must not be any array design attributes in HTS experiment||
 |AD02|warning|Both|An array design should have term source specified||
+
+## Array Data Matrix Node Checks
+
+|Ref|Modality|Type|Title|Details|
+|---|--------|----|-----|-------|
 |ADMN01|**error**|Both|An array data matrix node must have name specified||
 |ADMN02|**error**|Both|Name of an array data matrix node must be valid file location||
 |ADMN03|warning|Both|An array data matrix node should be described by a protocol||
+
+## Array Data Node Checks
+
+|Ref|Modality|Type|Title|Details|
+|---|--------|----|-----|-------|
 |ADN01|**error**|Both|An array data node must have a name||
 |ADN02|**error**|Both|Name of an array data node must be a valid file location||
 |ADN03|warning|Both|An array data node should be described by a protocol||
@@ -88,6 +101,11 @@
 |L03|**error**|Micro-array|Term source of a label attribute must be defined in IDF||
 |L01|warning|Micro-array|A label attribute should have name specified||
 |L02|warning|Micro-array|A label attribute should have term source specified||
+
+## Labeled Extract Node Checks
+
+|Ref|Modality|Type|Title|Details|
+|---|--------|----|-----|-------|
 |LE01|**error**|HTS|There are must not be any Labeled Extract nodes in HTS experiments||
 |LE02|**error**|Micro-array|A labeled extract node must have name specified||
 |LE04|**error**|Micro-array|A labeled extract node must have 'Label' attribute specified||

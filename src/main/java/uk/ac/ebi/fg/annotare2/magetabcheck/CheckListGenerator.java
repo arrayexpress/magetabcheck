@@ -156,19 +156,21 @@ public class CheckListGenerator {
 
         MarkdownChecks markdown = new MarkdownChecks(refs);
         markdown.header1(title + " (" + checks.size() + ")");
-        String prefix = null;
+        String prev = null;
         for (MageTabCheck check : checks) {
-            if (prefix == null || !check.ref().startsWith(prefix)) {
-                Matcher m = REF_PATTERN.matcher(check.ref());
-                if (m.matches()) {
-                    prefix = m.group(1);
-                    if (prefixes.containsKey(prefix)) {
-                        markdown.header2(prefixes.get(prefix) + " Checks");
-                    }
-                    markdown.checksStart();
-                } else {
-                    throw new IllegalStateException("Wrong REF format: " + check.ref());
+            Matcher m = REF_PATTERN.matcher(check.ref());
+            String prefix;
+            if (m.matches()) {
+                prefix = m.group(1);
+            } else {
+                throw new IllegalStateException("Wrong REF format: " + check.ref());
+            }
+            if (prev == null || !prev.equals(prefix)) {
+                if (prefixes.containsKey(prefix)) {
+                    markdown.header2(prefixes.get(prefix) + " Checks");
                 }
+                markdown.checksStart();
+                prev = prefix;
             }
             markdown.addCheck(check);
         }
