@@ -1,3 +1,9 @@
+## Release 1.5
+
+ * [#21] Generate the list of implemented checks automatically
+ * [#40] MageTabCheck configuration file required.
+   Now one can use a property file to set MageTabCheck parameters, such as debug, EFO URL, EFO cache, etc. (see wiki for details)
+
 ## Release 1.4
 
  * Fixed a critical bug in the checker core, which was introduced by the previous release refactorings; the wrong set of checks were run for a target object
