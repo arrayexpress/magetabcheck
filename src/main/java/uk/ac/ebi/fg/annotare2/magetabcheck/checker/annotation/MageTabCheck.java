@@ -24,6 +24,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.ANY;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.ERROR;
+
 /**
  * @author Olga Melnichuk
  */
@@ -33,9 +36,9 @@ public @interface MageTabCheck {
 
     String value();
 
-    CheckModality modality() default uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.ERROR;
+    CheckModality modality() default ERROR;
 
-    CheckApplicationType application() default uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.ANY;
+    CheckApplicationType application() default ANY;
 
     String ref() default "TBA";
 
