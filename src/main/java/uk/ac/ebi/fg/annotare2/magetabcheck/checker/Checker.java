@@ -69,17 +69,17 @@ public class Checker {
         //TODO do we still need a context?
         Map<Class<?>, Object> context = newHashMap();
 
-        Set<SdrfGraphEntity> marks = newHashSet();
+        Set<SdrfGraphEntity> visited = newHashSet();
         Queue<SdrfGraphNode> queue = newArrayDeque();
         queue.addAll(graph.getRootNodes());
         while (!queue.isEmpty()) {
             SdrfGraphNode node = queue.poll();
-            if (marks.contains(node)) {
+            if (visited.contains(node)) {
                 continue;
             }
             checkOne(node, context);
-            checkAttributes(node, context, marks);
-            marks.add(node);
+            checkAttributes(node, context, visited);
+            visited.add(node);
             for (SdrfGraphNode n : node.getChildNodes()) {
                 queue.add(n);
             }
