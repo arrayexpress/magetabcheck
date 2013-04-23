@@ -43,7 +43,7 @@ public class LimpopoBasedExperiment implements Experiment {
     }
 
     @Override
-    public SdrfGraph getSdfGraph() {
+    public SdrfGraph getSdrfGraph() {
         return sdrfGraph;
     }
 }

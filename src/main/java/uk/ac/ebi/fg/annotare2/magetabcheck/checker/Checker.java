@@ -48,7 +48,7 @@ public class Checker {
 
     public Collection<CheckResult> check(Experiment exp) {
         check(exp.getIdfData());
-        check(exp.getSdfGraph());
+        check(exp.getSdrfGraph());
         return getResults();
     }
 
