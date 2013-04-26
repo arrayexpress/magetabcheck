@@ -18,7 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyListCheck;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyRangeCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.QualityControlType;
 
 /**
@@ -28,5 +28,5 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.QualityControlType;
         ref = "QC01",
         value = "An experiment should have at least one quality control type specified",
         modality = CheckModality.WARNING)
-public class ListOfQualityControlTypesShouldBeNonEmpty extends NonEmptyListCheck<QualityControlType> {
+public class ListOfQualityControlTypesShouldBeNonEmpty extends NonEmptyRangeCheck<QualityControlType> {
 }

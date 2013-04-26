@@ -16,6 +16,7 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.model.idf;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -25,25 +26,27 @@ public interface IdfData {
 
     Info getInfo();
 
-    List<Person> getContacts();
+    Collection<Person> getContacts();
 
-    List<ExperimentalDesign> getExperimentDesigns();
+    Collection<ExperimentalDesign> getExperimentDesigns();
 
-    List<ExperimentalFactor> getExperimentalFactors();
+    Collection<ExperimentalFactor> getExperimentalFactors();
 
-    List<QualityControlType> getQualityControlTypes();
+    Collection<QualityControlType> getQualityControlTypes();
 
-    List<ReplicateType> getReplicateTypes();
+    Collection<ReplicateType> getReplicateTypes();
 
-    List<NormalizationType> getNormalizationTypes();
+    Collection<NormalizationType> getNormalizationTypes();
 
-    List<Publication> getPublications();
+    Collection<Publication> getPublications();
 
-    List<Protocol> getProtocols();
+    Collection<Protocol> getProtocols();
 
-    List<TermSource> getTermSources();
+    Collection<TermSource> getTermSources();
 
-    List<Comment> getComments(String name);
+    Collection<Comment> getComments();
+
+    Collection<Comment> getComments(String name);
 
     TermSource getTermSource(String ref);
 }

@@ -17,10 +17,8 @@
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyListCheck;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyRangeCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Person;
-
-import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author Olga Melnichuk
@@ -28,5 +26,5 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @MageTabCheck(
         ref = "C01",
         value = "At least one contact must be specified")
-public class ListOfContactsMustBeNonEmpty extends NonEmptyListCheck<Person> {
+public class ListOfContactsMustBeNonEmpty extends NonEmptyRangeCheck<Person> {
 }

@@ -406,7 +406,8 @@ public class IdfSimpleChecks {
 
     private static void assertNotEmptyString(Cell<String> cell) {
         setPosition(cell);
-        assertThat(cell.getValue(), not(isEmptyOrNullString()));
+        assertThat(cell.getValue(), notNullValue());
+        assertThat(cell.getValue(), not(isEmptyString()));
     }
 
     private static <T> void setPosition(Cell<T> cell) {

@@ -20,6 +20,7 @@ import uk.ac.ebi.arrayexpress2.magetab.datamodel.IDF;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.*;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,7 +45,7 @@ public class LimpopoIdfDataProxy implements IdfData {
     }
 
     @Override
-    public List<Person> getContacts() {
+    public Collection<Person> getContacts() {
         IDF idf = idfHelper.idf();
         int size = max(size(idf.personFirstName),
                 size(idf.personLastName),
@@ -63,7 +64,7 @@ public class LimpopoIdfDataProxy implements IdfData {
     }
 
     @Override
-    public List<ExperimentalDesign> getExperimentDesigns() {
+    public Collection<ExperimentalDesign> getExperimentDesigns() {
         int size = size(idfHelper.idf().experimentalDesign);
         List<ExperimentalDesign> designs = newArrayList();
         for (int i = 0; i < size; i++) {
@@ -73,7 +74,7 @@ public class LimpopoIdfDataProxy implements IdfData {
     }
 
     @Override
-    public List<ExperimentalFactor> getExperimentalFactors() {
+    public Collection<ExperimentalFactor> getExperimentalFactors() {
         int size = max(size(idfHelper.idf().experimentalFactorName),
                 size(idfHelper.idf().experimentalFactorType));
         List<ExperimentalFactor> factors = newArrayList();
@@ -84,7 +85,7 @@ public class LimpopoIdfDataProxy implements IdfData {
     }
 
     @Override
-    public List<QualityControlType> getQualityControlTypes() {
+    public Collection<QualityControlType> getQualityControlTypes() {
         int size = size(idfHelper.idf().qualityControlType);
         List<QualityControlType> qualityControlTypes = newArrayList();
         for (int i = 0; i < size; i++) {
@@ -94,7 +95,7 @@ public class LimpopoIdfDataProxy implements IdfData {
     }
 
     @Override
-    public List<ReplicateType> getReplicateTypes() {
+    public Collection<ReplicateType> getReplicateTypes() {
         int size = size(idfHelper.idf().replicateType);
         List<ReplicateType> replicateTypes = newArrayList();
         for (int i = 0; i < size; i++) {
@@ -104,7 +105,7 @@ public class LimpopoIdfDataProxy implements IdfData {
     }
 
     @Override
-    public List<NormalizationType> getNormalizationTypes() {
+    public Collection<NormalizationType> getNormalizationTypes() {
         int size = size(idfHelper.idf().normalizationType);
         List<NormalizationType> normalizationTypes = newArrayList();
         for (int i = 0; i < size; i++) {
@@ -114,7 +115,7 @@ public class LimpopoIdfDataProxy implements IdfData {
     }
 
     @Override
-    public List<Publication> getPublications() {
+    public Collection<Publication> getPublications() {
         int size = max(size(idfHelper.idf().publicationTitle),
                 size(idfHelper.idf().publicationStatus),
                 size(idfHelper.idf().pubMedId),
@@ -128,27 +129,40 @@ public class LimpopoIdfDataProxy implements IdfData {
     }
 
     @Override
-    public List<Protocol> getProtocols() {
+    public Collection<Protocol> getProtocols() {
         int size = size(idfHelper.idf().protocolName);
         List<Protocol> protocols = newArrayList();
-        for (int i=0; i<size; i++) {
+        for (int i = 0; i < size; i++) {
             protocols.add(new LimpopoBasedProtocol(idfHelper, i));
         }
         return protocols;
     }
 
     @Override
-    public List<TermSource> getTermSources() {
+    public Collection<TermSource> getTermSources() {
         return idfHelper.getTermSources();
     }
 
     @Override
-    public List<Comment> getComments(String type) {
+    public Collection<Comment> getComments(String type) {
         Map<String, Set<String>> allComments = idfHelper.idf().getComments();
-        Set<String> values = allComments.get(type);
+        return createComments(allComments.get(type), type);
+    }
+
+    @Override
+    public Collection<Comment> getComments() {
+        Map<String, Set<String>> allComments = idfHelper.idf().getComments();
+        List<Comment> comments = newArrayList();
+        for (String type : allComments.keySet()) {
+            comments.addAll(createComments(allComments.get(type), type));
+        }
+        return comments;
+    }
+
+    private Collection<Comment> createComments(Set<String> values, String type) {
         List<Comment> comments = newArrayList();
         int i = 0;
-        for(String value : values) {
+        for (String value : values) {
             comments.add(new LimpopoBasedComment(idfHelper, i++, type, value));
         }
         return comments;

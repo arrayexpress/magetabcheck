@@ -16,15 +16,15 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Check;
+import com.google.common.base.Predicate;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Visit;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyRangeCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Person;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermList;
 
+import javax.annotation.Nullable;
+
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfConstants.SUBMITTER_ROLE;
 
 /**
@@ -33,24 +33,18 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfConstants.SUBMIT
 @MageTabCheck(
         ref = "C07",
         value = "At least one contact with '" + SUBMITTER_ROLE + "' role must have an email specified")
-public class AtLeastOneSubmitterMustHaveEmail {
+public class AtLeastOneSubmitterMustHaveEmail extends NonEmptyRangeCheck<Person> {
 
-    private int emailCount;
-
-    @Visit
-    public void visit(Person person) {
-        TermList roles = person.getRoles();
-        if (roles == null || roles.isEmpty()) {
-            return;
-        }
-        if (roles.getNames().getValue().contains(SUBMITTER_ROLE)
-                && !isNullOrEmpty(person.getEmail().getValue())) {
-            emailCount++;
-        }
-    }
-
-    @Check
-    public void check() {
-        assertThat(emailCount, greaterThan(0));
+    public AtLeastOneSubmitterMustHaveEmail() {
+        super(new Predicate<Person>() {
+            @Override
+            public boolean apply(@Nullable Person person) {
+                TermList roles = person.getRoles();
+                return (roles != null)
+                        && !roles.isEmpty()
+                        && roles.getNames().getValue().contains(SUBMITTER_ROLE)
+                        && !isNullOrEmpty(person.getEmail().getValue());
+            }
+        });
     }
 }

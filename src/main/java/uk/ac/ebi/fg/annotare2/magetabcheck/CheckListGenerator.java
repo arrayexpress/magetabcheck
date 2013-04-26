@@ -63,6 +63,7 @@ public class CheckListGenerator {
         prefixes.put("QC", "Quality Control Type");
         prefixes.put("NT", "Normalization Type");
         prefixes.put("RT", "Replicate Type");
+        prefixes.put("COM", "MAGE TAB Comment");
 
         prefixes.put("SR", "Source Node");
         prefixes.put("SM", "Sample Node");

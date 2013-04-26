@@ -54,6 +54,7 @@ public class Checker {
 
     private void check(IdfData idf) {
         checkOne(idf.getInfo());
+        checkAll(idf.getComments(), Comment.class);
         checkAll(idf.getContacts(), Person.class);
         checkAll(idf.getExperimentDesigns(), ExperimentalDesign.class);
         checkAll(idf.getExperimentalFactors(), ExperimentalFactor.class);

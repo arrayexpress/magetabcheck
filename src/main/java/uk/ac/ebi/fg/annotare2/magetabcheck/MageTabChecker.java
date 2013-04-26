@@ -67,7 +67,7 @@ public class MageTabChecker {
             throw new UknownExperimentTypeException("IDF doesn't contain '" + AE_EXPERIMENT_TYPE_COMMENT +
                     "' comment; can't find the experiment type.");
         }
-        return lookupTypeInEfo(comments.iterator().next().getComment().getValue());
+        return lookupTypeInEfo(comments.iterator().next().getValue().getValue());
     }
 
     private ExperimentType lookupTypeInEfo(String type) throws UknownExperimentTypeException {

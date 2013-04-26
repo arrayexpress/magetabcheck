@@ -16,18 +16,19 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 
+import com.google.common.base.Predicate;
 import com.google.inject.Inject;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Check;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Visit;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checks.RangeCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.ProtocolType;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import javax.annotation.Nullable;
+
+import static com.google.common.collect.Ranges.singleton;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.EFO;
 
 /**
@@ -40,35 +41,33 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.EFO;
         details = "1. A `Protocol Type` field must be the name of " +
                 "['library construction protocols' class in EFO](http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004184) " +
                 "or one of its children; <br/> 2. `Protocol Term Source REF` must be \"EFO\" ([supported term sources](#term-source-list));")
-public class LibraryConstructionProtocolRequired {
-
-    private final EfoService efo;
-
-    private int counter;
+public class LibraryConstructionProtocolRequired extends RangeCheck<Protocol> {
 
     @Inject
     public LibraryConstructionProtocolRequired(EfoService efo) {
-        this.efo = efo;
+        super(new LibraryConstructionProtocolPredicate(efo), singleton(1));
     }
 
-    @Visit
-    public void visit(Protocol protocol) {
-        if (isLibraryConstructionProtocol(protocol.getType())) {
-            counter++;
+    private static class LibraryConstructionProtocolPredicate implements Predicate<Protocol> {
+
+        private final EfoService efo;
+
+        private LibraryConstructionProtocolPredicate(EfoService efo) {
+            this.efo = efo;
         }
-    }
 
-    private boolean isLibraryConstructionProtocol(ProtocolType type) {
-        return isEfoTermSource(type.getSource().getValue())
-                && efo.isLibraryConstructionProtocol(type.getAccession().getValue(), type.getName().getValue());
-    }
+        @Override
+        public boolean apply(@Nullable Protocol protocol) {
+            return isLibraryConstructionProtocol(protocol.getType());
+        }
 
-    private boolean isEfoTermSource(TermSource ts) {
-        return ts != null && EFO.matches(ts.getFile().getValue());
-    }
+        private boolean isLibraryConstructionProtocol(ProtocolType type) {
+            return isEfoTermSource(type.getSource().getValue())
+                    && efo.isLibraryConstructionProtocol(type.getAccession().getValue(), type.getName().getValue());
+        }
 
-    @Check
-    public void check() {
-        assertThat(1, equalTo(counter));
+        private boolean isEfoTermSource(TermSource ts) {
+            return ts != null && EFO.matches(ts.getFile().getValue());
+        }
     }
 }

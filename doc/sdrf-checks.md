@@ -1,5 +1,5 @@
 # SDRF checks (64)
-(updated: 26/04/2013 14:49)
+(updated: 26/04/2013 15:50)
 
 + [Array Design Attribute Checks](#array-design-attribute-checks)
 + [Array Data Matrix Node Checks](#array-data-matrix-node-checks)

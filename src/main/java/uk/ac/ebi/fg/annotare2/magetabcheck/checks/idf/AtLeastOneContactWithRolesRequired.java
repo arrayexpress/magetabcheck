@@ -16,14 +16,13 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Check;
+import com.google.common.base.Predicate;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Visit;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyRangeCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Person;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermList;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
+import javax.annotation.Nullable;
 
 /**
  * @author Olga Melnichuk
@@ -31,20 +30,15 @@ import static org.hamcrest.Matchers.greaterThan;
 @MageTabCheck(
         ref = "C04",
         value = "At least one contact must have a role specified")
-public class AtLeastOneContactWithRolesRequired {
+public class AtLeastOneContactWithRolesRequired extends NonEmptyRangeCheck<Person> {
 
-    private int roleCount;
-
-    @Visit
-    public void visit(Person person) {
-        TermList roles = person.getRoles();
-        if (roles != null && !roles.isEmpty()) {
-            roleCount++;
-        }
-    }
-
-    @Check
-    public void check() {
-        assertThat(roleCount, greaterThan(0));
+    public AtLeastOneContactWithRolesRequired() {
+        super(new Predicate<Person>() {
+            @Override
+            public boolean apply(@Nullable Person person) {
+                TermList roles = person.getRoles();
+                return (roles != null && !roles.isEmpty());
+            }
+        });
     }
 }

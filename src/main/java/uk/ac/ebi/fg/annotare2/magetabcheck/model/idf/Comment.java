@@ -23,5 +23,7 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.Cell;
  */
 public interface Comment {
 
-    Cell<String> getComment();
+    String getName();
+
+    Cell<String> getValue();
 }

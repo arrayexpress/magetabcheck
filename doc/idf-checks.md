@@ -1,7 +1,8 @@
-# IDF checks (54)
-(updated: 26/04/2013 14:49)
+# IDF checks (55)
+(updated: 26/04/2013 15:50)
 
 + [Contact Checks](#contact-checks)
++ [MAGE TAB Comment Checks](#mage-tab-comment-checks)
 + [Experimental Design Checks](#experimental-design-checks)
 + [Experimental Factor Checks](#experimental-factor-checks)
 + [General Checks](#general-checks)
@@ -11,8 +12,8 @@
 + [Quality Control Type Checks](#quality-control-type-checks)
 + [Replicate Type Checks](#replicate-type-checks)
 + [Term Source Checks](#term-source-checks)
-+ [Supported protocol hardware list](#supported-protocol-hardware-list)
 + [Term source list](#term-source-list)
++ [Supported protocol hardware list](#supported-protocol-hardware-list)
 
 ## Contact Checks
 
@@ -28,6 +29,12 @@
 |C08|warning|Both|A contact should have first name specified||
 |C09|warning|Both|A contact should have an affiliation specified||
 |C10|warning|Both|A contact role(s) should have a term source specified||
+
+## MAGE TAB Comment Checks
+
+|Ref|Modality|Type|Title|Details|
+|---|--------|----|-----|-------|
+|COM01|**error**|Both|Non-empty value for 'Comment[AEExperimentType]' must be provided in IDF||
 
 ## Experimental Design Checks
 
@@ -118,6 +125,12 @@
 |TS03|warning|Both|URL/File of a term source should be specified||
 |TS04|warning|Both|Version of a term source should be specified||
 
+## Term source list
+* ArrayExpress http://www.ebi.ac.uk/arrayexpress/
+* NCBI Taxonomy http://www.ncbi.nlm.nih.gov/taxonomy
+* EFO http://www.ebi.ac.uk/efo/
+* MGED Ontology http://mged.sourceforge.net/ontologies/index.php
+
 ## Supported protocol hardware list
 * illumina genome analyzer
 * illumina genome analyzer ii
@@ -139,9 +152,3 @@
 * ab solid 5500
 * ab solid 5500xl
 * complete genomics
-
-## Term source list
-* ArrayExpress http://www.ebi.ac.uk/arrayexpress/
-* NCBI Taxonomy http://www.ncbi.nlm.nih.gov/taxonomy
-* EFO http://www.ebi.ac.uk/efo/
-* MGED Ontology http://mged.sourceforge.net/ontologies/index.php

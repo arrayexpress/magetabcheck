@@ -19,7 +19,7 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyListCheck;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyRangeCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.ExperimentalDesign;
 
 /**
@@ -30,5 +30,5 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.ExperimentalDesign;
         value = "Micro-array experiment must have at least one experimental design specified",
         application = CheckApplicationType.MICRO_ARRAY_ONLY,
         modality = CheckModality.WARNING)
-public class ListOfExperimentalDesignsShouldBeNonEmpty extends NonEmptyListCheck<ExperimentalDesign> {
+public class ListOfExperimentalDesignsShouldBeNonEmpty extends NonEmptyRangeCheck<ExperimentalDesign> {
 }
