@@ -301,10 +301,10 @@ public class SdrfSimpleChecks {
     private void assertProtocolHasPerformerAttribute(SdrfProtocolNode protocolNode) {
         setPosition(protocolNode);
         SdrfPerformerAttribute attr = protocolNode.getPerformer();
-        assertThat(attr, notNullValue());
+        assertNotNull(attr);
 
         setPosition(attr);
-        assertThat(attr.getValue(), isEmptyOrNullString());
+        assertNotEmptyString(attr.getValue());
     }
 
     @MageTabCheck(
@@ -578,7 +578,8 @@ public class SdrfSimpleChecks {
     }
 
     private static void assertNotEmptyString(String str) {
-        assertThat(str, not(isEmptyOrNullString()));
+        assertThat(str, notNullValue());
+        assertThat(str.trim(), not(isEmptyString()));
     }
 
     private static void assertTermSourceIsValid(HasTermSource t) {

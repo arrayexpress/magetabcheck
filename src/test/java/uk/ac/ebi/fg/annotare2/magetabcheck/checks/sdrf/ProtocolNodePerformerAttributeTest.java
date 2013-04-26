@@ -57,6 +57,9 @@ public class ProtocolNodePerformerAttributeTest {
 
     private static SdrfPerformerAttribute createPerformerAttribute(String value) {
         SdrfPerformerAttribute attr = createMock(SdrfPerformerAttribute.class);
+        expect(attr.getLine()).andReturn(0);
+        expect(attr.getColumn()).andReturn(0);
+        expect(attr.getFileName()).andReturn("no file");
         expect(attr.getValue()).andReturn(value);
         replay(attr);
         return attr;
