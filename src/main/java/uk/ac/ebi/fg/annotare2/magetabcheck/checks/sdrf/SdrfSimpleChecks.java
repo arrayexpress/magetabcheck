@@ -252,15 +252,6 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
-            ref = "PN02",
-            value = "A protocol node should have date specified",
-            modality = WARNING)
-    public void protocolNodeShouldHaveDate(SdrfProtocolNode protocolNode) {
-        setPosition(protocolNode);
-        assertNotEmptyString(protocolNode.getDate());
-    }
-
-    @MageTabCheck(
             ref = "PN04",
             value = "A protocol node should have term source specified",
             modality = WARNING)

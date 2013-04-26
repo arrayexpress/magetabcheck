@@ -1,5 +1,5 @@
-# SDRF checks (63)
-(updated: 28/03/2013 09:34)
+# SDRF checks (62)
+(updated: 26/04/2013 11:14)
 
 + [Array Design Attribute Checks](#array-design-attribute-checks)
 + [Array Data Matrix Node Checks](#array-data-matrix-node-checks)
@@ -133,7 +133,6 @@
 |PN01|**error**|Both|A protocol node must have name specified||
 |PN03|**error**|Both|A protocol's date must be in 'YYYY-MM-DD' format||
 |PN05|**error**|Both|Term source value of a protocol node must be defined in IDF||
-|PN02|warning|Both|A protocol node should have date specified||
 |PN04|warning|Both|A protocol node should have term source specified||
 
 ## Parameter Value Attribute Checks
