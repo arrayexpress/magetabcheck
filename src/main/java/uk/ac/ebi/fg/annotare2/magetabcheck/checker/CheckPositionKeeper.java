@@ -24,6 +24,9 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPosition.createPo
 public class CheckPositionKeeper {
 
     public static final ThreadLocal<CheckPositionKeeper> threadLocal = new ThreadLocal<CheckPositionKeeper>();
+    static {
+        clearCheckPosition();
+    }
 
     private CheckPosition position;
 
