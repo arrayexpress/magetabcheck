@@ -24,6 +24,8 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.FileLocation;
  */
 public interface Info {
 
+    Cell<String> getAccession();
+
     Cell<String> getTitle();
 
     Cell<String> getExperimentDescription();

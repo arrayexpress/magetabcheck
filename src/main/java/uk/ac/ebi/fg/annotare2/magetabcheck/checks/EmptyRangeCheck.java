@@ -16,26 +16,20 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks;
 
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Check;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Visit;
+import com.google.common.base.Predicate;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
+import static com.google.common.collect.Ranges.singleton;
 
 /**
  * @author Olga Melnichuk
  */
-public class NonEmptyListCheck <T> {
+public class EmptyRangeCheck<T> extends RangeCheck<T> {
 
-    private int count;
-
-    @Visit
-    public void visit(T t) {
-        count++;
+    public EmptyRangeCheck() {
+        super(singleton(0));
     }
 
-    @Check
-    public void check() {
-        assertThat(count, greaterThan(0));
+    public EmptyRangeCheck(Predicate<T> predicate) {
+        super(predicate, singleton(0));
     }
 }

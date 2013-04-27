@@ -16,14 +16,14 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Check;
+import com.google.common.base.Predicate;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Visit;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyRangeCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Person;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermList;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
+import javax.annotation.Nullable;
+
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfConstants.SUBMITTER_ROLE;
 
 /**
@@ -32,23 +32,17 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfConstants.SUBMIT
 @MageTabCheck(
         ref = "C05",
         value = "At least one contact must have '" + SUBMITTER_ROLE + "' role specified ")
-public class AtLeastOneContactMustBeSubmitter {
+public class AtLeastOneContactMustBeSubmitter extends NonEmptyRangeCheck<Person> {
 
-    private int submitterCount;
-
-    @Visit
-    public void visit(Person person) {
-        TermList roles = person.getRoles();
-        if (roles == null || roles.isEmpty()) {
-            return;
-        }
-        if (roles.getNames().getValue().contains(SUBMITTER_ROLE)) {
-            submitterCount++;
-        }
-    }
-
-    @Check
-    public void check() {
-        assertThat(submitterCount, greaterThan(0));
+    public AtLeastOneContactMustBeSubmitter() {
+        super(new Predicate<Person>() {
+            @Override
+            public boolean apply(@Nullable Person person) {
+                TermList roles = person.getRoles();
+                return (roles != null)
+                        && !roles.isEmpty()
+                        && roles.getNames().getValue().contains(SUBMITTER_ROLE);
+            }
+        });
     }
 }

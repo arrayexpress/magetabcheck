@@ -26,6 +26,7 @@ import java.util.Collection;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.HTS_ONLY;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.MICRO_ARRAY_ONLY;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.WARNING;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionKeeper.setCheckPosition;
@@ -252,15 +253,6 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
-            ref = "PN02",
-            value = "A protocol node should have date specified",
-            modality = WARNING)
-    public void protocolNodeShouldHaveDate(SdrfProtocolNode protocolNode) {
-        setPosition(protocolNode);
-        assertNotEmptyString(protocolNode.getDate());
-    }
-
-    @MageTabCheck(
             ref = "PN04",
             value = "A protocol node should have term source specified",
             modality = WARNING)
@@ -287,6 +279,32 @@ public class SdrfSimpleChecks {
         }
         setPosition(protocolNode);
         assertThat(date, isDateString(DATE_FORMAT));
+    }
+
+    @MageTabCheck(
+            ref = "PN06",
+            value = "A protocol must have 'performer' attribute specified",
+            application = HTS_ONLY)
+    public void protocolNodeMustHavePerformerAttribute(SdrfProtocolNode protocolNode) {
+        assertProtocolHasPerformerAttribute(protocolNode);
+    }
+
+    @MageTabCheck(
+            ref = "PN07",
+            value = "A protocol should have 'performer' attribute specified",
+            modality = WARNING,
+            application = MICRO_ARRAY_ONLY)
+    public void protocolNodeShouldHavePerformerAttribute(SdrfProtocolNode protocolNode) {
+        assertProtocolHasPerformerAttribute(protocolNode);
+    }
+
+    private void assertProtocolHasPerformerAttribute(SdrfProtocolNode protocolNode) {
+        setPosition(protocolNode);
+        SdrfPerformerAttribute attr = protocolNode.getPerformer();
+        assertNotNull(attr);
+
+        setPosition(attr);
+        assertNotEmptyString(attr.getValue());
     }
 
     @MageTabCheck(
@@ -560,7 +578,8 @@ public class SdrfSimpleChecks {
     }
 
     private static void assertNotEmptyString(String str) {
-        assertThat(str, not(isEmptyOrNullString()));
+        assertThat(str, notNullValue());
+        assertThat(str.trim(), not(isEmptyString()));
     }
 
     private static void assertTermSourceIsValid(HasTermSource t) {

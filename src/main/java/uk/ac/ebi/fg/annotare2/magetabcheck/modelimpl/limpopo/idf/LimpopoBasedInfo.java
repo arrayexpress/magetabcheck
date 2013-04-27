@@ -35,6 +35,13 @@ class LimpopoBasedInfo extends LimpopoBasedIdfObject implements Info {
     }
 
     @Override
+    public Cell<String> getAccession() {
+        return createCell(
+                idf().accession,
+                idf().getLayout().getLineNumberForHeader(INVESTIGATION_ACCESSION));
+    }
+
+    @Override
     public Cell<String> getTitle() {
         return createCell(
                 idf().investigationTitle,

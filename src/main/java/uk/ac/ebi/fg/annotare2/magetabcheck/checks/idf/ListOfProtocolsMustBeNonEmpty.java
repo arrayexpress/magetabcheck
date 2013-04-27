@@ -17,7 +17,7 @@
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyListCheck;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyRangeCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
 
 /**
@@ -26,5 +26,5 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
 @MageTabCheck(
         ref = "PR01",
         value = "At least one protocol must be used in an experiment")
-public class ListOfProtocolsMustBeNonEmpty extends NonEmptyListCheck<Protocol> {
+public class ListOfProtocolsMustBeNonEmpty extends NonEmptyRangeCheck<Protocol> {
 }

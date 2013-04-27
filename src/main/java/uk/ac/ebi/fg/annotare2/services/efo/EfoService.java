@@ -66,7 +66,7 @@ public interface EfoService {
         }
 
         private ServiceUnavailableException unavailable() {
-            throw unavailable();
+            throw new ServiceUnavailableException("EFO Service hasn't been started properly. See logs for details.");
         }
     };
 

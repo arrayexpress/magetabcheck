@@ -26,6 +26,6 @@ public interface Experiment {
 
     IdfData getIdfData();
 
-    SdrfGraph getSdfGraph();
+    SdrfGraph getSdrfGraph();
 
 }

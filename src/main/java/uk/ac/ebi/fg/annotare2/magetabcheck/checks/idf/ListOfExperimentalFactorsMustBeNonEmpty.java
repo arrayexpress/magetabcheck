@@ -17,7 +17,7 @@
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyListCheck;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyRangeCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.ExperimentalFactor;
 
 /**
@@ -26,5 +26,5 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.ExperimentalFactor;
 @MageTabCheck(
         ref = "EF01",
         value = "An experiment must have at least one experimental factor specified")
-public class ListOfExperimentalFactorsMustBeNonEmpty extends NonEmptyListCheck<ExperimentalFactor> {
+public class ListOfExperimentalFactorsMustBeNonEmpty extends NonEmptyRangeCheck<ExperimentalFactor> {
 }

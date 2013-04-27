@@ -18,7 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.checks.sdrf;
 
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.ArrayDesignAttribute;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checks.EmptyListCheck;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checks.EmptyRangeCheck;
 
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.HTS_ONLY;
 
@@ -29,5 +29,5 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.H
         ref = "AD04",
         value = "There are must not be any array design attributes in HTS experiment",
         application = HTS_ONLY)
-public class ListOfArrayDesignAttributesMustBeEmpty extends EmptyListCheck<ArrayDesignAttribute> {
+public class ListOfArrayDesignAttributesMustBeEmpty extends EmptyRangeCheck<ArrayDesignAttribute> {
 }

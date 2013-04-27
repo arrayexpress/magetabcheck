@@ -21,6 +21,8 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.modelimpl.limpopo.idf;
  */
 abstract class IdfTags {
 
+    public static final String INVESTIGATION_ACCESSION = "Investigation Accession";
+
     public static final String INVESTIGATION_TITLE = "Investigation Title";
 
     public static final String EXPERIMENT_DESCRIPTION = "Experiment Description";

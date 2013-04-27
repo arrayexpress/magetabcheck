@@ -37,7 +37,12 @@ class LimpopoBasedComment extends LimpopoBasedIdfObject implements Comment {
     }
 
     @Override
-    public Cell<String> getComment() {
+    public String getName() {
+        return type;
+    }
+
+    @Override
+    public Cell<String> getValue() {
         return createCell(
                 value,
                 idf().getLayout().getLineNumberForComment(type));

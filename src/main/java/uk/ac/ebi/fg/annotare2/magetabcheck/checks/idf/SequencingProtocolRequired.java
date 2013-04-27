@@ -16,19 +16,20 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 
+import com.google.common.base.Predicate;
 import com.google.inject.Inject;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Check;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Visit;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checks.RangeCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.ProtocolType;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
 
+import javax.annotation.Nullable;
+
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static com.google.common.collect.Ranges.singleton;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownProtocolHardware.isValidProtocolHardware;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.EFO;
 
@@ -43,45 +44,42 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.EFO;
                 "['sequencing protocols class' in EFO](http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004170) " +
                 "or one of its children;<br/>2. `Protocol Term Source REF` must be \"EFO\" ([full list](#term-source-list))" +
                 "<br/>3. `Protocol Hardware` field must contain a comma separated list of protocol hardware used ([supported term sources](#protocol-hardware-list));")
-public class SequencingProtocolRequired {
-
-    private int counter = 0;
-
-    private final EfoService efo;
+public class SequencingProtocolRequired extends RangeCheck<Protocol> {
 
     @Inject
     public SequencingProtocolRequired(EfoService efo) {
-        this.efo = efo;
+        super(new SequencingProtocolPredicate(efo), singleton(1));
     }
 
-    @Visit
-    public void visit(Protocol protocol) {
-        if (isSequencingProtocol(protocol.getType())
-                && hasSequencingHardware(protocol)) {
-            counter++;
+    private static class SequencingProtocolPredicate implements Predicate<Protocol> {
+        private final EfoService efo;
+
+        private SequencingProtocolPredicate(EfoService efo) {
+            this.efo = efo;
         }
-    }
 
-    private boolean hasSequencingHardware(Protocol protocol) {
-        String hardware = protocol.getHardware().getValue();
-        if (isNullOrEmpty(hardware)) {
-            return false;
+        @Override
+        public boolean apply(@Nullable Protocol protocol) {
+            return isSequencingProtocol(protocol.getType())
+                    && hasSequencingHardware(protocol);
         }
-        String[] v = hardware.trim().split("\\s*,\\s*");
-        return isValidProtocolHardware(v);
-    }
 
-    private boolean isSequencingProtocol(ProtocolType type) {
-        return isEfoTermSource(type.getSource().getValue())
-                && efo.isSequencingProtocol(type.getAccession().getValue(), type.getName().getValue());
-    }
+        private boolean hasSequencingHardware(Protocol protocol) {
+            String hardware = protocol.getHardware().getValue();
+            if (isNullOrEmpty(hardware)) {
+                return false;
+            }
+            String[] v = hardware.trim().split("\\s*,\\s*");
+            return isValidProtocolHardware(v);
+        }
 
-    private boolean isEfoTermSource(TermSource ts) {
-        return ts != null && EFO.matches(ts.getFile().getValue());
-    }
+        private boolean isSequencingProtocol(ProtocolType type) {
+            return isEfoTermSource(type.getSource().getValue())
+                    && efo.isSequencingProtocol(type.getAccession().getValue(), type.getName().getValue());
+        }
 
-    @Check
-    public void check() {
-        assertThat(1, equalTo(counter));
+        private boolean isEfoTermSource(TermSource ts) {
+            return ts != null && EFO.matches(ts.getFile().getValue());
+        }
     }
 }

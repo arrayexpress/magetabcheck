@@ -17,7 +17,7 @@
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.sdrf;
 
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checks.EmptyListCheck;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checks.EmptyRangeCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfLabeledExtractNode;
 
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.HTS_ONLY;
@@ -29,5 +29,5 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.H
         ref = "LE01",
         value = "There are must not be any Labeled Extract nodes in HTS experiments",
         application = HTS_ONLY)
-public class ListOfLabeledExtractNodesMustBeEmpty extends EmptyListCheck<SdrfLabeledExtractNode>{
+public class ListOfLabeledExtractNodesMustBeEmpty extends EmptyRangeCheck<SdrfLabeledExtractNode> {
 }

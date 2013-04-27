@@ -17,7 +17,7 @@
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.sdrf;
 
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyListCheck;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyRangeCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfScanNode;
 
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.HTS_ONLY;
@@ -29,5 +29,5 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.H
         ref = "SC02",
         value = "An SDRF graph must have at least one scan node",
         application = HTS_ONLY)
-public class ListOfScanNodesMustNotBeEmpty extends NonEmptyListCheck<SdrfScanNode> {
+public class ListOfScanNodesMustNotBeEmpty extends NonEmptyRangeCheck<SdrfScanNode> {
 }

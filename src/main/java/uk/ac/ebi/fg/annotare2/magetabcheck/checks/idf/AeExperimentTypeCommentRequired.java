@@ -18,27 +18,27 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 
 import com.google.common.base.Predicate;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyRangeCheck;
-import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Person;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checks.RangeCheck;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Comment;
 
 import javax.annotation.Nullable;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.collect.Ranges.singleton;
 
 /**
  * @author Olga Melnichuk
  */
 @MageTabCheck(
-        ref = "C03",
-        value = "At least one contact must have email specified")
-public class AtLeastOneContactWithEmailRequired extends NonEmptyRangeCheck<Person> {
+        ref = "COM01",
+        value = "Non-empty value for 'Comment[AEExperimentType]' must be provided in IDF")
+public class AeExperimentTypeCommentRequired extends RangeCheck<Comment> {
 
-    public AtLeastOneContactWithEmailRequired() {
-        super(new Predicate<Person>() {
+    public AeExperimentTypeCommentRequired() {
+        super(new Predicate<Comment>() {
             @Override
-            public boolean apply(@Nullable Person person) {
-                return !isNullOrEmpty(person.getEmail().getValue());
+            public boolean apply(@Nullable Comment comment) {
+                return "AEExperimentType".equals(comment.getName());
             }
-        });
+        }, singleton(1));
     }
 }
