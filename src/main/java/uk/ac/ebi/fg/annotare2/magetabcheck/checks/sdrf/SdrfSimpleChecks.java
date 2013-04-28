@@ -323,6 +323,15 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
+            ref = "AN03",
+            value = "HTS experiments must not use any array designs",
+            application = HTS_ONLY)
+    public void assayNodeMustNotHaveArrayDesigns(SdrfAssayNode assayNode) {
+        setPosition(assayNode);
+        assertThat(assayNode.getArrayDesigns().isEmpty(), is(true));
+    }
+
+    @MageTabCheck(
             ref = "TT01",
             value = "Technology type attribute must have name specified")
     public void technologyTypeMustHaveName(SdrfTechnologyTypeAttribute technologyTypeAttribute) {
