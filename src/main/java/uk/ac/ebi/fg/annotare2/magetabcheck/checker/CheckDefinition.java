@@ -19,8 +19,6 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.checker;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +29,15 @@ import static com.google.common.collect.Lists.newArrayList;
  */
 
 public abstract class CheckDefinition {
+
+    static enum CheckType {
+        CLASS_BASED,
+        METHOD_BASED;
+
+        public boolean isClassBased() {
+            return this == CLASS_BASED;
+        }
+    }
 
     private final MageTabCheck annotation;
 
@@ -67,6 +74,8 @@ public abstract class CheckDefinition {
         }
         return params.toArray(new Object[params.size()]);
     }
+
+    public abstract CheckType getType();
 
     public abstract <T> CheckRunner<T> newRunner(Class<T> itemClass);
 

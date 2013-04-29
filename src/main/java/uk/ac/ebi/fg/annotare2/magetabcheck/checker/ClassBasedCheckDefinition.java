@@ -17,8 +17,6 @@
 package uk.ac.ebi.fg.annotare2.magetabcheck.checker;
 
 import com.google.common.base.Predicate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Check;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Context;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
@@ -28,11 +26,9 @@ import javax.annotation.Nullable;
 import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.Collections2.filter;
-import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 
 /**
@@ -100,6 +96,11 @@ class ClassBasedCheckDefinition extends CheckDefinition {
             }
         }
         return false;
+    }
+
+    @Override
+    public CheckType getType() {
+        return CheckType.CLASS_BASED;
     }
 
     public Object getInstance() {

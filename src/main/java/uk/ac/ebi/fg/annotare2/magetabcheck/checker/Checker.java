@@ -16,6 +16,7 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.checker;
 
+import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.Experiment;
@@ -36,9 +37,9 @@ public class Checker {
 
     private final ExperimentType invType;
 
-    private List<CheckResult> results = newArrayList();
-
     private final List<CheckDefinition> allChecks = newArrayList();
+
+    private List<CheckRunWatcher> watchers = newArrayList();
 
     @Inject
     public Checker(List<CheckDefinition> allChecks, @Assisted ExperimentType type) {
@@ -47,29 +48,35 @@ public class Checker {
     }
 
     public Collection<CheckResult> check(Experiment exp) {
+        for (CheckDefinition cd : allChecks) {
+            watchers.add(new CheckRunWatcher(cd));
+        }
         check(exp.getIdfData());
         check(exp.getSdrfGraph());
-        return getResults();
+        return summarize();
     }
 
     private void check(IdfData idf) {
+        if (idf == null) {
+            return;
+        }
         checkOne(idf.getInfo());
-        checkAll(idf.getComments(), Comment.class);
-        checkAll(idf.getContacts(), Person.class);
-        checkAll(idf.getExperimentDesigns(), ExperimentalDesign.class);
-        checkAll(idf.getExperimentalFactors(), ExperimentalFactor.class);
-        checkAll(idf.getQualityControlTypes(), QualityControlType.class);
-        checkAll(idf.getReplicateTypes(), ReplicateType.class);
-        checkAll(idf.getNormalizationTypes(), NormalizationType.class);
-        checkAll(idf.getProtocols(), Protocol.class);
-        checkAll(idf.getPublications(), Publication.class);
-        checkAll(idf.getTermSources(), TermSource.class);
+        checkAll(idf.getComments());
+        checkAll(idf.getContacts());
+        checkAll(idf.getExperimentDesigns());
+        checkAll(idf.getExperimentalFactors());
+        checkAll(idf.getQualityControlTypes());
+        checkAll(idf.getReplicateTypes());
+        checkAll(idf.getNormalizationTypes());
+        checkAll(idf.getProtocols());
+        checkAll(idf.getPublications());
+        checkAll(idf.getTermSources());
     }
 
     private void check(SdrfGraph graph) {
-        //TODO do we still need a context?
-        Map<Class<?>, Object> context = newHashMap();
-
+        if (graph == null) {
+            return;
+        }
         Set<SdrfGraphEntity> visited = newHashSet();
         Queue<SdrfGraphNode> queue = newArrayDeque();
         queue.addAll(graph.getRootNodes());
@@ -78,8 +85,8 @@ public class Checker {
             if (visited.contains(node)) {
                 continue;
             }
-            checkOne(node, context);
-            checkAttributes(node, context, visited);
+            checkOne(node);
+            checkAttributes(node, visited);
             visited.add(node);
             for (SdrfGraphNode n : node.getChildNodes()) {
                 queue.add(n);
@@ -87,67 +94,83 @@ public class Checker {
         }
     }
 
-    private void checkAttributes(HasAttributes obj, Map<Class<?>, Object> context, Set<SdrfGraphEntity> marks) {
+    private void checkAttributes(HasAttributes obj, Set<SdrfGraphEntity> marks) {
         for (SdrfGraphAttribute attr : obj.getAttributes()) {
             if (marks.contains(attr)) {
                 continue;
             }
-            checkOne(attr, context);
+            checkOne(attr);
             marks.add(attr);
-            checkAttributes(attr, context, marks);
+            checkAttributes(attr, marks);
         }
     }
 
-    private <T> void checkAll(Collection<T> collection, Class<T> itemClass) {
-        List<CheckRunner<T>> checkRunners = getCheckRunnersFor(itemClass, invType);
-        if (checkRunners.isEmpty()) {
-            return;
-        }
+    private <T> void checkAll(Collection<T> collection) {
         for (T item : collection) {
-            runAllWith(checkRunners, item, Collections.<Class<?>, Object>emptyMap());
+            checkOne(item);
         }
-        sumUp(checkRunners);
     }
 
     private <T> void checkOne(T item) {
-        checkOne(item, Collections.<Class<?>, Object>emptyMap());
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> void checkOne(T item, Map<Class<?>, Object> context) {
-        List<CheckRunner<T>> checkRunners = getCheckRunnersFor((Class<T>) item.getClass(), invType);
-        if (checkRunners.isEmpty()) {
-            return;
-        }
-        runAllWith(checkRunners, item, context);
-        sumUp(checkRunners);
-    }
-
-    private <T> void runAllWith(List<CheckRunner<T>> checkRunners, T item, Map<Class<?>, Object> context) {
-        for (CheckRunner<T> runner : checkRunners) {
-            runner.runWith(item, context);
+        for (CheckRunWatcher watcher : watchers) {
+            watcher.run(item, invType);
         }
     }
 
-    private <T> void sumUp(List<CheckRunner<T>> checkRunners) {
-        for (CheckRunner<T> runner : checkRunners) {
-            results.addAll(runner.sumUp());
+    private List<CheckResult> summarize() {
+        List<CheckResult> results = newArrayList();
+        for (CheckRunWatcher watcher : watchers) {
+            results.addAll(watcher.summarize());
         }
+        return results;
     }
 
-    public <T> List<CheckRunner<T>> getCheckRunnersFor(Class<T> itemClass, ExperimentType invType) {
-        List<CheckRunner<T>> runners = newArrayList();
+    private static class CheckRunWatcher {
 
-        for (CheckDefinition def : allChecks) {
-            if (def.isApplicable(itemClass, invType)) {
-                runners.add(def.newRunner(itemClass));
+        private final CheckDefinition def;
+        private Map<Class<?>, CheckRunner<?>> runners;
+        private final List<CheckResult> results;
+
+        private CheckRunWatcher(CheckDefinition def) {
+            this.def = def;
+            results = newArrayList();
+            runners = newHashMap();
+        }
+
+        @SuppressWarnings("unchecked")
+        public <T> void run(T item, ExperimentType invType) {
+            if (!def.isApplicable(item.getClass(), invType)) {
+                return;
+            }
+
+            CheckRunner<T> runner;
+            if (def.getType().isClassBased()) {
+                if (runners.containsKey(item.getClass())) {
+                    runner = ((CheckRunner<T>) runners.get(item.getClass()));
+                } else {
+                    runner = (CheckRunner<T>) def.newRunner(item.getClass());
+                    runners.put(item.getClass(), runner);
+                }
+            } else {
+                runner = (CheckRunner<T>) def.newRunner(item.getClass());
+            }
+            runner.runWith(item, Maps.<Class<?>, Object>newHashMap());
+            if (!def.getType().isClassBased()) {
+                sumUp(runner.sumUp());
             }
         }
-        return runners;
-    }
 
+        public List<CheckResult> summarize() {
+            if (def.getType().isClassBased()) {
+                for(CheckRunner<?> runner : runners.values()) {
+                    sumUp(runner.sumUp());
+                }
+            }
+            return results;
+        }
 
-    public Collection<CheckResult> getResults() {
-        return Collections.unmodifiableList(results);
+        private void sumUp(List<CheckResult> checkResults) {
+            results.addAll(checkResults);
+        }
     }
 }

@@ -48,6 +48,11 @@ class MethodBasedCheckDefinition extends CheckDefinition {
         return subjectType != null && subjectType.isAssignableFrom(objType);
     }
 
+    @Override
+    public CheckType getType() {
+        return CheckType.METHOD_BASED;
+    }
+
     private static Class<?> getFirstParameter(Method method) {
         Class[] types = method.getParameterTypes();
         return types == null || types.length == 0 ? null : types[0];
