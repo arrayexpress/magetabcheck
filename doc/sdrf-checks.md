@@ -1,5 +1,5 @@
-# SDRF checks (64)
-(updated: 29/04/2013 09:30)
+# SDRF checks (65)
+(updated: 29/04/2013 12:01)
 
 + [Array Design Attribute Checks](#array-design-attribute-checks)
 + [Array Data Matrix Node Checks](#array-data-matrix-node-checks)
@@ -91,6 +91,7 @@
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
 |FV03|**error**|Both|Term source of a factor value attribute must be declared in IDF||
+|FV04|**error**|Both|Values of a experimental factor must vary||
 |FV01|warning|Both|A factor value attribute should have name specified||
 |FV02|warning|Both|A factor value attribute should have term source specified||
 
