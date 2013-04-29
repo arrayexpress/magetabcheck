@@ -1,5 +1,5 @@
 # SDRF checks (65)
-(updated: 29/04/2013 12:52)
+(updated: 29/04/2013 17:57)
 
 + [Array Design Attribute Checks](#array-design-attribute-checks)
 + [Array Data Matrix Node Checks](#array-data-matrix-node-checks)
@@ -52,7 +52,7 @@
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
 |AN01|**error**|Both|An assay node must have name specified||
-|AN02|**error**|HTS|An assay node must have 'Technology Type' attribute specified||
+|AN02|**error**|Both|An assay node must have 'Technology Type' attribute specified||
 
 ## Characteristic Attribute Checks
 
