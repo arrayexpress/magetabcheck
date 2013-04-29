@@ -316,8 +316,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "AN02",
-            value = "An assay node must have 'Technology Type' attribute specified",
-            application = HTS_ONLY)
+            value = "An assay node must have 'Technology Type' attribute specified")
     public void assayNodeMustHaveTechnologyTypeAttribute(SdrfAssayNode assayNode) {
         setPosition(assayNode);
         assertNotNull(assayNode.getTechnologyType());
