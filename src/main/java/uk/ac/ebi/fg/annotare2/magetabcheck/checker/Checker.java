@@ -39,7 +39,7 @@ public class Checker {
 
     private final List<CheckDefinition> allChecks = newArrayList();
 
-    private List<CheckRunWatcher> watchers = newArrayList();
+    private List<CheckRunWatcher> watchers;
 
     @Inject
     public Checker(List<CheckDefinition> allChecks, @Assisted ExperimentType type) {
@@ -48,6 +48,7 @@ public class Checker {
     }
 
     public Collection<CheckResult> check(Experiment exp) {
+        watchers = newArrayList();
         for (CheckDefinition cd : allChecks) {
             watchers.add(new CheckRunWatcher(cd));
         }
