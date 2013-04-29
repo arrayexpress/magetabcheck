@@ -1,3 +1,12 @@
+## Release 1.6
+
+ * fixed a critical bug in graph traverse approach
+ * [#6]  Added check: protocol node should have non empty 'performer' attribute
+ * [#7]  Values of a experiment factor must vary
+ * [#37] Check for non empty Comment[AEExperimentType] added
+ * [#42] Check Removed (as useless) PN02 : A protocol node should have date specified
+ * [#43] StackOverflowException when EFO service is unavailable
+
 ## Release 1.5
 
  * [#21] Generate the list of implemented checks automatically
