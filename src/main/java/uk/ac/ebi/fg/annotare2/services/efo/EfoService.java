@@ -60,11 +60,6 @@ public interface EfoService {
             throw unavailable();
         }
 
-        @Override
-        public Collection<String> getSubTermsOf(String accession) {
-            throw unavailable();
-        }
-
         private ServiceUnavailableException unavailable() {
             throw new ServiceUnavailableException("EFO Service hasn't been started properly. See logs for details.");
         }
