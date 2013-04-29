@@ -65,16 +65,6 @@ public class EfoServiceImpl implements EfoService {
         return findByTermAccessionOrName(SEQUENCING_PROTOCOL, accession, name) != null;
     }
 
-    @Override
-    public Collection<String> getSubTermsOf(String accession) {
-        List<String> list = newArrayList();
-        EfoNode node = graph.getNodeById(accession);
-        for (EfoNode ch : node.getChildren()) {
-            list.add(ch.getName());
-        }
-        return list;
-    }
-
     private EfoNode findNodeByTermName(String startEfo, final String termName) {
         return findNode(startEfo, new Predicate<EfoNode>() {
             @Override

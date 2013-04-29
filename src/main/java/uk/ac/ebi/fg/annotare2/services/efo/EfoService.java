@@ -107,12 +107,4 @@ public interface EfoService {
      * @return <code>true</code> if
      */
     boolean isSequencingProtocol(String accession, String name);
-
-    /**
-     * Returns names of all child terms.
-     *
-     * @param accession a term accession to get children from
-     * @return a collection of term names
-     */
-    Collection<String> getSubTermsOf(String accession);
 }
