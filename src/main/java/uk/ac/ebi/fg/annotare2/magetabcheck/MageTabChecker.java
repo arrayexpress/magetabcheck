@@ -23,10 +23,10 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckResult;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckerFactory;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.ExperimentType;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.UknownExperimentTypeException;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.Experiment;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Comment;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.IdfData;
-import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
 
 import java.util.Collection;
 
@@ -39,12 +39,12 @@ public class MageTabChecker {
 
     private static final String AE_EXPERIMENT_TYPE_COMMENT = "AEExperimentType";
 
-    private final EfoService efoService;
+    private final MageTabCheckEfo efoService;
 
     private final CheckerFactory checkerFactory;
 
     @Inject
-    public MageTabChecker(EfoService efoService,
+    public MageTabChecker(MageTabCheckEfo efoService,
                           CheckerFactory checkerFactory) {
         this.efoService = efoService;
         this.checkerFactory = checkerFactory;

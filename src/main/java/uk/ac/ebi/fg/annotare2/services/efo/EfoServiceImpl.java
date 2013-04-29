@@ -21,11 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * @author Olga Melnichuk
@@ -44,38 +41,18 @@ public class EfoServiceImpl implements EfoService {
     }
 
     @Override
-    public String findHtsInvestigationType(String name) {
-        EfoNode node = findNodeByTermName(HTS_EXPERIMENT_TYPES, name);
-        return node == null ? null : node.getAccession();
-    }
-
-    @Override
-    public String findMaInvestigationType(String name) {
-        EfoNode node = findNodeByTermName(MA_EXPERIMENT_TYPES, name);
-        return node == null ? null : node.getAccession();
-    }
-
-    @Override
-    public boolean isLibraryConstructionProtocol(String accession, String name) {
-        return findByTermAccessionOrName(LIBRARY_CONSTRUCTION_PROTOCOL, accession, name) != null;
-    }
-
-    @Override
-    public boolean isSequencingProtocol(String accession, String name) {
-        return findByTermAccessionOrName(SEQUENCING_PROTOCOL, accession, name) != null;
-    }
-
-    private EfoNode findNodeByTermName(String startEfo, final String termName) {
-        return findNode(startEfo, new Predicate<EfoNode>() {
+    public EfoNode findTermByName(final String name, String rootAccession) {
+        return findNode(rootAccession, new Predicate<EfoNode>() {
             @Override
             public boolean apply(@Nullable EfoNode input) {
-                return termName.equalsIgnoreCase(input.getName());
+                return name.equalsIgnoreCase(input.getName());
             }
         });
     }
 
-    private EfoNode findNodeByTermAccession(String startEfo, final String accession) {
-        return findNode(startEfo, new Predicate<EfoNode>() {
+    @Override
+    public EfoNode findTermByAccession(final String accession, String rootAccession) {
+        return findNode(rootAccession, new Predicate<EfoNode>() {
             @Override
             public boolean apply(@Nullable EfoNode input) {
                 return accession.equals(input.getAccession());
@@ -83,23 +60,24 @@ public class EfoServiceImpl implements EfoService {
         });
     }
 
-    private EfoNode findByTermAccessionOrName(String startEfo, final String accession, final String name) {
+    @Override
+    public EfoNode findTermByNameOrAccession(final String accession, final String name, String rootAccession) {
         if (isNullOrEmpty(accession)) {
             if (!isNullOrEmpty(name)) {
-                EfoNode node = findNodeByTermName(startEfo, name);
+                EfoNode node = findTermByName(name, rootAccession);
                 if (node != null) {
                     return node;
                 }
             }
         } else if (isNullOrEmpty(name)) {
             if (!isNullOrEmpty(accession)) {
-                EfoNode node = findNodeByTermAccession(startEfo, accession);
+                EfoNode node = findTermByAccession(accession, rootAccession);
                 if (node != null) {
                     return node;
                 }
             }
         } else {
-            EfoNode node = findNodeByTermAccession(startEfo, accession);
+            EfoNode node = findTermByAccession(accession, rootAccession);
             if (node != null && name.equals(node.getName())) {
                 return node;
             }
@@ -107,10 +85,15 @@ public class EfoServiceImpl implements EfoService {
         return null;
     }
 
-    private EfoNode findNode(String startFromId, Predicate<EfoNode> predicate) {
-        EfoNode node = graph.getNodeById(startFromId);
+    @Override
+    public EfoNode findTermByAccession(String accession) {
+        return graph.getNodeById(accession);
+    }
+
+    private EfoNode findNode(String rootAccession, Predicate<EfoNode> predicate) {
+        EfoNode node = graph.getNodeById(rootAccession);
         if (node == null) {
-            log.error("EFO node class " + startFromId + "not found");
+            log.error("'" + rootAccession + "' not found in EFO");
             return null;
         }
         return findDescendant(node, predicate);

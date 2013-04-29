@@ -21,10 +21,10 @@ import com.google.inject.Inject;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checks.RangeCheck;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.ProtocolType;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermSource;
-import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
 
 import javax.annotation.Nullable;
 
@@ -47,14 +47,14 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.EFO;
 public class SequencingProtocolRequired extends RangeCheck<Protocol> {
 
     @Inject
-    public SequencingProtocolRequired(EfoService efo) {
+    public SequencingProtocolRequired(MageTabCheckEfo efo) {
         super(new SequencingProtocolPredicate(efo), singleton(1));
     }
 
     private static class SequencingProtocolPredicate implements Predicate<Protocol> {
-        private final EfoService efo;
+        private final MageTabCheckEfo efo;
 
-        private SequencingProtocolPredicate(EfoService efo) {
+        private SequencingProtocolPredicate(MageTabCheckEfo efo) {
             this.efo = efo;
         }
 

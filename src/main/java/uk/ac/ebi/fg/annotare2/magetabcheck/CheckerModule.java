@@ -19,6 +19,8 @@ package uk.ac.ebi.fg.annotare2.magetabcheck;
 import com.google.inject.*;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.*;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfoImpl;
 import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
 import uk.ac.ebi.fg.annotare2.services.efo.EfoServiceProperties;
 import uk.ac.ebi.fg.annotare2.services.efo.EfoServiceProvider;
@@ -34,6 +36,7 @@ public class CheckerModule extends AbstractModule {
     protected void configure() {
         bind(EfoServiceProperties.class).to(MageTabCheckProperties.class);
         bind(EfoService.class).toProvider(EfoServiceProvider.class).in(Scopes.SINGLETON);
+        bind(MageTabCheckEfo.class).to(MageTabCheckEfoImpl.class).in(Scopes.SINGLETON);
 
         bind(AllChecks.class).to(AllChecksImpl.class).in(Scopes.SINGLETON);
 

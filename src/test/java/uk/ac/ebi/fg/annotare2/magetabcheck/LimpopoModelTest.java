@@ -24,9 +24,9 @@ import uk.ac.ebi.arrayexpress2.magetab.datamodel.MAGETABInvestigation;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.*;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.AtLeastOneContactWithEmailRequired;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfSimpleChecks;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Info;
 import uk.ac.ebi.fg.annotare2.magetabcheck.modelimpl.limpopo.LimpopoBasedChecker;
-import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -73,14 +73,14 @@ public class LimpopoModelTest {
     public static class RnaSeqModule extends AbstractModule {
         @Override
         protected void configure() {
-            EfoService service = createMock(EfoService.class);
+            MageTabCheckEfo service = createMock(MageTabCheckEfo.class);
             expect(service.findHtsInvestigationType(RNA_SEQ_TYPE))
                     .andReturn("AN_ACCESSION");
             expect(service.findMaInvestigationType(RNA_SEQ_TYPE))
                     .andReturn(null);
             replay(service);
 
-            bind(EfoService.class).toInstance(service);
+            bind(MageTabCheckEfo.class).toInstance(service);
 
             CheckDefinitionListBuilder builder = new CheckDefinitionListBuilder();
             builder.addMethodBasedCheck(IdfSimpleChecks.class, "investigationTitleRequired", Info.class);

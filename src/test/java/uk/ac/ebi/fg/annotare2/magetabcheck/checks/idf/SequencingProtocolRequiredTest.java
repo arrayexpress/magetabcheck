@@ -20,9 +20,9 @@ import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.easymock.IAnswer;
 import org.junit.Test;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
 import uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownProtocolHardware;
 import uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource;
-import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
 
 import java.util.Collections;
 
@@ -103,8 +103,8 @@ public class SequencingProtocolRequiredTest extends AbstractCheckTest {
         rule.check();
     }
 
-    private EfoService efoServiceMock() {
-        EfoService mock = EasyMock.createMock(EfoService.class);
+    private MageTabCheckEfo efoServiceMock() {
+        MageTabCheckEfo mock = EasyMock.createMock(MageTabCheckEfo.class);
         final Capture<String> argCapture = new Capture<String>();
         expect(mock.isSequencingProtocol((String) anyObject(), capture(argCapture))).andAnswer(
                 new IAnswer<Boolean>() {

@@ -18,88 +18,42 @@ package uk.ac.ebi.fg.annotare2.services.efo;
 
 import uk.ac.ebi.fg.annotare2.magetabcheck.ServiceUnavailableException;
 
-import java.util.Collection;
-
 /**
  * @author Olga Melnichuk
  */
 public interface EfoService {
 
-    public static final String HTS_EXPERIMENT_TYPES = "EFO_0003740";
-
-    public static final String MA_EXPERIMENT_TYPES = "EFO_0002696";
-
-    public static final String LIBRARY_CONSTRUCTION_PROTOCOL = "EFO_0004184";
-
-    public static final String SEQUENCING_PROTOCOL = "EFO_0004170";
-
-    public static final String BIOLOGICAL_VARIATION_DESINGS = "EFO_0004667";
-
-    public static final String METHODOLOGICAL_VARIATION_DESIGNS = "EFO_0004669";
-
-    public static final String BIOMOLECULAR_ANNOTATION_DESIGNS = "EFO_0004665";
-
     public static final EfoService UNAVAILABLE = new EfoService() {
         @Override
-        public String findHtsInvestigationType(String name) {
+        public EfoNode findTermByAccession(String accession) {
             throw unavailable();
         }
 
         @Override
-        public String findMaInvestigationType(String name) {
+        public EfoNode findTermByName(String name, String rootAccession) {
             throw unavailable();
         }
 
         @Override
-        public boolean isLibraryConstructionProtocol(String accession, String name) {
+        public EfoNode findTermByAccession(String accession, String rootAccession) {
             throw unavailable();
         }
 
         @Override
-        public boolean isSequencingProtocol(String accession, String name) {
+        public EfoNode findTermByNameOrAccession(String name, String accession, String rootAccession) {
             throw unavailable();
         }
 
         private ServiceUnavailableException unavailable() {
-            throw new ServiceUnavailableException("EFO Service hasn't been started properly. See logs for details.");
+            return new ServiceUnavailableException("EFO Service hasn't been started properly. See logs for details.");
         }
     };
 
-    /**
-     * Looks through the all descendants of {@value #HTS_EXPERIMENT_TYPES} term and returns
-     * accession of the term which name equals to the given one.
-     *
-     * @param name name of the term to find
-     * @return term accession or <code>null</code> if term was not found
-     */
-    String findHtsInvestigationType(String name);
+    EfoNode findTermByName(String name, String rootAccession);
 
-    /**
-     * Looks through the all descendants of {@value #MA_EXPERIMENT_TYPES} term and returns
-     * accession of the term which name equals to the given one.
-     *
-     * @param name name of the term to find
-     * @return term accession or <code>null</code> if term was not found
-     */
-    String findMaInvestigationType(String name);
+    EfoNode findTermByAccession(String accession);
 
-    /**
-     * Checks if the given term accession and name correspond to the existed EFO term located in the
-     * {@value #LIBRARY_CONSTRUCTION_PROTOCOL} branch. At least on of arguments (accession or name) should be not null.
-     *
-     * @param accession a term accession
-     * @param name      a term name
-     * @return <code>true</code> if
-     */
-    boolean isLibraryConstructionProtocol(String accession, String name);
+    EfoNode findTermByAccession(String accession, String rootAccession);
 
-    /**
-     * Checks if the given term accession and name correspond to the existed EFO term located in the
-     * {@value #LIBRARY_CONSTRUCTION_PROTOCOL} branch. At least on of arguments (accession or name) should be not null.
-     *
-     * @param accession a term accession
-     * @param name      a term name
-     * @return <code>true</code> if
-     */
-    boolean isSequencingProtocol(String accession, String name);
+    EfoNode findTermByNameOrAccession(String name, String accession, String rootAccession);
 }
