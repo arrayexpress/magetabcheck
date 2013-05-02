@@ -1,16 +1,16 @@
 ## Release 1.6
 
  * fixed a critical bug in graph traverse approach
- * [#6]  Added check: protocol node should have non empty 'performer' attribute
- * [#7]  Values of a experiment factor must vary
- * [#37] Check for non empty Comment[AEExperimentType] added
- * [#42] Check Removed (as useless) PN02 : A protocol node should have date specified
- * [#43] StackOverflowException when EFO service is unavailable
+ * [#6](https://github.com/arrayexpress/magetabcheck/issues/6)  Added check: protocol node should have non empty 'performer' attribute
+ * [#7](https://github.com/arrayexpress/magetabcheck/issues/7)  Values of a experiment factor must vary
+ * [#37](https://github.com/arrayexpress/magetabcheck/issues/37) Check for non empty Comment[AEExperimentType] added
+ * [#42](https://github.com/arrayexpress/magetabcheck/issues/42) Check Removed (as useless) PN02 : A protocol node should have date specified
+ * [#43](https://github.com/arrayexpress/magetabcheck/issues/43) StackOverflowException when EFO service is unavailable
 
 ## Release 1.5
 
- * [#21] Generate the list of implemented checks automatically
- * [#40] MageTabCheck configuration file required.
+ * [#21](https://github.com/arrayexpress/magetabcheck/issues/21) Generate the list of implemented checks automatically
+ * [#40](https://github.com/arrayexpress/magetabcheck/issues/40) MageTabCheck configuration file required.
    Now one can use a property file to set MageTabCheck parameters, such as debug, EFO URL, EFO cache, etc. (see wiki for details)
 
 ## Release 1.4
