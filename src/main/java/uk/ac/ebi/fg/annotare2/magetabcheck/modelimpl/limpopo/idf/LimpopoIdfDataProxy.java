@@ -20,10 +20,7 @@ import uk.ac.ebi.arrayexpress2.magetab.datamodel.IDF;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.*;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.primitives.Ints.max;
@@ -146,7 +143,9 @@ public class LimpopoIdfDataProxy implements IdfData {
     @Override
     public Collection<Comment> getComments(String type) {
         Map<String, Set<String>> allComments = idfHelper.idf().getComments();
-        return createComments(allComments.get(type), type);
+        Set<String> comments = allComments.containsKey(type) ?
+                allComments.get(type): Collections.<String>emptySet();
+        return createComments(comments, type);
     }
 
     @Override
