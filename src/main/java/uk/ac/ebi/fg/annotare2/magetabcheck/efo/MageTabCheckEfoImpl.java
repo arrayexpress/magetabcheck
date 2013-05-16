@@ -17,8 +17,8 @@
 package uk.ac.ebi.fg.annotare2.magetabcheck.efo;
 
 import com.google.inject.Inject;
-import uk.ac.ebi.fg.annotare2.services.efo.EfoNode;
 import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
+import uk.ac.ebi.fg.annotare2.services.efo.EfoTerm;
 
 /**
  * @author Olga Melnichuk
@@ -34,23 +34,23 @@ public class MageTabCheckEfoImpl implements MageTabCheckEfo {
 
     @Override
     public String findHtsInvestigationType(String name) {
-        EfoNode node = efoService.findTermByName(HTS_EXPERIMENT_TYPES, name);
-        return node == null ? null : node.getAccession();
+        EfoTerm term = efoService.findTermByLabel(HTS_EXPERIMENT_TYPES, name);
+        return term == null ? null : term.getAccession();
     }
 
     @Override
     public String findMaInvestigationType(String name) {
-        EfoNode node = efoService.findTermByName(MA_EXPERIMENT_TYPES, name);
-        return node == null ? null : node.getAccession();
+        EfoTerm term = efoService.findTermByLabel(MA_EXPERIMENT_TYPES, name);
+        return term == null ? null : term.getAccession();
     }
 
     @Override
     public boolean isLibraryConstructionProtocol(String accession, String name) {
-        return efoService.findTermByNameOrAccession(name, accession, LIBRARY_CONSTRUCTION_PROTOCOL) != null;
+        return efoService.findTermByLabelOrAccession(name, accession, LIBRARY_CONSTRUCTION_PROTOCOL) != null;
     }
 
     @Override
     public boolean isSequencingProtocol(String accession, String name) {
-        return efoService.findTermByNameOrAccession(name, accession, SEQUENCING_PROTOCOL) != null;
+        return efoService.findTermByLabelOrAccession(name, accession, SEQUENCING_PROTOCOL) != null;
     }
 }

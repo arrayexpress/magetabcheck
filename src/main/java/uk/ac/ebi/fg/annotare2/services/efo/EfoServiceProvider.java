@@ -41,7 +41,7 @@ public class EfoServiceProvider implements Provider<EfoService> {
     private EfoService load(EfoServiceProperties properties) {
         if (properties != null) {
             try {
-                EfoGraph graph = new EfoLoader(properties).load();
+                EfoDag graph = new EfoLoader(properties).load();
                 if (graph != null) {
                     return new EfoServiceImpl(graph);
                 }

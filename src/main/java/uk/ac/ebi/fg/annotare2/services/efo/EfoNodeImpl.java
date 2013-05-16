@@ -75,6 +75,11 @@ class EfoNodeImpl implements EfoNode {
         return unmodifiableCollection(children);
     }
 
+    @Override
+    public EfoTerm asTerm() {
+        return new EfoTerm(getAccession(), getName(), getAlternativeNames());
+    }
+
     void setTerm(String term) {
         this.term = term;
     }
@@ -103,7 +108,7 @@ class EfoNodeImpl implements EfoNode {
         children.addAll(moreChildren);
     }
 
-    public boolean remove() {
+    public boolean toBeRemoved() {
         if (!isOrganizational()) {
             return false;
         }

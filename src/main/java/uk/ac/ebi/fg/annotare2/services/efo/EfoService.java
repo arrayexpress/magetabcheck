@@ -25,22 +25,22 @@ public interface EfoService {
 
     public static final EfoService UNAVAILABLE = new EfoService() {
         @Override
-        public EfoNode findTermByAccession(String accession) {
+        public EfoTerm findTermByAccession(String accession) {
             throw unavailable();
         }
 
         @Override
-        public EfoNode findTermByName(String name, String rootAccession) {
+        public EfoTerm findTermByLabel(String name, String rootAccession) {
             throw unavailable();
         }
 
         @Override
-        public EfoNode findTermByAccession(String accession, String rootAccession) {
+        public EfoTerm findTermByAccession(String accession, String rootAccession) {
             throw unavailable();
         }
 
         @Override
-        public EfoNode findTermByNameOrAccession(String name, String accession, String rootAccession) {
+        public EfoTerm findTermByLabelOrAccession(String name, String accession, String rootAccession) {
             throw unavailable();
         }
 
@@ -49,11 +49,11 @@ public interface EfoService {
         }
     };
 
-    EfoNode findTermByName(String name, String rootAccession);
+    EfoTerm findTermByLabel(String name, String rootAccession);
 
-    EfoNode findTermByAccession(String accession);
+    EfoTerm findTermByAccession(String accession);
 
-    EfoNode findTermByAccession(String accession, String rootAccession);
+    EfoTerm findTermByAccession(String accession, String rootAccession);
 
-    EfoNode findTermByNameOrAccession(String name, String accession, String rootAccession);
+    EfoTerm findTermByLabelOrAccession(String name, String accession, String rootAccession);
 }

@@ -32,4 +32,6 @@ public interface EfoNode {
     public Collection<? extends EfoNode> getParents();
 
     public Collection<? extends EfoNode> getChildren();
+
+    public EfoTerm asTerm();
 }

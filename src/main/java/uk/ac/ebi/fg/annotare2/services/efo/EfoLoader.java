@@ -59,11 +59,11 @@ public class EfoLoader {
         log.debug("EFO cache dir used {}", cacheDir);
     }
 
-    public EfoGraph load() throws IOException, OWLOntologyCreationException {
+    public EfoDag load() throws IOException, OWLOntologyCreationException {
         return load(defaultEfoUrl);
     }
 
-    public EfoGraph load(final URL url) throws IOException, OWLOntologyCreationException {
+    public EfoDag load(final URL url) throws IOException, OWLOntologyCreationException {
         if (url == null) {
             log.error("Given EFO url is null; please use the config file to specify the proper one");
             return null;
@@ -98,7 +98,7 @@ public class EfoLoader {
         return new File(cacheDir, fileName + ".cache");
     }
 
-    public EfoGraph load(File file) throws IOException, OWLOntologyCreationException {
+    public EfoDag load(File file) throws IOException, OWLOntologyCreationException {
         InputStream in = null;
         try {
             in = new FileInputStream(file);
@@ -108,7 +108,7 @@ public class EfoLoader {
         }
     }
 
-    public EfoGraph load(InputStream in) throws OWLOntologyCreationException {
+    public EfoDag load(InputStream in) throws OWLOntologyCreationException {
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
         OWLReasoner reasoner = null;
 
@@ -122,7 +122,7 @@ public class EfoLoader {
             reasoner = new Reasoner.ReasonerFactory().createReasoner(ontology);
             reasoner.precomputeInferences(InferenceType.CLASS_HIERARCHY);
             reasoner.isConsistent();
-            return EfoGraph.build(ontology, reasoner);
+            return EfoDag.build(ontology, reasoner);
         } finally {
             if (reasoner != null) {
                 reasoner.dispose();

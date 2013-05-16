@@ -31,9 +31,9 @@ public class EfoServiceImpl implements EfoService {
 
     private static final Logger log = LoggerFactory.getLogger(EfoService.class);
 
-    private final EfoGraph graph;
+    private final EfoDag graph;
 
-    public EfoServiceImpl(EfoGraph graph) {
+    public EfoServiceImpl(EfoDag graph) {
         if (graph == null) {
             throw new IllegalArgumentException("EfoGraph == null");
         }
@@ -41,53 +41,56 @@ public class EfoServiceImpl implements EfoService {
     }
 
     @Override
-    public EfoNode findTermByName(final String name, String rootAccession) {
-        return findNode(rootAccession, new Predicate<EfoNode>() {
+    public EfoTerm findTermByLabel(final String name, String rootAccession) {
+        EfoNode node = findNode(rootAccession, new Predicate<EfoNode>() {
             @Override
             public boolean apply(@Nullable EfoNode input) {
                 return name.equalsIgnoreCase(input.getName());
             }
         });
+        return node == null ? null : node.asTerm();
     }
 
     @Override
-    public EfoNode findTermByAccession(final String accession, String rootAccession) {
-        return findNode(rootAccession, new Predicate<EfoNode>() {
+    public EfoTerm findTermByAccession(final String accession, String rootAccession) {
+        EfoNode node = findNode(rootAccession, new Predicate<EfoNode>() {
             @Override
             public boolean apply(@Nullable EfoNode input) {
                 return accession.equals(input.getAccession());
             }
         });
+        return node == null ? null : node.asTerm();
     }
 
     @Override
-    public EfoNode findTermByNameOrAccession(final String accession, final String name, String rootAccession) {
+    public EfoTerm findTermByLabelOrAccession(final String accession, final String name, String rootAccession) {
         if (isNullOrEmpty(accession)) {
             if (!isNullOrEmpty(name)) {
-                EfoNode node = findTermByName(name, rootAccession);
-                if (node != null) {
-                    return node;
+                EfoTerm term = findTermByLabel(name, rootAccession);
+                if (term != null) {
+                    return term;
                 }
             }
         } else if (isNullOrEmpty(name)) {
             if (!isNullOrEmpty(accession)) {
-                EfoNode node = findTermByAccession(accession, rootAccession);
-                if (node != null) {
-                    return node;
+                EfoTerm term = findTermByAccession(accession, rootAccession);
+                if (term != null) {
+                    return term;
                 }
             }
         } else {
-            EfoNode node = findTermByAccession(accession, rootAccession);
-            if (node != null && name.equals(node.getName())) {
-                return node;
+            EfoTerm term = findTermByAccession(accession, rootAccession);
+            if (term != null && name.equals(term.getLabel())) {
+                return term;
             }
         }
         return null;
     }
 
     @Override
-    public EfoNode findTermByAccession(String accession) {
-        return graph.getNodeById(accession);
+    public EfoTerm findTermByAccession(String accession) {
+        EfoNode node = graph.getNodeById(accession);
+        return node == null ? null : node.asTerm();
     }
 
     private EfoNode findNode(String rootAccession, Predicate<EfoNode> predicate) {

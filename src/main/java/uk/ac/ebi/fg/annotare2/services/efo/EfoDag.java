@@ -33,9 +33,9 @@ import static com.google.common.collect.Maps.newHashMap;
 /**
  * @author Olga Melnichuk
  */
-public class EfoGraph {
+public class EfoDag {
 
-    private static final Logger log = LoggerFactory.getLogger(EfoGraph.class);
+    private static final Logger log = LoggerFactory.getLogger(EfoDag.class);
 
     private Map<String, EfoNodeImpl> efoMap = newHashMap();
 
@@ -54,8 +54,8 @@ public class EfoGraph {
             this.reasoner = reasoner;
         }
 
-        public EfoGraph build() {
-            EfoGraph graph = new EfoGraph();
+        public EfoDag build() {
+            EfoDag graph = new EfoDag();
 
             log.debug("Building EFO graph: loading all classes...");
 
@@ -67,7 +67,7 @@ public class EfoGraph {
 
             List<String> toBeRemoved = newArrayList();
             for (Map.Entry<String, EfoNodeImpl> entry : efoMap.entrySet()) {
-                if (entry.getValue().remove()) {
+                if (entry.getValue().toBeRemoved()) {
                     toBeRemoved.add(entry.getKey());
                 }
             }
@@ -116,7 +116,7 @@ public class EfoGraph {
         }
     }
 
-    public static EfoGraph build(OWLOntology ontology, OWLReasoner reasoner) {
+    public static EfoDag build(OWLOntology ontology, OWLReasoner reasoner) {
         return new Builder(ontology, reasoner).build();
     }
 
