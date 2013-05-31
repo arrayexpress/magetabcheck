@@ -60,7 +60,7 @@ public class SequencingProtocolRequired extends RangeCheck<Protocol> {
 
         @Override
         public boolean apply(@Nullable Protocol protocol) {
-            return isSequencingProtocol(protocol.getType())
+            return efo.isSequencingProtocol(protocol.getType())
                     && hasSequencingHardware(protocol);
         }
 
@@ -71,15 +71,6 @@ public class SequencingProtocolRequired extends RangeCheck<Protocol> {
             }
             String[] v = hardware.trim().split("\\s*,\\s*");
             return isValidProtocolHardware(v);
-        }
-
-        private boolean isSequencingProtocol(ProtocolType type) {
-            return isEfoTermSource(type.getSource().getValue())
-                    && efo.isSequencingProtocol(type.getAccession().getValue(), type.getName().getValue());
-        }
-
-        private boolean isEfoTermSource(TermSource ts) {
-            return ts != null && EFO.matches(ts.getFile().getValue());
         }
     }
 }

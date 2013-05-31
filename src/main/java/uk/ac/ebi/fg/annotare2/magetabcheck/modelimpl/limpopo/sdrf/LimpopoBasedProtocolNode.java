@@ -18,6 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.modelimpl.limpopo.sdrf;
 
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.ProtocolApplicationNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfParameterValueAttribute;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfPerformerAttribute;
@@ -62,8 +63,13 @@ class LimpopoBasedProtocolNode extends LimpopoBasedSdrfNode<ProtocolApplicationN
     }
 
     @Override
-    public String getProtocol() {
+    public String getProtocolRef() {
         return node().protocol;
+    }
+
+    @Override
+    public Protocol getProtocol() {
+         return protocol(getProtocolRef());
     }
 
     @Override

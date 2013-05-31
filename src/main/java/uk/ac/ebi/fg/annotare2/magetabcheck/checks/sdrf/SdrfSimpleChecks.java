@@ -16,14 +16,20 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.sdrf;
 
+import com.google.inject.Inject;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.FileLocation;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.ProtocolType;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.*;
 
 import java.util.Collection;
+import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.HTS_ONLY;
@@ -39,6 +45,13 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.NCBI
  * @author Olga Melnichuk
  */
 public class SdrfSimpleChecks {
+
+    MageTabCheckEfo efo;
+
+    @Inject
+    public SdrfSimpleChecks(MageTabCheckEfo efo) {
+        this.efo = efo;
+    }
 
     @MageTabCheck(
             ref = "SR01",
@@ -323,6 +336,27 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
+            ref = "AN03",
+            value = "An assay node must be described by a 'sequencing' protocol",
+            application = HTS_ONLY)
+    public void assayNodeMustBeDescribedBySequencingProtocol(SdrfAssayNode assayNode) {
+        setPosition(assayNode);
+
+        SdrfProtocolNode found = null;
+        for(SdrfProtocolNode protocolNode : getProtocolParents(assayNode)) {
+            Protocol protocol = protocolNode.getProtocol();
+            if (protocol == null) {
+                continue;
+            }
+            if (efo.isSequencingProtocol(protocol.getType())) {
+                found = protocolNode;
+                break;
+            }
+        }
+        assertNotNull(found);
+    }
+
+    @MageTabCheck(
             ref = "TT01",
             value = "Technology type attribute must have name specified")
     public void technologyTypeMustHaveName(SdrfTechnologyTypeAttribute technologyTypeAttribute) {
@@ -595,19 +629,8 @@ public class SdrfSimpleChecks {
     }
 
     private static void assertNodeIsDescribedByProtocol(SdrfGraphNode node) {
-        Collection<? extends SdrfGraphNode> parents = node.getParentNodes();
-        if (parents.isEmpty()) {
-            return;
-        }
         setPosition(node);
-        SdrfGraphNode protocolNode = null;
-        for (SdrfGraphNode p : parents) {
-            if (SdrfProtocolNode.class.isAssignableFrom(p.getClass())) {
-                protocolNode = p;
-                break;
-            }
-        }
-        assertNotNull(protocolNode);
+        assertThat(getProtocolParents(node), is(not(empty())));
     }
 
     private static void assertFileLocationIsValid(SdrfDataNode dataNode) {
@@ -616,6 +639,16 @@ public class SdrfSimpleChecks {
             setPosition(dataNode);
             assertThat(location, isValidFileLocation());
         }
+    }
+
+    private static Collection<SdrfProtocolNode> getProtocolParents(SdrfGraphNode node) {
+        List<SdrfProtocolNode> protocols = newArrayList();
+        for (SdrfGraphNode p : node.getParentNodes()) {
+            if (SdrfProtocolNode.class.isAssignableFrom(p.getClass())) {
+                protocols.add((SdrfProtocolNode)p);
+            }
+        }
+        return protocols;
     }
 
     private static <T extends HasLocation> void setPosition(T t) {

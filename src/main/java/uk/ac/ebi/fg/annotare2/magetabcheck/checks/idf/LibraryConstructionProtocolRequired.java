@@ -58,16 +58,7 @@ public class LibraryConstructionProtocolRequired extends RangeCheck<Protocol> {
 
         @Override
         public boolean apply(@Nullable Protocol protocol) {
-            return isLibraryConstructionProtocol(protocol.getType());
-        }
-
-        private boolean isLibraryConstructionProtocol(ProtocolType type) {
-            return isEfoTermSource(type.getSource().getValue())
-                    && efo.isLibraryConstructionProtocol(type.getAccession().getValue(), type.getName().getValue());
-        }
-
-        private boolean isEfoTermSource(TermSource ts) {
-            return ts != null && EFO.matches(ts.getFile().getValue());
+            return efo.isLibraryConstructionProtocol(protocol.getType());
         }
     }
 }

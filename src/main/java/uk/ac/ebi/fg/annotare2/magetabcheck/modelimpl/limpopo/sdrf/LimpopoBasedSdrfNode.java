@@ -20,6 +20,7 @@ import uk.ac.ebi.arrayexpress2.magetab.datamodel.graph.Node;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.layout.Location;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SDRFNode;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.FileLocation;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfGraphNode;
 
@@ -89,6 +90,10 @@ abstract class LimpopoBasedSdrfNode<T extends SDRFNode> extends ObjectWithAttrib
 
     protected T node() {
         return node;
+    }
+
+    protected Protocol protocol(String protocolRef) {
+        return helper.protocol(protocolRef);
     }
 
     protected TermSource termSource(String termSourceRef) {

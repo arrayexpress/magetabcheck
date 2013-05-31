@@ -21,8 +21,12 @@ import org.easymock.EasyMock;
 import org.easymock.IAnswer;
 import org.junit.Test;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfoImpl;
 import uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownProtocolHardware;
 import uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Term;
+import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
+import uk.ac.ebi.fg.annotare2.services.efo.EfoTerm;
 
 import java.util.Collections;
 
@@ -104,18 +108,17 @@ public class SequencingProtocolRequiredTest extends AbstractCheckTest {
     }
 
     private MageTabCheckEfo efoServiceMock() {
-        MageTabCheckEfo mock = EasyMock.createMock(MageTabCheckEfo.class);
-        final Capture<String> argCapture = new Capture<String>();
-        expect(mock.isSequencingProtocol((String) anyObject(), capture(argCapture))).andAnswer(
-                new IAnswer<Boolean>() {
+        EfoService mock =  EasyMock.createMock(EfoService.class);
+        expect(mock.findTermByLabelOrAccession(isA(String.class), isA(String.class), isA(String.class))).andAnswer(
+                new IAnswer<EfoTerm>() {
                     @Override
-                    public Boolean answer() throws Throwable {
-                        String value = argCapture.getValue();
-                        return value != null && value.equals("sequencing protocol");
+                    public EfoTerm answer() throws Throwable {
+                        String title = (String) getCurrentArguments()[0];
+                        return "sequencing protocol".equals(title) ? new EfoTerm("", "", Collections.<String>emptyList()) : null;
                     }
                 }
         );
         replay(mock);
-        return mock;
+        return new MageTabCheckEfoImpl(mock);
     }
 }

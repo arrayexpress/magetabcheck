@@ -16,6 +16,9 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf;
 
+
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
+
 import java.util.Collection;
 
 /**
@@ -25,7 +28,9 @@ public interface SdrfProtocolNode extends SdrfGraphNode, HasTermSource {
 
     String getDate();
 
-    String getProtocol ();
+    String getProtocolRef();
+
+    Protocol getProtocol ();
 
     SdrfPerformerAttribute getPerformer();
 

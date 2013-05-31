@@ -172,6 +172,16 @@ public class LimpopoIdfDataProxy implements IdfData {
         return idfHelper.getTermSource(ref);
     }
 
+    @Override
+    public Protocol getProtocol(String ref) {
+        for(Protocol protocol : getProtocols()) {
+            if (ref.equals(protocol.getName())) {
+                return protocol;
+            }
+        }
+        return null;
+    }
+
     private int size(List<String> list) {
         return list == null || list.isEmpty() ? 0 : list.size();
     }

@@ -16,6 +16,8 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.efo;
 
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Term;
+
 /**
  * @author Olga Melnichuk
  */
@@ -63,19 +65,17 @@ public interface MageTabCheckEfo {
      * Checks if the given term accession and name correspond to the existed EFO term located in the
      * {@value #LIBRARY_CONSTRUCTION_PROTOCOL} branch. At least on of arguments (accession or name) should be not null.
      *
-     * @param accession a term accession
-     * @param name      a term name
+     * @param term a term from IDF to check
      * @return <code>true</code> if
      */
-    boolean isLibraryConstructionProtocol(String accession, String name);
+    boolean isLibraryConstructionProtocol(Term term);
 
     /**
      * Checks if the given term accession and name correspond to the existed EFO term located in the
      * {@value #LIBRARY_CONSTRUCTION_PROTOCOL} branch. At least on of arguments (accession or name) should be not null.
      *
-     * @param accession a term accession
-     * @param name      a term name
+     * @param term a term from IDF to check
      * @return <code>true</code> if
      */
-    boolean isSequencingProtocol(String accession, String name);
+    boolean isSequencingProtocol(Term term);
 }

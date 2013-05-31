@@ -17,8 +17,12 @@
 package uk.ac.ebi.fg.annotare2.magetabcheck.efo;
 
 import com.google.inject.Inject;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Term;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
 import uk.ac.ebi.fg.annotare2.services.efo.EfoTerm;
+
+import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.EFO;
 
 /**
  * @author Olga Melnichuk
@@ -45,13 +49,21 @@ public class MageTabCheckEfoImpl implements MageTabCheckEfo {
     }
 
     @Override
-    public boolean isLibraryConstructionProtocol(String accession, String name) {
-        return efoService.findTermByLabelOrAccession(name, accession, LIBRARY_CONSTRUCTION_PROTOCOL) != null;
+    public boolean isLibraryConstructionProtocol(Term term) {
+        return isEfoTermSource(term.getSource().getValue())
+                && efoService.findTermByLabelOrAccession(
+                term.getName().getValue(), term.getAccession().getValue(), LIBRARY_CONSTRUCTION_PROTOCOL) != null;
     }
 
     @Override
-    public boolean isSequencingProtocol(String accession, String name) {
-        return efoService.findTermByLabelOrAccession(name, accession, SEQUENCING_PROTOCOL) != null;
+    public boolean isSequencingProtocol(Term term) {
+        return isEfoTermSource(term.getSource().getValue())
+                && efoService.findTermByLabelOrAccession(
+                term.getName().getValue(), term.getAccession().getValue(), SEQUENCING_PROTOCOL) != null;
+    }
+
+    private boolean isEfoTermSource(TermSource ts) {
+        return ts != null && EFO.matches(ts.getFile().getValue());
     }
 
     private EfoTerm findTermByLabelInSubClasses(String name, String... subclasses) {

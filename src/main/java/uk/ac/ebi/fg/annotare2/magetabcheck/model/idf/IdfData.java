@@ -49,4 +49,6 @@ public interface IdfData {
     Collection<Comment> getComments(String name);
 
     TermSource getTermSource(String ref);
+
+    Protocol getProtocol(String protocolRef);
 }

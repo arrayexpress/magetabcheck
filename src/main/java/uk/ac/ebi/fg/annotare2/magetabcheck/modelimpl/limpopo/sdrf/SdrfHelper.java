@@ -22,6 +22,7 @@ import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.*;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.*;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.Identity;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.IdfData;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfGraphAttribute;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfGraphNode;
@@ -166,5 +167,9 @@ class SdrfHelper {
 
     public String getSourceName() {
         return sourceName == null ? "SDRF" : sourceName;
+    }
+
+    public Protocol protocol(String protocolRef) {
+        return idf.getProtocol(protocolRef);
     }
 }

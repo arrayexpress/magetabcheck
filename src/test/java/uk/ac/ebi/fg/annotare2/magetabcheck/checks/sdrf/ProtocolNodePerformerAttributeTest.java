@@ -17,6 +17,8 @@
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.sdrf;
 
 import org.junit.Test;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfPerformerAttribute;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfProtocolNode;
 
@@ -29,28 +31,28 @@ public class ProtocolNodePerformerAttributeTest {
 
     @Test(expected = AssertionError.class)
     public void nullAttributeTest() {
-        new SdrfSimpleChecks().protocolNodeMustHavePerformerAttribute(
+        new SdrfSimpleChecks(mockEfo()).protocolNodeMustHavePerformerAttribute(
                 createProtocolNode(null)
         );
     }
 
     @Test(expected = AssertionError.class)
     public void emptyAttributeTest() {
-        new SdrfSimpleChecks().protocolNodeMustHavePerformerAttribute(
+        new SdrfSimpleChecks(mockEfo()).protocolNodeMustHavePerformerAttribute(
                 createProtocolNode(createPerformerAttribute(""))
         );
     }
 
     @Test(expected = AssertionError.class)
     public void whitespaceAttributeTest() {
-        new SdrfSimpleChecks().protocolNodeMustHavePerformerAttribute(
+        new SdrfSimpleChecks(mockEfo()).protocolNodeMustHavePerformerAttribute(
                 createProtocolNode(createPerformerAttribute(" "))
         );
     }
 
     @Test
     public void nonEmptyAttributeTest() {
-        new SdrfSimpleChecks().protocolNodeMustHavePerformerAttribute(
+        new SdrfSimpleChecks(mockEfo()).protocolNodeMustHavePerformerAttribute(
                 createProtocolNode(createPerformerAttribute("test"))
         );
     }
@@ -73,6 +75,12 @@ public class ProtocolNodePerformerAttributeTest {
         expect(node.getPerformer()).andReturn(attribute);
         replay(node);
         return node;
+    }
+
+    private static MageTabCheckEfo mockEfo() {
+        MageTabCheckEfo mock = createMock(MageTabCheckEfo.class);
+        replay(mock);
+        return mock;
     }
 
 }
