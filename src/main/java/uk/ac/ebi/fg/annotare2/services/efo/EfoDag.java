@@ -64,19 +64,6 @@ public class EfoDag {
                 loadClass(cls, efoMap);
             }
             log.debug("Building EFO graph: {} classes are loaded", efoMap.size());
-
-            List<String> toBeRemoved = newArrayList();
-            for (Map.Entry<String, EfoNodeImpl> entry : efoMap.entrySet()) {
-                if (entry.getValue().toBeRemoved()) {
-                    toBeRemoved.add(entry.getKey());
-                }
-            }
-
-            for (String key : toBeRemoved) {
-                efoMap.remove(key);
-            }
-            log.debug("Building EFO graph: nodes with 'organizational_class' annotation removed", efoMap.size());
-            log.debug("Building EFO graph: done [total number of nodes = {}]", efoMap.size());
             return graph;
         }
 
@@ -99,6 +86,8 @@ public class EfoDag {
             NodeSet<OWLClass> children = reasoner.getSubClasses(cls, true);
             EfoNodeImpl efoNode = annotVisitor.getNode();
 
+            visited.put(id, efoNode);
+
             for (OWLClass childCls : children.getFlattened()) {
                 EfoNodeImpl child = loadClass(childCls, visited);
                 if (child != null) {
@@ -106,8 +95,6 @@ public class EfoDag {
                     child.addParent(efoNode);
                 }
             }
-
-            visited.put(id, efoNode);
             return efoNode;
         }
 

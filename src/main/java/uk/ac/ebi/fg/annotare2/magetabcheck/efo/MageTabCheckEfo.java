@@ -21,6 +21,12 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.efo;
  */
 public interface MageTabCheckEfo {
 
+    public static final String AE_EXPERIMENT_TYPES = "EFO_0004120";
+
+    public static final String ARRAY_ASSAY = "EFO_0002696";
+
+    public static final String HTS_ASSAY = "EFO_0002697";
+
     public static final String HTS_EXPERIMENT_TYPES = "EFO_0003740";
 
     public static final String MA_EXPERIMENT_TYPES = "EFO_0002696";
@@ -51,7 +57,7 @@ public interface MageTabCheckEfo {
      * @param name name of the term to find
      * @return term accession or <code>null</code> if term was not found
      */
-    String findMaInvestigationType(String name);
+    String findArrayInvestigationType(String name);
 
     /**
      * Checks if the given term accession and name correspond to the existed EFO term located in the

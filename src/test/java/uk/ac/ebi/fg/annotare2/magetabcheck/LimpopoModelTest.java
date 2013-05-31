@@ -76,7 +76,7 @@ public class LimpopoModelTest {
             MageTabCheckEfo service = createMock(MageTabCheckEfo.class);
             expect(service.findHtsInvestigationType(RNA_SEQ_TYPE))
                     .andReturn("AN_ACCESSION");
-            expect(service.findMaInvestigationType(RNA_SEQ_TYPE))
+            expect(service.findArrayInvestigationType(RNA_SEQ_TYPE))
                     .andReturn(null);
             replay(service);
 

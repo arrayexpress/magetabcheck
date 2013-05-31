@@ -63,7 +63,7 @@ public class EfoServiceImpl implements EfoService {
     }
 
     @Override
-    public EfoTerm findTermByLabelOrAccession(final String accession, final String name, String rootAccession) {
+    public EfoTerm findTermByLabelOrAccession(final String name, final String accession, String rootAccession) {
         if (isNullOrEmpty(accession)) {
             if (!isNullOrEmpty(name)) {
                 EfoTerm term = findTermByLabel(name, rootAccession);

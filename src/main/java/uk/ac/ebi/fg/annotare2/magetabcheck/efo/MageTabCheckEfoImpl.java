@@ -34,13 +34,13 @@ public class MageTabCheckEfoImpl implements MageTabCheckEfo {
 
     @Override
     public String findHtsInvestigationType(String name) {
-        EfoTerm term = efoService.findTermByLabel(HTS_EXPERIMENT_TYPES, name);
+        EfoTerm term = findTermByLabelInSubClasses(name, AE_EXPERIMENT_TYPES, HTS_ASSAY);
         return term == null ? null : term.getAccession();
     }
 
     @Override
-    public String findMaInvestigationType(String name) {
-        EfoTerm term = efoService.findTermByLabel(MA_EXPERIMENT_TYPES, name);
+    public String findArrayInvestigationType(String name) {
+        EfoTerm term = findTermByLabelInSubClasses(name, AE_EXPERIMENT_TYPES, ARRAY_ASSAY);
         return term == null ? null : term.getAccession();
     }
 
@@ -52,5 +52,20 @@ public class MageTabCheckEfoImpl implements MageTabCheckEfo {
     @Override
     public boolean isSequencingProtocol(String accession, String name) {
         return efoService.findTermByLabelOrAccession(name, accession, SEQUENCING_PROTOCOL) != null;
+    }
+
+    private EfoTerm findTermByLabelInSubClasses(String name, String... subclasses) {
+        EfoTerm prev = null;
+        for (String subclass : subclasses) {
+            EfoTerm term = efoService.findTermByLabel(name, subclass);
+            if (term == null) {
+                return null;
+            }
+            if (prev != null && !prev.getAccession().equals(term.getAccession())) {
+                return null;
+            }
+            prev = term;
+        }
+        return prev;
     }
 }

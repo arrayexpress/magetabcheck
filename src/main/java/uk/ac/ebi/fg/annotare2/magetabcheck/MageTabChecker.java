@@ -86,6 +86,6 @@ public class MageTabChecker {
     }
 
     private boolean isMicroArrayExperiment(String type) {
-        return efoService.findMaInvestigationType(type) != null;
+        return efoService.findArrayInvestigationType(type) != null;
     }
 }
