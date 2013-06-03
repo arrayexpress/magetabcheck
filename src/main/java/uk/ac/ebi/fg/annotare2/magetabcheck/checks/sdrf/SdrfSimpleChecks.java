@@ -169,6 +169,27 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
+            ref = "EX04",
+            value = "An extract node must be described by a 'library construction' protocol",
+            application = HTS_ONLY)
+    public void extractNodeMustBeDescribedByLibraryConstructionProtocol(SdrfExtractNode extractNode) {
+        setPosition(extractNode);
+
+        SdrfProtocolNode found = null;
+        for (SdrfProtocolNode protocolNode : getParentsOfClass(extractNode, SdrfProtocolNode.class)) {
+            Protocol protocol = protocolNode.getProtocol();
+            if (protocol == null) {
+                continue;
+            }
+            if (efo.isLibraryConstructionProtocol(protocol.getType())) {
+                found = protocolNode;
+                break;
+            }
+        }
+        assertNotNull(found);
+    }
+
+    @MageTabCheck(
             ref = "LE02",
             value = "A labeled extract node must have name specified",
             application = MICRO_ARRAY_ONLY)
