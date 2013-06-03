@@ -1,3 +1,12 @@
+## Release 1.7
+
+ * EFO service was divided into two: MageTabCheckEfo (specific MageTabCheck) and EfoService (the core); it is needed
+   for easy override/re-use the EFO core graph
+ * [#8](https://github.com/arrayexpress/magetabcheck/issues/8) Add Assay Node check: If 'Technology Type' value = 'array assay' then incoming nodes must be 'Labeled Extract' nodes only
+ * [#10](https://github.com/arrayexpress/magetabcheck/issues/10) Add Assay Node Check: An assay node must be described by a 'sequencing' protocol
+ * [#4](https://github.com/arrayexpress/magetabcheck/issues/10) Add Extract Node Check: An extract node must be described by a 'construction library' protocol
+ * [#14](https://github.com/arrayexpress/magetabcheck/issues/14) Add Labeled Extract Node Check: Number of unique labels in a experiment should not be greater than the number of channels
+
 ## Release 1.6
 
  * fixed a critical bug in graph traverse approach
