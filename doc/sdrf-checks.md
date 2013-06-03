@@ -1,5 +1,5 @@
-# SDRF checks (69)
-(updated: 03/06/2013 11:42)
+# SDRF checks (70)
+(updated: 03/06/2013 14:43)
 
 + [Array Design Attribute Checks](#array-design-attribute-checks)
 + [Array Data Matrix Node Checks](#array-data-matrix-node-checks)
@@ -86,7 +86,7 @@
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
 |EX01|**error**|Both|An extract node must have name specified||
-|EX03|**error**|HTS|An extract node must be described by a 'library construction' protocol||
+|EX04|**error**|HTS|An extract node must be described by a 'library construction' protocol||
 |EX02|warning|Both|An extract node should have 'Material Type' attribute specified||
 |EX03|warning|Both|An extract node should be described by a protocol||
 
@@ -116,6 +116,7 @@
 |LE04|**error**|Micro-array|A labeled extract node must have 'Label' attribute specified||
 |LE03|warning|Micro-array|A labeled extract node should have 'Material Type' attribute specified||
 |LE05|warning|Micro-array|A labeled extract node should be described by a protocol||
+|LE06|warning|Micro-array|Number of unique labels in a experiment should not be greater than the number of channels||
 
 ## Material Type Attribute Checks
 
