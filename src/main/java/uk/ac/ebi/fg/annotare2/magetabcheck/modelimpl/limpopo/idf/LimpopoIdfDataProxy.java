@@ -175,7 +175,7 @@ public class LimpopoIdfDataProxy implements IdfData {
     @Override
     public Protocol getProtocol(String ref) {
         for(Protocol protocol : getProtocols()) {
-            if (ref.equals(protocol.getName())) {
+            if (ref.equals(protocol.getName().getValue())) {
                 return protocol;
             }
         }

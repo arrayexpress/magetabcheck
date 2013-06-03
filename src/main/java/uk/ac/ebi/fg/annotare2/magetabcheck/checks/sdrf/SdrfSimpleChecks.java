@@ -21,7 +21,6 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.FileLocation;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
-import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.ProtocolType;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.*;
 
@@ -335,6 +334,17 @@ public class SdrfSimpleChecks {
         assertNotNull(assayNode.getTechnologyType());
     }
 
+
+    @MageTabCheck(
+            ref = "AN04",
+            value = "'Technology Type' attribute must be equal to 'array assay' in micro-array submissions",
+            application = MICRO_ARRAY_ONLY)
+    public void assayNodeTechnologyTypeIsArrayAssay(SdrfAssayNode assayNode) {
+        setPosition(assayNode);
+        assertNotNull(assayNode.getTechnologyType());
+        assertThat(assayNode.getTechnologyType().getValue().trim(), equalToIgnoringCase("array assay"));
+    }
+
     @MageTabCheck(
             ref = "AN03",
             value = "An assay node must be described by a 'sequencing' protocol",
@@ -343,7 +353,7 @@ public class SdrfSimpleChecks {
         setPosition(assayNode);
 
         SdrfProtocolNode found = null;
-        for(SdrfProtocolNode protocolNode : getProtocolParents(assayNode)) {
+        for (SdrfProtocolNode protocolNode : getParentsOfClass(assayNode, SdrfProtocolNode.class)) {
             Protocol protocol = protocolNode.getProtocol();
             if (protocol == null) {
                 continue;
@@ -354,6 +364,15 @@ public class SdrfSimpleChecks {
             }
         }
         assertNotNull(found);
+    }
+
+    @MageTabCheck(
+            ref = "AN05",
+            value = "If 'Technology Type' value = 'array assay' then incoming nodes must be 'Labeled Extract' nodes only",
+            application = MICRO_ARRAY_ONLY)
+    public void assayNodeMustBeDerrivedFromLabeledExtracts(SdrfAssayNode assayNode) {
+        setPosition(assayNode);
+        assertThat(getParentsOfClass(assayNode, SdrfLabeledExtractNode.class), is(not(empty())));
     }
 
     @MageTabCheck(
@@ -630,7 +649,7 @@ public class SdrfSimpleChecks {
 
     private static void assertNodeIsDescribedByProtocol(SdrfGraphNode node) {
         setPosition(node);
-        assertThat(getProtocolParents(node), is(not(empty())));
+        assertThat(getParentsOfClass(node, SdrfProtocolNode.class), is(not(empty())));
     }
 
     private static void assertFileLocationIsValid(SdrfDataNode dataNode) {
@@ -641,11 +660,11 @@ public class SdrfSimpleChecks {
         }
     }
 
-    private static Collection<SdrfProtocolNode> getProtocolParents(SdrfGraphNode node) {
-        List<SdrfProtocolNode> protocols = newArrayList();
+    private static <T> Collection<T> getParentsOfClass(SdrfGraphNode node, Class<T> parentClass) {
+        List<T> protocols = newArrayList();
         for (SdrfGraphNode p : node.getParentNodes()) {
-            if (SdrfProtocolNode.class.isAssignableFrom(p.getClass())) {
-                protocols.add((SdrfProtocolNode)p);
+            if (parentClass.isAssignableFrom(p.getClass())) {
+                protocols.add((T)p);
             }
         }
         return protocols;

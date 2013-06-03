@@ -1,26 +1,66 @@
 package uk.ac.ebi.fg.annotare2.magetabcheck.modelimpl.limpopo.sdrf;
 
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.AssayNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.HybridizationNode;
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.ArrayDesignAttribute;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
-import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfArrayDesignAttribute;
-import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfAssayNode;
-import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfFactorValueAttribute;
-import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfTechnologyTypeAttribute;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermSource;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.*;
 
 import java.util.Collection;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Collections.emptyList;
 
 /**
  * @author Olga Melnichuk
  */
 public class LimpopoBasedHybridizationNode extends LimpopoBasedSdrfNode<HybridizationNode> implements SdrfAssayNode {
 
-    protected LimpopoBasedHybridizationNode(HybridizationNode node, SdrfHelper helper) {
+    private SdrfTechnologyTypeAttribute technologyType;
+
+    protected LimpopoBasedHybridizationNode(HybridizationNode node, final SdrfHelper helper) {
         super(node, helper);
+        technologyType = new SdrfTechnologyTypeAttribute() {
+            @Override
+            public String getValue() {
+                return "array assay";
+            }
+
+            @Override
+            public String getName() {
+                return "Technology Attribute";
+            }
+
+            @Override
+            public Collection<? extends SdrfGraphAttribute> getAttributes() {
+                return emptyList();
+            }
+
+            @Override
+            public int getLine() {
+                return 0;
+            }
+
+            @Override
+            public int getColumn() {
+                return 0;
+            }
+
+            @Override
+            public String getFileName() {
+                return helper.getSourceName();
+            }
+
+            @Override
+            public String getTermSourceRef() {
+                return null;
+            }
+
+            @Override
+            public TermSource getTermSource() {
+                return null;
+            }
+        };
     }
 
     @Override
@@ -34,7 +74,7 @@ public class LimpopoBasedHybridizationNode extends LimpopoBasedSdrfNode<Hybridiz
 
     @Override
     public SdrfTechnologyTypeAttribute getTechnologyType() {
-        return getAttribute(SdrfTechnologyTypeAttribute.class);
+        return technologyType;
     }
 
     @Override
