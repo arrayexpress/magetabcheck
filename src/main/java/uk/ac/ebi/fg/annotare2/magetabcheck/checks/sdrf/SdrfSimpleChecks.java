@@ -316,7 +316,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "PN06",
-            value = "A protocol must have 'performer' attribute specified",
+            value = "A protocol must have 'performer' attribute specified (for ENA submissions)",
             application = HTS_ONLY)
     public void protocolNodeMustHavePerformerAttribute(SdrfProtocolNode protocolNode) {
         assertProtocolHasPerformerAttribute(protocolNode);
