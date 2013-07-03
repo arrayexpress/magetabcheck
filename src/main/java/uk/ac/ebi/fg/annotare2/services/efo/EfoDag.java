@@ -24,6 +24,7 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +42,16 @@ public class EfoDag {
 
     public EfoNode getNodeById(String efoId) {
         return efoMap.get(efoId);
+    }
+
+    public Collection<EfoNode> getRootNodes() {
+        List<EfoNode> roots = newArrayList();
+        for (EfoNode node : efoMap.values()) {
+            if (node.getParents().isEmpty()) {
+                roots.add(node);
+            }
+        }
+        return roots;
     }
 
     public static class Builder {
