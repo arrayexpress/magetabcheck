@@ -27,6 +27,10 @@ public interface EfoNode {
 
     public String getLabel();
 
+    public String getDefinition();
+
+    public boolean isOrganisational();
+
     public Collection<String> getAlternativeNames();
 
     public Collection<? extends EfoNode> getParents();
