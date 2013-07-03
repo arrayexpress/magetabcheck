@@ -25,7 +25,7 @@ public interface EfoNode {
 
     public String getAccession();
 
-    public String getName();
+    public String getLabel();
 
     public Collection<String> getAlternativeNames();
 

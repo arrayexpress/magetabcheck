@@ -45,7 +45,7 @@ public class EfoServiceImpl implements EfoService {
         EfoNode node = findNode(rootAccession, new Predicate<EfoNode>() {
             @Override
             public boolean apply(@Nullable EfoNode input) {
-                return name.equalsIgnoreCase(input.getName());
+                return name.equalsIgnoreCase(input.getLabel());
             }
         });
         return node == null ? null : node.asTerm();

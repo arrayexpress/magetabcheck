@@ -35,13 +35,24 @@ class ClassAnnotationVisitor extends OWLObjectVisitorAdapter {
 
             @Override
             public void updateNode(String literal, EfoNodeImpl node) {
-                node.setTerm(literal);
+                node.setLabel(literal);
+            }
+        },
+        DEFINITION {
+            @Override
+            public boolean matches(OWLAnnotationProperty property) {
+                return "definition".equals(property.getIRI().getFragment());
+            }
+
+            @Override
+            public void updateNode(String literal, EfoNodeImpl node) {
+                node.setDefinition(literal);
             }
         },
         ORGANIZATIONAL_CLASS {
             @Override
             public boolean matches(OWLAnnotationProperty property) {
-               return  "organizational_class".equals(property.getIRI().getFragment());
+                return "organizational_class".equals(property.getIRI().getFragment());
             }
 
             @Override
@@ -75,7 +86,7 @@ class ClassAnnotationVisitor extends OWLObjectVisitorAdapter {
             if (!(annotation.getValue() instanceof OWLLiteral)) {
                 return null;
             }
-            for(Literal lit : values()) {
+            for (Literal lit : values()) {
                 if (lit.matches(annotation.getProperty())) {
                     return lit;
                 }

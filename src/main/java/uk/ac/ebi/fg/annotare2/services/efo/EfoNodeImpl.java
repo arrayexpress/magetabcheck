@@ -30,7 +30,9 @@ class EfoNodeImpl implements EfoNode {
 
     private final String id;
 
-    private String term;
+    private String label;
+
+    private String definition;
 
     private final List<String> alternativeTerms = newArrayList();
 
@@ -56,8 +58,12 @@ class EfoNodeImpl implements EfoNode {
     }
 
     @Override
-    public String getName() {
-        return term;
+    public String getLabel() {
+        return label;
+    }
+
+    String getDefinition() {
+        return definition;
     }
 
     @Override
@@ -77,11 +83,15 @@ class EfoNodeImpl implements EfoNode {
 
     @Override
     public EfoTerm asTerm() {
-        return new EfoTerm(getAccession(), getName(), getAlternativeNames());
+        return new EfoTerm(getAccession(), getLabel(), getDefinition(), isOrganizational(), getAlternativeNames());
     }
 
-    void setTerm(String term) {
-        this.term = term;
+    void setLabel(String label) {
+        this.label = label;
+    }
+
+    void setDefinition(String definition) {
+        this.definition = definition;
     }
 
     void addChild(EfoNodeImpl child) {

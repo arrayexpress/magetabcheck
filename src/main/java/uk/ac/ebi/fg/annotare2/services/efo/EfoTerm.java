@@ -30,10 +30,14 @@ public class EfoTerm {
     private final String accession;
     private final String label;
     private final List<String> synonyms = newArrayList();
+    private final String definition;
+    private final boolean isOrganisational;
 
-    public EfoTerm(String accession, String label, Collection<String> synonyms) {
+    public EfoTerm(String accession, String label, String definition, boolean isOrganisational,  Collection<String> synonyms) {
         this.accession = accession;
         this.label = label;
+        this.definition = definition;
+        this.isOrganisational = isOrganisational;
         this.synonyms.addAll(synonyms);
     }
 
@@ -47,5 +51,13 @@ public class EfoTerm {
 
     public Collection<String> getSynonyms() {
         return unmodifiableCollection(synonyms);
+    }
+
+    public String getDefinition() {
+        return definition;
+    }
+
+    public boolean isOrganisational() {
+        return isOrganisational;
     }
 }
