@@ -38,7 +38,11 @@ public class EfoDag {
 
     private static final Logger log = LoggerFactory.getLogger(EfoDag.class);
 
-    private Map<String, EfoNodeImpl> efoMap = newHashMap();
+    private final Map<String, EfoNode> efoMap;
+
+    EfoDag(Map<String, EfoNode> efoMap) {
+        this.efoMap = newHashMap(efoMap);
+    }
 
     public EfoNode getNodeById(String efoId) {
         return efoMap.get(efoId);
@@ -66,25 +70,23 @@ public class EfoDag {
         }
 
         public EfoDag build() {
-            EfoDag graph = new EfoDag();
-
             log.debug("Building EFO graph: loading all classes...");
 
-            Map<String, EfoNodeImpl> efoMap = graph.efoMap;
+            Map<String, EfoNode> efoMap = newHashMap();
             for (OWLClass cls : ontology.getClassesInSignature(true)) {
                 loadClass(cls, efoMap);
             }
             log.debug("Building EFO graph: {} classes are loaded", efoMap.size());
-            return graph;
+            return new EfoDag(efoMap);
         }
 
-        private EfoNodeImpl loadClass(OWLClass cls, Map<String, EfoNodeImpl> visited) {
+        private EfoNodeImpl loadClass(OWLClass cls, Map<String, EfoNode> visited) {
             if (!reasoner.isSatisfiable(cls)) {
                 return null;
             }
 
             String id = getId(cls);
-            EfoNodeImpl node = visited.get(id);
+            EfoNodeImpl node = (EfoNodeImpl) visited.get(id);
             if (node != null) {
                 return node;
             }

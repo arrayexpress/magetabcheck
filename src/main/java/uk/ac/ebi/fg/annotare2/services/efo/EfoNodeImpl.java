@@ -40,7 +40,6 @@ class EfoNodeImpl implements EfoNode {
 
     private final List<EfoNodeImpl> children = newArrayList();
 
-
     private boolean isOrganisational;
 
     EfoNodeImpl(String id) {
