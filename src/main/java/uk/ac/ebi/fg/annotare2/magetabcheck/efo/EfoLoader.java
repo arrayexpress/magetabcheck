@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.services.efo;
+package uk.ac.ebi.fg.annotare2.magetabcheck.efo;
 
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;

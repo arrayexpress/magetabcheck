@@ -23,8 +23,8 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfoImpl;
 import uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownProtocolHardware;
 import uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource;
-import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
-import uk.ac.ebi.fg.annotare2.services.efo.EfoTerm;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.EfoService;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.EfoTerm;
 
 import java.util.Collections;
 

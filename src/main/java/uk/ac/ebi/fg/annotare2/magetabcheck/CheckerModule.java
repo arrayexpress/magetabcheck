@@ -21,9 +21,9 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.*;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfoImpl;
-import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
-import uk.ac.ebi.fg.annotare2.services.efo.EfoServiceProperties;
-import uk.ac.ebi.fg.annotare2.services.efo.EfoServiceProvider;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.EfoService;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.EfoServiceProperties;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.EfoServiceProvider;
 
 import java.util.List;
 

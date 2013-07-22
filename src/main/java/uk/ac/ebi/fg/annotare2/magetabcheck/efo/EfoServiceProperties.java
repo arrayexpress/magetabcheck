@@ -14,28 +14,31 @@
  * limitations under the License.
  */
 
-package uk.ac.ebi.fg.annotare2.services.efo;
+package uk.ac.ebi.fg.annotare2.magetabcheck.efo;
 
-import java.util.Collection;
+import java.io.File;
+import java.net.URL;
 
 /**
  * @author Olga Melnichuk
  */
-public interface EfoNode {
+public interface EfoServiceProperties {
 
-    public String getAccession();
+    /**
+     * An EFO url to download EFO file from
+     * @return an {@link URL} object
+     */
+    URL getEfoUrl();
 
-    public String getLabel();
+    /**
+     * An EFO cachedir; to reuse downloaded EFO with future runs
+     * @return a local file directory path
+     */
+    File getCacheDir();
 
-    public String getDefinition();
-
-    public boolean isOrganisational();
-
-    public Collection<String> getAlternativeNames();
-
-    public Collection<? extends EfoNode> getParents();
-
-    public Collection<? extends EfoNode> getChildren();
-
-    public EfoTerm asTerm();
+    /**
+     * An OWL API setting
+     * @return an integer number
+     */
+    int getOwlEntityExpansionLimit();
 }

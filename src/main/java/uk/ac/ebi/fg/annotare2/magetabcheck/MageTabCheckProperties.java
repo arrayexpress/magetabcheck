@@ -18,7 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetabcheck;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.fg.annotare2.services.efo.EfoServiceProperties;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.EfoServiceProperties;
 
 import java.io.*;
 import java.net.MalformedURLException;

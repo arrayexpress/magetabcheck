@@ -19,8 +19,6 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.efo;
 import com.google.inject.Inject;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Term;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermSource;
-import uk.ac.ebi.fg.annotare2.services.efo.EfoService;
-import uk.ac.ebi.fg.annotare2.services.efo.EfoTerm;
 
 import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.EFO;
 
