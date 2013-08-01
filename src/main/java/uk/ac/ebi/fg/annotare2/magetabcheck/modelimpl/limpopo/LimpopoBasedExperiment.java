@@ -16,7 +16,9 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.modelimpl.limpopo;
 
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.IDF;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.MAGETABInvestigation;
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.SDRF;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.Experiment;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.IdfData;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfGraph;
@@ -33,8 +35,12 @@ public class LimpopoBasedExperiment implements Experiment {
     private final SdrfGraph sdrfGraph;
 
     public LimpopoBasedExperiment(MAGETABInvestigation inv) {
-        this.idfData = new LimpopoIdfDataProxy(inv.IDF);
-        this.sdrfGraph = new LimpopoBasedSdrfGraph(inv.SDRF, idfData);
+        this(inv.IDF, inv.SDRF);
+    }
+
+    public LimpopoBasedExperiment(IDF idf, SDRF sdrf) {
+        this.idfData = new LimpopoIdfDataProxy(idf);
+        this.sdrfGraph = new LimpopoBasedSdrfGraph(sdrf, idfData);
     }
 
     @Override
