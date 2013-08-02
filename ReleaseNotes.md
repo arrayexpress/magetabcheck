@@ -1,3 +1,11 @@
+## Release 1.8
+
+ * 'efo' package is in 'magetabcheck' package now
+ * EfoTerm now has 'definition' property (Annotare2 requires this feature)
+ * LimpopoBasedExperiment can be created with separate IDF and SDRF instances (Annotare2 requires this feature)
+ * [#28](https://github.com/arrayexpress/magetabcheck/issues/28) Add SDRF-to-IDF ref check: IDF should not contain protocol definitions that are not used in SDRF
+ * [#9](https://github.com/arrayexpress/magetabcheck/issues/9) Add Assay Node check: 'Technology Type' value = 'array assay' then incoming 'Labeled Extract nodes must have distinct labels
+
 ## Release 1.7
 
  * EFO service was divided into two: MageTabCheckEfo (specific MageTabCheck) and EfoService (the core); it is needed
