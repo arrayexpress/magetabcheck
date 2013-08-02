@@ -50,7 +50,9 @@ public class IdfProtocolUsageCheck {
     @Visit
     public void visit(SdrfProtocolNode protocolNode) {
         Protocol protocol = protocolNode.getProtocol();
-        usedProtocols.add(protocol.getName().getValue());
+        if (protocol != null) {
+            usedProtocols.add(protocol.getName().getValue());
+        }
     }
 
     @Check
