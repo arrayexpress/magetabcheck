@@ -85,6 +85,8 @@ public class CheckListGenerator {
         prefixes.put("DADN", "Derived Array Data Node");
         prefixes.put("ADMN", "Array Data Matrix Node");
         prefixes.put("DADMN", "Derived Array Data Matrix Node");
+
+        prefixes.put("REF", "SDRF-IDF reference checks");
     }
 
     private static final Map<String, RefList> refs = newHashMap();
