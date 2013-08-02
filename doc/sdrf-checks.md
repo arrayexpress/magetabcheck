@@ -1,5 +1,5 @@
-# SDRF checks (70)
-(updated: 02/08/2013 14:53)
+# SDRF checks (71)
+(updated: 02/08/2013 15:55)
 
 + [Array Design Attribute Checks](#array-design-attribute-checks)
 + [Array Data Matrix Node Checks](#array-data-matrix-node-checks)
@@ -56,6 +56,7 @@
 |AN03|**error**|HTS|An assay node must be described by a 'sequencing' protocol||
 |AN04|**error**|Micro-array|'Technology Type' attribute must be equal to 'array assay' in micro-array submissions||
 |AN05|**error**|Micro-array|If 'Technology Type' value = 'array assay' then incoming nodes must be 'Labeled Extract' nodes only||
+|AN06|**error**|Micro-array|If 'Technology Type' value = 'array assay' then incoming 'Labeled Extract nodes must have distinct labels||
 
 ## Characteristic Attribute Checks
 

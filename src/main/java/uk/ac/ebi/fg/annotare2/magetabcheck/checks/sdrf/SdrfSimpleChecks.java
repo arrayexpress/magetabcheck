@@ -26,9 +26,11 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.*;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.HTS_ONLY;
@@ -394,6 +396,20 @@ public class SdrfSimpleChecks {
     public void assayNodeMustBeDerrivedFromLabeledExtracts(SdrfAssayNode assayNode) {
         setPosition(assayNode);
         assertThat(getParentsOfClass(assayNode, SdrfLabeledExtractNode.class), is(not(empty())));
+    }
+
+    @MageTabCheck(
+            ref = "AN06",
+            value = "If 'Technology Type' value = 'array assay' then incoming 'Labeled Extract nodes must have distinct labels",
+            application = MICRO_ARRAY_ONLY)
+    public void assayNodeMustHaveDistinctLabeledExtracts(SdrfAssayNode assayNode) {
+        setPosition(assayNode);
+        Collection<SdrfLabeledExtractNode> incomingLabeledExtracts = getParentsOfClass(assayNode, SdrfLabeledExtractNode.class);
+        Set<String> labels = newHashSet();
+        for(SdrfLabeledExtractNode labeledExtractNode : incomingLabeledExtracts) {
+            String label = labeledExtractNode.getLabel().getValue();
+            assertThat(labels.add(label), is(true));
+        }
     }
 
     @MageTabCheck(
