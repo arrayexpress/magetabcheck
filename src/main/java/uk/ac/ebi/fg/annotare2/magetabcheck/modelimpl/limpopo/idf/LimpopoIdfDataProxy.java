@@ -22,6 +22,7 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.*;
 import javax.annotation.Nonnull;
 import java.util.*;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.primitives.Ints.max;
 
@@ -144,7 +145,7 @@ public class LimpopoIdfDataProxy implements IdfData {
     public Collection<Comment> getComments(String type) {
         Map<String, Set<String>> allComments = idfHelper.idf().getComments();
         Set<String> comments = allComments.containsKey(type) ?
-                allComments.get(type): Collections.<String>emptySet();
+                allComments.get(type) : Collections.<String>emptySet();
         return createComments(comments, type);
     }
 
@@ -174,7 +175,7 @@ public class LimpopoIdfDataProxy implements IdfData {
 
     @Override
     public Protocol getProtocol(String ref) {
-        for(Protocol protocol : getProtocols()) {
+        for (Protocol protocol : getProtocols()) {
             if (ref.equals(protocol.getName().getValue())) {
                 return protocol;
             }
@@ -183,6 +184,14 @@ public class LimpopoIdfDataProxy implements IdfData {
     }
 
     private int size(List<String> list) {
-        return list == null || list.isEmpty() ? 0 : list.size();
+        if (list == null) {
+            return 0;
+        }
+        for (int i = list.size() - 1; i >= 0; i--) {
+            if (!isNullOrEmpty(list.get(i))) {
+                return i + 1;
+            }
+        }
+        return 0;
     }
 }
