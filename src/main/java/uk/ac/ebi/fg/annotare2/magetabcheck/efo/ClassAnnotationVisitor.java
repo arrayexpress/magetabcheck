@@ -41,7 +41,7 @@ class ClassAnnotationVisitor extends OWLObjectVisitorAdapter {
         DEFINITION {
             @Override
             public boolean matches(OWLAnnotationProperty property) {
-                return "http://www.ebi.ac.uk/efo/definition_citation".equals(property.getIRI().toString());
+                return "definition".equals(property.getIRI().getFragment());
             }
 
             @Override
