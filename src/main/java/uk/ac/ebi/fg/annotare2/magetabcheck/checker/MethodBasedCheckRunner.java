@@ -24,8 +24,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionKeeper.clearCheckPosition;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionKeeper.getCheckPosition;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.clearCheckPosition;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.getCheckPosition;
 
 /**
  * @author Olga Melnichuk

@@ -21,9 +21,9 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPosition.createPo
 /**
  * @author Olga Melnichuk
  */
-public class CheckPositionKeeper {
+public class CheckPositionSetter {
 
-    public static final ThreadLocal<CheckPositionKeeper> threadLocal = new ThreadLocal<CheckPositionKeeper>();
+    public static final ThreadLocal<CheckPositionSetter> threadLocal = new ThreadLocal<CheckPositionSetter>();
     static {
         clearCheckPosition();
     }
@@ -39,11 +39,15 @@ public class CheckPositionKeeper {
     }
 
     public static void clearCheckPosition() {
-        threadLocal.set(new CheckPositionKeeper());
+        threadLocal.set(new CheckPositionSetter());
     }
 
     public static void setCheckPosition(String fileName, int line, int column) {
-        threadLocal.get().setPosition(createPosition(fileName, line, column));
+        setCheckPosition(createPosition(fileName, line, column));
+    }
+
+    public static void setCheckPosition(CheckPosition position) {
+        threadLocal.get().setPosition(position);
     }
 
     public static CheckPosition getCheckPosition() {

@@ -16,6 +16,7 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.sdrf;
 
+import com.google.common.base.Predicate;
 import com.google.inject.Inject;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
@@ -24,11 +25,11 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.*;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import javax.annotation.Nullable;
+import java.util.*;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.collect.Collections2.filter;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -36,7 +37,7 @@ import static org.hamcrest.Matchers.*;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.HTS_ONLY;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.MICRO_ARRAY_ONLY;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.WARNING;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionKeeper.setCheckPosition;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.setCheckPosition;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfConstants.DATE_FORMAT;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.matchers.IsDateString.isDateString;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.matchers.IsValidFileLocation.isValidFileLocation;
@@ -178,7 +179,7 @@ public class SdrfSimpleChecks {
         setPosition(extractNode);
 
         SdrfProtocolNode found = null;
-        for (SdrfProtocolNode protocolNode : getParentsOfClass(extractNode, SdrfProtocolNode.class)) {
+        for (SdrfProtocolNode protocolNode : getParentProtocolNodes(extractNode)) {
             Protocol protocol = protocolNode.getProtocol();
             if (protocol == null) {
                 continue;
@@ -376,7 +377,7 @@ public class SdrfSimpleChecks {
         setPosition(assayNode);
 
         SdrfProtocolNode found = null;
-        for (SdrfProtocolNode protocolNode : getParentsOfClass(assayNode, SdrfProtocolNode.class)) {
+        for (SdrfProtocolNode protocolNode : getParentProtocolNodes(assayNode)) {
             Protocol protocol = protocolNode.getProtocol();
             if (protocol == null) {
                 continue;
@@ -395,7 +396,14 @@ public class SdrfSimpleChecks {
             application = MICRO_ARRAY_ONLY)
     public void assayNodeMustBeDerrivedFromLabeledExtracts(SdrfAssayNode assayNode) {
         setPosition(assayNode);
-        assertThat(getParentsOfClass(assayNode, SdrfLabeledExtractNode.class), is(not(empty())));
+        Collection<SdrfGraphNode> parents = getParentNodes(assayNode);
+        Collection<SdrfGraphNode> filtered = filter(parents, new Predicate<SdrfGraphNode>() {
+            @Override
+            public boolean apply(@Nullable SdrfGraphNode input) {
+                return SdrfLabeledExtractNode.class.isAssignableFrom(input.getClass());
+            }
+        });
+        assertThat(parents.size(), equalTo(filtered.size()));
     }
 
     @MageTabCheck(
@@ -404,10 +412,15 @@ public class SdrfSimpleChecks {
             application = MICRO_ARRAY_ONLY)
     public void assayNodeMustHaveDistinctLabeledExtracts(SdrfAssayNode assayNode) {
         setPosition(assayNode);
-        Collection<SdrfLabeledExtractNode> incomingLabeledExtracts = getParentsOfClass(assayNode, SdrfLabeledExtractNode.class);
+        Collection<SdrfGraphNode> parentNodes = filter(getParentNodes(assayNode), new Predicate<SdrfGraphNode>() {
+            @Override
+            public boolean apply(@Nullable SdrfGraphNode input) {
+                return SdrfLabeledExtractNode.class.isAssignableFrom(input.getClass());
+            }
+        });
         Set<String> labels = newHashSet();
-        for(SdrfLabeledExtractNode labeledExtractNode : incomingLabeledExtracts) {
-            String label = labeledExtractNode.getLabel().getValue();
+        for(SdrfGraphNode node : parentNodes) {
+            String label = ((SdrfLabeledExtractNode)node).getLabel().getValue();
             assertThat(labels.add(label), is(true));
         }
     }
@@ -686,7 +699,7 @@ public class SdrfSimpleChecks {
 
     private static void assertNodeIsDescribedByProtocol(SdrfGraphNode node) {
         setPosition(node);
-        assertThat(getParentsOfClass(node, SdrfProtocolNode.class), is(not(empty())));
+        assertThat(getParentProtocolNodes(node), is(not(empty())));
     }
 
     private static void assertFileLocationIsValid(SdrfDataNode dataNode) {
@@ -697,14 +710,30 @@ public class SdrfSimpleChecks {
         }
     }
 
-    private static <T> Collection<T> getParentsOfClass(SdrfGraphNode node, Class<T> parentClass) {
-        List<T> protocols = newArrayList();
-        for (SdrfGraphNode p : node.getParentNodes()) {
-            if (parentClass.isAssignableFrom(p.getClass())) {
-                protocols.add((T)p);
+    private static Collection<SdrfProtocolNode> getParentProtocolNodes(SdrfGraphNode node) {
+        List<SdrfProtocolNode> protocols = newArrayList();
+        Queue<SdrfGraphNode> queue = new ArrayDeque<SdrfGraphNode>();
+        queue.addAll(node.getParentNodes());
+        while (!queue.isEmpty()) {
+            SdrfGraphNode p = queue.poll();
+            if (SdrfProtocolNode.class.isAssignableFrom(p.getClass())) {
+                protocols.add((SdrfProtocolNode) p);
+                queue.addAll(p.getParentNodes());
             }
         }
         return protocols;
+    }
+
+    private static Collection<SdrfGraphNode> getParentNodes(SdrfGraphNode node) {
+        List<SdrfGraphNode> parents = newArrayList();
+        for (SdrfGraphNode p : node.getParentNodes()) {
+            if (SdrfProtocolNode.class.isAssignableFrom(p.getClass())) {
+                parents.addAll(getParentNodes(p));
+            } else {
+                parents.add(p);
+            }
+        }
+        return parents;
     }
 
     private static <T extends HasLocation> void setPosition(T t) {

@@ -16,18 +16,15 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.checker;
 
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.Cell;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.primitives.Ints.compare;
 
 /**
  * @author Olga Melnichuk
  */
 public class CheckPosition implements Comparable<CheckPosition> {
-
-    static final int NO_INDEX = -1;
-
-    static final String NO_FILE_NAME = "NoFileName";
-
-    private static final CheckPosition UNDEFINED = new CheckPosition(null, NO_INDEX, NO_INDEX);
 
     private final String fileName;
 
@@ -36,7 +33,7 @@ public class CheckPosition implements Comparable<CheckPosition> {
     private final int column;
 
     private CheckPosition(String fileName, int line, int column) {
-        this.fileName = fileName == null ? NO_FILE_NAME : fileName;
+        this.fileName = fileName;
         this.line = line;
         this.column = column;
     }
@@ -54,11 +51,15 @@ public class CheckPosition implements Comparable<CheckPosition> {
     }
 
     public String asString() {
-        return isUndefined() ? "UNLOCATED" : fileName + "@(" + line + ", " + column + ")";
+        return isNullOrEmpty(fileName) ? "UNLOCATED" : fileName + "@(" + printIndex(line) + ", " + printIndex(column) + ")";
+    }
+
+    private String printIndex(int index) {
+        return index < 0 ? "unknown" : Integer.toString(index);
     }
 
     public boolean isUndefined() {
-        return this == UNDEFINED;
+        return line < 0 || column < 0 || isNullOrEmpty(fileName);
     }
 
     @Override
@@ -91,11 +92,15 @@ public class CheckPosition implements Comparable<CheckPosition> {
         return compare(column, o.column);
     }
 
+    public static CheckPosition createPosition(Cell<?> cell) {
+        return createPosition(cell.getSourceName(), cell.getLine(), cell.getColumn());
+    }
+
     public static CheckPosition createPosition(String fileName, int line, int column) {
-        return line == NO_INDEX || column == NO_INDEX ? UNDEFINED : new CheckPosition(fileName, line, column);
+        return new CheckPosition(fileName, line, column);
     }
 
     public static CheckPosition undefinedPosition() {
-        return UNDEFINED;
+        return new CheckPosition(null, -1, -1);
     }
 }

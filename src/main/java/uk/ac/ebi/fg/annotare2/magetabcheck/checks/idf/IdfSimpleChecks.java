@@ -18,6 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 
 import org.hamcrest.Matchers;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPosition;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.Cell;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.FileLocation;
@@ -30,7 +31,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.MICRO_ARRAY_ONLY;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.WARNING;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionKeeper.setCheckPosition;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPosition.createPosition;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.setCheckPosition;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfConstants.DATE_FORMAT;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfConstants.SUBMITTER_ROLE;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.matchers.IsDateString.isDateString;
@@ -410,7 +412,7 @@ public class IdfSimpleChecks {
         assertThat(cell.getValue(), not(isEmptyString()));
     }
 
-    private static <T> void setPosition(Cell<T> cell) {
-        setCheckPosition(cell.getSourceName(), cell.getLine(), cell.getColumn());
+    private static void setPosition(Cell<?> cell) {
+        setCheckPosition(createPosition(cell));
     }
 }
