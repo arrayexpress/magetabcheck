@@ -115,7 +115,7 @@ class LimpopoBasedPerson extends LimpopoBasedIdfObject implements Person {
         return new TermList() {
             @Override
             public Cell<List<String>> getNames() {
-                return  createCell(
+                return createCell(
                         Collections.unmodifiableList(names),
                         idf().getLayout().getLineNumberForHeader(IdfTags.PERSON_ROLES));
             }

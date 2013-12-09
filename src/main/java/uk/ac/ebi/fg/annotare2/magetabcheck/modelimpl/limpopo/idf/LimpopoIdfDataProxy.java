@@ -44,16 +44,16 @@ public class LimpopoIdfDataProxy implements IdfData {
 
     @Override
     public Collection<Person> getContacts() {
-        IDF idf = idfHelper.idf();
-        int size = max(size(idf.personFirstName),
-                size(idf.personLastName),
-                size(idf.personEmail),
-                size(idf.personAddress),
-                size(idf.personAffiliation),
-                size(idf.personPhone),
-                size(idf.personMidInitials),
-                size(idf.personFax),
-                size(idf.personRoles));
+        int size = max(
+                size(idf().personFirstName),
+                size(idf().personLastName),
+                size(idf().personEmail),
+                size(idf().personAddress),
+                size(idf().personAffiliation),
+                size(idf().personPhone),
+                size(idf().personMidInitials),
+                size(idf().personFax),
+                size(idf().personRoles));
         List<Person> contacts = newArrayList();
         for (int i = 0; i < size; i++) {
             contacts.add(new LimpopoBasedPerson(idfHelper, i));
@@ -63,7 +63,10 @@ public class LimpopoIdfDataProxy implements IdfData {
 
     @Override
     public Collection<ExperimentalDesign> getExperimentDesigns() {
-        int size = size(idfHelper.idf().experimentalDesign);
+        int size = max(
+                size(idf().experimentalDesign),
+                size(idf().experimentalDesignTermAccession),
+                size(idf().experimentalDesignTermSourceREF));
         List<ExperimentalDesign> designs = newArrayList();
         for (int i = 0; i < size; i++) {
             designs.add(new LimpopoBasedExperimentalDesign(idfHelper, i));
@@ -73,8 +76,11 @@ public class LimpopoIdfDataProxy implements IdfData {
 
     @Override
     public Collection<ExperimentalFactor> getExperimentalFactors() {
-        int size = max(size(idfHelper.idf().experimentalFactorName),
-                size(idfHelper.idf().experimentalFactorType));
+        int size = max(
+                size(idf().experimentalFactorName),
+                size(idf().experimentalFactorType),
+                size(idf().experimentalFactorTermAccession),
+                size(idf().experimentalDesignTermSourceREF));
         List<ExperimentalFactor> factors = newArrayList();
         for (int i = 0; i < size; i++) {
             factors.add(new LimpopoBasedExperimentalFactor(idfHelper, i));
@@ -84,7 +90,10 @@ public class LimpopoIdfDataProxy implements IdfData {
 
     @Override
     public Collection<QualityControlType> getQualityControlTypes() {
-        int size = size(idfHelper.idf().qualityControlType);
+        int size = max(
+                size(idf().qualityControlType),
+                size(idf().qualityControlTermAccession),
+                size(idf().qualityControlTermSourceREF));
         List<QualityControlType> qualityControlTypes = newArrayList();
         for (int i = 0; i < size; i++) {
             qualityControlTypes.add(new LimpopoBasedQualityControlType(idfHelper, i));
@@ -94,7 +103,10 @@ public class LimpopoIdfDataProxy implements IdfData {
 
     @Override
     public Collection<ReplicateType> getReplicateTypes() {
-        int size = size(idfHelper.idf().replicateType);
+        int size = max(
+                size(idf().replicateType),
+                size(idf().replicateTermAccession),
+                size(idf().replicateTermSourceREF));
         List<ReplicateType> replicateTypes = newArrayList();
         for (int i = 0; i < size; i++) {
             replicateTypes.add(new LimpopoBasedReplicateType(idfHelper, i));
@@ -104,7 +116,10 @@ public class LimpopoIdfDataProxy implements IdfData {
 
     @Override
     public Collection<NormalizationType> getNormalizationTypes() {
-        int size = size(idfHelper.idf().normalizationType);
+        int size = max(
+                size(idf().normalizationType),
+                size(idf().normalizationTermAccession),
+                size(idf().normalizationTermSourceREF));
         List<NormalizationType> normalizationTypes = newArrayList();
         for (int i = 0; i < size; i++) {
             normalizationTypes.add(new LimpopoBasedNormalizationType(idfHelper, i));
@@ -114,11 +129,14 @@ public class LimpopoIdfDataProxy implements IdfData {
 
     @Override
     public Collection<Publication> getPublications() {
-        int size = max(size(idfHelper.idf().publicationTitle),
-                size(idfHelper.idf().publicationStatus),
-                size(idfHelper.idf().pubMedId),
-                size(idfHelper.idf().publicationDOI),
-                size(idfHelper.idf().publicationAuthorList));
+        int size = max(
+                size(idf().publicationTitle),
+                size(idf().publicationAuthorList),
+                size(idf().pubMedId),
+                size(idf().publicationDOI),
+                size(idf().publicationStatus),
+                size(idf().publicationStatusTermAccession),
+                size(idf().publicationStatusTermSourceREF));
         List<Publication> publications = newArrayList();
         for (int i = 0; i < size; i++) {
             publications.add(new LimpopoBasedPublication(idfHelper, i));
@@ -128,7 +146,16 @@ public class LimpopoIdfDataProxy implements IdfData {
 
     @Override
     public Collection<Protocol> getProtocols() {
-        int size = size(idfHelper.idf().protocolName);
+        int size = max(
+                size(idf().protocolName),
+                size(idf().protocolDescription),
+                size(idf().protocolContact),
+                size(idf().protocolParameters),
+                size(idf().protocolHardware),
+                size(idf().protocolSoftware),
+                size(idf().protocolType),
+                size(idf().protocolTermAccession),
+                size(idf().protocolTermSourceREF));
         List<Protocol> protocols = newArrayList();
         for (int i = 0; i < size; i++) {
             protocols.add(new LimpopoBasedProtocol(idfHelper, i));
@@ -143,7 +170,7 @@ public class LimpopoIdfDataProxy implements IdfData {
 
     @Override
     public Collection<Comment> getComments(String type) {
-        Map<String, Set<String>> allComments = idfHelper.idf().getComments();
+        Map<String, Set<String>> allComments = idf().getComments();
         Set<String> comments = allComments.containsKey(type) ?
                 allComments.get(type) : Collections.<String>emptySet();
         return createComments(comments, type);
@@ -151,7 +178,7 @@ public class LimpopoIdfDataProxy implements IdfData {
 
     @Override
     public Collection<Comment> getComments() {
-        Map<String, Set<String>> allComments = idfHelper.idf().getComments();
+        Map<String, Set<String>> allComments = idf().getComments();
         List<Comment> comments = newArrayList();
         for (String type : allComments.keySet()) {
             comments.addAll(createComments(allComments.get(type), type));
@@ -181,6 +208,11 @@ public class LimpopoIdfDataProxy implements IdfData {
             }
         }
         return null;
+    }
+
+
+    private IDF idf() {
+        return idfHelper.idf();
     }
 
     private int size(List<String> list) {

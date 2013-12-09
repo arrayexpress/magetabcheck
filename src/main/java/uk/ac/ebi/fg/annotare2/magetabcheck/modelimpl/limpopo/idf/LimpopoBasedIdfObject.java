@@ -33,7 +33,7 @@ abstract class LimpopoBasedIdfObject {
     private final int index;
 
     public LimpopoBasedIdfObject(@Nonnull IdfHelper helper) {
-        this(helper, 0);
+        this(helper, -1);
     }
 
     public LimpopoBasedIdfObject(@Nonnull IdfHelper helper, int index) {
@@ -50,7 +50,7 @@ abstract class LimpopoBasedIdfObject {
     }
 
     protected String get(List<String> list) {
-        return list == null || index >= list.size() ? null : list.get(index);
+        return list == null || index < 0 || index >= list.size() ? null : list.get(index);
     }
 
     protected int getColumn() {
