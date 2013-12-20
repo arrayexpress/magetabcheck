@@ -1,5 +1,5 @@
-# SDRF checks (71)
-(updated: 02/08/2013 15:55)
+# SDRF checks (67)
+(updated: 20/12/2013 15:05)
 
 + [Array Design Attribute Checks](#array-design-attribute-checks)
 + [Array Data Matrix Node Checks](#array-data-matrix-node-checks)
@@ -36,7 +36,6 @@
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
 |ADMN01|**error**|Both|An array data matrix node must have name specified||
-|ADMN02|**error**|Both|Name of an array data matrix node must be valid file location||
 |ADMN03|warning|Both|An array data matrix node should be described by a protocol||
 
 ## Array Data Node Checks
@@ -44,7 +43,6 @@
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
 |ADN01|**error**|Both|An array data node must have a name||
-|ADN02|**error**|Both|Name of an array data node must be a valid file location||
 |ADN03|warning|Both|An array data node should be described by a protocol||
 
 ## Assay Node Checks
@@ -71,7 +69,6 @@
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
 |DADMN01|**error**|Both|A derived array data matrix node must have name specified||
-|DADMN02|**error**|Both|Name of derived data matrix node must be valid file location||
 |DADMN03|warning|Both|A derived array data matrix node should be described by protocol||
 
 ## Derived Array Data Node Checks
@@ -79,7 +76,6 @@
 |Ref|Modality|Type|Title|Details|
 |---|--------|----|-----|-------|
 |DADN01|**error**|Both|A derived array data node must have name specified||
-|DADN02|**error**|Both|Name of a derived array data node must be a valid file location||
 |DADN03|warning|Both|A derived array data node should be described by a protocol||
 
 ## Extract Node Checks

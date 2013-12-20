@@ -592,12 +592,12 @@ public class SdrfSimpleChecks {
         assertNotEmptyName(arrayDataNode);
     }
 
-    @MageTabCheck(
+    /*@MageTabCheck(
             ref = "ADN02",
             value = "Name of an array data node must be a valid file location")
     public void nameOfArrayDataNodeMustBeValidFileLocation(SdrfArrayDataNode arrayDataNode) {
         assertFileLocationIsValid(arrayDataNode);
-    }
+    }*/
 
     @MageTabCheck(
             ref = "ADN03",
@@ -615,12 +615,12 @@ public class SdrfSimpleChecks {
         assertNotEmptyName(derivedArrayDataNode);
     }
 
-    @MageTabCheck(
+   /* @MageTabCheck(
             ref = "DADN02",
             value = "Name of a derived array data node must be a valid file location")
     public void nameOfDerivedArrayDataNodeMustBeValidFileLocation(SdrfDerivedArrayDataNode derivedArrayDataNode) {
         assertFileLocationIsValid(derivedArrayDataNode);
-    }
+    }*/
 
     @MageTabCheck(
             ref = "DADN03",
@@ -637,12 +637,12 @@ public class SdrfSimpleChecks {
         assertNotEmptyName(arrayDataMatrixNode);
     }
 
-    @MageTabCheck(
+    /*@MageTabCheck(
             ref = "ADMN02",
             value = "Name of an array data matrix node must be valid file location")
     public void nameOfArrayDataMatrixNodeMustBeValidFileLocation(SdrfArrayDataMatrixNode arrayDataMatrixNode) {
         assertFileLocationIsValid(arrayDataMatrixNode);
-    }
+    }*/
 
     @MageTabCheck(
             ref = "ADMN03",
@@ -659,13 +659,13 @@ public class SdrfSimpleChecks {
         assertNotEmptyName(derivedArrayDataMatrixNode);
     }
 
-    @MageTabCheck(
+    /*@MageTabCheck(
             ref = "DADMN02",
             value = "Name of derived data matrix node must be valid file location")
     public void nameOfDerivedArrayDataMatrixNodeMustBeValidFileLocation(
             SdrfDerivedArrayDataMatrixNode derivedArrayDataMatrixNode) {
         assertFileLocationIsValid(derivedArrayDataMatrixNode);
-    }
+    }*/
 
     @MageTabCheck(
             ref = "DADMN03",
