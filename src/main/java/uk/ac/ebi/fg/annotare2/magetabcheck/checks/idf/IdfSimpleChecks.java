@@ -350,8 +350,7 @@ public class IdfSimpleChecks {
 
     @MageTabCheck(
             ref = "PR05",
-            value = "Description of a protocol should be specified",
-            modality = WARNING)
+            value = "Description of a protocol should be specified")
     public void protocolShouldHaveDescription(Protocol prot) {
         assertNotEmptyString(prot.getDescription());
     }
