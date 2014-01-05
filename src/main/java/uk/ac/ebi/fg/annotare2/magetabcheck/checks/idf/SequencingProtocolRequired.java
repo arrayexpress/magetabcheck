@@ -23,15 +23,10 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checks.RangeCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
-import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.ProtocolType;
-import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermSource;
 
 import javax.annotation.Nullable;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Ranges.singleton;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownProtocolHardware.isValidProtocolHardware;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.EFO;
 
 /**
  * @author Olga Melnichuk
@@ -42,8 +37,7 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.EFO;
         application = CheckApplicationType.HTS_ONLY,
         details = "1. A `Protocol Type` field must be the name of " +
                 "['sequencing protocols class' in EFO](http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004170) " +
-                "or one of its children;<br/>2. `Protocol Term Source REF` must be \"EFO\" ([full list](#term-source-list))" +
-                "<br/>3. `Protocol Hardware` field must contain a comma separated list of protocol hardware used ([supported term sources](#protocol-hardware-list));")
+                "or one of its children;<br/>2. `Protocol Term Source REF` must be \"EFO\" if specified ([full list](#term-source-list))")
 public class SequencingProtocolRequired extends RangeCheck<Protocol> {
 
     @Inject
@@ -51,26 +45,16 @@ public class SequencingProtocolRequired extends RangeCheck<Protocol> {
         super(new SequencingProtocolPredicate(efo), singleton(1));
     }
 
-    private static class SequencingProtocolPredicate implements Predicate<Protocol> {
+    static class SequencingProtocolPredicate implements Predicate<Protocol> {
         private final MageTabCheckEfo efo;
 
-        private SequencingProtocolPredicate(MageTabCheckEfo efo) {
+        SequencingProtocolPredicate(MageTabCheckEfo efo) {
             this.efo = efo;
         }
 
         @Override
         public boolean apply(@Nullable Protocol protocol) {
-            return efo.isSequencingProtocol(protocol.getType())
-                    && hasSequencingHardware(protocol);
-        }
-
-        private boolean hasSequencingHardware(Protocol protocol) {
-            String hardware = protocol.getHardware().getValue();
-            if (isNullOrEmpty(hardware)) {
-                return false;
-            }
-            String[] v = hardware.trim().split("\\s*,\\s*");
-            return isValidProtocolHardware(v);
+            return protocol != null && efo.isSequencingProtocol(protocol.getType());
         }
     }
 }

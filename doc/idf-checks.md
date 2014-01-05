@@ -1,5 +1,5 @@
-# IDF checks (55)
-(updated: 20/12/2013 15:09)
+# IDF checks (56)
+(updated: 05/01/2014 15:58)
 
 + [Contact Checks](#contact-checks)
 + [MAGE TAB Comment Checks](#mage-tab-comment-checks)
@@ -94,8 +94,9 @@
 |PR02|**error**|Both|Name of a protocol must be specified||
 |PR03|**error**|Both|A protocol type must be specified||
 |PR05|**error**|Both|Description of a protocol should be specified||
-|PR08|**error**|HTS|Library construction protocol is required for HTS submissions|1. A `Protocol Type` field must be the name of ['library construction protocols' class in EFO](http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004184) or one of its children; <br/> 2. `Protocol Term Source REF` must be "EFO" ([supported term sources](#term-source-list));|
-|PR09|**error**|HTS|Sequencing protocol is required for HTS submissions|1. A `Protocol Type` field must be the name of ['sequencing protocols class' in EFO](http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004170) or one of its children;<br/>2. `Protocol Term Source REF` must be "EFO" ([full list](#term-source-list))<br/>3. `Protocol Hardware` field must contain a comma separated list of protocol hardware used ([supported term sources](#supported-protocol-hardware-list));|
+|PR08|**error**|HTS|Library construction protocol is required for HTS submissions|1. A `Protocol Type` field must be the name of ['library construction protocols' class in EFO](http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004184) or one of its children; <br/> 2. `Protocol Term Source REF` must be "EFO" if specified ([supported term sources](#term-source-list));|
+|PR09|**error**|HTS|Sequencing protocol is required for HTS submissions|1. A `Protocol Type` field must be the name of ['sequencing protocols class' in EFO](http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004170) or one of its children;<br/>2. `Protocol Term Source REF` must be "EFO" if specified ([full list](#term-source-list))|
+|PR10|**error**|HTS|Sequencing protocol must have sequencing hardware specified for HTS submissions|`Protocol Hardware` field for the sequencing protocol must contain a comma separated list of protocol hardware used ([supported term sources](#supported-protocol-hardware-list))|
 |PR04|warning|Both|A protocol type should have term source specified||
 |PR06|warning|Both|Description of a protocol should be over 50 characters long||
 |PR07|warning|Both|A protocol should have parameters||

@@ -61,7 +61,7 @@ public class MageTabCheckEfoImpl implements MageTabCheckEfo {
     }
 
     private boolean isEfoTermSource(TermSource ts) {
-        return ts != null && EFO.matches(ts.getFile().getValue());
+        return ts == null || EFO.matches(ts.getFile().getValue());
     }
 
     private EfoTerm findTermByLabelInSubClasses(String name, String... subclasses) {

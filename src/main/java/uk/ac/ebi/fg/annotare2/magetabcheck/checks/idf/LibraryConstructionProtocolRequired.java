@@ -40,7 +40,7 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.EFO;
         application = CheckApplicationType.HTS_ONLY,
         details = "1. A `Protocol Type` field must be the name of " +
                 "['library construction protocols' class in EFO](http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004184) " +
-                "or one of its children; <br/> 2. `Protocol Term Source REF` must be \"EFO\" ([supported term sources](#term-source-list));")
+                "or one of its children; <br/> 2. `Protocol Term Source REF` must be \"EFO\" if specified ([supported term sources](#term-source-list));")
 public class LibraryConstructionProtocolRequired extends RangeCheck<Protocol> {
 
     @Inject
