@@ -73,7 +73,7 @@ public class SequencingProtocolRequiredTest extends AbstractCheckTest {
 
     @Test(expected = AssertionError.class)
     public void testInvalidHardware() {
-        SequencingProtocolRequired rule = new SequencingProtocolRequired(efoServiceMock());
+        SequencingProtocolHardwareRequired rule = new SequencingProtocolHardwareRequired(efoServiceMock());
         rule.visit(createProtocol(
                 "name",
                 "description",
@@ -102,6 +102,21 @@ public class SequencingProtocolRequiredTest extends AbstractCheckTest {
                 createTermSource(
                         "not efo",
                         "unknown url")));
+        rule.check();
+    }
+
+    @Test
+    public void testNullProtocolTypeSource() {
+        SequencingProtocolRequired rule = new SequencingProtocolRequired(efoServiceMock());
+        rule.visit(createProtocol(
+                "name",
+                "description",
+                Collections.<String>emptyList(),
+                KnownProtocolHardware.LIST.get(0),
+                "software",
+                "contact",
+                SEQUENCING_PROTOCOL_TYPE,
+                null));
         rule.check();
     }
 
