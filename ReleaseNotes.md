@@ -1,3 +1,9 @@
+## Release 1.10
+
+ * Loosing sequencing and library construction rules: if term source is not specified for a protocol type then do not check it; sequencing protocol hardware check extracted into separate rule.
+ * Changed modality of a rule: description of a protocol is required
+ * Disabled file location check; just check that a file name cell is not empty
+
 ## Release 1.9
 
  * bugfix: 'Definition' annotation of efo ontology classes was not extracted properly and as result all efo terms had empty definition field
