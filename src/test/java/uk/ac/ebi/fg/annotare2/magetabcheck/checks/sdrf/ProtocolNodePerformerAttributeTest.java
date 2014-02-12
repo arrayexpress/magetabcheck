@@ -17,44 +17,80 @@
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.sdrf;
 
 import org.junit.Test;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.AbstractCheckTest;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
+import uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfPerformerAttribute;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfProtocolNode;
+
+import java.util.Collections;
 
 import static org.easymock.EasyMock.*;
 
 /**
  * @author Olga Melnichuk
  */
-public class ProtocolNodePerformerAttributeTest {
+public class ProtocolNodePerformerAttributeTest extends AbstractCheckTest {
+
+    private static final String SEQUENCING_PROTOCOL_TYPE = "sequencing protocol";
 
     @Test(expected = AssertionError.class)
-    public void nullAttributeTest() {
-        new SdrfSimpleChecks(mockEfo()).protocolNodeMustHavePerformerAttribute(
-                createProtocolNode(null)
+    public void nullAttributeSequencingProtocolTest() {
+        new SdrfSimpleChecks(mockEfo()).sequencingProtocolNodeMustHavePerformerAttribute(
+                createSequencingProtocolNode(null)
         );
     }
 
     @Test(expected = AssertionError.class)
-    public void emptyAttributeTest() {
-        new SdrfSimpleChecks(mockEfo()).protocolNodeMustHavePerformerAttribute(
-                createProtocolNode(createPerformerAttribute(""))
+    public void emptyAttributeSequencingProtocolTest() {
+        new SdrfSimpleChecks(mockEfo()).sequencingProtocolNodeMustHavePerformerAttribute(
+                createSequencingProtocolNode(createPerformerAttribute(""))
         );
     }
 
     @Test(expected = AssertionError.class)
-    public void whitespaceAttributeTest() {
-        new SdrfSimpleChecks(mockEfo()).protocolNodeMustHavePerformerAttribute(
-                createProtocolNode(createPerformerAttribute(" "))
+    public void whitespaceAttributeSequencingProtocolTest() {
+        new SdrfSimpleChecks(mockEfo()).sequencingProtocolNodeMustHavePerformerAttribute(
+                createSequencingProtocolNode(createPerformerAttribute(" "))
         );
     }
 
     @Test
-    public void nonEmptyAttributeTest() {
-        new SdrfSimpleChecks(mockEfo()).protocolNodeMustHavePerformerAttribute(
-                createProtocolNode(createPerformerAttribute("test"))
+    public void nonEmptyAttributeSequencingProtocolTest() {
+        new SdrfSimpleChecks(mockEfo()).sequencingProtocolNodeMustHavePerformerAttribute(
+                createSequencingProtocolNode(createPerformerAttribute("test"))
         );
     }
+
+    @Test
+    public void nullAttributeNonSequencingProtocolTest() {
+        new SdrfSimpleChecks(mockEfo()).sequencingProtocolNodeMustHavePerformerAttribute(
+                createNonSequencingProtocolNode(null)
+        );
+    }
+
+    @Test
+    public void emptyAttributeNonSequencingProtocolTest() {
+        new SdrfSimpleChecks(mockEfo()).sequencingProtocolNodeMustHavePerformerAttribute(
+                createNonSequencingProtocolNode(createPerformerAttribute(""))
+        );
+    }
+
+    @Test
+    public void whitespaceAttributeNonSequencingProtocolTest() {
+        new SdrfSimpleChecks(mockEfo()).sequencingProtocolNodeMustHavePerformerAttribute(
+                createNonSequencingProtocolNode(createPerformerAttribute(" "))
+        );
+    }
+
+    @Test
+    public void nonEmptyAttributeNonSequencingProtocolTest() {
+        new SdrfSimpleChecks(mockEfo()).sequencingProtocolNodeMustHavePerformerAttribute(
+                createNonSequencingProtocolNode(createPerformerAttribute("test"))
+        );
+    }
+
 
     private static SdrfPerformerAttribute createPerformerAttribute(String value) {
         SdrfPerformerAttribute attr = createMock(SdrfPerformerAttribute.class);
@@ -66,12 +102,38 @@ public class ProtocolNodePerformerAttributeTest {
         return attr;
     }
 
-    private static SdrfProtocolNode createProtocolNode(SdrfPerformerAttribute attribute) {
+    private static Protocol getProtocol(String protocolType) {
+        return createProtocol(
+                "name",
+                "description",
+                Collections.<String>emptyList(),
+                "invalid hardware name",
+                "software",
+                "contact",
+                protocolType,
+                createTermSource(
+                        KnownTermSource.EFO.name(),
+                        KnownTermSource.EFO.getUrl()));
+    }
+
+    private static SdrfProtocolNode createNonSequencingProtocolNode(SdrfPerformerAttribute attribute) {
         SdrfProtocolNode node = createMock(SdrfProtocolNode.class);
         expect(node.getLine()).andReturn(0);
         expect(node.getColumn()).andReturn(0);
         expect(node.getFileName()).andReturn("no file");
         expect(node.getPerformer()).andReturn(attribute);
+        expect(node.getProtocol()).andReturn(getProtocol(""));
+        replay(node);
+        return node;
+    }
+
+    private static SdrfProtocolNode createSequencingProtocolNode(SdrfPerformerAttribute attribute) {
+        SdrfProtocolNode node = createMock(SdrfProtocolNode.class);
+        expect(node.getLine()).andReturn(0);
+        expect(node.getColumn()).andReturn(0);
+        expect(node.getFileName()).andReturn("no file");
+        expect(node.getPerformer()).andReturn(attribute);
+        expect(node.getProtocol()).andReturn(getProtocol(SEQUENCING_PROTOCOL_TYPE));
         replay(node);
         return node;
     }

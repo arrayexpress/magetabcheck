@@ -319,15 +319,20 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "PN06",
-            value = "A protocol must have 'performer' attribute specified (for ENA submissions)",
+            value = "A nucleic acid sequencing protocol must have a 'performer' attribute specified",
             application = HTS_ONLY)
     public void protocolNodeMustHavePerformerAttribute(SdrfProtocolNode protocolNode) {
-        assertProtocolHasPerformerAttribute(protocolNode);
+        Protocol protocol = protocolNode.getProtocol();
+
+        // Only an error if its a nucleic acid sequencing protocol
+        if (protocol != null && efo.isSequencingProtocol(protocol.getType())) {
+            assertProtocolHasPerformerAttribute(protocolNode);
+        }
     }
 
     @MageTabCheck(
             ref = "PN07",
-            value = "A protocol should have 'performer' attribute specified",
+            value = "A protocol should have a 'performer' attribute specified",
             modality = WARNING,
             application = MICRO_ARRAY_ONLY)
     public void protocolNodeShouldHavePerformerAttribute(SdrfProtocolNode protocolNode) {
