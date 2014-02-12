@@ -127,26 +127,37 @@
 |TS04|warning|Both|Version of a term source should be specified||
 
 ## Supported protocol hardware list
-* illumina genome analyzer
-* illumina genome analyzer ii
-* illumina genome analyzer iix
-* illumina hiseq 2000
-* illumina hiseq 1000
-* illumina miseq
-* 454 gs
-* 454 gs 20
-* 454 gs flx
-* 454 gs flx titanium
-* 454 gs junior
-* ab solid system
-* ab solid system 2.0
-* ab solid system 3.0
-* ab solid 4 system
-* ab solid 4hq system
-* ab solid pi system
-* ab solid 5500
-* ab solid 5500xl
-* complete genomics
+
+* Illumina Genome Analyzer
+* Illumina Genome Analyzer II
+* Illumina Genome Analyzer IIx
+* Illumina HiSeq 2500
+* Illumina HiSeq 2000
+* Illumina HiSeq 1000
+* Illumina MiSeq
+* Illumina HiScanSQ
+* Helicos HeliScope
+* AB SOLiD System
+* AB SOLiD System 2.0
+* AB SOLiD System 3.0
+* AB SOLiD 3 Plus System
+* AB SOLiD 4 System
+* AB SOLiD 4hq System
+* AB SOLiD PI System
+* AB 5500 Genetic Analyzer
+* AB 5500xl Genetic Analyzer
+* Complete Genomics
+* PacBio RS
+* Ion Torrent PGM
+* Ion Torrent Proton
+* AB 3730xL Genetic Analyzer
+* AB 3730 Genetic Analyzer
+* AB 3500xL Genetic Analyzer
+* AB 3500 Genetic Analyzer
+* AB 3130xL Genetic Analyzer
+* AB 3130 Genetic Analyzer
+* AB 310 Genetic Analyzer
+* unspecified
 
 ## Term source list
 * ArrayExpress http://www.ebi.ac.uk/arrayexpress/
