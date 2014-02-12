@@ -321,10 +321,8 @@ public class SdrfSimpleChecks {
             ref = "PN06",
             value = "A nucleic acid sequencing protocol must have a 'performer' attribute specified",
             application = HTS_ONLY)
-    public void protocolNodeMustHavePerformerAttribute(SdrfProtocolNode protocolNode) {
+    public void sequencingProtocolNodeMustHavePerformerAttribute(SdrfProtocolNode protocolNode) {
         Protocol protocol = protocolNode.getProtocol();
-
-        // Only an error if its a nucleic acid sequencing protocol
         if (protocol != null && efo.isSequencingProtocol(protocol.getType())) {
             assertProtocolHasPerformerAttribute(protocolNode);
         }
