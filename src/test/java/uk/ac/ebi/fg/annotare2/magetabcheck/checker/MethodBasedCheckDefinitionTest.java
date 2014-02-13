@@ -20,12 +20,12 @@ import org.junit.Test;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Comparator;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.ANY;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.HTS_ONLY;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.MICRO_ARRAY_ONLY;
+import static org.junit.Assert.assertTrue;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.*;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.ClassInstanceProvider.DEFAULT_CLASS_INSTANCE_PROVIDER;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.ExperimentType.HTS;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.ExperimentType.MICRO_ARRAY;
@@ -52,6 +52,7 @@ public class MethodBasedCheckDefinitionTest {
     @Test
     public void test() {
         Method[] methods = MethodBasedChecks.class.getDeclaredMethods();
+        Arrays.sort(methods, new CompareMethodsByName());
 
         MethodBasedCheckDefinition def1 = new MethodBasedCheckDefinition(methods[0], DEFAULT_CLASS_INSTANCE_PROVIDER);
         assertTrue(def1.isSubjectTypeAssignableFrom(String.class));
@@ -73,5 +74,26 @@ public class MethodBasedCheckDefinitionTest {
         assertTrue(def3.isApplicable(Double.class, HTS));
         assertTrue(def3.isApplicable(Double.class, MICRO_ARRAY));
         assertFalse(def3.isApplicable(Integer.class, MICRO_ARRAY));
+    }
+
+    private class CompareMethodsByName implements Comparator<Method> {
+
+        @Override
+        public int compare(Method m1, Method m2) {
+            if (null == m1 && null == m2) return 0;
+
+            if (null == m1) return 1;
+
+            if (null == m2) return -1;
+
+            if (null == m1.getName() && null == m2.getName()) return 0;
+
+            if (null == m1.getName()) return 1;
+
+            if (null == m2.getName()) return -1;
+
+            return m1.getName().compareTo(m2.getName());
+        }
+
     }
 }
