@@ -1,7 +1,7 @@
 ## Release 1.11
 
  * Updated list of acceptable hardware for nucleic acid sequencing protocol.
- * Performer is now mandatory only forfor nucleic acid sequencing protocol.
+ * Performer is now mandatory only for nucleic acid sequencing protocol.
  * Switched to limpopo 1.1.5
 
 ## Release 1.10
