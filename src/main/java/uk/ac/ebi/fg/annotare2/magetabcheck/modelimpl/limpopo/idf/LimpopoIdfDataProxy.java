@@ -80,7 +80,7 @@ public class LimpopoIdfDataProxy implements IdfData {
                 size(idf().experimentalFactorName),
                 size(idf().experimentalFactorType),
                 size(idf().experimentalFactorTermAccession),
-                size(idf().experimentalDesignTermSourceREF));
+                size(idf().experimentalFactorTermSourceREF));
         List<ExperimentalFactor> factors = newArrayList();
         for (int i = 0; i < size; i++) {
             factors.add(new LimpopoBasedExperimentalFactor(idfHelper, i));
