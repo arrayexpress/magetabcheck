@@ -16,9 +16,12 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 
+import com.google.common.base.Predicate;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyRangeCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Olga Melnichuk
@@ -27,4 +30,19 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
         ref = "PR01",
         value = "At least one protocol must be used in an experiment")
 public class ListOfProtocolsMustBeNonEmpty extends NonEmptyRangeCheck<Protocol> {
+    public ListOfProtocolsMustBeNonEmpty() {
+        super(new Predicate<Protocol>() {
+            @Override
+            public boolean apply(@Nullable Protocol protocol) {
+                return protocol != null &&
+                        protocol.getName() != null &&
+                        protocol.getName().getValue() != null &&
+                        protocol.getDescription()!=null &&
+                        protocol.getDescription().getValue() !=null &&
+                        protocol.getType() != null &&
+                        protocol.getType().getName() != null &&
+                        protocol.getType().getName().getValue() != null;
+            }
+        });
+    }
 }

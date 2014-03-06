@@ -16,19 +16,32 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 
+import com.google.common.base.Predicate;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyRangeCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.ExperimentalDesign;
 
+import javax.annotation.Nullable;
+
 /**
  * @author Olga Melnichuk
  */
 @MageTabCheck(
         ref = "ED01",
-        value = "Micro-array experiment must have at least one experimental design specified",
-        application = CheckApplicationType.MICRO_ARRAY_ONLY,
-        modality = CheckModality.WARNING)
+        value = "Experiment must have at least one experimental design specified",
+  application = CheckApplicationType.MICRO_ARRAY_ONLY,
+  modality = CheckModality.WARNING
+     )
 public class ListOfExperimentalDesignsShouldBeNonEmpty extends NonEmptyRangeCheck<ExperimentalDesign> {
+    public ListOfExperimentalDesignsShouldBeNonEmpty() {
+        super(new Predicate<ExperimentalDesign>() {
+            @Override
+            public boolean apply(@Nullable ExperimentalDesign design) {
+                return design.getName() != null &&
+                        design.getName().getValue() != null;
+            }
+        });
+    }
 }

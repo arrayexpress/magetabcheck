@@ -53,7 +53,12 @@ public class LimpopoIdfDataProxy implements IdfData {
                 size(idf().personPhone),
                 size(idf().personMidInitials),
                 size(idf().personFax),
-                size(idf().personRoles));
+                size(idf().personRoles),
+                // Note that to check the existence of at least one contact the code requires
+                // that at least one entry is present in that list. If none of the above applies, 1 below
+                // will ensure that an empty LimpopoBasedPerson object will be inserted into contacts
+                // This in turn will result in the 'non empty list of contacts' test being applied downstream.
+                1);
         List<Person> contacts = newArrayList();
         for (int i = 0; i < size; i++) {
             contacts.add(new LimpopoBasedPerson(idfHelper, i));
@@ -66,7 +71,12 @@ public class LimpopoIdfDataProxy implements IdfData {
         int size = max(
                 size(idf().experimentalDesign),
                 size(idf().experimentalDesignTermAccession),
-                size(idf().experimentalDesignTermSourceREF));
+                size(idf().experimentalDesignTermSourceREF),
+                // Note that to check the existence of at least one design the code requires
+                // that at least one entry is present in that list. If none of the above applies, 1 below
+                // will ensure that an empty LimpopoBasedExperimentalDesign object will be inserted into designs
+                // This in turn will result in the 'non empty list of experimental designs' test being applied downstream.
+                1);
         List<ExperimentalDesign> designs = newArrayList();
         for (int i = 0; i < size; i++) {
             designs.add(new LimpopoBasedExperimentalDesign(idfHelper, i));
@@ -80,7 +90,12 @@ public class LimpopoIdfDataProxy implements IdfData {
                 size(idf().experimentalFactorName),
                 size(idf().experimentalFactorType),
                 size(idf().experimentalFactorTermAccession),
-                size(idf().experimentalFactorTermSourceREF));
+                size(idf().experimentalFactorTermSourceREF),
+                // Note that to check the existence of at least one experimental factor the code requires
+                // that at least one entry is present in that list. If none of the above applies, 1 below
+                // will ensure that an empty LimpopoBasedExperimentalFactor object will be inserted into factors
+                // This in turn will result in the 'non empty list of experimental factors' test being applied downstream.
+                1);
         List<ExperimentalFactor> factors = newArrayList();
         for (int i = 0; i < size; i++) {
             factors.add(new LimpopoBasedExperimentalFactor(idfHelper, i));
@@ -155,7 +170,12 @@ public class LimpopoIdfDataProxy implements IdfData {
                 size(idf().protocolSoftware),
                 size(idf().protocolType),
                 size(idf().protocolTermAccession),
-                size(idf().protocolTermSourceREF));
+                size(idf().protocolTermSourceREF),
+                // Note that to check the existence of at least one protocol the code requires
+                // that at least one entry is present in that list. If none of the above applies, 1 below
+                // will ensure that an empty LimpopoBasedProtocol object will be inserted into protocols
+                // This in turn will result in the 'non empty list of protocols' test being applied downstream.
+                1);
         List<Protocol> protocols = newArrayList();
         for (int i = 0; i < size; i++) {
             protocols.add(new LimpopoBasedProtocol(idfHelper, i));
