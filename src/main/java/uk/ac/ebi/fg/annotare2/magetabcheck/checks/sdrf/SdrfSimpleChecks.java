@@ -165,15 +165,15 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "EX03",
-            value = "An extract node should be described by a protocol",
-            modality = WARNING)
+            value = "A nucleic acid extraction protocol must be included",
+            application = MICRO_ARRAY_ONLY)
     public void extractNodeShouldBeDescribedByProtocol(SdrfExtractNode extractNode) {
         assertNodeIsDescribedByProtocol(extractNode);
     }
 
     @MageTabCheck(
             ref = "EX04",
-            value = "An extract node must be described by a 'library construction' protocol",
+            value = "A nucleic acid library construction protocol must be included",
             application = HTS_ONLY)
     public void extractNodeMustBeDescribedByLibraryConstructionProtocol(SdrfExtractNode extractNode) {
         setPosition(extractNode);
@@ -221,8 +221,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "LE05",
-            value = "A labeled extract node should be described by a protocol",
-            modality = WARNING,
+            value = "A nucleic acid labeling protocol must be included",
             application = MICRO_ARRAY_ONLY)
     public void labeledExtractNodeShouldBeDescribedByProtocol(SdrfLabeledExtractNode labeledExtractNode) {
         assertNodeIsDescribedByProtocol(labeledExtractNode);
@@ -361,20 +360,9 @@ public class SdrfSimpleChecks {
         assertNotNull(assayNode.getTechnologyType());
     }
 
-
-    @MageTabCheck(
-            ref = "AN04",
-            value = "'Technology Type' attribute must be equal to 'array assay' in micro-array submissions",
-            application = MICRO_ARRAY_ONLY)
-    public void assayNodeTechnologyTypeIsArrayAssay(SdrfAssayNode assayNode) {
-        setPosition(assayNode);
-        assertNotNull(assayNode.getTechnologyType());
-        assertThat(assayNode.getTechnologyType().getValue().trim(), equalToIgnoringCase("array assay"));
-    }
-
     @MageTabCheck(
             ref = "AN03",
-            value = "An assay node must be described by a 'sequencing' protocol",
+            value = "A nucleic acid sequencing protocol must be included",
             application = HTS_ONLY)
     public void assayNodeMustBeDescribedBySequencingProtocol(SdrfAssayNode assayNode) {
         setPosition(assayNode);
@@ -394,7 +382,38 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
+            ref = "AN04",
+            value = "A nucleic acid hybridization to array protocol must be included",
+            application = MICRO_ARRAY_ONLY)
+    public void assayNodeMustBeDescribedByHybridizationProtocol(SdrfAssayNode assayNode) {
+        setPosition(assayNode);
+
+        SdrfProtocolNode found = null;
+        for (SdrfProtocolNode protocolNode : getParentProtocolNodes(assayNode)) {
+            Protocol protocol = protocolNode.getProtocol();
+            if (protocol == null) {
+                continue;
+            }
+            if (protocol.getType().getName().equals("nucleic acid hybridization to array protocol")) {
+                found = protocolNode;
+                break;
+            }
+        }
+        assertNotNull(found);
+    }
+
+    @MageTabCheck(
             ref = "AN05",
+            value = "'Technology Type' attribute must be equal to 'array assay' in micro-array submissions",
+            application = MICRO_ARRAY_ONLY)
+    public void assayNodeTechnologyTypeIsArrayAssay(SdrfAssayNode assayNode) {
+        setPosition(assayNode);
+        assertNotNull(assayNode.getTechnologyType());
+        assertThat(assayNode.getTechnologyType().getValue().trim(), equalToIgnoringCase("array assay"));
+    }
+
+    @MageTabCheck(
+            ref = "AN06",
             value = "If 'Technology Type' value = 'array assay' then incoming nodes must be 'Labeled Extract' nodes only",
             application = MICRO_ARRAY_ONLY)
     public void assayNodeMustBeDerrivedFromLabeledExtracts(SdrfAssayNode assayNode) {
@@ -410,7 +429,7 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
-            ref = "AN06",
+            ref = "AN07",
             value = "If 'Technology Type' value = 'array assay' then incoming 'Labeled Extract nodes must have distinct labels",
             application = MICRO_ARRAY_ONLY)
     public void assayNodeMustHaveDistinctLabeledExtracts(SdrfAssayNode assayNode) {
@@ -627,8 +646,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "DADN03",
-            value = "A derived array data node should be described by a protocol",
-            modality = WARNING)
+            value = "A normalization data transformation protocol must be included")
     public void derivedArrayDataNodeShouldBeDescribedByProtocol(SdrfDerivedArrayDataNode derivedArrayDataNode) {
         assertNodeIsDescribedByProtocol(derivedArrayDataNode);
     }
@@ -672,8 +690,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "DADMN03",
-            value = "A derived array data matrix node should be described by protocol",
-            modality = WARNING)
+            value = "A normalization data transformation protocol must be included")
     public void derivedArrayDataMatrixNodeShouldBeDescribedByProtocol(
             SdrfDerivedArrayDataMatrixNode derivedArrayDataMatrixNode) {
         assertNodeIsDescribedByProtocol(derivedArrayDataMatrixNode);
