@@ -394,7 +394,7 @@ public class SdrfSimpleChecks {
             if (protocol == null) {
                 continue;
             }
-            if (protocol.getType().getName().equals("nucleic acid hybridization to array protocol")) {
+            if (protocol.getType().getName().getValue().equals("nucleic acid hybridization to array protocol")) {
                 found = protocolNode;
                 break;
             }
