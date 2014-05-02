@@ -16,9 +16,12 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 
+import com.google.common.base.Predicate;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checks.NonEmptyRangeCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Person;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Olga Melnichuk
@@ -27,4 +30,22 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Person;
         ref = "C01",
         value = "At least one contact must be specified")
 public class ListOfContactsMustBeNonEmpty extends NonEmptyRangeCheck<Person> {
+    public ListOfContactsMustBeNonEmpty() {
+        super(new Predicate<Person>() {
+            @Override
+            public boolean apply(@Nullable Person contact) {
+                return contact.getFirstName() != null &&
+                        contact.getFirstName().getValue() !=null &&
+                        contact.getLastName() != null &&
+                        contact.getLastName().getValue() != null &&
+                        contact.getEmail() != null &&
+                        contact.getEmail().getValue() != null &&
+                        contact.getAffiliation() != null &&
+                        contact.getAffiliation().getValue() != null   &&
+                        contact.getRoles()    != null &&
+                        contact.getRoles().getNames() != null &&
+                        contact.getRoles().getNames().getValue() !=null;
+            }
+        });
+    }
 }

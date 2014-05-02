@@ -28,7 +28,7 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermSource;
 
 import javax.annotation.Nullable;
 
-import static com.google.common.collect.Ranges.singleton;
+import static com.google.common.collect.Ranges.atLeast;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.EFO;
 
 /**
@@ -45,7 +45,7 @@ public class LibraryConstructionProtocolRequired extends RangeCheck<Protocol> {
 
     @Inject
     public LibraryConstructionProtocolRequired(MageTabCheckEfo efo) {
-        super(new LibraryConstructionProtocolPredicate(efo), singleton(1));
+        super(new LibraryConstructionProtocolPredicate(efo), atLeast(1));
     }
 
     private static class LibraryConstructionProtocolPredicate implements Predicate<Protocol> {

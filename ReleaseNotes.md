@@ -1,3 +1,11 @@
+## Release 1.12
+
+ * Enforce application of a minimum set of protocols based on experiment type.
+ * Added logic for dependant factors like compound and dose
+ * Updated code that checks for existence of contacts, experimental factors, designs and protocols
+ * Switched to limpopo 1.1.7
+
+
 ## Release 1.11
 
  * Updated list of acceptable hardware for nucleic acid sequencing protocol.

@@ -102,12 +102,12 @@ class LimpopoBasedPerson extends LimpopoBasedIdfObject implements Person {
 
         final List<String> names = newArrayList();
         if (!isNullOrEmpty(roleNames)) {
-            names.addAll(asList(roleNames.split(",")));
+            names.addAll(asList(roleNames.split("\\s*[;]\\s*")));
         }
 
         final List<String> accessions = newArrayList();
         if (!isNullOrEmpty(roleAccessions)) {
-            accessions.addAll(asList(roleAccessions.split(",")));
+            accessions.addAll(asList(roleAccessions.split("\\s*[;]\\s*")));
         }
 
         final int size = toTheSameSize(names, accessions);
