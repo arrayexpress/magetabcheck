@@ -57,14 +57,14 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "SR01",
-            value = "A source node must have name specified")
+            value = "A source (starting sample for the experiment) must have name specified")
     public void sourceNodeMustHaveName(SdrfSourceNode sourceNode) {
         assertNotEmptyName(sourceNode);
     }
 
     @MageTabCheck(
             ref = "SR02",
-            value = "A source node should have 'Material Type' attribute specified",
+            value = "A source (starting sample for the experiment) should have a 'Material Type' attribute specified",
             modality = WARNING)
     public void sourceNodeShouldHaveMaterialTypeAttribute(SdrfSourceNode sourceNode) {
         setPosition(sourceNode);
@@ -73,7 +73,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "SR03",
-            value = "A source node should have 'Provider' attribute specified",
+            value = "A source (starting sample for the experiment) should have 'Provider' attribute specified",
             modality = WARNING)
     public void sourceNodeShouldHaveProviderAttribute(SdrfSourceNode sourceNode) {
         setPosition(sourceNode);
@@ -83,7 +83,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "SR04",
-            value = "A source node must have an 'Organism' characteristic specified")
+            value = "A source (starting sample for the experiment) must have an 'Organism' characteristic specified")
     public void sourceNodeMustHaveOrganismCharacteristic(SdrfSourceNode sourceNode) {
         setPosition(sourceNode);
         Collection<SdrfCharacteristicAttribute> characteristics = sourceNode.getCharacteristics();
@@ -106,7 +106,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "SR05",
-            value = "A source node should have more than 2 characteristic attributes",
+            value = "A source (starting sample for the experiment) should have more than 2 characteristic attributes",
             modality = WARNING)
     public void sourceNodeShouldHaveMoreThan2Characteristics(SdrfSourceNode sourceNode) {
         setPosition(sourceNode);
@@ -117,7 +117,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "SR07",
-            value = "A source node should be described by a protocol",
+            value = "A source (starting sample for the experiment) should be described by a protocol",
             modality = WARNING)
     public void sourceNodeShouldBeDescribedByProtocol(SdrfSourceNode sourceNode) {
         assertNodeIsDescribedByProtocol(sourceNode);
@@ -125,14 +125,14 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "SM01",
-            value = "A sample node must have name specified")
+            value = "A sample must have name specified")
     public void sampleNodeMustHaveName(SdrfSampleNode sampleNode) {
         assertNotEmptyName(sampleNode);
     }
 
     @MageTabCheck(
             ref = "SM02",
-            value = "A sample node should have 'Material Type' attribute specified",
+            value = "A sample should have a 'Material Type' attribute specified",
             modality = WARNING)
     public void sampleNodeShouldHaveMaterialTypeAttribute(SdrfSampleNode sampleNode) {
         setPosition(sampleNode);
@@ -141,7 +141,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "SM03",
-            value = "A sample node should be described by a protocol",
+            value = "A sample should be described by a protocol",
             modality = WARNING)
     public void sampleNodeShouldBeDescribedByProtocol(SdrfSampleNode sampleNode) {
         assertNodeIsDescribedByProtocol(sampleNode);
@@ -149,14 +149,14 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "EX01",
-            value = "An extract node must have name specified")
+            value = "An extract must have name specified")
     public void extractNodeMustHaveName(SdrfExtractNode extractNode) {
         assertNotEmptyName(extractNode);
     }
 
     @MageTabCheck(
             ref = "EX02",
-            value = "An extract node should have 'Material Type' attribute specified",
+            value = "An extract should have a 'Material Type' attribute specified",
             modality = WARNING)
     public void extractNodeShouldHaveMaterialTypeAttribute(SdrfExtractNode extractNode) {
         setPosition(extractNode);
@@ -194,7 +194,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "LE02",
-            value = "A labeled extract node must have name specified",
+            value = "A labeled extract must have name specified",
             application = MICRO_ARRAY_ONLY)
     public void labeledExtractNodeMustHaveName(SdrfLabeledExtractNode labeledExtractNode) {
         assertNotEmptyName(labeledExtractNode);
@@ -202,7 +202,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "LE03",
-            value = "A labeled extract node should have 'Material Type' attribute specified",
+            value = "A labeled extract should have a 'Material Type' attribute specified",
             modality = WARNING,
             application = MICRO_ARRAY_ONLY)
     public void labeledExtractNodeShouldHaveMaterialTypeAttribute(SdrfLabeledExtractNode labeledExtractNode) {
@@ -212,7 +212,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "LE04",
-            value = "A labeled extract node must have 'Label' attribute specified",
+            value = "A labeled extract must have 'Label' attribute specified",
             application = MICRO_ARRAY_ONLY)
     public void labeledExtractNodeMustHaveLabelAttribute(SdrfLabeledExtractNode labeledExtractNode) {
         setPosition(labeledExtractNode);
@@ -257,7 +257,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "MT01",
-            value = "A material type attribute should have name specified",
+            value = "A material type attribute should have a name specified",
             modality = WARNING)
     public void materialTypeAttributeShouldHaveName(SdrfMaterialTypeAttribute materialTypeAttribute) {
         assertNotEmptyName(materialTypeAttribute);
@@ -265,7 +265,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "MT02",
-            value = "A material type attribute should have term source specified",
+            value = "A material type attribute should have a term source specified",
             modality = WARNING)
     public void materialTypeAttributeShouldHaveTermSource(SdrfMaterialTypeAttribute mta) {
         setPosition(mta);
@@ -282,14 +282,14 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "PN01",
-            value = "A protocol node must have name specified")
+            value = "A protocol must have a name specified")
     public void protocolNodeMustHaveName(SdrfProtocolNode protocolNode) {
         assertNotEmptyName(protocolNode);
     }
 
     @MageTabCheck(
             ref = "PN04",
-            value = "A protocol node should have term source specified",
+            value = "A protocol node should have a term source specified",
             modality = WARNING)
     public void protocolNodeShouldHaveTermSource(SdrfProtocolNode protocolNode) {
         setPosition(protocolNode);
@@ -347,14 +347,14 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "AN01",
-            value = "An assay node must have name specified")
+            value = "An assay must have a name specified")
     public void assayNodeMustHaveName(SdrfAssayNode assayNode) {
         assertNotEmptyName(assayNode);
     }
 
     @MageTabCheck(
             ref = "AN02",
-            value = "An assay node must have 'Technology Type' attribute specified")
+            value = "An assay must have a 'Technology Type' attribute specified")
     public void assayNodeMustHaveTechnologyTypeAttribute(SdrfAssayNode assayNode) {
         setPosition(assayNode);
         assertNotNull(assayNode.getTechnologyType());
@@ -362,7 +362,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "AN03",
-            value = "A nucleic acid sequencing protocol must be included",
+            value = "A 'nucleic acid sequencing protocol' must be included",
             application = HTS_ONLY)
     public void assayNodeMustBeDescribedBySequencingProtocol(SdrfAssayNode assayNode) {
         setPosition(assayNode);
@@ -383,7 +383,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "AN04",
-            value = "A nucleic acid hybridization to array protocol must be included",
+            value = "A 'nucleic acid hybridization to array protocol' must be included",
             application = MICRO_ARRAY_ONLY)
     public void assayNodeMustBeDescribedByHybridizationProtocol(SdrfAssayNode assayNode) {
         setPosition(assayNode);
@@ -414,7 +414,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "AN06",
-            value = "If 'Technology Type' value = 'array assay' then incoming nodes must be 'Labeled Extract' nodes only",
+            value = "For an array assay (microarray experiment) the incoming nodes must be 'Labeled Extract' nodes only",
             application = MICRO_ARRAY_ONLY)
     public void assayNodeMustBeDerrivedFromLabeledExtracts(SdrfAssayNode assayNode) {
         setPosition(assayNode);
@@ -430,7 +430,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "AN07",
-            value = "If 'Technology Type' value = 'array assay' then incoming 'Labeled Extract nodes must have distinct labels",
+            value = "For an array assay (microarray experiment) the associated labeled extract(s) must have distinct labels",
             application = MICRO_ARRAY_ONLY)
     public void assayNodeMustHaveDistinctLabeledExtracts(SdrfAssayNode assayNode) {
         setPosition(assayNode);
@@ -473,7 +473,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "PV01",
-            value = "A parameter value attribute (of a protocol) should have name specified",
+            value = "A parameter value attribute (of a protocol) should have a name specified",
             modality = WARNING)
     public void parameterValueAttributeShouldHaveName(SdrfParameterValueAttribute parameterValueAttribute) {
         setPosition(parameterValueAttribute);
@@ -482,7 +482,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "PV02",
-            value = "A parameter value attribute (of a protocol) should have unit specified",
+            value = "A parameter value attribute (of a protocol) should have a unit specified",
             modality = WARNING)
     public void parameterValueAttributeShouldHaveUnit(SdrfParameterValueAttribute parameterValueAttribute) {
         setPosition(parameterValueAttribute);
@@ -526,7 +526,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "CA02",
-            value = "A characteristic attribute should have term source specified",
+            value = "A characteristic attribute should have a term source specified",
             modality = WARNING)
     public void characteristicAttributeShouldHaveTermSource(SdrfCharacteristicAttribute attribute) {
         setPosition(attribute);
@@ -543,7 +543,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "FV01",
-            value = "A factor value attribute should have name specified",
+            value = "A factor value attribute should have a name specified",
             modality = WARNING)
     public void factorValueAttributeShouldHaveName(SdrfFactorValueAttribute fvAttribute) {
         setPosition(fvAttribute);
@@ -552,7 +552,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "FV02",
-            value = "A factor value attribute should have term source specified",
+            value = "A factor value attribute should have a term source specified",
             modality = WARNING)
     public void factorValueAttributeShouldHaveTermSource(SdrfFactorValueAttribute fvAttribute) {
         setPosition(fvAttribute);
@@ -569,14 +569,14 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "AD01",
-            value = "An array design attribute must have name specified")
+            value = "An array design attribute must have a name specified")
     public void arrayDesignAttributeMustHaveName(SdrfArrayDesignAttribute adAttribute) {
         assertNotEmptyName(adAttribute);
     }
 
     @MageTabCheck(
             ref = "AD02",
-            value = "An array design should have term source specified",
+            value = "An array design should have a term source specified",
             modality = WARNING)
     public void arrayDesignAttributeShouldHaveTermSource(SdrfArrayDesignAttribute adAttribute) {
         setPosition(adAttribute);
@@ -601,7 +601,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "SC01",
-            value = "A scan node should have name specified",
+            value = "A scan should have a name specified",
             modality = WARNING)
     public void scanNodeShouldHaveName(SdrfScanNode scanNode) {
         assertNotEmptyName(scanNode);
@@ -609,7 +609,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "ADN01",
-            value = "An array data node must have a name")
+            value = "An array data node (raw data file) must have a name")
     public void arrayDataNodeMustHaveName(SdrfArrayDataNode arrayDataNode) {
         assertNotEmptyName(arrayDataNode);
     }
@@ -623,7 +623,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "ADN03",
-            value = "An array data node should be described by a protocol",
+            value = "An array data node (raw data file) should be described by a protocol",
             modality = WARNING)
     public void arrayDataNodeShouldBeDescribedByProtocol(SdrfArrayDataNode arrayDataNode) {
         setPosition(arrayDataNode);
@@ -632,7 +632,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "DADN01",
-            value = "A derived array data node must have name specified")
+            value = "A derived array data node (processed data file) must have name specified")
     public void derivedArrayDataNodeMustHaveName(SdrfDerivedArrayDataNode derivedArrayDataNode) {
         assertNotEmptyName(derivedArrayDataNode);
     }
@@ -646,14 +646,14 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "DADN03",
-            value = "A normalization data transformation protocol must be included")
+            value = "A 'normalization data transformation protocol' must be included")
     public void derivedArrayDataNodeShouldBeDescribedByProtocol(SdrfDerivedArrayDataNode derivedArrayDataNode) {
         assertNodeIsDescribedByProtocol(derivedArrayDataNode);
     }
 
     @MageTabCheck(
             ref = "ADMN01",
-            value = "An array data matrix node must have name specified")
+            value = "An array data matrix file must have name specified")
     public void arrayDataMatrixNodeMustHaveName(SdrfArrayDataMatrixNode arrayDataMatrixNode) {
         assertNotEmptyName(arrayDataMatrixNode);
     }
@@ -667,7 +667,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "ADMN03",
-            value = "An array data matrix node should be described by a protocol",
+            value = "An array data matrix file should be described by a protocol",
             modality = WARNING)
     public void arrayDataMatrixNodeShouldBeDescribedByProtocol(SdrfArrayDataMatrixNode arrayDataMatrixNode) {
         assertNodeIsDescribedByProtocol(arrayDataMatrixNode);
@@ -675,7 +675,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "DADMN01",
-            value = "A derived array data matrix node must have name specified")
+            value = "A derived array data matrix file must have a name specified")
     public void derivedArrayDataMatrixNodeMustHaveName(SdrfDerivedArrayDataMatrixNode derivedArrayDataMatrixNode) {
         assertNotEmptyName(derivedArrayDataMatrixNode);
     }
@@ -690,7 +690,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "DADMN03",
-            value = "A normalization data transformation protocol must be included")
+            value = "A 'normalization data transformation protocol' must be included")
     public void derivedArrayDataMatrixNodeShouldBeDescribedByProtocol(
             SdrfDerivedArrayDataMatrixNode derivedArrayDataMatrixNode) {
         assertNodeIsDescribedByProtocol(derivedArrayDataMatrixNode);

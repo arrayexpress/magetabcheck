@@ -21,7 +21,7 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.WARNING;
  */
 @MageTabCheck(
         ref = "LE06",
-        value = "Number of unique labels in a experiment should not be greater than the number of channels",
+        value = "Number of labels (dyes used) in experiment is greater than the number of channels",
         application = MICRO_ARRAY_ONLY,
         modality = WARNING)
 public class NumberOfUniqueLabelsNotGraterThanChannels {

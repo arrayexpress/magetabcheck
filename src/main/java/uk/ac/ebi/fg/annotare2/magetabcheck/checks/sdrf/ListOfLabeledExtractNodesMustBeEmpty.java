@@ -27,7 +27,7 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.H
  */
 @MageTabCheck(
         ref = "LE01",
-        value = "There are must not be any Labeled Extract nodes in HTS experiments",
+        value = "There must not be a labeled extract in a sequencing experiment",
         application = HTS_ONLY)
 public class ListOfLabeledExtractNodesMustBeEmpty extends EmptyRangeCheck<SdrfLabeledExtractNode> {
 }
