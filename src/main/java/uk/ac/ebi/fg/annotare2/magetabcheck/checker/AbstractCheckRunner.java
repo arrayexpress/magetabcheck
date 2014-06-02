@@ -61,11 +61,11 @@ abstract class AbstractCheckRunner<T> implements CheckRunner<T> {
     }
 
     protected void failure() {
-        failure(null);
+        failure(null, null);
     }
 
-    protected void failure(CheckPosition pos) {
-        results.add(checkFailed(checkTitle, checkModality, pos));
+    protected void failure(CheckPosition pos, String dynamicDetail) {
+        results.add(checkFailed(checkTitle, checkModality, pos, dynamicDetail));
     }
 
     protected void error(Throwable e) {

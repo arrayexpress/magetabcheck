@@ -35,6 +35,8 @@ public class CheckResult implements Comparable<CheckResult> {
 
     private String title;
 
+    private String dynamicDetail;
+
     private Throwable exception;
 
     private CheckPosition position = undefinedPosition();
@@ -59,16 +61,22 @@ public class CheckResult implements Comparable<CheckResult> {
         return this;
     }
 
+    private CheckResult setDynamicDetail(String dynamicDetail) {
+        this.dynamicDetail = dynamicDetail;
+        return this;
+    }
+
     public static CheckResult checkSucceeded(String checkTitle, CheckModality checkModality, CheckPosition pos) {
         return new CheckResult(CHECK_SUCCESS, checkModality)
                 .setTitle(checkTitle)
                 .setPosition(pos);
     }
 
-    public static CheckResult checkFailed(String checkTitle, CheckModality checkModality, CheckPosition pos) {
+    public static CheckResult checkFailed(String checkTitle, CheckModality checkModality, CheckPosition pos, String dynamicDetail) {
         return new CheckResult(CHECK_FAILURE, checkModality)
                 .setTitle(checkTitle)
-                .setPosition(pos);
+                .setPosition(pos)
+                .setDynamicDetail(dynamicDetail);
     }
 
     public static CheckResult checkBroken(String checkTitle, CheckModality checkModality, Throwable e) {
@@ -93,6 +101,7 @@ public class CheckResult implements Comparable<CheckResult> {
                 ", title='" + title + '\'' +
                 ", exception=" + exception +
                 ", position=" + position +
+                dynamicDetail != null ? ", dynamicDetail="+dynamicDetail : "" +
                 '}';
     }
 
@@ -123,6 +132,10 @@ public class CheckResult implements Comparable<CheckResult> {
 
         sb.append(" ")
                 .append(title == null ? "Unknown check" : title);
+
+        if (dynamicDetail != null) {
+            sb.append(" (" + dynamicDetail + ") ");
+        }
 
         if (exception != null) {
             sb.append("\n")

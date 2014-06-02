@@ -8,6 +8,7 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Visit;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfAssayNode;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfFactorValueAttribute;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfScanNode;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSetter.setCheckDynamicDetail;
 
 import java.util.Set;
 
@@ -80,6 +81,7 @@ public class FactorValuesMustVary {
         // Check all factors other than compound and dose
         for (String key : multimap.keySet()) {
             if (!key.equals("dose") && !key.equals("compound"))  {
+                setCheckDynamicDetail("Offending factor: " + key);
                 assertThat(multimap.get(key).size(), greaterThan(1));
             }
         }

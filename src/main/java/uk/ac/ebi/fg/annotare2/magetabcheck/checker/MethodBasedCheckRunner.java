@@ -26,6 +26,8 @@ import java.util.Map;
 import static com.google.common.collect.Maps.newHashMap;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.clearCheckPosition;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.getCheckPosition;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSetter.clearCheckDynamicDetail;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSetter.getCheckDynamicDetail;
 
 /**
  * @author Olga Melnichuk
@@ -55,13 +57,14 @@ class MethodBasedCheckRunner<T> extends AbstractCheckRunner<T> {
     @Override
     public void runWith(T item, Map<Class<?>, Object> context) {
         clearCheckPosition();
+        clearCheckDynamicDetail();
         try {
             methodDef.invoke(add(context, item));
             success(getCheckPosition());
         } catch (InvocationTargetException e) {
             Throwable t = e.getCause();
             if (t instanceof AssertionError) {
-                failure(getCheckPosition());
+                failure(getCheckPosition(), getCheckDynamicDetail());
             } else {
                 error(t);
             }

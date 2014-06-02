@@ -26,7 +26,8 @@ import java.util.Map;
 
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.clearCheckPosition;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.getCheckPosition;
-
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSetter.clearCheckDynamicDetail;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSetter.getCheckDynamicDetail;
 /**
  * @author Olga Melnichuk
  */
@@ -76,6 +77,7 @@ class ClassBasedCheckRunner<T> extends AbstractCheckRunner<T> {
         if (!hasErrors()) {
             try {
                 clearCheckPosition();
+                clearCheckDynamicDetail();
                 classDef.invokeCheck(target);
                 success();
             } catch (AssertionError e) {
@@ -85,7 +87,7 @@ class ClassBasedCheckRunner<T> extends AbstractCheckRunner<T> {
             } catch (InvocationTargetException e) {
                 Throwable t = e.getCause();
                 if (t instanceof AssertionError) {
-                    failure(getCheckPosition());
+                    failure(getCheckPosition(), getCheckDynamicDetail());
                 } else {
                     error(t);
                 }
