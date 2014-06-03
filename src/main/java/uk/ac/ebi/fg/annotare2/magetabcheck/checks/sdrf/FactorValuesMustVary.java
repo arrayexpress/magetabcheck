@@ -2,6 +2,7 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.checks.sdrf;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Check;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Visit;
@@ -11,6 +12,7 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfScanNode;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSetter.setCheckDynamicDetail;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -79,11 +81,30 @@ public class FactorValuesMustVary {
         }
 
         // Check all factors other than compound and dose
+        // Store non-varying factors
+        SortedSet<String> offendingFactors = Sets.newTreeSet();
         for (String key : multimap.keySet()) {
-            if (!key.equals("dose") && !key.equals("compound"))  {
-                setCheckDynamicDetail("Offending factor: " + key);
-                assertThat(multimap.get(key).size(), greaterThan(1));
+            if (!key.equals("dose") && !key.equals("compound")) {
+
+                // If size is equal to one then the values of that factor do not vary
+                if (multimap.get(key).size() == 1) {
+                    offendingFactors.add(key);
+                }
             }
         }
+
+        //  Check non-varying factors
+        if (!offendingFactors.isEmpty()) {
+
+            // Format string that user sees
+            StringBuilder sb = new StringBuilder();
+            for (String factor : offendingFactors) {
+                sb.append(factor + ", ");
+            }
+            setCheckDynamicDetail("Offending factor(s): " + sb.toString());
+        }
+        // Throws error if offendingFactors contains entries
+        assertThat(offendingFactors.size(), equalTo(0));
+
     }
 }
