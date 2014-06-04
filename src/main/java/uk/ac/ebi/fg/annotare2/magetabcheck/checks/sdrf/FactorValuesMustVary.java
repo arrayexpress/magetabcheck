@@ -61,6 +61,7 @@ public class FactorValuesMustVary {
 
     private void check(Multimap<String, String> multimap) {
         Set factors = multimap.keySet();
+        SortedSet<String> offendingFactors = Sets.newTreeSet();
 
         // Compound and dose are dependant factors
         // If we have both only one needs to vary
@@ -73,16 +74,30 @@ public class FactorValuesMustVary {
             min++;
         }
 
-        // Min is determines if we have compound and dose, or just one
+        // Min determines if we have compound and dose, or just one
         // Thus if we have both min equals 2 and we should have more unique values than min
         // to ensure values vary. This also catches the case where we have just dose or just compound
         if (factors.contains("compound") || factors.contains("dose")) {
-            assertThat((multimap.get("dose").size() + multimap.get("compound").size()), greaterThan(min));
+
+            int numUniqueFactorValues = multimap.get("dose").size() + multimap.get("compound").size() ;
+
+            // if values of compound and dose do not vary add to offending factors and then assert at end
+            if (numUniqueFactorValues <= min) {
+                if (factors.contains("compound") && factors.contains("dose")) {
+                    offendingFactors.add("dose");
+                    offendingFactors.add("compound");
+                } else if (factors.contains("dose")) {
+                    offendingFactors.add("dose");
+                } else {
+                    offendingFactors.add("compound");
+                }
+            }
+
         }
 
         // Check all factors other than compound and dose
         // Store non-varying factors
-        SortedSet<String> offendingFactors = Sets.newTreeSet();
+
         for (String key : multimap.keySet()) {
             if (!key.equals("dose") && !key.equals("compound")) {
 
