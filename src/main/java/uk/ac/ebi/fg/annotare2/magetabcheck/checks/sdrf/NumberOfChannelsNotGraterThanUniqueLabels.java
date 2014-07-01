@@ -12,7 +12,7 @@ import java.util.Set;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.lang.Math.max;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.MICRO_ARRAY_ONLY;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.WARNING;
 
@@ -21,17 +21,17 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.WARNING;
  */
 @MageTabCheck(
         ref = "LE06",
-        value = "Number of labels (dyes used) in experiment is greater than the number of channels",
+        value = "Number of channels in the experiment should not exceed the number of labels (dyes used)",
         application = MICRO_ARRAY_ONLY,
         modality = WARNING)
-public class NumberOfUniqueLabelsNotGraterThanChannels {
+public class NumberOfChannelsNotGraterThanUniqueLabels {
 
     private final Set<String> uniqueLabels = newHashSet();
     private int channels = 0;
 
     @Visit
     public void visit(SdrfLabeledExtractNode labeledExtract) {
-        uniqueLabels.add(labeledExtract.getLabel().getName());
+        uniqueLabels.add(labeledExtract.getLabel().getValue());
     }
 
     @Visit
@@ -40,7 +40,7 @@ public class NumberOfUniqueLabelsNotGraterThanChannels {
         for (SdrfGraphNode parent : assayNode.getParentNodes()) {
             if (SdrfLabeledExtractNode.class.isAssignableFrom(parent.getClass())) {
                 SdrfLabeledExtractNode labeledExtract = (SdrfLabeledExtractNode) parent;
-                labels.add(labeledExtract.getLabel().getName());
+                labels.add(labeledExtract.getLabel().getValue());
             }
         }
         channels = max(channels, labels.size());
@@ -48,6 +48,6 @@ public class NumberOfUniqueLabelsNotGraterThanChannels {
 
     @Check
     public void check() {
-        assertThat(uniqueLabels.size(), greaterThan(channels));
+        assertThat(channels, lessThanOrEqualTo(uniqueLabels.size()));
     }
 }
