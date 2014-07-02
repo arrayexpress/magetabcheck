@@ -614,6 +614,15 @@ public class SdrfSimpleChecks {
         assertNotEmptyName(arrayDataNode);
     }
 
+    @MageTabCheck(
+            ref = "ADN02",
+            value = "A raw data file name must only contain alphanumeric characters, underscores and dots")
+    public void arrayDataNodeMustHaveFormattedName(SdrfArrayDataNode arrayDataNode) {
+        assertThat(checkFileName(arrayDataNode), is(true));
+    }
+
+
+
     /*@MageTabCheck(
             ref = "ADN02",
             value = "Name of an array data node must be a valid file location")
@@ -637,6 +646,14 @@ public class SdrfSimpleChecks {
         assertNotEmptyName(derivedArrayDataNode);
     }
 
+
+    @MageTabCheck(
+            ref = "DADN02",
+            value = "A processed data file name must only contain alphanumeric characters, underscores and dots")
+    public void derivedArrayDataNodeMustHaveFormattedName(SdrfDerivedArrayDataNode derivedArrayDataNode) {
+        assertThat(checkFileName(derivedArrayDataNode), is(true));
+    }
+
    /* @MageTabCheck(
             ref = "DADN02",
             value = "Name of a derived array data node must be a valid file location")
@@ -656,6 +673,13 @@ public class SdrfSimpleChecks {
             value = "An array data matrix file must have name specified")
     public void arrayDataMatrixNodeMustHaveName(SdrfArrayDataMatrixNode arrayDataMatrixNode) {
         assertNotEmptyName(arrayDataMatrixNode);
+    }
+
+    @MageTabCheck(
+            ref = "ADMN02",
+            value = "An array data matrix file name must only contain alphanumeric characters, underscores and dots")
+    public void arrayDataMatrixNodeMustHaveFormattedName(SdrfArrayDataMatrixNode arrayDataMatrixNode) {
+        assertThat(checkFileName(arrayDataMatrixNode), is(true));
     }
 
     /*@MageTabCheck(
@@ -680,6 +704,13 @@ public class SdrfSimpleChecks {
         assertNotEmptyName(derivedArrayDataMatrixNode);
     }
 
+    @MageTabCheck(
+            ref = "DADMN02",
+            value = "A derived array data matrix file name must only contain alphanumeric characters, underscores and dots")
+    public void derivedArrayDataMatrixNodeMustHaveFormattedName(SdrfDerivedArrayDataMatrixNode derivedArrayDataMatrixNode) {
+        assertThat(checkFileName(derivedArrayDataMatrixNode), is(true));
+    }
+
     /*@MageTabCheck(
             ref = "DADMN02",
             value = "Name of derived data matrix node must be valid file location")
@@ -695,6 +726,15 @@ public class SdrfSimpleChecks {
             SdrfDerivedArrayDataMatrixNode derivedArrayDataMatrixNode) {
         assertNodeIsDescribedByProtocol(derivedArrayDataMatrixNode);
     }
+
+    private static boolean checkFileName(SdrfDataNode dataNode){
+        // We only want to accept files with alphanumeric characters, no spaces, symbols etc.
+        String pattern = "[_a-zA-Z0-9\\-\\.]+";
+        String filename = dataNode.getName();
+        boolean isFound = java.util.regex.Pattern.compile(pattern).matcher(filename).matches();
+        return isFound;
+    }
+
 
     private static <T> void assertNotNull(T obj) {
         assertThat(obj, notNullValue());
