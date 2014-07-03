@@ -1,3 +1,8 @@
+## Release 1.14
+
+  * Added check for file names to ensure they only contain alphanumeric characters, underscores and dots.
+  * Update to limpopo 1.1.8
+
 ## Release 1.13
 
   * Updated check for varying factor values so the offending factor is returned in error message
