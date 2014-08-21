@@ -18,6 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.modelimpl.limpopo.sdrf;
 
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.LabeledExtractNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfComment;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfLabelAttribute;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfLabeledExtractNode;
 
@@ -53,5 +54,14 @@ class LimpopoBasedLabeledExtractNode extends LimpopoBasedMaterialNode<LabeledExt
     @Override
     public SdrfLabelAttribute getLabel() {
         return getAttribute(SdrfLabelAttribute.class);
+    }
+
+    @Override
+    public Collection<SdrfComment> getComments() {
+        List<SdrfComment> comments = newArrayList();
+        for (String commentName : node().comments.keySet()) {
+            comments.add(new LimpopoBasedSdrfComment(commentName, node().comments.get(commentName)));
+        }
+        return comments;
     }
 }

@@ -19,7 +19,7 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf;
 /**
  * @author Olga Melnichuk
  */
-public interface SdrfSourceNode extends SdrfMaterialNode {
+public interface SdrfSourceNode extends SdrfMaterialNode, HasComments {
 
     String getDescription();
 

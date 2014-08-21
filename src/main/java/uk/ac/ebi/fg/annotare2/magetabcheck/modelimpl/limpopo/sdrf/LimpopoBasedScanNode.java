@@ -18,6 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.modelimpl.limpopo.sdrf;
 
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.ScanNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfComment;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfFactorValueAttribute;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfScanNode;
 
@@ -45,5 +46,14 @@ class LimpopoBasedScanNode extends LimpopoBasedSdrfNode<ScanNode> implements Sdr
     @Override
     public Collection<SdrfFactorValueAttribute> getFactorValues() {
         return getAttributes(SdrfFactorValueAttribute.class);
+    }
+
+    @Override
+    public Collection<SdrfComment> getComments() {
+        List<SdrfComment> comments = newArrayList();
+        for (String commentName : node().comments.keySet()) {
+            comments.add(new LimpopoBasedSdrfComment(commentName, node().comments.get(commentName)));
+        }
+        return comments;
     }
 }

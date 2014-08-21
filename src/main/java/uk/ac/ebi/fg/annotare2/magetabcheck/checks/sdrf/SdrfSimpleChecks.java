@@ -17,6 +17,7 @@
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.sdrf;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
@@ -513,6 +514,24 @@ public class SdrfSimpleChecks {
     public void termSourceOfUnitAttributeMustBeValid(SdrfUnitAttribute unitAttribute) {
         setPosition(unitAttribute);
         assertTermSourceIsValid(unitAttribute);
+    }
+
+    @MageTabCheck(
+            ref = "LC01",
+            value = "Library source, layout, selection and strategy must be specified for the ENA library info",
+            application = HTS_ONLY)
+    public void extractNodeMustHaveFourLibraryComments(SdrfExtractNode extractNode) {
+        setPosition(extractNode);
+        Collection<String> requiredComments = ImmutableSet.of(
+                "LIBRARY_LAYOUT", "LIBRARY_SELECTION", "LIBRARY_SOURCE", "LIBRARY_STRATEGY"
+        );
+        int count = 0;
+        for (SdrfComment comment : extractNode.getComments()) {
+            if (requiredComments.contains(comment.getName())) {
+                count++;
+            }
+        }
+        assertThat(count, is(4));
     }
 
     @MageTabCheck(

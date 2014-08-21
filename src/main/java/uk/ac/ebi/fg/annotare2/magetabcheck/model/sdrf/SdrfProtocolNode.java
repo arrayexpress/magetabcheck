@@ -24,7 +24,7 @@ import java.util.Collection;
 /**
  * @author Olga Melnichuk
  */
-public interface SdrfProtocolNode extends SdrfGraphNode, HasTermSource {
+public interface SdrfProtocolNode extends SdrfGraphNode, HasTermSource, HasComments {
 
     String getDate();
 

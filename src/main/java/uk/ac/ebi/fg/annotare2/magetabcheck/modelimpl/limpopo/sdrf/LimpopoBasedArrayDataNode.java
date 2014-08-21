@@ -20,9 +20,12 @@ import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.ArrayDataNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.FileLocation;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfArrayDataNode;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfComment;
 
 import java.util.Collection;
+import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.emptyList;
 
 /**
@@ -42,5 +45,14 @@ class LimpopoBasedArrayDataNode extends LimpopoBasedSdrfNode <ArrayDataNode> imp
     @Override
     public FileLocation getLocation() {
         return location(getName());
+    }
+
+    @Override
+    public Collection<SdrfComment> getComments() {
+        List<SdrfComment> comments = newArrayList();
+        for (String commentName : node().comments.keySet()) {
+            comments.add(new LimpopoBasedSdrfComment(commentName, node().comments.get(commentName)));
+        }
+        return comments;
     }
 }

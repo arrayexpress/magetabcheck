@@ -21,7 +21,7 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.FileLocation;
 /**
  * @author Olga Melnichuk
  */
-public interface SdrfDataNode extends SdrfGraphNode {
+public interface SdrfDataNode extends SdrfGraphNode, HasComments {
 
     FileLocation getLocation();
 }

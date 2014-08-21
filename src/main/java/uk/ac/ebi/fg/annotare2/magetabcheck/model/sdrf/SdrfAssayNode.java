@@ -21,7 +21,7 @@ import java.util.Collection;
 /**
  * @author Olga Melnichuk
  */
-public interface SdrfAssayNode extends SdrfGraphNode {
+public interface SdrfAssayNode extends SdrfGraphNode, HasComments {
 
     SdrfTechnologyTypeAttribute getTechnologyType();
 

@@ -18,10 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.modelimpl.limpopo.sdrf;
 
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.AssayNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
-import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfArrayDesignAttribute;
-import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfAssayNode;
-import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfFactorValueAttribute;
-import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfTechnologyTypeAttribute;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -59,5 +56,14 @@ class LimpopoBasedAssayNode extends LimpopoBasedSdrfNode<AssayNode> implements S
     @Override
     public Collection<SdrfArrayDesignAttribute> getArrayDesigns() {
         return getAttributes(SdrfArrayDesignAttribute.class);
+    }
+
+    @Override
+    public Collection<SdrfComment> getComments() {
+        List<SdrfComment> comments = newArrayList();
+        for (String commentName : node().comments.keySet()) {
+            comments.add(new LimpopoBasedSdrfComment(commentName, node().comments.get(commentName)));
+        }
+        return comments;
     }
 }

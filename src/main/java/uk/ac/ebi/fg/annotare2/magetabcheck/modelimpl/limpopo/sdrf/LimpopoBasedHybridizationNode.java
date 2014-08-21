@@ -86,4 +86,13 @@ public class LimpopoBasedHybridizationNode extends LimpopoBasedSdrfNode<Hybridiz
     public Collection<SdrfArrayDesignAttribute> getArrayDesigns() {
         return getAttributes(SdrfArrayDesignAttribute.class);
     }
+
+    @Override
+    public Collection<SdrfComment> getComments() {
+        List<SdrfComment> comments = newArrayList();
+        for (String commentName : node().comments.keySet()) {
+            comments.add(new LimpopoBasedSdrfComment(commentName, node().comments.get(commentName)));
+        }
+        return comments;
+    }
 }
