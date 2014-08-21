@@ -754,7 +754,10 @@ public class SdrfSimpleChecks {
 
     private static void assertNotEmptyName(SdrfGraphEntity node) {
         setPosition(node);
-        assertNotEmptyString(node.getName());
+        String name = node.getName();
+        assertNotEmptyString(name);
+            // also check pattern used by Annotare to mark empty nodes
+        assertThat(name.matches("____UNASSIGNED____\\d+"), is(false));
     }
 
     private static void assertNodeIsDescribedByProtocol(SdrfGraphNode node) {
