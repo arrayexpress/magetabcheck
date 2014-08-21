@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 @MageTabCheck(
         ref = "SR06",
-        value = "A source (starting sample for the experiment) should have unique characteristic types e.g. a characteristic of type strain (Characteristics[strain]) should not appear twice or more "
+        value = "A source (starting sample for the experiment) should have unique characteristic types e.g. a characteristic of type strain (Characteristics[strain]) should not appear twice or more, regardless of casing (strain/Strain/STRAIN)"
 )
 public class CharacteristicTypeMustVary {
 
