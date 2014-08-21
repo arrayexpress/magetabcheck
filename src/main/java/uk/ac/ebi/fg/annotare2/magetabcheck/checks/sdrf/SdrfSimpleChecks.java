@@ -663,7 +663,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "DADN03",
-            value = "A derived array data node (processed data file) should be described by a 'normalization data transformation protocol'")
+            value = "You must provide a 'normalization data transformation protocol' to describe your processed data file(s)")
     public void derivedArrayDataNodeShouldBeDescribedByProtocol(SdrfDerivedArrayDataNode derivedArrayDataNode) {
         assertNodeIsDescribedByProtocol(derivedArrayDataNode);
     }
@@ -721,7 +721,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "DADMN03",
-            value = "A derived array data matrix node (processed data matrix file) should be described by a 'normalization data transformation protocol'")
+            value = "You must provide a 'normalization data transformation protocol' to describe your processed data matrix file")
     public void derivedArrayDataMatrixNodeShouldBeDescribedByProtocol(
             SdrfDerivedArrayDataMatrixNode derivedArrayDataMatrixNode) {
         assertNodeIsDescribedByProtocol(derivedArrayDataMatrixNode);
