@@ -19,12 +19,12 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 import org.easymock.EasyMock;
 import org.easymock.IAnswer;
 import org.junit.Test;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.EfoService;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.EfoTerm;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfoImpl;
 import uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownProtocolHardware;
 import uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource;
-import uk.ac.ebi.fg.annotare2.magetabcheck.efo.EfoService;
-import uk.ac.ebi.fg.annotare2.magetabcheck.efo.EfoTerm;
 
 import java.util.Collections;
 
@@ -95,7 +95,7 @@ public class LibraryConstructionProtocolRequiredTest extends AbstractCheckTest {
                     @Override
                     public EfoTerm answer() throws Throwable {
                         String title = (String) getCurrentArguments()[0];
-                        return "library construction protocol".equals(title) ? new EfoTerm("", "", "", false, Collections.<String>emptyList()) : null;
+                        return "library construction protocol".equals(title) ? EfoTerm.EMPTY : null;
                     }
                 }
         );

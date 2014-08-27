@@ -20,14 +20,14 @@ import org.easymock.EasyMock;
 import org.easymock.IAnswer;
 import org.junit.Test;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.AbstractCheckTest;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.EfoService;
+import uk.ac.ebi.fg.annotare2.magetabcheck.efo.EfoTerm;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfoImpl;
 import uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfPerformerAttribute;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfProtocolNode;
-import uk.ac.ebi.fg.annotare2.magetabcheck.efo.EfoService;
-import uk.ac.ebi.fg.annotare2.magetabcheck.efo.EfoTerm;
 
 import java.util.Collections;
 
@@ -150,7 +150,7 @@ public class ProtocolNodePerformerAttributeTest extends AbstractCheckTest {
                     @Override
                     public EfoTerm answer() throws Throwable {
                         String title = (String) getCurrentArguments()[0];
-                        return SEQUENCING_PROTOCOL_TYPE.equals(title) ? new EfoTerm("", "", "", false, Collections.<String>emptyList()) : null;
+                        return SEQUENCING_PROTOCOL_TYPE.equals(title) ? EfoTerm.EMPTY : null;
                     }
                 }
         );

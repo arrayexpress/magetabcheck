@@ -17,6 +17,7 @@
 package uk.ac.ebi.fg.annotare2.magetabcheck.efo;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -27,18 +28,30 @@ import static java.util.Collections.unmodifiableCollection;
  */
 public class EfoTerm {
 
+    public static EfoTerm EMPTY = new EfoTerm("", "", "", false, Collections.<String>emptyList(), Collections.<String>emptyList(), Collections.<String>emptyList());
+
     private final String accession;
     private final String label;
     private final List<String> synonyms = newArrayList();
     private final String definition;
     private final boolean isOrganisational;
+    private final List<String> parents = newArrayList();
+    private final List<String> ascendants = newArrayList();
 
-    public EfoTerm(String accession, String label, String definition, boolean isOrganisational,  Collection<String> synonyms) {
+    public EfoTerm(String accession,
+                   String label,
+                   String definition,
+                   boolean isOrganisational,
+                   Collection<String> synonyms,
+                   Collection<String> parents,
+                   Collection<String> ascendants) {
         this.accession = accession;
         this.label = label;
         this.definition = definition;
         this.isOrganisational = isOrganisational;
         this.synonyms.addAll(synonyms);
+        this.parents.addAll(parents);
+        this.ascendants.addAll(ascendants);
     }
 
     public String getAccession() {
@@ -59,5 +72,13 @@ public class EfoTerm {
 
     public boolean isOrganisational() {
         return isOrganisational;
+    }
+
+    public Collection<String> getParents() {
+        return unmodifiableCollection(parents);
+    }
+
+    public Collection<String> getAscendants() {
+        return unmodifiableCollection(ascendants);
     }
 }

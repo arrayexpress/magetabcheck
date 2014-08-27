@@ -89,7 +89,15 @@ class EfoNodeImpl implements EfoNode {
 
     @Override
     public EfoTerm asTerm() {
-        return new EfoTerm(getAccession(), getLabel(), getDefinition(), isOrganisational(), getAlternativeNames());
+        return new EfoTerm(
+                getAccession(),
+                getLabel(),
+                getDefinition(),
+                isOrganisational(),
+                getAlternativeNames(),
+                getParentAccessions(),
+                getAscendantAccessions()
+        );
     }
 
     void setLabel(String label) {
@@ -118,6 +126,27 @@ class EfoNodeImpl implements EfoNode {
 
     void addChildren(Collection<EfoNodeImpl> moreChildren) {
         children.addAll(moreChildren);
+    }
+
+    private Collection<String> getParentAccessions() {
+        List<String> parentAccessions = newArrayList();
+
+        for (EfoNode parent : getParents()) {
+            parentAccessions.add(parent.getAccession());
+        }
+
+        return parentAccessions;
+    }
+
+    private Collection<String> getAscendantAccessions() {
+        List<String> ascendantAccessions = newArrayList();
+
+        ascendantAccessions.addAll(getParentAccessions());
+        for (EfoNode parent : getParents()) {
+            ascendantAccessions.addAll(((EfoNodeImpl)parent).getAscendantAccessions());
+        }
+
+        return ascendantAccessions;
     }
 
     @Deprecated
