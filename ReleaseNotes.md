@@ -1,3 +1,10 @@
+## Release 1.15
+
+  * Added check for characteristics of the same type
+  * Updated error message about missing sequencing hardware so it contains some new platforms accepted by the ENA
+  * Added check for presence of library comments attached to extract node for sequencing submissions
+  * Updated check for presence of assay names
+
 ## Release 1.14
 
   * Added check for file names to ensure they only contain alphanumeric characters, underscores and dots.
