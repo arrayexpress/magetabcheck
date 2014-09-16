@@ -18,7 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.checks;
 
 import com.google.common.base.Predicate;
 
-import static com.google.common.collect.Ranges.singleton;
+import static com.google.common.collect.Range.singleton;
 
 /**
  * @author Olga Melnichuk
