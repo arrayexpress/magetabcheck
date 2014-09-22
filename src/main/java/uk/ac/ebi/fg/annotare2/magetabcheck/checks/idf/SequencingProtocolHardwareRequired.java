@@ -10,7 +10,7 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
 import javax.annotation.Nullable;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.collect.Ranges.singleton;
+import static com.google.common.collect.Range.singleton;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownProtocolHardware.isValidProtocolHardware;
 
 /**

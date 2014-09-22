@@ -23,7 +23,7 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Comment;
 
 import javax.annotation.Nullable;
 
-import static com.google.common.collect.Ranges.singleton;
+import static com.google.common.collect.Range.singleton;
 
 /**
  * @author Olga Melnichuk

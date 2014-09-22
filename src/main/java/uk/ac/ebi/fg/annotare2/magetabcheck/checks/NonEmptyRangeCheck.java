@@ -18,7 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.checks;
 
 import com.google.common.base.Predicate;
 
-import static com.google.common.collect.Ranges.greaterThan;
+import static com.google.common.collect.Range.greaterThan;
 
 /**
  * @author Olga Melnichuk

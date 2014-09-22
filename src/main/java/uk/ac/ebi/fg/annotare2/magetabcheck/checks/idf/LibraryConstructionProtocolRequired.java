@@ -23,13 +23,10 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checks.RangeCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
-import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.ProtocolType;
-import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermSource;
 
 import javax.annotation.Nullable;
 
-import static com.google.common.collect.Ranges.atLeast;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.EFO;
+import static com.google.common.collect.Range.atLeast;
 
 /**
  * @author Olga Melnichuk

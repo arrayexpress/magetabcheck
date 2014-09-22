@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.URL;
 
-import static com.google.common.io.Closeables.closeQuietly;
+import static com.google.common.io.Closeables.close;
 
 /**
  * @author Olga Melnichuk
@@ -104,7 +104,7 @@ public class EfoLoader {
             in = new FileInputStream(file);
             return load(in);
         } finally {
-            closeQuietly(in);
+            close(in, true);
         }
     }
 
