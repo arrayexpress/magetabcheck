@@ -26,7 +26,7 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
 
 import javax.annotation.Nullable;
 
-import static com.google.common.collect.Range.singleton;
+import static com.google.common.collect.Range.atLeast;
 
 /**
  * @author Olga Melnichuk
@@ -42,7 +42,7 @@ public class SequencingProtocolRequired extends RangeCheck<Protocol> {
 
     @Inject
     public SequencingProtocolRequired(MageTabCheckEfo efo) {
-        super(new SequencingProtocolPredicate(efo), singleton(1));
+        super(new SequencingProtocolPredicate(efo), atLeast(1));
     }
 
     static class SequencingProtocolPredicate implements Predicate<Protocol> {
