@@ -10,7 +10,7 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
 import javax.annotation.Nullable;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.collect.Range.singleton;
+import static com.google.common.collect.Range.atLeast;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownProtocolHardware.isValidProtocolHardware;
 
 /**
@@ -26,7 +26,7 @@ public class SequencingProtocolHardwareRequired extends RangeCheck<Protocol> {
 
     @Inject
     public SequencingProtocolHardwareRequired(MageTabCheckEfo efo) {
-        super(new SequencingProtocolHardwarePredicate(efo), singleton(1));
+        super(new SequencingProtocolHardwarePredicate(efo), atLeast(1));
     }
 
     static class SequencingProtocolHardwarePredicate extends SequencingProtocolRequired.SequencingProtocolPredicate {
