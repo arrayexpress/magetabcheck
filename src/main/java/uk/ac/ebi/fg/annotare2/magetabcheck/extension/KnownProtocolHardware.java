@@ -19,7 +19,6 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.extension;
 import com.google.common.base.Function;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -33,6 +32,7 @@ public class KnownProtocolHardware {
 
     //TODO put it into property file
     public static final List<String> LIST = unmodifiableList(transform(newArrayList(
+
             "Illumina Genome Analyzer",
             "Illumina Genome Analyzer II",
             "Illumina Genome Analyzer IIx",
@@ -62,6 +62,11 @@ public class KnownProtocolHardware {
             "AB 3130xL Genetic Analyzer",
             "AB 3130 Genetic Analyzer",
             "AB 310 Genetic Analyzer",
+            "MinION",
+            "GridION",
+            "HiSeq X Ten",
+            "NextSeq 500",
+            "Illumina HiSeq 1500",
             "unspecified" ), new Function<String, String>() {
         @Override
         public String apply(@Nullable String input) {
