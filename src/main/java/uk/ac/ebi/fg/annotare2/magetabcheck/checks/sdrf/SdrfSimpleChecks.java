@@ -562,7 +562,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "FV01",
-            value = "A factor value attribute should have a name specified",
+            value = "An experimental variable attribute should have a name specified",
             modality = WARNING)
     public void factorValueAttributeShouldHaveName(SdrfFactorValueAttribute fvAttribute) {
         setPosition(fvAttribute);
@@ -571,7 +571,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "FV02",
-            value = "A factor value attribute should have a term source specified",
+            value = "An experimental variable attribute should have a term source specified",
             modality = WARNING)
     public void factorValueAttributeShouldHaveTermSource(SdrfFactorValueAttribute fvAttribute) {
         setPosition(fvAttribute);
@@ -580,7 +580,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "FV03",
-            value = "Term source of a factor value attribute must be declared in IDF")
+            value = "Term source of an experimental variable attribute must be declared in IDF")
     public void termSourceOfFactorValueAttributeMustBeValid(SdrfFactorValueAttribute fvAttribute) {
         setPosition(fvAttribute);
         assertTermSourceIsValid(fvAttribute);

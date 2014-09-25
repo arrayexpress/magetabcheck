@@ -58,7 +58,7 @@ public class CheckListGenerator {
         prefixes.put("PR", "Protocol");
         prefixes.put("PB", "Publication");
         prefixes.put("C", "Contact");
-        prefixes.put("EF", "Experimental Factor");
+        prefixes.put("EF", "Experimental Variable");
         prefixes.put("ED", "Experimental Design");
         prefixes.put("QC", "Quality Control Type");
         prefixes.put("NT", "Normalization Type");
@@ -75,7 +75,7 @@ public class CheckListGenerator {
         prefixes.put("L", "Label Attribute");
         prefixes.put("PN", "Protocol Node");
         prefixes.put("PV", "Parameter Value Attribute");
-        prefixes.put("FV", "Factor Value Attribute");
+        prefixes.put("FV", "Experimental Variable Attribute");
         prefixes.put("AN", "Assay Node");
         prefixes.put("TT", "Technology type");
         prefixes.put("SC", "Scan Node");

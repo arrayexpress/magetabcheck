@@ -18,7 +18,6 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 
 import org.hamcrest.Matchers;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPosition;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.Cell;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.FileLocation;
@@ -202,14 +201,14 @@ public class IdfSimpleChecks {
 
     @MageTabCheck(
             ref = "EF02",
-            value = "An experimental factor must have name specified")
+            value = "An experimental variable must have name specified")
     public void experimentalFactorMustHaveName(ExperimentalFactor exf) {
         assertNotEmptyString(exf.getName());
     }
 
     @MageTabCheck(
             ref = "EF03",
-            value = "An experimental factor should have a type specified",
+            value = "An experimental variable should have a type specified",
             modality = WARNING
     )
     public void experimentalFactorShouldHaveType(ExperimentalFactor exf) {
@@ -218,7 +217,7 @@ public class IdfSimpleChecks {
 
     @MageTabCheck(
             ref = "EF04",
-            value = "An experimental factor type should have term source specified",
+            value = "An experimental variable type should have term source specified",
             modality = WARNING)
     public void experimentalFactorTypeShouldHaveSource(ExperimentalFactor exf) {
         assertNotNull(exf.getType().getSource());

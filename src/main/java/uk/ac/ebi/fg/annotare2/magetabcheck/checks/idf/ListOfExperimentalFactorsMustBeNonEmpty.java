@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
  */
 @MageTabCheck(
         ref = "EF01",
-        value = "An experiment must have at least one experimental factor/variable specified")
+        value = "An experiment must have at least one experimental variable specified")
 public class ListOfExperimentalFactorsMustBeNonEmpty extends NonEmptyRangeCheck<ExperimentalFactor> {
     public ListOfExperimentalFactorsMustBeNonEmpty() {
         super(new Predicate<ExperimentalFactor>() {
