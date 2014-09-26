@@ -1,3 +1,10 @@
+## Release 1.16
+
+  * Switched to Guava 16.0.1
+  * Changed wording of some error/warning messages from "experimental factor" to "experimental variable"
+  * Updated list of accepted sequencing hardware
+  * Fixed SequencingProtocolRequired and SequencingProtocolHardwareRequired to accept more than one sequencing protocol defined
+
 ## Release 1.15
 
   * Added check for characteristics of the same type
