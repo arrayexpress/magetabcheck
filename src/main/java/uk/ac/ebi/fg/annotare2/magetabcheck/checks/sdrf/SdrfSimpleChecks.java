@@ -642,12 +642,12 @@ public class SdrfSimpleChecks {
 
 
 
-    /*@MageTabCheck(
+    @MageTabCheck(
             ref = "ADN02",
             value = "Name of an array data node must be a valid file location")
     public void nameOfArrayDataNodeMustBeValidFileLocation(SdrfArrayDataNode arrayDataNode) {
         assertFileLocationIsValid(arrayDataNode);
-    }*/
+    }
 
     @MageTabCheck(
             ref = "ADN03",
@@ -673,12 +673,12 @@ public class SdrfSimpleChecks {
         assertThat(checkFileName(derivedArrayDataNode), is(true));
     }
 
-   /* @MageTabCheck(
+    @MageTabCheck(
             ref = "DADN02",
             value = "Name of a derived array data node must be a valid file location")
     public void nameOfDerivedArrayDataNodeMustBeValidFileLocation(SdrfDerivedArrayDataNode derivedArrayDataNode) {
         assertFileLocationIsValid(derivedArrayDataNode);
-    }*/
+    }
 
     @MageTabCheck(
             ref = "DADN03",
@@ -701,12 +701,12 @@ public class SdrfSimpleChecks {
         assertThat(checkFileName(arrayDataMatrixNode), is(true));
     }
 
-    /*@MageTabCheck(
+    @MageTabCheck(
             ref = "ADMN02",
             value = "Name of an array data matrix node must be valid file location")
     public void nameOfArrayDataMatrixNodeMustBeValidFileLocation(SdrfArrayDataMatrixNode arrayDataMatrixNode) {
         assertFileLocationIsValid(arrayDataMatrixNode);
-    }*/
+    }
 
     @MageTabCheck(
             ref = "ADMN03",
@@ -730,13 +730,13 @@ public class SdrfSimpleChecks {
         assertThat(checkFileName(derivedArrayDataMatrixNode), is(true));
     }
 
-    /*@MageTabCheck(
+    @MageTabCheck(
             ref = "DADMN02",
             value = "Name of derived data matrix node must be valid file location")
     public void nameOfDerivedArrayDataMatrixNodeMustBeValidFileLocation(
             SdrfDerivedArrayDataMatrixNode derivedArrayDataMatrixNode) {
         assertFileLocationIsValid(derivedArrayDataMatrixNode);
-    }*/
+    }
 
     @MageTabCheck(
             ref = "DADMN03",
@@ -775,7 +775,8 @@ public class SdrfSimpleChecks {
         setPosition(node);
         String name = node.getName();
         assertNotEmptyString(name);
-            // also check pattern used by Annotare to mark empty nodes
+
+        // also check pattern used by Annotare to mark empty nodes
         assertThat(null == name || name.matches("____UNASSIGNED____\\d+"), is(false));
     }
 

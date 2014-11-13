@@ -60,6 +60,8 @@ public class IsValidFileLocation extends TypeSafeMatcher<FileLocation> {
                     conn.disconnect();
                     return false;
                 }
+            } else if ("annotare".equals(protocol)) {
+                return null != location.openConnection();
             } else {
                 log.debug("unknown protocol: {}", protocol);
                 return false;
@@ -80,7 +82,7 @@ public class IsValidFileLocation extends TypeSafeMatcher<FileLocation> {
     }
 
     @Factory
-    public static <T> Matcher<FileLocation> isValidFileLocation() {
+    public static Matcher<FileLocation> isValidFileLocation() {
         return new IsValidFileLocation();
     }
 }
