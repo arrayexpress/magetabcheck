@@ -531,7 +531,34 @@ public class SdrfSimpleChecks {
                 count++;
             }
         }
-        assertThat(count, is(4));
+        assertThat(count, is(requiredComments.size()));
+    }
+
+    @MageTabCheck(
+            ref = "LC02",
+            value = "NOMINAL_LENGTH and NOMINAL_SDEV must be specified as integer values for paired-end sequencing samples in the ENA library info",
+            application = HTS_ONLY)
+    public void extractNodeMustHaveNominalLengthAndSDevSpecifiedForPairedExtracts(SdrfExtractNode extractNode) {
+        setPosition(extractNode);
+        Collection<String> requiredComments = ImmutableSet.of(
+                "NOMINAL_LENGTH", "NOMINAL_SDEV"
+        );
+
+        boolean isPaired = false;
+        int count = 0;
+
+        for (SdrfComment comment : extractNode.getComments()) {
+            if (comment.getName().equals("LIBRARY_LAYOUT") && comment.getValues().contains("PAIRED")) {
+                isPaired = true;
+            }
+            if (requiredComments.contains(comment.getName()) && isValidUnsignedInteger(comment.getValues())) {
+                count++;
+            }
+        }
+
+        if (isPaired) {
+            assertThat(count, is(requiredComments.size()));
+        }
     }
 
     @MageTabCheck(
@@ -754,6 +781,14 @@ public class SdrfSimpleChecks {
         return isFound;
     }
 
+    private static boolean isValidUnsignedInteger(Collection<String> values) {
+        for (String value : values) {
+            if (null == value || !value.matches("^\\d+$")) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     private static <T> void assertNotNull(T obj) {
         assertThat(obj, notNullValue());
