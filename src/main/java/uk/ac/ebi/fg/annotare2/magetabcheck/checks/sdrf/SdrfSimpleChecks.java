@@ -536,28 +536,28 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "LC02",
-            value = "NOMINAL_LENGTH and NOMINAL_SDEV must be specified as integer values for paired-end sequencing samples in the ENA library info",
+            value = "NOMINAL_LENGTH must be a positive integer and NOMINAL_SDEV must be a positive number for paired-end sequencing samples in the ENA library info",
             application = HTS_ONLY)
     public void extractNodeMustHaveNominalLengthAndSDevSpecifiedForPairedExtracts(SdrfExtractNode extractNode) {
         setPosition(extractNode);
-        Collection<String> requiredComments = ImmutableSet.of(
-                "NOMINAL_LENGTH", "NOMINAL_SDEV"
-        );
 
         boolean isPaired = false;
         int count = 0;
 
         for (SdrfComment comment : extractNode.getComments()) {
-            if (comment.getName().equals("LIBRARY_LAYOUT") && comment.getValues().contains("PAIRED")) {
+            if ("LIBRARY_LAYOUT".equals(comment.getName()) && comment.getValues().contains("PAIRED")) {
                 isPaired = true;
             }
-            if (requiredComments.contains(comment.getName()) && isValidUnsignedInteger(comment.getValues())) {
+            if ("NOMINAL_LENGTH".contains(comment.getName()) && isValidPositiveInteger(comment.getValues())) {
+                count++;
+            }
+            if ("NOMINAL_SDEV".contains(comment.getName()) && isValidPositiveDouble(comment.getValues())) {
                 count++;
             }
         }
 
         if (isPaired) {
-            assertThat(count, is(requiredComments.size()));
+            assertThat(count, is(2));
         }
     }
 
@@ -775,15 +775,30 @@ public class SdrfSimpleChecks {
 
     private static boolean checkFileName(SdrfDataNode dataNode){
         // We only want to accept files with alphanumeric characters, no spaces, symbols etc.
-        String pattern = "[_a-zA-Z0-9\\-\\.]+";
         String filename = dataNode.getName();
-        boolean isFound = java.util.regex.Pattern.compile(pattern).matcher(filename).matches();
-        return isFound;
+        return null != filename && filename.matches("^[_a-zA-Z0-9\\-\\.]+$");
     }
 
-    private static boolean isValidUnsignedInteger(Collection<String> values) {
+    private static boolean isValidPositiveInteger(Collection<String> values) {
         for (String value : values) {
-            if (null == value || !value.matches("^\\d+$")) {
+            try {
+                if (null == value || Integer.valueOf(value) <= 0) {
+                    return false;
+                }
+            } catch (NumberFormatException x) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean isValidPositiveDouble(Collection<String> values) {
+        for (String value : values) {
+            try {
+                if (null == value || Double.valueOf(value) < 0) {
+                    return false;
+                }
+            } catch (NumberFormatException x) {
                 return false;
             }
         }
