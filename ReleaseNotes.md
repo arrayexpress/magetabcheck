@@ -1,3 +1,8 @@
+## Release 1.17
+
+  * Re-enabled file presence checking for both Annotare-embedded and standalone checking 
+  * Added verification of NOMINAL_LENGTH and NOMINAL_SDEV parameters for paired-end HTS samples
+
 ## Release 1.16
 
   * Switched to Guava 16.0.1
