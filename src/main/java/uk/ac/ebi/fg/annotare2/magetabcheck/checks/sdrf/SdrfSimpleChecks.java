@@ -23,7 +23,6 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.FileLocation;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
-import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.*;
 
 import javax.annotation.Nullable;
@@ -42,7 +41,6 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.se
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfConstants.DATE_FORMAT;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.matchers.IsDateString.isDateString;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.matchers.IsValidFileLocation.isValidFileLocation;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownTermSource.NCBI_TAXONOMY;
 
 /**
  * @author Olga Melnichuk
@@ -96,10 +94,10 @@ public class SdrfSimpleChecks {
     private SdrfCharacteristicAttribute getOrganism(Collection<SdrfCharacteristicAttribute> characteristics) {
         for (SdrfCharacteristicAttribute attr : characteristics) {
             if ("Organism".equalsIgnoreCase(attr.getType())) {
-                TermSource ts = attr.getTermSource();
-                if (ts == null || NCBI_TAXONOMY.matches(ts.getFile().getValue())) {
+//                TermSource ts = attr.getTermSource();
+//                if (ts == null || NCBI_TAXONOMY.matches(ts.getFile().getValue())) {
                     return attr;
-                }
+//                }
             }
         }
         return null;
