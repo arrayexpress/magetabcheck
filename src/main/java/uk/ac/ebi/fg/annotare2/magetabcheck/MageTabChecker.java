@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckResult;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckerFactory;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.ExperimentType;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.UknownExperimentTypeException;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checker.UnknownExperimentTypeException;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.Experiment;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Comment;
@@ -55,22 +55,22 @@ public class MageTabChecker {
         return (checkerFactory.create(type).check(exp));
     }
 
-    public Collection<CheckResult> check(Experiment exp) throws UknownExperimentTypeException {
+    public Collection<CheckResult> check(Experiment exp) throws UnknownExperimentTypeException {
         log.debug("The experiment type is not given explicitly");
         return check(exp, guessType(exp.getIdfData()));
     }
 
-    private ExperimentType guessType(IdfData idf) throws UknownExperimentTypeException {
+    private ExperimentType guessType(IdfData idf) throws UnknownExperimentTypeException {
         log.info("Looking for an experiment type in 'Comment[{}]' IDF field...", AE_EXPERIMENT_TYPE_COMMENT);
         Collection<Comment> comments = idf.getComments(AE_EXPERIMENT_TYPE_COMMENT);
         if (comments.isEmpty()) {
-            throw new UknownExperimentTypeException("IDF doesn't contain '" + AE_EXPERIMENT_TYPE_COMMENT +
+            throw new UnknownExperimentTypeException("IDF doesn't contain '" + AE_EXPERIMENT_TYPE_COMMENT +
                     "' comment; can't find the experiment type.");
         }
         return lookupTypeInEfo(comments.iterator().next().getValue().getValue());
     }
 
-    private ExperimentType lookupTypeInEfo(String type) throws UknownExperimentTypeException {
+    private ExperimentType lookupTypeInEfo(String type) throws UnknownExperimentTypeException {
         log.debug("Comment[{}]='{}' has been found. Checking if it's defined in EFO...", AE_EXPERIMENT_TYPE_COMMENT, type);
 
         if (isMicroArrayExperiment(type)) {
@@ -78,7 +78,7 @@ public class MageTabChecker {
         } else if (isHtsExperiment(type)) {
             return ExperimentType.HTS;
         }
-        throw new UknownExperimentTypeException("Can't find '" + type + "' in EFO");
+        throw new UnknownExperimentTypeException("Can't find '" + type + "' in EFO");
     }
 
     private boolean isHtsExperiment(String type) {

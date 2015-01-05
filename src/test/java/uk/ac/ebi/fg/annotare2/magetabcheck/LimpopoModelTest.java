@@ -47,7 +47,7 @@ public class LimpopoModelTest {
     private static final String RNA_SEQ_TYPE = "RNA-seq of coding RNA";
 
     @Test
-    public void magetabAssemblyTest() throws UknownExperimentTypeException {
+    public void magetabAssemblyTest() throws UnknownExperimentTypeException {
         MAGETABInvestigation inv = new MAGETABInvestigation();
         inv.IDF.getComments().put("AEExperimentType", new HashSet<String>(asList(RNA_SEQ_TYPE)));
         inv.IDF.investigationTitle = "Test";

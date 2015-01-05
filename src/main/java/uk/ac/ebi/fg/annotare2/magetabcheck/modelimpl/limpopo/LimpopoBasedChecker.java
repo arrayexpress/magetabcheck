@@ -29,7 +29,7 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.CheckerModule;
 import uk.ac.ebi.fg.annotare2.magetabcheck.MageTabChecker;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckResult;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckResultStatus;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.UknownExperimentTypeException;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checker.UnknownExperimentTypeException;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -99,7 +99,7 @@ public class LimpopoBasedChecker {
             logResult("---");
         } catch (ParseException e) {
             log.error("MAGE-TAB parse error", e);
-        } catch (UknownExperimentTypeException e) {
+        } catch (UnknownExperimentTypeException e) {
             log.error("Can't run checker without knowing the experiment type", e);
         } catch (MalformedURLException e) {
             log.error("Can't create an URL", e);
@@ -113,9 +113,9 @@ public class LimpopoBasedChecker {
      * @return a collection of check results
      * @throws MalformedURLException         if given string is not a file path
      * @throws ParseException                if IDF can not be parsed by Limpopo MAGE-TAB parser
-     * @throws UknownExperimentTypeException if IDF doesn't contain Comment[AEExperimentType] or its value is not from EFO
+     * @throws uk.ac.ebi.fg.annotare2.magetabcheck.checker.UnknownExperimentTypeException if IDF doesn't contain Comment[AEExperimentType] or its value is not from EFO
      */
-    public final Collection<CheckResult> check(String idfFilePath) throws MalformedURLException, ParseException, UknownExperimentTypeException {
+    public final Collection<CheckResult> check(String idfFilePath) throws MalformedURLException, ParseException, UnknownExperimentTypeException {
         return check(parse(idfFilePath));
     }
 
@@ -124,9 +124,9 @@ public class LimpopoBasedChecker {
      *
      * @param inv an MAGETABInvestigation object
      * @return a collection of check results
-     * @throws UknownExperimentTypeException if MAGETABInvestigation.IDF doesn't contain Comment[AEExperimentType] or its value is not from EFO
+     * @throws uk.ac.ebi.fg.annotare2.magetabcheck.checker.UnknownExperimentTypeException if MAGETABInvestigation.IDF doesn't contain Comment[AEExperimentType] or its value is not from EFO
      */
-    public final Collection<CheckResult> check(MAGETABInvestigation inv) throws UknownExperimentTypeException {
+    public final Collection<CheckResult> check(MAGETABInvestigation inv) throws UnknownExperimentTypeException {
         return natural().sortedCopy(checker.check(new LimpopoBasedExperiment(inv)));
     }
 
