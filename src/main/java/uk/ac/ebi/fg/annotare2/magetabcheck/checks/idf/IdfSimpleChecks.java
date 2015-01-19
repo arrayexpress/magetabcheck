@@ -23,6 +23,8 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.Cell;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.FileLocation;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.*;
 
+import java.util.Date;
+
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.lang.Boolean.FALSE;
 import static java.util.Arrays.asList;
@@ -130,6 +132,20 @@ public class IdfSimpleChecks {
         }
         setPosition(cell);
         assertThat(loc, isValidFileLocation());
+    }
+
+    @MageTabCheck(
+            ref = "G09",
+            value = "Experiment public release date must be either present or future date")
+    public void publicReleaseDateTodayOrInFuture(Info info) {
+        Cell<String> cell = info.getPublicReleaseDate();
+        if (isNullOrEmpty(cell.getValue())) {
+            return;
+        }
+        String today = DATE_FORMAT.format(new Date());
+
+        setPosition(cell);
+        assertThat(cell.getValue(), greaterThanOrEqualTo(today));
     }
 
     @MageTabCheck(
