@@ -7,8 +7,10 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfAssayNode;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfGraphNode;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfLabeledExtractNode;
 
+import java.util.List;
 import java.util.Set;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.lang.Math.max;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,30 +26,31 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.WARNING;
         value = "Number of channels in the experiment should not exceed the number of labels (dyes used)",
         application = MICRO_ARRAY_ONLY,
         modality = WARNING)
-public class NumberOfChannelsNotGraterThanUniqueLabels {
+public class NumberOfChannelsNoGreaterThanNumberOfUniqueLabels {
 
     private final Set<String> uniqueLabels = newHashSet();
-    private int channels = 0;
-
-    @Visit
-    public void visit(SdrfLabeledExtractNode labeledExtract) {
-        uniqueLabels.add(labeledExtract.getLabel().getValue());
-    }
+    private int maxNumberOfChannels = 0;
 
     @Visit
     public void visit(SdrfAssayNode assayNode) {
-        Set<String> labels = newHashSet();
-        for (SdrfGraphNode parent : assayNode.getParentNodes()) {
-            if (SdrfLabeledExtractNode.class.isAssignableFrom(parent.getClass())) {
-                SdrfLabeledExtractNode labeledExtract = (SdrfLabeledExtractNode) parent;
-                labels.add(labeledExtract.getLabel().getValue());
+        List<String> labels = newArrayList();
+        addLabels(labels, assayNode);
+        uniqueLabels.addAll(labels);
+        maxNumberOfChannels = max(maxNumberOfChannels, labels.size());
+    }
+
+    private void addLabels(List<String> labelSet, SdrfGraphNode node) {
+        if (node instanceof SdrfLabeledExtractNode) {
+            labelSet.add(((SdrfLabeledExtractNode)node).getLabel().getValue());
+        } else {
+            for (SdrfGraphNode parent : node.getParentNodes()) {
+                addLabels(labelSet, parent);
             }
         }
-        channels = max(channels, labels.size());
     }
 
     @Check
     public void check() {
-        assertThat(channels, lessThanOrEqualTo(uniqueLabels.size()));
+        assertThat(maxNumberOfChannels, lessThanOrEqualTo(uniqueLabels.size()));
     }
 }
