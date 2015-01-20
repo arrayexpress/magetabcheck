@@ -47,17 +47,10 @@ public class MageTabCheckEfoImpl implements MageTabCheckEfo {
     }
 
     @Override
-    public boolean isLibraryConstructionProtocol(Term term) {
+    public boolean isProtocolType(Term term, String protocolEfoId) {
         return isEfoTermSource(term.getSource().getValue())
                 && efoService.findTermByLabelOrAccession(
-                term.getName().getValue(), term.getAccession().getValue(), LIBRARY_CONSTRUCTION_PROTOCOL) != null;
-    }
-
-    @Override
-    public boolean isSequencingProtocol(Term term) {
-        return isEfoTermSource(term.getSource().getValue())
-                && efoService.findTermByLabelOrAccession(
-                term.getName().getValue(), term.getAccession().getValue(), SEQUENCING_PROTOCOL) != null;
+                term.getName().getValue(), term.getAccession().getValue(), protocolEfoId) != null;
     }
 
     private boolean isEfoTermSource(TermSource ts) {

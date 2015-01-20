@@ -27,6 +27,7 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
 import javax.annotation.Nullable;
 
 import static com.google.common.collect.Range.atLeast;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo.SEQUENCING_PROTOCOL;
 
 /**
  * @author Olga Melnichuk
@@ -54,7 +55,7 @@ public class SequencingProtocolRequired extends RangeCheck<Protocol> {
 
         @Override
         public boolean apply(@Nullable Protocol protocol) {
-            return protocol != null && efo.isSequencingProtocol(protocol.getType());
+            return protocol != null && efo.isProtocolType(protocol.getType(), SEQUENCING_PROTOCOL);
         }
     }
 }

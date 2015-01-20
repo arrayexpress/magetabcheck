@@ -23,6 +23,7 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.FileLocation;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.ProtocolType;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.*;
 
 import javax.annotation.Nullable;
@@ -41,6 +42,7 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.se
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfConstants.DATE_FORMAT;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.matchers.IsDateString.isDateString;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.matchers.IsValidFileLocation.isValidFileLocation;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo.*;
 
 /**
  * @author Olga Melnichuk
@@ -144,6 +146,26 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
+            ref = "SM04",
+            value = "A growth, treatment or sample collection protocol must be included")
+    public void sampleNodeShouldBeDescribedByGrowthOrTreatmentOrSampleCollectionProtocol(SdrfSampleNode sampleNode) {
+        SdrfProtocolNode found = null;
+        for (SdrfProtocolNode protocolNode : getParentProtocolNodes(sampleNode)) {
+            if (null == protocolNode.getProtocol()) {
+                continue;
+            }
+            ProtocolType type = protocolNode.getProtocol().getType();
+            if (efo.isProtocolType(type, GROWTH_PROTOCOL) ||
+                    efo.isProtocolType(type, TREATMENT_PROTOCOL) ||
+                    efo.isProtocolType(type, SAMPLE_COLLECTION_PROTOCOL)) {
+                found = protocolNode;
+                break;
+            }
+        }
+        assertNotNull(found);
+    }
+
+    @MageTabCheck(
             ref = "EX01",
             value = "An extract must have name specified")
     public void extractNodeMustHaveName(SdrfExtractNode extractNode) {
@@ -180,7 +202,7 @@ public class SdrfSimpleChecks {
             if (protocol == null) {
                 continue;
             }
-            if (efo.isLibraryConstructionProtocol(protocol.getType())) {
+            if (efo.isProtocolType(protocol.getType(), LIBRARY_CONSTRUCTION_PROTOCOL)) {
                 found = protocolNode;
                 break;
             }
@@ -318,7 +340,7 @@ public class SdrfSimpleChecks {
             application = HTS_ONLY)
     public void sequencingProtocolNodeMustHavePerformerAttribute(SdrfProtocolNode protocolNode) {
         Protocol protocol = protocolNode.getProtocol();
-        if (protocol != null && efo.isSequencingProtocol(protocol.getType())) {
+        if (protocol != null && efo.isProtocolType(protocol.getType(), SEQUENCING_PROTOCOL)) {
             assertProtocolHasPerformerAttribute(protocolNode);
         }
     }
@@ -358,7 +380,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "AN03",
-            value = "A 'nucleic acid sequencing protocol' must be included",
+            value = "A nucleic acid sequencing protocol must be included",
             application = HTS_ONLY)
     public void assayNodeMustBeDescribedBySequencingProtocol(SdrfAssayNode assayNode) {
         setPosition(assayNode);
@@ -369,7 +391,7 @@ public class SdrfSimpleChecks {
             if (protocol == null) {
                 continue;
             }
-            if (efo.isSequencingProtocol(protocol.getType())) {
+            if (efo.isProtocolType(protocol.getType(), SEQUENCING_PROTOCOL)) {
                 found = protocolNode;
                 break;
             }
@@ -379,7 +401,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "AN04",
-            value = "A 'nucleic acid hybridization to array protocol' must be included",
+            value = "A nucleic acid hybridization to array protocol must be included",
             application = MICRO_ARRAY_ONLY)
     public void assayNodeMustBeDescribedByHybridizationProtocol(SdrfAssayNode assayNode) {
         setPosition(assayNode);
@@ -390,7 +412,7 @@ public class SdrfSimpleChecks {
             if (protocol == null) {
                 continue;
             }
-            if (protocol.getType().getName().getValue().equals("nucleic acid hybridization to array protocol")) {
+            if (efo.isProtocolType(protocol.getType(), ARRAY_HYBRIDIZATION_PROTOCOL)) {
                 found = protocolNode;
                 break;
             }
@@ -418,7 +440,7 @@ public class SdrfSimpleChecks {
         Collection<SdrfGraphNode> filtered = filter(parents, new Predicate<SdrfGraphNode>() {
             @Override
             public boolean apply(@Nullable SdrfGraphNode input) {
-                return SdrfLabeledExtractNode.class.isAssignableFrom(input.getClass());
+                return null != input && SdrfLabeledExtractNode.class.isAssignableFrom(input.getClass());
             }
         });
         assertThat(parents.size(), equalTo(filtered.size()));
@@ -433,7 +455,7 @@ public class SdrfSimpleChecks {
         Collection<SdrfGraphNode> parentNodes = filter(getParentNodes(assayNode), new Predicate<SdrfGraphNode>() {
             @Override
             public boolean apply(@Nullable SdrfGraphNode input) {
-                return SdrfLabeledExtractNode.class.isAssignableFrom(input.getClass());
+                return null != input && SdrfLabeledExtractNode.class.isAssignableFrom(input.getClass());
             }
         });
         Set<String> labels = newHashSet();

@@ -27,6 +27,7 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Protocol;
 import javax.annotation.Nullable;
 
 import static com.google.common.collect.Range.atLeast;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo.LIBRARY_CONSTRUCTION_PROTOCOL;
 
 /**
  * @author Olga Melnichuk
@@ -55,7 +56,7 @@ public class LibraryConstructionProtocolRequired extends RangeCheck<Protocol> {
 
         @Override
         public boolean apply(@Nullable Protocol protocol) {
-            return efo.isLibraryConstructionProtocol(protocol.getType());
+            return efo.isProtocolType(protocol.getType(), LIBRARY_CONSTRUCTION_PROTOCOL);
         }
     }
 }

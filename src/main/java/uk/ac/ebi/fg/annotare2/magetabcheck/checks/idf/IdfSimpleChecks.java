@@ -299,7 +299,7 @@ public class IdfSimpleChecks {
 
     @MageTabCheck(
             ref = "PB02",
-            value = "PubMed Id must be numeric")
+            value = "PubMed ID must be numeric")
     public void pubMedIdMustBeNumeric(Publication pub) {
         Cell<String> cell = pub.getPubMedId();
         if (isNullOrEmpty(cell.getValue())) {
@@ -311,7 +311,7 @@ public class IdfSimpleChecks {
 
     @MageTabCheck(
             ref = "PB03",
-            value = "A publication authors should be specified",
+            value = "Publication authors should be specified",
             modality = WARNING)
     public void publicationShouldHaveAuthorsSpecified(Publication pub) {
         assertNotEmptyString(pub.getAuthorList());

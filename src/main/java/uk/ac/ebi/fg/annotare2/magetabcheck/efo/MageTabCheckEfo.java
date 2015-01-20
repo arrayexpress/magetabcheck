@@ -33,9 +33,17 @@ public interface MageTabCheckEfo {
 
     public static final String MA_EXPERIMENT_TYPES = "EFO_0002696";
 
+    public static final String GROWTH_PROTOCOL = "EFO_0003789";
+
+    public static final String TREATMENT_PROTOCOL = "EFO_0003969";
+
+    public static final String SAMPLE_COLLECTION_PROTOCOL = "EFO_0005518";
+
     public static final String LIBRARY_CONSTRUCTION_PROTOCOL = "EFO_0004184";
 
     public static final String SEQUENCING_PROTOCOL = "EFO_0004170";
+
+    public static final String ARRAY_HYBRIDIZATION_PROTOCOL = "EFO_0003815";
 
     public static final String BIOLOGICAL_VARIATION_DESINGS = "EFO_0004667";
 
@@ -62,20 +70,12 @@ public interface MageTabCheckEfo {
     String findArrayInvestigationType(String name);
 
     /**
-     * Checks if the given term accession and name correspond to the existed EFO term located in the
-     * {@value #LIBRARY_CONSTRUCTION_PROTOCOL} branch. At least on of arguments (accession or name) should be not null.
+     * Checks if the given term accession and name correspond to the existing EFO term located in the
+     * specified branch. At least on of arguments (accession or name) should be not null.
      *
      * @param term a term from IDF to check
+     * @param protocolEfoId protocol type in EFO to be matched against
      * @return <code>true</code> if
      */
-    boolean isLibraryConstructionProtocol(Term term);
-
-    /**
-     * Checks if the given term accession and name correspond to the existed EFO term located in the
-     * {@value #LIBRARY_CONSTRUCTION_PROTOCOL} branch. At least on of arguments (accession or name) should be not null.
-     *
-     * @param term a term from IDF to check
-     * @return <code>true</code> if
-     */
-    boolean isSequencingProtocol(Term term);
+    boolean isProtocolType(Term term, String protocolEfoId);
 }
