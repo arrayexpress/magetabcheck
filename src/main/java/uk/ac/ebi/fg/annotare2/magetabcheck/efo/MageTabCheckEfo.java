@@ -39,11 +39,17 @@ public interface MageTabCheckEfo {
 
     public static final String SAMPLE_COLLECTION_PROTOCOL = "EFO_0005518";
 
+    public static final String EXTRACTION_PROTOCOL = "EFO_0002944";
+
     public static final String LIBRARY_CONSTRUCTION_PROTOCOL = "EFO_0004184";
+
+    public static final String LABELING_PROTOCOL = "EFO_0003813";
 
     public static final String SEQUENCING_PROTOCOL = "EFO_0004170";
 
     public static final String ARRAY_HYBRIDIZATION_PROTOCOL = "EFO_0003815";
+
+    public static final String DATA_TRANSOFRMATION_PROTOCOL = "EFO_0003816";
 
     public static final String BIOLOGICAL_VARIATION_DESINGS = "EFO_0004667";
 
