@@ -16,6 +16,7 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.refs;
 
+import com.google.inject.Singleton;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Check;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Visit;
@@ -37,6 +38,7 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.WARNING;
         value = "IDF should not contain protocol definitions that are not used in SDRF",
         modality = WARNING
 )
+@Singleton
 public class IdfProtocolUsageCheck {
 
     private final Set<String> definedProtocols = newHashSet();

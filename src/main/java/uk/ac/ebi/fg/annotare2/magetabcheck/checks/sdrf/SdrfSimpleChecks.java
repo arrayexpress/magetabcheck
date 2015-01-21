@@ -27,12 +27,14 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.ProtocolType;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.*;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.List;
+import java.util.Queue;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Collections2.filter;
 import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Sets.newHashSet;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.HTS_ONLY;
@@ -488,7 +490,7 @@ public class SdrfSimpleChecks {
         });
         assertThat(parents.size(), equalTo(filtered.size()));
     }
-
+    /*
     @MageTabCheck(
             ref = "AN07",
             value = "For an array assay (microarray experiment) the associated labeled extract(s) must have distinct labels",
@@ -503,11 +505,22 @@ public class SdrfSimpleChecks {
             }
         });
         Set<String> labels = newHashSet();
+        List<String> labeledExtracts = newArrayList();
         for(SdrfGraphNode node : parentNodes) {
-            String label = ((SdrfLabeledExtractNode)node).getLabel().getValue();
-            assertThat(labels.add(label), is(true));
+            if (null != ((SdrfLabeledExtractNode)node).getLabel()) {
+                String label = ((SdrfLabeledExtractNode) node).getLabel().getValue();
+                labels.add(label);
+                labeledExtracts.add(node.getName() + " (" + label + ")");
+            } else {
+                labeledExtracts.add(node.getName() + " (null)");
+            }
+            //String label = ((SdrfLabeledExtractNode)node).getLabel().getValue();
+            //assertThat(labels.add(label), is(true));
         }
+        setCheckDynamicDetail("offending assay " + assayNode.getName() + " is connected to: " + Joiner.on(", ").join(labeledExtracts));
+        assertThat(labels.size(), equalTo(parentNodes.size()));
     }
+    */
 
     @MageTabCheck(
             ref = "TT01",
