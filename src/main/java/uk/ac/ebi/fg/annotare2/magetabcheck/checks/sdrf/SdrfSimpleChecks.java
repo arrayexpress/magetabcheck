@@ -221,7 +221,7 @@ public class SdrfSimpleChecks {
         setLinePosition(extractNode);
         assertThat(
                 isProtocolTypeMatching(
-                        getFollowingProtocolNodes(extractNode),
+                        getParentProtocolNodes(extractNode),
                         EXTRACTION_PROTOCOL),
                 is(Boolean.TRUE));
     }
@@ -235,7 +235,7 @@ public class SdrfSimpleChecks {
         setLinePosition(extractNode);
         assertThat(
                 isProtocolTypeMatching(
-                        getFollowingProtocolNodes(extractNode),
+                        getParentProtocolNodes(extractNode),
                         LIBRARY_CONSTRUCTION_PROTOCOL),
                 is(Boolean.TRUE));
     }
@@ -280,7 +280,7 @@ public class SdrfSimpleChecks {
         setLinePosition(labeledExtractNode);
         assertThat(
                 isProtocolTypeMatching(
-                        getFollowingProtocolNodes(labeledExtractNode),
+                        getParentProtocolNodes(labeledExtractNode),
                         LABELING_PROTOCOL),
                 is(Boolean.TRUE));
     }
@@ -443,7 +443,7 @@ public class SdrfSimpleChecks {
         setLinePosition(assayNode);
         assertThat(
                 isProtocolTypeMatching(
-                        getFollowingProtocolNodes(assayNode),
+                        getParentProtocolNodes(assayNode),
                         SEQUENCING_PROTOCOL),
                 is(Boolean.TRUE));
     }
@@ -457,7 +457,7 @@ public class SdrfSimpleChecks {
         setLinePosition(assayNode);
         assertThat(
                 isProtocolTypeMatching(
-                        getFollowingProtocolNodes(assayNode),
+                        getParentProtocolNodes(assayNode),
                         ARRAY_HYBRIDIZATION_PROTOCOL),
                 is(Boolean.TRUE));
     }
@@ -490,37 +490,6 @@ public class SdrfSimpleChecks {
         });
         assertThat(parents.size(), equalTo(filtered.size()));
     }
-    /*
-    @MageTabCheck(
-            ref = "AN07",
-            value = "For an array assay (microarray experiment) the associated labeled extract(s) must have distinct labels",
-            application = MICRO_ARRAY_ONLY)
-    @SuppressWarnings("unused")
-    public void assayNodeMustHaveDistinctLabeledExtracts(SdrfAssayNode assayNode) {
-        setLinePosition(assayNode);
-        Collection<SdrfGraphNode> parentNodes = filter(getParentNodes(assayNode), new Predicate<SdrfGraphNode>() {
-            @Override
-            public boolean apply(@Nullable SdrfGraphNode input) {
-                return null != input && input instanceof SdrfLabeledExtractNode;
-            }
-        });
-        Set<String> labels = newHashSet();
-        List<String> labeledExtracts = newArrayList();
-        for(SdrfGraphNode node : parentNodes) {
-            if (null != ((SdrfLabeledExtractNode)node).getLabel()) {
-                String label = ((SdrfLabeledExtractNode) node).getLabel().getValue();
-                labels.add(label);
-                labeledExtracts.add(node.getName() + " (" + label + ")");
-            } else {
-                labeledExtracts.add(node.getName() + " (null)");
-            }
-            //String label = ((SdrfLabeledExtractNode)node).getLabel().getValue();
-            //assertThat(labels.add(label), is(true));
-        }
-        setCheckDynamicDetail("offending assay " + assayNode.getName() + " is connected to: " + Joiner.on(", ").join(labeledExtracts));
-        assertThat(labels.size(), equalTo(parentNodes.size()));
-    }
-    */
 
     @MageTabCheck(
             ref = "TT01",
@@ -817,7 +786,7 @@ public class SdrfSimpleChecks {
         setLinePosition(derivedArrayDataNode);
         assertThat(
                 isProtocolTypeMatching(
-                        getFollowingProtocolNodes(derivedArrayDataNode),
+                        getParentProtocolNodes(derivedArrayDataNode),
                         DATA_TRANSOFRMATION_PROTOCOL),
                 is(Boolean.TRUE));    }
 
@@ -890,7 +859,7 @@ public class SdrfSimpleChecks {
         setLinePosition(derivedArrayDataMatrixNode);
         assertThat(
                 isProtocolTypeMatching(
-                        getFollowingProtocolNodes(derivedArrayDataMatrixNode),
+                        getParentProtocolNodes(derivedArrayDataMatrixNode),
                         DATA_TRANSOFRMATION_PROTOCOL),
                 is(Boolean.TRUE));
     }
