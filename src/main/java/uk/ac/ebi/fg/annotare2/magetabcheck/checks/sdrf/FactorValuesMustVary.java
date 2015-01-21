@@ -3,7 +3,6 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.checks.sdrf;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
-import com.google.inject.Singleton;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Check;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Visit;
@@ -24,7 +23,6 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSett
 @MageTabCheck(
         ref = "FV04",
         value = "Values of an experimental variable must vary, for compound+dose at least one must vary")
-@Singleton
 public class FactorValuesMustVary {
 
     private Multimap<String, String> assayFactorValues;

@@ -16,40 +16,30 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.checker;
 
-import com.google.inject.ConfigurationException;
-import com.google.inject.ProvisionException;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.clearCheckPosition;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.getCheckPosition;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSetter.clearCheckDynamicDetail;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSetter.getCheckDynamicDetail;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.clearCheckPosition;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.getCheckPosition;
 /**
  * @author Olga Melnichuk
  */
 class ClassBasedCheckRunner<T> extends AbstractCheckRunner<T> {
 
     private final ClassBasedCheckDefinition classDef;
-
-    private Object target;
+    private final Object target;
 
     @SuppressWarnings("unchecked")
-    ClassBasedCheckRunner(ClassBasedCheckDefinition classDef) {
+    ClassBasedCheckRunner(ClassBasedCheckDefinition classDef, Object target) {
         super(isNotNull(classDef.getAnnotation()));
 
         this.classDef = classDef;
-
-        try {
-            target = classDef.getInstance();
-        } catch (ConfigurationException e) {
-            error(e);
-        } catch (ProvisionException e) {
-            error(e);
-        }
+        this.target = target;
     }
 
     private static MageTabCheck isNotNull(MageTabCheck annotation) {
@@ -68,7 +58,12 @@ class ClassBasedCheckRunner<T> extends AbstractCheckRunner<T> {
         } catch (IllegalAccessException e) {
             error(e);
         } catch (InvocationTargetException e) {
-            error(e.getCause());
+            Throwable t = e.getCause();
+            if (t instanceof AssertionError) {
+                failure(getCheckPosition(), getCheckDynamicDetail());
+            } else {
+                error(t);
+            }
         }
     }
 

@@ -24,10 +24,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.clearCheckPosition;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.getCheckPosition;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSetter.clearCheckDynamicDetail;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSetter.getCheckDynamicDetail;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.clearCheckPosition;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.getCheckPosition;
 
 /**
  * @author Olga Melnichuk
@@ -35,10 +35,12 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSett
 class MethodBasedCheckRunner<T> extends AbstractCheckRunner<T> {
 
     private final MethodBasedCheckDefinition methodDef;
+    private final Object target;
 
-    MethodBasedCheckRunner(MethodBasedCheckDefinition def) {
+    MethodBasedCheckRunner(MethodBasedCheckDefinition def, Object target) {
         super(isNotNull(def.getAnnotation()));
         this.methodDef = def;
+        this.target = target;
     }
 
     private static MageTabCheck isNotNull(MageTabCheck annotation) {
@@ -59,7 +61,7 @@ class MethodBasedCheckRunner<T> extends AbstractCheckRunner<T> {
         clearCheckPosition();
         clearCheckDynamicDetail();
         try {
-            methodDef.invoke(add(context, item));
+            methodDef.invoke(target, add(context, item));
             success(getCheckPosition());
         } catch (InvocationTargetException e) {
             Throwable t = e.getCause();

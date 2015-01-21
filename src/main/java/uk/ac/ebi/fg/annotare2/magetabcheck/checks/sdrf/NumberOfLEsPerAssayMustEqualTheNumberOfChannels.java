@@ -2,8 +2,8 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.checks.sdrf;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.inject.Singleton;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.Visit;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.HasLocation;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfAssayNode;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfGraphNode;
@@ -22,10 +22,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.MICRO_ARRAY_ONLY;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSetter.setCheckDynamicDetail;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.WARNING;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.setCheckPosition;
 
-@Singleton
+@MageTabCheck(
+        ref = "AN08",
+        value = "An assay must be connected to a number of distinctly labeled extracts that equals a number of channels (dyes used)",
+        application = MICRO_ARRAY_ONLY)
 @SuppressWarnings("unused")
 public class NumberOfLEsPerAssayMustEqualTheNumberOfChannels {
 
@@ -38,20 +40,12 @@ public class NumberOfLEsPerAssayMustEqualTheNumberOfChannels {
 
     private final Set<String> uniqueLabels = newHashSet();
 
-    @MageTabCheck(
-            value = "",
-            application = MICRO_ARRAY_ONLY,
-            modality = WARNING)
-    @SuppressWarnings("unused")
+    @Visit
     public void collectLabels(SdrfLabeledExtractNode labeledExtractNode) {
         uniqueLabels.add(getLabel(labeledExtractNode));
     }
 
-    @MageTabCheck(
-            ref = "AN08",
-            value = "An assay must be connected to a number of distinctly labeled extracts that equals a number of channels (dyes used)",
-            application = MICRO_ARRAY_ONLY)
-    @SuppressWarnings("unused")
+    @Visit
     public void check(SdrfAssayNode assayNode) {
         Collection<SdrfLabeledExtractNode> labeledExtractNodes = getConnectedLabeledExtractNodes(assayNode);
         Set<String> labels = newHashSet();
@@ -61,7 +55,7 @@ public class NumberOfLEsPerAssayMustEqualTheNumberOfChannels {
 
         setCellPosition(assayNode);
         setCheckDynamicDetail("i.e. assay '" + assayNode.getName() + "' must be connected to " + uniqueLabels.size() +
-                " labeled extracts with labels " + Joiner.on(", ").join(uniqueLabels) +
+                " labeled extract*s) with labels " + Joiner.on(", ").join(uniqueLabels) +
                 "; currently connected to " +
                 Joiner.on(", ").join(transform(labeledExtractNodes, GET_NODE_NAME)));
         assertThat(labels.size(), equalTo(uniqueLabels.size()));

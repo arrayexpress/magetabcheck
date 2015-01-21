@@ -20,7 +20,7 @@ import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.Experiment;
-import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.*;
+import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.IdfData;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.*;
 
 import java.util.*;
@@ -130,11 +130,13 @@ public class Checker {
 
         private final CheckDefinition def;
         private Map<Class<?>, CheckRunner<?>> runners;
+        private Map<Class<?>, Object> targets;
         private final List<CheckResult> results;
 
         private CheckRunWatcher(CheckDefinition def) {
             this.def = def;
             results = newArrayList();
+            targets = newHashMap();
             runners = newHashMap();
         }
 
@@ -145,15 +147,23 @@ public class Checker {
             }
 
             CheckRunner<T> runner;
+            Object target;
+            if (targets.containsKey(def.getCheckClass())) {
+                target = targets.get(def.getCheckClass());
+            } else {
+                target = def.getCheckInstance();
+                targets.put(def.getCheckClass(), target);
+            }
+
             if (def.getType().isClassBased()) {
                 if (runners.containsKey(item.getClass())) {
                     runner = ((CheckRunner<T>) runners.get(item.getClass()));
                 } else {
-                    runner = (CheckRunner<T>) def.newRunner(item.getClass());
+                    runner = (CheckRunner<T>) def.newRunner(item.getClass(), target);
                     runners.put(item.getClass(), runner);
                 }
             } else {
-                runner = (CheckRunner<T>) def.newRunner(item.getClass());
+                runner = (CheckRunner<T>) def.newRunner(item.getClass(), target);
             }
             runner.runWith(item, Maps.<Class<?>, Object>newHashMap());
             if (!def.getType().isClassBased()) {

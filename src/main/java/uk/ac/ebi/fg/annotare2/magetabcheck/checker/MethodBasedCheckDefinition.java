@@ -38,8 +38,8 @@ class MethodBasedCheckDefinition extends CheckDefinition {
     }
 
     @Override
-    public <T> CheckRunner<T> newRunner(Class<T> itemClass) {
-        return new MethodBasedCheckRunner<T>(this);
+    public <T> CheckRunner<T> newRunner(Class<T> itemClass, Object target) {
+        return new MethodBasedCheckRunner<T>(this, target);
     }
 
     @Override
@@ -53,13 +53,23 @@ class MethodBasedCheckDefinition extends CheckDefinition {
         return CheckType.METHOD_BASED;
     }
 
+    @Override
+    public Class<?> getCheckClass() {
+        return method.getDeclaringClass();
+    }
+
+    @Override
+    public Object getCheckInstance() {
+        return instanceProvider.newInstance(getCheckClass());
+    }
+
     private static Class<?> getFirstParameter(Method method) {
         Class[] types = method.getParameterTypes();
         return types == null || types.length == 0 ? null : types[0];
     }
 
-    public void invoke(Map<Class<?>, Object> context) throws InvocationTargetException, IllegalAccessException {
+    public void invoke(Object target, Map<Class<?>, Object> context) throws InvocationTargetException, IllegalAccessException {
         Object[] params = getParams(method, context);
-        method.invoke(instanceProvider.newInstance(method.getDeclaringClass()), params);
+        method.invoke(target, params);
     }
 }

@@ -84,8 +84,8 @@ class ClassBasedCheckDefinition extends CheckDefinition {
     }
 
     @Override
-    public <T> CheckRunner<T> newRunner(Class<T> itemClass) {
-        return new ClassBasedCheckRunner<T>(this);
+    public <T> CheckRunner<T> newRunner(Class<T> itemClass, Object target) {
+        return new ClassBasedCheckRunner<T>(this, target);
     }
 
     @Override
@@ -103,7 +103,12 @@ class ClassBasedCheckDefinition extends CheckDefinition {
         return CheckType.CLASS_BASED;
     }
 
-    public Object getInstance() {
+    @Override
+    public Class<?> getCheckClass() {
+        return clazz;
+    }
+
+    public Object getCheckInstance() {
         return instanceProvider.newInstance(clazz);
     }
 

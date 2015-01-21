@@ -77,7 +77,11 @@ public abstract class CheckDefinition {
 
     public abstract CheckType getType();
 
-    public abstract <T> CheckRunner<T> newRunner(Class<T> itemClass);
+    public abstract Class<?> getCheckClass();
+
+    public abstract Object getCheckInstance();
+
+    public abstract <T> CheckRunner<T> newRunner(Class<T> itemClass, Object target);
 
     protected abstract boolean isSubjectTypeAssignableFrom(Class objType);
 }
