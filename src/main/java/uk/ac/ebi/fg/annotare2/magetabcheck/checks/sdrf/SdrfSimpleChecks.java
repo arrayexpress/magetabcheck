@@ -677,7 +677,8 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "AD01",
-            value = "An array design attribute must have a name specified")
+            value = "An array design attribute must have a name specified",
+            application = MICRO_ARRAY_ONLY)
     @SuppressWarnings("unused")
     public void arrayDesignAttributeMustHaveName(SdrfArrayDesignAttribute adAttribute) {
         assertNotEmptyName(adAttribute);
@@ -686,7 +687,8 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "AD02",
             value = "An array design should have a term source specified",
-            modality = WARNING)
+            modality = WARNING,
+            application = MICRO_ARRAY_ONLY)
     @SuppressWarnings("unused")
     public void arrayDesignAttributeShouldHaveTermSource(SdrfArrayDesignAttribute adAttribute) {
         setCellPosition(adAttribute);
@@ -695,7 +697,8 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "AD03",
-            value = "Term source of an array design attribute must be declared in IDF")
+            value = "Term source of an array design attribute must be declared in IDF",
+            application = MICRO_ARRAY_ONLY)
     @SuppressWarnings("unused")
     public void termSourceOfArrayDesignAttributeMustBeValid(SdrfArrayDesignAttribute adAttribute) {
         setCellPosition(adAttribute);
@@ -738,7 +741,7 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
-            ref = "ADN02",
+            ref = "ADN03",
             value = "Name of an array data node must be a valid file location")
     @SuppressWarnings("unused")
     public void nameOfArrayDataNodeMustBeValidFileLocation(SdrfArrayDataNode arrayDataNode) {
@@ -746,7 +749,7 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
-            ref = "ADN03",
+            ref = "ADN04",
             value = "An array data node (raw data file) should be described by a protocol",
             modality = WARNING)
     @SuppressWarnings("unused")
@@ -774,7 +777,7 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
-            ref = "DADN02",
+            ref = "DADN03",
             value = "Name of a derived array data node must be a valid file location")
     @SuppressWarnings("unused")
     public void nameOfDerivedArrayDataNodeMustBeValidFileLocation(SdrfDerivedArrayDataNode derivedArrayDataNode) {
@@ -782,8 +785,8 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
-            ref = "DADN03",
-            value = "You must provide a normalization data transformation protocol to describe your processed data file(s)")
+            ref = "DADN04",
+            value = "A normalization data transformation protocol that describes the analysis methods used to generate the processed data file(s) must be included")
     @SuppressWarnings("unused")
     public void derivedArrayDataNodeShouldBeDescribedByProtocol(SdrfDerivedArrayDataNode derivedArrayDataNode) {
         setLinePosition(derivedArrayDataNode);
@@ -812,7 +815,7 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
-            ref = "ADMN02",
+            ref = "ADMN03",
             value = "Name of an array data matrix node must be valid file location")
     @SuppressWarnings("unused")
     public void nameOfArrayDataMatrixNodeMustBeValidFileLocation(SdrfArrayDataMatrixNode arrayDataMatrixNode) {
@@ -820,7 +823,7 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
-            ref = "ADMN03",
+            ref = "ADMN04",
             value = "An array data matrix file should be described by a protocol",
             modality = WARNING)
     @SuppressWarnings("unused")
@@ -846,7 +849,7 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
-            ref = "DADMN02",
+            ref = "DADMN03",
             value = "Name of derived data matrix node must be valid file location")
     @SuppressWarnings("unused")
     public void nameOfDerivedArrayDataMatrixNodeMustBeValidFileLocation(
@@ -855,8 +858,8 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
-            ref = "DADMN03",
-            value = "You must provide a normalization data transformation protocol to describe your processed data matrix file")
+            ref = "DADMN04",
+            value = "A normalization data transformation protocol that describes the analysis methods used to generate the processed data matrix file must be included")
     @SuppressWarnings("unused")
     public void derivedArrayDataMatrixNodeShouldBeDescribedByProtocol(
             SdrfDerivedArrayDataMatrixNode derivedArrayDataMatrixNode) {

@@ -128,12 +128,12 @@ public class FactorValuesMustVary {
                 // Format string that user sees
                 StringBuilder sb = new StringBuilder();
                 for (Iterator<String> it = offendingFactors.iterator(); it.hasNext(); ) {
-                    sb.append(it.next());
+                    sb.append('\'').append(it.next()).append('\'');
                     if (it.hasNext()) {
                         sb.append(", ");
                     }
                 }
-                setCheckDynamicDetail("Offending factor" + (offendingFactors.size() > 1 ? "s" : "") + ": " + sb.toString());
+                setCheckDynamicDetail("offending factor" + (offendingFactors.size() > 1 ? "s" : "") + ": " + sb.toString());
             }
             // Throws error if offendingFactors contains entries
             assertThat(offendingFactors.size(), equalTo(0));

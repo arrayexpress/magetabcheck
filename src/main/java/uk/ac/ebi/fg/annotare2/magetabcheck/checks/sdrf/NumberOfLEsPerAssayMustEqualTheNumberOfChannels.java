@@ -34,7 +34,7 @@ public class NumberOfLEsPerAssayMustEqualTheNumberOfChannels {
     private static Function<SdrfLabeledExtractNode, String> GET_NODE_NAME = new Function<SdrfLabeledExtractNode, String>() {
         public String apply(@Nullable SdrfLabeledExtractNode node) {
             checkNotNull(node);
-            return node.getName() + " (label: " + (null != node.getLabel() ? node.getLabel().getValue() : "null") + ")";
+            return "'" + node.getName() + "'";
         }
     };
 
@@ -42,7 +42,7 @@ public class NumberOfLEsPerAssayMustEqualTheNumberOfChannels {
 
     @Visit
     public void collectLabels(SdrfLabeledExtractNode labeledExtractNode) {
-        uniqueLabels.add(getLabel(labeledExtractNode));
+        uniqueLabels.add("'" + getLabel(labeledExtractNode) + "'");
     }
 
     @Visit
@@ -55,7 +55,7 @@ public class NumberOfLEsPerAssayMustEqualTheNumberOfChannels {
 
         setCellPosition(assayNode);
         setCheckDynamicDetail("i.e. assay '" + assayNode.getName() + "' must be connected to " + uniqueLabels.size() +
-                " labeled extract*s) with labels " + Joiner.on(", ").join(uniqueLabels) +
+                " labeled extract" + (1 == uniqueLabels.size() ? "" : "s") + " with labels " + Joiner.on(", ").join(uniqueLabels) +
                 "; currently connected to " +
                 Joiner.on(", ").join(transform(labeledExtractNodes, GET_NODE_NAME)));
         assertThat(labels.size(), equalTo(uniqueLabels.size()));
