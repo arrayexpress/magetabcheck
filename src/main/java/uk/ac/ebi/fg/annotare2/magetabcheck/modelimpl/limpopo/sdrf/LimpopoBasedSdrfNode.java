@@ -85,7 +85,12 @@ abstract class LimpopoBasedSdrfNode<T extends SDRFNode> extends ObjectWithAttrib
 
     @Override
     public String getName() {
-        return node.getNodeName();
+        String name = node.getNodeName();
+        // Annotare uses this pattern to mark not yet completed nodes
+        if (null != name && name.matches("^____UNASSIGNED____\\d+$")) {
+            name = "";
+        }
+        return name;
     }
 
     protected T node() {
@@ -101,6 +106,11 @@ abstract class LimpopoBasedSdrfNode<T extends SDRFNode> extends ObjectWithAttrib
     }
 
     protected FileLocation location(String file) {
+        // Annotare uses this pattern to make file nodes unique
+        if (null != file && file.matches("^____.+____\\d+____$")) {
+            file = file.replaceFirst("^____(.+)____\\d+____$", "$1");
+        }
+
         return new FileLocation(helper.getSourceUrl(), file);
     }
 

@@ -99,7 +99,10 @@ public class SdrfSimpleChecks {
         Collection<SdrfCharacteristicAttribute> characteristics = sourceNode.getCharacteristics();
         assertNotNull(characteristics);
         assertThat(characteristics.isEmpty(), is(Boolean.FALSE));
-        assertNotNull(getOrganism(characteristics));
+        SdrfCharacteristicAttribute organism = getOrganism(characteristics);
+        assertNotNull(organism);
+        setCellPosition(organism);
+        assertNotEmptyString(organism.getValue());
     }
 
     private SdrfCharacteristicAttribute getOrganism(Collection<SdrfCharacteristicAttribute> characteristics) {
@@ -788,7 +791,8 @@ public class SdrfSimpleChecks {
                 isProtocolTypeMatching(
                         getParentProtocolNodes(derivedArrayDataNode),
                         DATA_TRANSOFRMATION_PROTOCOL),
-                is(Boolean.TRUE));    }
+                is(Boolean.TRUE));
+    }
 
     @MageTabCheck(
             ref = "ADMN01",
@@ -916,9 +920,6 @@ public class SdrfSimpleChecks {
         setCellPosition(node);
         String name = node.getName();
         assertNotEmptyString(name);
-
-        // also check pattern used by Annotare to mark empty nodes
-        assertThat(null == name || name.matches("____UNASSIGNED____\\d+"), is(false));
     }
 
     private static void assertNodeIsDescribedByProtocol(SdrfGraphNode node) {
