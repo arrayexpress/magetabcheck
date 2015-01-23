@@ -1,3 +1,11 @@
+## Release 1.18
+
+  * Clarified check AN08 (An assay must be connected to a number of distinctly labeled extracts that equals a number of channels (dyes used))
+  * Reworked check runner framework so checks re-use common class instance for checking session
+  * It is possible to use assertions in "visit" phase of class-based check
+  * Some checks were reworded for clarity
+  * Switched to limpopo 1.1.10
+  
 ## Release 1.17
 
   * Re-enabled file presence checking for both Annotare-embedded and standalone checking 
