@@ -60,7 +60,7 @@
         <url>https://github.com/arrayexpress/magetabcheck</url>
         <connection>scm:git:git://github.com/arrayexpress/magetabcheck.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/arrayexpress/magetabcheck.git</developerConnection>
-      <tag>magetabcheck-1.18</tag>
+      <tag>magetabcheck-1.19</tag>
     </scm>
 
     <profiles>
@@ -99,7 +99,7 @@
         <guice.version>3.0</guice.version>
         <slf4j.version>1.7.7</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
-        <limpopo.version>1.1.11-SNAPSHOT</limpopo.version>
+        <limpopo.version>1.1.11</limpopo.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
     </properties>
