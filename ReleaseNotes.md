@@ -1,3 +1,7 @@
+## Release 1.19
+
+  * Switched to limpopo 1.1.14 and org.reflections to 0.9.10
+
 ## Release 1.18
 
   * Clarified check AN08 (An assay must be connected to a number of distinctly labeled extracts that equals a number of channels (dyes used))
