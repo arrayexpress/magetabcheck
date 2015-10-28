@@ -172,4 +172,8 @@ class SdrfHelper {
     public Protocol protocol(String protocolRef) {
         return idf.getProtocol(protocolRef);
     }
+
+    public Collection<? extends SdrfGraphNode> getRootNodes() {
+        return wrapNodes(sdrf.getRootNodes());
+    }
 }
