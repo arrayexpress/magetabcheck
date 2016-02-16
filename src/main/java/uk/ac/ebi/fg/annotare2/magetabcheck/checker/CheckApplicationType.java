@@ -9,7 +9,7 @@
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or impl
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -20,7 +20,8 @@ import java.util.EnumSet;
 
 import static java.util.EnumSet.allOf;
 import static java.util.EnumSet.of;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.ExperimentType.*;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.ExperimentType.HTS;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.ExperimentType.MICRO_ARRAY;
 
 /**
  * @author Olga Melnichuk
