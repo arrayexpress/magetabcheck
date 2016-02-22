@@ -16,10 +16,8 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.efo;
 
-import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
-import com.google.common.io.InputSupplier;
-import com.google.common.io.OutputSupplier;
+import com.google.common.io.Resources;
 import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -30,7 +28,10 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 import static com.google.common.io.Closeables.close;
@@ -77,13 +78,7 @@ public class EfoLoader {
             }
 
             log.debug("Downloading EFO file [url={}]", url);
-            OutputSupplier<FileOutputStream> out = Files.newOutputStreamSupplier(cacheFile);
-            ByteStreams.copy(new InputSupplier<InputStream>() {
-                @Override
-                public InputStream getInput() throws IOException {
-                    return url.openStream();
-                }
-            }, out);
+            Resources.asByteSource(url).copyTo(Files.asByteSink(cacheFile));
             log.debug("EFO file download successfully completed.");
         } else {
             log.debug("Loading EFO graph from cache [file={}]", cacheFile);

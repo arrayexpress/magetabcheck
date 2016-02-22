@@ -46,6 +46,17 @@
             <timezone>0</timezone>
             <properties />
         </developer>
+        <developer>
+            <id>kolais</id>
+            <name>Nikolay Kolesnikov</name>
+            <organization>EBI</organization>
+            <organizationUrl>http://www.ebi.ac.uk</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>0</timezone>
+            <properties />
+        </developer>
     </developers>
 
     <licenses>
@@ -60,7 +71,7 @@
         <url>https://github.com/arrayexpress/magetabcheck</url>
         <connection>scm:git:git://github.com/arrayexpress/magetabcheck.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/arrayexpress/magetabcheck.git</developerConnection>
-      <tag>magetabcheck-1.19</tag>
+      <tag>magetabcheck-1.20</tag>
     </scm>
 
     <profiles>
@@ -95,8 +106,8 @@
 
     <properties>
         <gwt.version>2.4.0</gwt.version>
-        <guava.version>16.0.1</guava.version>
-        <guice.version>3.0</guice.version>
+        <guava.version>19.0</guava.version>
+        <guice.version>4.0</guice.version>
         <slf4j.version>1.7.7</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
         <limpopo.version>1.2.0</limpopo.version>

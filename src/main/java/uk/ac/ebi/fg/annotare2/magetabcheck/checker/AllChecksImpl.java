@@ -18,6 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.checker;
 
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
+import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
@@ -40,7 +41,7 @@ public class AllChecksImpl implements AllChecks {
         Reflections reflections = new Reflections(
                 new ConfigurationBuilder()
                         .setUrls(ClasspathHelper.forJavaClassPath())
-                        .setScanners(new TypeAnnotationsScanner(), new MethodAnnotationsScanner())
+                        .setScanners(new SubTypesScanner(), new TypeAnnotationsScanner(), new MethodAnnotationsScanner())
         );
         classBasedChecks.addAll(reflections.getTypesAnnotatedWith(MageTabCheck.class));
         methodBasedChecks.addAll(reflections.getMethodsAnnotatedWith(MageTabCheck.class));
