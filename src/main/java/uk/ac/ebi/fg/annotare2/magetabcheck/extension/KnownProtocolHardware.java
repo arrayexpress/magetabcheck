@@ -32,15 +32,23 @@ public class KnownProtocolHardware {
 
     //TODO put it into property file
     public static final List<String> LIST = unmodifiableList(transform(newArrayList(
-
+            "454 GS",
+            "454 GS 20",
+            "454 GS FLX",
+            "454 GS FLX+",
+            "454 GS FLX Titanium",
+            "454 GS Junior",
             "Illumina Genome Analyzer",
             "Illumina Genome Analyzer II",
             "Illumina Genome Analyzer IIx",
             "Illumina HiSeq 2500",
             "Illumina HiSeq 2000",
+            "Illumina HiSeq 1500",
             "Illumina HiSeq 1000",
             "Illumina MiSeq",
             "Illumina HiScanSQ",
+            "HiSeq X Ten",
+            "NextSeq 500",
             "Helicos HeliScope",
             "AB SOLiD System",
             "AB SOLiD System 2.0",
@@ -51,10 +59,12 @@ public class KnownProtocolHardware {
             "AB SOLiD PI System",
             "AB 5500 Genetic Analyzer",
             "AB 5500xl Genetic Analyzer",
-            "Complete Genomics",
             "PacBio RS",
+            "PacBio RS II",
             "Ion Torrent PGM",
             "Ion Torrent Proton",
+            "MinION",
+            "GridION",
             "AB 3730xL Genetic Analyzer",
             "AB 3730 Genetic Analyzer",
             "AB 3500xL Genetic Analyzer",
@@ -62,12 +72,7 @@ public class KnownProtocolHardware {
             "AB 3130xL Genetic Analyzer",
             "AB 3130 Genetic Analyzer",
             "AB 310 Genetic Analyzer",
-            "MinION",
-            "GridION",
-            "HiSeq X Ten",
-            "NextSeq 500",
-            "Illumina HiSeq 1500",
-            "unspecified" ), new Function<String, String>() {
+            "unspecified"), new Function<String, String>() {
         @Override
         public String apply(@Nullable String input) {
             return input.toLowerCase();
