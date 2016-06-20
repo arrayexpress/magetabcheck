@@ -1,3 +1,9 @@
+## Release 1.20
+
+  * Updated sequencing hardware list
+  * Updated to latest version of Guice/Guava
+  * Slightly updated reflection scanner invocation
+
 ## Release 1.19
 
   * Switched to limpopo 1.1.14 and org.reflections to 0.9.10
