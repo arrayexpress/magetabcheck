@@ -22,23 +22,32 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfGraph;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfGraphNode;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * @author Olga Melnichuk
  */
-public class LimpopoBasedSdrfGraph implements SdrfGraph{
+public class LimpopoBasedSdrfGraph implements SdrfGraph {
 
-    private final SdrfHelper helper;
+    private final Set<SdrfHelper> helpers;
 
-    private final SDRF sdrf;
-
-    public LimpopoBasedSdrfGraph(SDRF sdrf, IdfData idf) {
-        helper = new SdrfHelper(sdrf, idf);
-        this.sdrf = sdrf;
+    public LimpopoBasedSdrfGraph(Collection<SDRF> sdrfs, IdfData idf) {
+        helpers = new HashSet<SdrfHelper>();
+        for (SDRF sdrf : sdrfs) {
+            helpers.add(new SdrfHelper(sdrf, idf));
+        }
     }
 
     @Override
     public Collection<? extends SdrfGraphNode> getRootNodes() {
-        return helper.wrapNodes(sdrf.getRootNodes());
+        List<SdrfGraphNode> rootNodes = newArrayList();
+        for (SdrfHelper helper : helpers) {
+            rootNodes.addAll(helper.getRootNodes());
+        }
+        return rootNodes;
     }
 }

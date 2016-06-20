@@ -25,6 +25,8 @@ import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfGraph;
 import uk.ac.ebi.fg.annotare2.magetabcheck.modelimpl.limpopo.idf.LimpopoIdfDataProxy;
 import uk.ac.ebi.fg.annotare2.magetabcheck.modelimpl.limpopo.sdrf.LimpopoBasedSdrfGraph;
 
+import java.util.Map;
+
 /**
  * @author Olga Melnichuk
  */
@@ -35,12 +37,12 @@ public class LimpopoBasedExperiment implements Experiment {
     private final SdrfGraph sdrfGraph;
 
     public LimpopoBasedExperiment(MAGETABInvestigation inv) {
-        this(inv.IDF, inv.SDRF);
+        this(inv.IDF, inv.SDRFs);
     }
 
-    public LimpopoBasedExperiment(IDF idf, SDRF sdrf) {
+    public LimpopoBasedExperiment(IDF idf, Map<String, SDRF> sdrfs) {
         this.idfData = new LimpopoIdfDataProxy(idf);
-        this.sdrfGraph = new LimpopoBasedSdrfGraph(sdrf, idfData);
+        this.sdrfGraph = new LimpopoBasedSdrfGraph(sdrfs.values(), idfData);
     }
 
     @Override

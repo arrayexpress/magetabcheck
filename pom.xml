@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2012 EMBL - European Bioinformatics Institute
+  ~ Copyright 2009-2016 European Molecular Biology Laboratory
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,14 +14,13 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>uk.ac.ebi.fg.annotare2</groupId>
     <artifactId>magetabcheck</artifactId>
-    <version>1.19</version>
+    <version>1.20</version>
     <packaging>jar</packaging>
 
     <name>MAGE-TAB Checker</name>
@@ -46,6 +45,17 @@
             <timezone>0</timezone>
             <properties />
         </developer>
+        <developer>
+            <id>kolais</id>
+            <name>Nikolay Kolesnikov</name>
+            <organization>EBI</organization>
+            <organizationUrl>http://www.ebi.ac.uk</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>0</timezone>
+            <properties />
+        </developer>
     </developers>
 
     <licenses>
@@ -60,7 +70,7 @@
         <url>https://github.com/arrayexpress/magetabcheck</url>
         <connection>scm:git:git://github.com/arrayexpress/magetabcheck.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/arrayexpress/magetabcheck.git</developerConnection>
-      <tag>magetabcheck-1.19</tag>
+      <tag>magetabcheck-1.20</tag>
     </scm>
 
     <profiles>
@@ -95,11 +105,11 @@
 
     <properties>
         <gwt.version>2.4.0</gwt.version>
-        <guava.version>16.0.1</guava.version>
-        <guice.version>3.0</guice.version>
+        <guava.version>19.0</guava.version>
+        <guice.version>4.0</guice.version>
         <slf4j.version>1.7.7</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
-        <limpopo.version>1.1.14</limpopo.version>
+        <limpopo.version>1.2.0</limpopo.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
     </properties>

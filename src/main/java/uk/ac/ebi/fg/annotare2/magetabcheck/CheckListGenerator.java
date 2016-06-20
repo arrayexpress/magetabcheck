@@ -19,8 +19,11 @@ package uk.ac.ebi.fg.annotare2.magetabcheck;
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import com.google.common.collect.Ordering;
+import com.google.common.io.CharSink;
+import com.google.common.io.Files;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
+import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
@@ -38,10 +41,6 @@ import java.util.regex.Pattern;
 import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
-import static com.google.common.io.CharStreams.newWriterSupplier;
-import static com.google.common.io.CharStreams.write;
-import static com.google.common.io.Files.newOutputStreamSupplier;
-import static com.google.inject.internal.util.$Maps.newHashMap;
 
 /**
  * @author Olga Melnichuk
@@ -50,7 +49,7 @@ public class CheckListGenerator {
 
     private static final Pattern REF_PATTERN = Pattern.compile("([a-zA-Z]+)[0-9]*");
 
-    private static final Map<String, String> prefixes = newHashMap();
+    private static final Map<String, String> prefixes = new HashMap<String, String>();
 
     static {
         prefixes.put("G", "General");
@@ -89,7 +88,7 @@ public class CheckListGenerator {
         prefixes.put("REF", "SDRF-IDF reference checks");
     }
 
-    private static final Map<String, RefList> refs = newHashMap();
+    private static final Map<String, RefList> refs = new HashMap<String, RefList>();
 
     static {
         refs.put("#protocol-hardware-list", new ProtocolHardwareList("Supported protocol hardware list"));
@@ -125,12 +124,13 @@ public class CheckListGenerator {
                 throw new IllegalStateException("Can't create directories " + parent);
             }
         }
-        write(markdown(), newWriterSupplier(newOutputStreamSupplier(out), Charsets.UTF_8));
+        CharSink sink = Files.asCharSink(out, Charsets.UTF_8);
+        sink.write(markdown());
     }
 
     private String markdown() {
         Reflections reflections = new Reflections(packageName,
-                new TypeAnnotationsScanner(), new MethodAnnotationsScanner());
+                new TypeAnnotationsScanner(), new MethodAnnotationsScanner(), new SubTypesScanner());
 
         List<MageTabCheck> checks = new ArrayList<MageTabCheck>();
         for (Class<?> clazz : reflections.getTypesAnnotatedWith(MageTabCheck.class)) {
