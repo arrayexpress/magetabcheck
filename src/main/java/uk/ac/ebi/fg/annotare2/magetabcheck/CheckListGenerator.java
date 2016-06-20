@@ -23,6 +23,7 @@ import com.google.common.io.CharSink;
 import com.google.common.io.Files;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
+import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
@@ -129,7 +130,7 @@ public class CheckListGenerator {
 
     private String markdown() {
         Reflections reflections = new Reflections(packageName,
-                new TypeAnnotationsScanner(), new MethodAnnotationsScanner());
+                new TypeAnnotationsScanner(), new MethodAnnotationsScanner(), new SubTypesScanner());
 
         List<MageTabCheck> checks = new ArrayList<MageTabCheck>();
         for (Class<?> clazz : reflections.getTypesAnnotatedWith(MageTabCheck.class)) {
