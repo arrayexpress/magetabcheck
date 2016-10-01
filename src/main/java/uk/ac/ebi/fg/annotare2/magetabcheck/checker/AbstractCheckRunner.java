@@ -9,7 +9,7 @@
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or impl
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -41,15 +41,18 @@ abstract class AbstractCheckRunner<T> implements CheckRunner<T> {
 
     private CheckModality checkModality;
 
+    private  String checkReference;
+
     private boolean hasErrors = false;
 
-    protected AbstractCheckRunner(String checkTitle, CheckModality checkModality) {
+    protected AbstractCheckRunner(String checkTitle, CheckModality checkModality, String checkReference) {
         this.checkTitle = checkTitle;
         this.checkModality = checkModality;
+        this.checkReference = checkReference;
     }
 
     protected AbstractCheckRunner(@Nonnull MageTabCheck annot) {
-        this(annot.value(), annot.modality());
+        this(annot.value(), annot.modality(), annot.ref());
     }
 
     protected void success() {
@@ -57,7 +60,7 @@ abstract class AbstractCheckRunner<T> implements CheckRunner<T> {
     }
 
     protected void success(CheckPosition pos) {
-        results.add(checkSucceeded(checkTitle, checkModality, pos));
+        results.add(checkSucceeded(checkTitle, checkModality, pos, checkReference));
     }
 
     protected void failure() {
@@ -65,12 +68,12 @@ abstract class AbstractCheckRunner<T> implements CheckRunner<T> {
     }
 
     protected void failure(CheckPosition pos, String dynamicDetail) {
-        results.add(checkFailed(checkTitle, checkModality, pos, dynamicDetail));
+        results.add(checkFailed(checkTitle, checkModality, pos, dynamicDetail, checkReference));
     }
 
     protected void error(Throwable e) {
         log.error("Check running error(" + checkTitle + ")", e);
-        results.add(checkBroken(checkTitle, checkModality, e));
+        results.add(checkBroken(checkTitle, checkModality, e, checkReference));
         hasErrors = true;
     }
 
