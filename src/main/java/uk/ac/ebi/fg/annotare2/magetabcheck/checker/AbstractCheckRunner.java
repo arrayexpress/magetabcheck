@@ -41,15 +41,18 @@ abstract class AbstractCheckRunner<T> implements CheckRunner<T> {
 
     private CheckModality checkModality;
 
+    private  String checkReference;
+
     private boolean hasErrors = false;
 
-    protected AbstractCheckRunner(String checkTitle, CheckModality checkModality) {
+    protected AbstractCheckRunner(String checkTitle, CheckModality checkModality, String checkReference) {
         this.checkTitle = checkTitle;
         this.checkModality = checkModality;
+        this.checkReference = checkReference;
     }
 
     protected AbstractCheckRunner(@Nonnull MageTabCheck annot) {
-        this(annot.value(), annot.modality());
+        this(annot.value(), annot.modality(), annot.ref());
     }
 
     protected void success() {
@@ -57,7 +60,7 @@ abstract class AbstractCheckRunner<T> implements CheckRunner<T> {
     }
 
     protected void success(CheckPosition pos) {
-        results.add(checkSucceeded(checkTitle, checkModality, pos));
+        results.add(checkSucceeded(checkTitle, checkModality, pos, checkReference));
     }
 
     protected void failure() {
@@ -65,12 +68,12 @@ abstract class AbstractCheckRunner<T> implements CheckRunner<T> {
     }
 
     protected void failure(CheckPosition pos, String dynamicDetail) {
-        results.add(checkFailed(checkTitle, checkModality, pos, dynamicDetail));
+        results.add(checkFailed(checkTitle, checkModality, pos, dynamicDetail, checkReference));
     }
 
     protected void error(Throwable e) {
         log.error("Check running error(" + checkTitle + ")", e);
-        results.add(checkBroken(checkTitle, checkModality, e));
+        results.add(checkBroken(checkTitle, checkModality, e, checkReference));
         hasErrors = true;
     }
 
