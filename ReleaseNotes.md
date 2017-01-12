@@ -1,3 +1,6 @@
+## Release 1.22
+  * Updated Known Protocol Hardware List
+
 ## Release 1.21
   * Updated API to return reference code for enabling custom error messages in Annotare
 
