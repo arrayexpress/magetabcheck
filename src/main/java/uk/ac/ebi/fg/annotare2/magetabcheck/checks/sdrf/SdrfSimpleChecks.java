@@ -881,7 +881,7 @@ public class SdrfSimpleChecks {
     private static boolean checkProcessedFileName(SdrfDataNode dataNode){
         // We only want to accept files with alphanumeric characters, no spaces, symbols etc.
         String filename = dataNode.getName();
-        return filename.matches("^[_a-zA-Z0-9\\-\\.]+$") || filename.equalsIgnoreCase("none");
+        return filename.matches("^[_a-zA-Z0-9\\-\\.]+$") || isNullOrEmpty(filename);
 
     }
 
