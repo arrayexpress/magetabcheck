@@ -790,7 +790,7 @@ public class SdrfSimpleChecks {
     @SuppressWarnings("unused")
     public void derivedArrayDataNodeShouldBeDescribedByProtocol(SdrfDerivedArrayDataNode derivedArrayDataNode) {
         setLinePosition(derivedArrayDataNode);
-        if(isNullOrEmpty(derivedArrayDataNode.getFileName())) {
+        {
             assertThat(
                     isProtocolTypeMatching(
                             getParentProtocolNodes(derivedArrayDataNode),
