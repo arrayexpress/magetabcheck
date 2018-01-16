@@ -784,18 +784,18 @@ public class SdrfSimpleChecks {
         assertFileLocationIsValid(derivedArrayDataNode);
     }
 
-    @MageTabCheck(
+/*    @MageTabCheck(
             ref = "DADN04",
             value = "A normalization data transformation protocol that describes the analysis methods used to generate the processed data file(s) must be included")
     @SuppressWarnings("unused")
     public void derivedArrayDataNodeShouldBeDescribedByProtocol(SdrfDerivedArrayDataNode derivedArrayDataNode) {
         setLinePosition(derivedArrayDataNode);
-            /*assertThat(
+            *//*assertThat(
                     isProtocolTypeMatching(
                             getParentProtocolNodes(derivedArrayDataNode),
                             DATA_TRANSOFRMATION_PROTOCOL),
-                    is(Boolean.TRUE));*/
-    }
+                    is(Boolean.TRUE));*//*
+    }*/
 
     @MageTabCheck(
             ref = "ADMN01",
