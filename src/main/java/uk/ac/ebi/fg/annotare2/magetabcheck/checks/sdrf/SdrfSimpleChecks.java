@@ -802,7 +802,7 @@ public class SdrfSimpleChecks {
                     isProtocolTypeMatching(
                             getParentProtocolNodes(derivedArrayDataNode),
                             DATA_TRANSOFRMATION_PROTOCOL),
-                    is(Boolean.TRUE));
+                    is(Boolean.FALSE));
         }
     }
 
