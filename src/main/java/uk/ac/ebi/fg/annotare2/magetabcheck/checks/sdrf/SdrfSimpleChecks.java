@@ -790,11 +790,13 @@ public class SdrfSimpleChecks {
     @SuppressWarnings("unused")
     public void derivedArrayDataNodeShouldBeDescribedByProtocol(SdrfDerivedArrayDataNode derivedArrayDataNode) {
         setLinePosition(derivedArrayDataNode);
-        assertThat(
-                isProtocolTypeMatching(
-                        getParentProtocolNodes(derivedArrayDataNode),
-                        DATA_TRANSOFRMATION_PROTOCOL),
-                is(Boolean.TRUE));
+        if(isNullOrEmpty(derivedArrayDataNode.getFileName())) {
+            assertThat(
+                    isProtocolTypeMatching(
+                            getParentProtocolNodes(derivedArrayDataNode),
+                            DATA_TRANSOFRMATION_PROTOCOL),
+                    is(Boolean.FALSE));
+        }
     }
 
     @MageTabCheck(
