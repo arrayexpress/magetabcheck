@@ -39,6 +39,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.HTS_ONLY;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.MICRO_ARRAY_ONLY;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSetter.setCheckDynamicDetail;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.WARNING;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.setCheckPosition;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfConstants.DATE_FORMAT;
@@ -772,6 +773,7 @@ public class SdrfSimpleChecks {
             value = "A processed data file name must only contain alphanumeric characters, underscores and dots")
     @SuppressWarnings("unused")
     public void derivedArrayDataNodeMustHaveFormattedName(SdrfDerivedArrayDataNode derivedArrayDataNode) {
+        setCheckDynamicDetail("offending factor: " + derivedArrayDataNode.getFileName());
         setCellPosition(derivedArrayDataNode);
         assertThat(checkProcessedFileName(derivedArrayDataNode), is(true));
     }
