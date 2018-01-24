@@ -773,7 +773,8 @@ public class SdrfSimpleChecks {
             value = "A processed data file name must only contain alphanumeric characters, underscores and dots")
     @SuppressWarnings("unused")
     public void derivedArrayDataNodeMustHaveFormattedName(SdrfDerivedArrayDataNode derivedArrayDataNode) {
-        setCheckDynamicDetail("offending factor: " + derivedArrayDataNode.getFileName());
+        SdrfDataNode dataNode = derivedArrayDataNode;
+        setCheckDynamicDetail("offending factor: " + dataNode.getFileName());
         setCellPosition(derivedArrayDataNode);
         assertThat(checkProcessedFileName(derivedArrayDataNode), is(true));
     }
