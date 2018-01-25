@@ -144,6 +144,7 @@ public class SdrfSimpleChecks {
     @SuppressWarnings("unused")
     public void growthTreatmentOrSampleCollectionProtocolMustBeDefined(SdrfSourceNode sourceNode) {
         setLinePosition(sourceNode);
+        setCheckDynamicDetail("Affected sample: " + sourceNode.getName());
         assertThat(
                 isProtocolTypeMatching(
                         getFollowingProtocolNodes(sourceNode),
@@ -737,7 +738,7 @@ public class SdrfSimpleChecks {
             value = "A raw data file name must only contain alphanumeric characters, underscores and dots")
     @SuppressWarnings("unused")
     public void arrayDataNodeMustHaveFormattedName(SdrfArrayDataNode arrayDataNode) {
-        setCheckDynamicDetail("offending factor: " + arrayDataNode.getName());
+        setCheckDynamicDetail("Affected file: " + arrayDataNode.getName());
         setCellPosition(arrayDataNode);
         assertThat(checkFileName(arrayDataNode), is(true));
     }
@@ -774,7 +775,7 @@ public class SdrfSimpleChecks {
             value = "A processed data file name must only contain alphanumeric characters, underscores and dots")
     @SuppressWarnings("unused")
     public void derivedArrayDataNodeMustHaveFormattedName(SdrfDerivedArrayDataNode derivedArrayDataNode) {
-        setCheckDynamicDetail("offending factor: " + derivedArrayDataNode.getName());
+        setCheckDynamicDetail("Affected file: " + derivedArrayDataNode.getName());
         setCellPosition(derivedArrayDataNode);
         assertThat(checkProcessedFileName(derivedArrayDataNode), is(true));
     }
@@ -822,7 +823,7 @@ public class SdrfSimpleChecks {
             value = "An array data matrix file name must only contain alphanumeric characters, underscores and dots")
     @SuppressWarnings("unused")
     public void arrayDataMatrixNodeMustHaveFormattedName(SdrfArrayDataMatrixNode arrayDataMatrixNode) {
-        setCheckDynamicDetail("offending factor: " + arrayDataMatrixNode.getName());
+        setCheckDynamicDetail("Affected file: " + arrayDataMatrixNode.getName());
         setCellPosition(arrayDataMatrixNode);
         assertThat(checkFileName(arrayDataMatrixNode), is(true));
     }
@@ -857,7 +858,7 @@ public class SdrfSimpleChecks {
             value = "A derived array data matrix file name must only contain alphanumeric characters, underscores and dots")
     @SuppressWarnings("unused")
     public void derivedArrayDataMatrixNodeMustHaveFormattedName(SdrfDerivedArrayDataMatrixNode derivedArrayDataMatrixNode) {
-        setCheckDynamicDetail("offending factor: " + derivedArrayDataMatrixNode.getName());
+        setCheckDynamicDetail("Affected file: " + derivedArrayDataMatrixNode.getName());
         setCellPosition(derivedArrayDataMatrixNode);
         assertThat(checkFileName(derivedArrayDataMatrixNode), is(true));
     }
