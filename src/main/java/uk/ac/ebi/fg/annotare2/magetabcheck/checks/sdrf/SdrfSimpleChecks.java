@@ -737,6 +737,7 @@ public class SdrfSimpleChecks {
             value = "A raw data file name must only contain alphanumeric characters, underscores and dots")
     @SuppressWarnings("unused")
     public void arrayDataNodeMustHaveFormattedName(SdrfArrayDataNode arrayDataNode) {
+        setCheckDynamicDetail("offending factor: " + arrayDataNode.getName());
         setCellPosition(arrayDataNode);
         assertThat(checkFileName(arrayDataNode), is(true));
     }
@@ -792,11 +793,20 @@ public class SdrfSimpleChecks {
     @SuppressWarnings("unused")
     public void derivedArrayDataNodeShouldBeDescribedByProtocol(SdrfDerivedArrayDataNode derivedArrayDataNode) {
         setLinePosition(derivedArrayDataNode);
+        if(!isNullOrEmpty(derivedArrayDataNode.getName())) {
             assertThat(
                     isProtocolTypeMatching(
                             getParentProtocolNodes(derivedArrayDataNode),
                             DATA_TRANSOFRMATION_PROTOCOL),
                     is(Boolean.TRUE));
+        }
+        else {
+            assertThat(
+                    isProtocolTypeMatching(
+                            getParentProtocolNodes(derivedArrayDataNode),
+                            DATA_TRANSOFRMATION_PROTOCOL),
+                    is(Boolean.FALSE));
+        }
     }
 
     @MageTabCheck(
@@ -812,6 +822,7 @@ public class SdrfSimpleChecks {
             value = "An array data matrix file name must only contain alphanumeric characters, underscores and dots")
     @SuppressWarnings("unused")
     public void arrayDataMatrixNodeMustHaveFormattedName(SdrfArrayDataMatrixNode arrayDataMatrixNode) {
+        setCheckDynamicDetail("offending factor: " + arrayDataMatrixNode.getName());
         setCellPosition(arrayDataMatrixNode);
         assertThat(checkFileName(arrayDataMatrixNode), is(true));
     }
@@ -846,6 +857,7 @@ public class SdrfSimpleChecks {
             value = "A derived array data matrix file name must only contain alphanumeric characters, underscores and dots")
     @SuppressWarnings("unused")
     public void derivedArrayDataMatrixNodeMustHaveFormattedName(SdrfDerivedArrayDataMatrixNode derivedArrayDataMatrixNode) {
+        setCheckDynamicDetail("offending factor: " + derivedArrayDataMatrixNode.getName());
         setCellPosition(derivedArrayDataMatrixNode);
         assertThat(checkFileName(derivedArrayDataMatrixNode), is(true));
     }
