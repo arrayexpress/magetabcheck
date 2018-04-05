@@ -191,8 +191,7 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "SM03",
-            value = "A sample should be described by a protocol",
-            modality = ERROR)
+            value = "A sample should be described by a protocol")
     @SuppressWarnings("unused")
     public void sampleNodeShouldBeDescribedByProtocol(SdrfSampleNode sampleNode) {
         setLinePosition(sampleNode);
