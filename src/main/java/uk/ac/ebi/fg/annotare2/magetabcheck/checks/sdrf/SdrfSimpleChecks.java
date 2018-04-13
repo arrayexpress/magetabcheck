@@ -40,7 +40,6 @@ import static org.hamcrest.Matchers.*;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.HTS_ONLY;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.MICRO_ARRAY_ONLY;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSetter.setCheckDynamicDetail;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.ERROR;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.WARNING;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.setCheckPosition;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfConstants.DATE_FORMAT;
@@ -191,11 +190,11 @@ public class SdrfSimpleChecks {
 
     @MageTabCheck(
             ref = "SM03",
-            value = "A sample should be described by a protocol")
+            value = "A sample should be described by a protocol",
+            modality = WARNING)
     @SuppressWarnings("unused")
     public void sampleNodeShouldBeDescribedByProtocol(SdrfSampleNode sampleNode) {
         setLinePosition(sampleNode);
-        setCheckDynamicDetail("Offending sample: " + sampleNode.getName());
         assertNodeIsDescribedByProtocol(sampleNode);
     }
 
@@ -239,6 +238,7 @@ public class SdrfSimpleChecks {
     @SuppressWarnings("unused")
     public void extractNodeMustBeDescribedByLibraryConstructionProtocol(SdrfExtractNode extractNode) {
         setLinePosition(extractNode);
+        setCheckDynamicDetail("Offending sample: " + extractNode.getName());
         assertThat(
                 isProtocolTypeMatching(
                         getParentProtocolNodes(extractNode),
@@ -447,6 +447,7 @@ public class SdrfSimpleChecks {
     @SuppressWarnings("unused")
     public void assayNodeMustBeDescribedBySequencingProtocol(SdrfAssayNode assayNode) {
         setLinePosition(assayNode);
+        setCheckDynamicDetail("Offending sample: " + assayNode.getName());
         assertThat(
                 isProtocolTypeMatching(
                         getParentProtocolNodes(assayNode),
