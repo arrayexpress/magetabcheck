@@ -224,7 +224,7 @@ public class SdrfSimpleChecks {
     @SuppressWarnings("unused")
     public void extractNodeShouldBeDescribedByProtocol(SdrfExtractNode extractNode) {
         setLinePosition(extractNode);
-        setCheckDynamicDetail("Offending sample: " + extractNode.getName());
+        setCheckDynamicDetail("Affected sample: " + extractNode.getName());
         assertThat(
                 isProtocolTypeMatching(
                         getParentProtocolNodes(extractNode),
@@ -285,7 +285,7 @@ public class SdrfSimpleChecks {
     @SuppressWarnings("unused")
     public void labeledExtractNodeShouldBeDescribedByProtocol(SdrfLabeledExtractNode labeledExtractNode) {
         setLinePosition(labeledExtractNode);
-        setCheckDynamicDetail("Offending sample: " + labeledExtractNode.getName());
+        setCheckDynamicDetail("Affected sample: " + labeledExtractNode.getName());
         assertThat(
                 isProtocolTypeMatching(
                         getParentProtocolNodes(labeledExtractNode),
@@ -464,7 +464,7 @@ public class SdrfSimpleChecks {
     @SuppressWarnings("unused")
     public void assayNodeMustBeDescribedByHybridizationProtocol(SdrfAssayNode assayNode) {
         setLinePosition(assayNode);
-        setCheckDynamicDetail("Offending sample: " + assayNode.getName());
+        setCheckDynamicDetail("Affected sample: " + assayNode.getName());
         assertThat(
                 isProtocolTypeMatching(
                         getParentProtocolNodes(assayNode),
