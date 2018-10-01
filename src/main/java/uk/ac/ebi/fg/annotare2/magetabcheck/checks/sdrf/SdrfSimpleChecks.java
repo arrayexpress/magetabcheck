@@ -595,27 +595,7 @@ public class SdrfSimpleChecks {
         }
         assertThat(count, is(requiredComments.size()));
     }
-
-    @MageTabCheck(
-            ref = "SC01",
-            value = "Single cell Library construction and spike in must be specified for the Single cell library info",
-            application = HTS_ONLY)
-    @SuppressWarnings("unused")
-    public void extractNodeMustHaveTwoSingleCellLibraryComments(SdrfExtractNode extractNode) {
-        setLinePosition(extractNode);
-        Collection<String> requiredSingleCellComments = ImmutableSet.of(
-                "library construction", "spike in");
-
-        int singleCellCount = 0;
-
-        for (SdrfComment comment : extractNode.getComments()) {
-            if(requiredSingleCellComments.contains(comment.getName())) {
-                singleCellCount++;
-            }
-        }
-        assertThat(singleCellCount, is(requiredSingleCellComments.size()));
-    }
-
+    
     @MageTabCheck(
             ref = "LC02",
             value = "NOMINAL_LENGTH must be a positive integer and NOMINAL_SDEV must be a positive number for paired-end sequencing samples in the ENA library info",
