@@ -37,8 +37,7 @@ import static com.google.common.collect.Collections2.filter;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.HTS_ONLY;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.MICRO_ARRAY_ONLY;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.*;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSetter.setCheckDynamicDetail;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.WARNING;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.setCheckPosition;
@@ -235,7 +234,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "EX04",
             value = "A nucleic acid library construction protocol must be included",
-            application = HTS_ONLY)
+            application = SINGLE_CELL_AND_HTS)
     @SuppressWarnings("unused")
     public void extractNodeMustBeDescribedByLibraryConstructionProtocol(SdrfExtractNode extractNode) {
         setLinePosition(extractNode);
@@ -397,7 +396,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "PN06",
             value = "A nucleic acid sequencing protocol must have a 'performer' attribute specified",
-            application = HTS_ONLY)
+            application = SINGLE_CELL_AND_HTS)
     @SuppressWarnings("unused")
     public void sequencingProtocolNodeMustHavePerformerAttribute(SdrfProtocolNode protocolNode) {
         Protocol protocol = protocolNode.getProtocol();
@@ -445,7 +444,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "AN03",
             value = "A nucleic acid sequencing protocol must be included",
-            application = HTS_ONLY)
+            application = SINGLE_CELL_AND_HTS)
     @SuppressWarnings("unused")
     public void assayNodeMustBeDescribedBySequencingProtocol(SdrfAssayNode assayNode) {
         setLinePosition(assayNode);
@@ -580,7 +579,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "LC01",
             value = "Library source, layout, selection and strategy must be specified for the ENA library info",
-            application = HTS_ONLY)
+            application = SINGLE_CELL_AND_HTS)
     @SuppressWarnings("unused")
     public void extractNodeMustHaveFourLibraryComments(SdrfExtractNode extractNode) {
         setLinePosition(extractNode);
@@ -595,11 +594,31 @@ public class SdrfSimpleChecks {
         }
         assertThat(count, is(requiredComments.size()));
     }
-    
+
+    @MageTabCheck(
+            ref = "SC01",
+            value = "Single cell Library construction and spike in must be specified for the Single cell library info",
+            application = SINGLE_CELL_ONLY)
+    @SuppressWarnings("unused")
+    public void extractNodeMustHaveTwoSingleCellLibraryComments(SdrfExtractNode extractNode) {
+        setLinePosition(extractNode);
+        Collection<String> requiredSingleCellComments = ImmutableSet.of(
+                "library construction", "spike in");
+
+        int singleCellCount = 0;
+
+        for (SdrfComment comment : extractNode.getComments()) {
+            if(requiredSingleCellComments.contains(comment.getName())) {
+                singleCellCount++;
+            }
+        }
+        assertThat(singleCellCount, is(requiredSingleCellComments.size()));
+    }
+
     @MageTabCheck(
             ref = "LC02",
             value = "NOMINAL_LENGTH must be a positive integer and NOMINAL_SDEV must be a positive number for paired-end sequencing samples in the ENA library info",
-            application = HTS_ONLY)
+            application = SINGLE_CELL_AND_HTS)
     @SuppressWarnings("unused")
     public void extractNodeMustHaveNominalLengthAndSDevSpecifiedForPairedExtracts(SdrfExtractNode extractNode) {
         setLinePosition(extractNode);

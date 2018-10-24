@@ -45,11 +45,13 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckResultStatus.SUCC
 public class LimpopoModelTest {
 
     private static final String RNA_SEQ_TYPE = "RNA-seq of coding RNA";
+    private static final String SINGLE_CELL_PROFILE = "Single-cell sequencing";
 
     @Test
     public void magetabAssemblyTest() throws UnknownExperimentTypeException {
         MAGETABInvestigation inv = new MAGETABInvestigation();
         inv.IDF.getComments().put("AEExperimentType", new HashSet<String>(asList(RNA_SEQ_TYPE)));
+        inv.IDF.getComments().put("ExperimentType", new HashSet<String>(asList(SINGLE_CELL_PROFILE)));
         inv.IDF.investigationTitle = "Test";
         inv.IDF.personEmail.add(0, "user@ebi.ac.uk");
 

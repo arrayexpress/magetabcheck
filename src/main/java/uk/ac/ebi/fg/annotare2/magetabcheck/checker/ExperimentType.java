@@ -21,5 +21,6 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.checker;
  */
 public enum ExperimentType {
     HTS,
-    MICRO_ARRAY
+    MICRO_ARRAY,
+    SINGLE_CELL
 }

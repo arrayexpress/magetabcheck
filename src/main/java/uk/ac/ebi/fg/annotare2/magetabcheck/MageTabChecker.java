@@ -19,10 +19,7 @@ package uk.ac.ebi.fg.annotare2.magetabcheck;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckResult;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckerFactory;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.ExperimentType;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.UnknownExperimentTypeException;
+import uk.ac.ebi.fg.annotare2.magetabcheck.checker.*;
 import uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.Experiment;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.Comment;
@@ -38,6 +35,7 @@ public class MageTabChecker {
     private static final Logger log = LoggerFactory.getLogger(MageTabChecker.class);
 
     private static final String AE_EXPERIMENT_TYPE_COMMENT = "AEExperimentType";
+    private static final String EXPERIMENT_TYPE_COMMENT = "ExperimentType";
 
     private final MageTabCheckEfo efoService;
 
@@ -57,7 +55,8 @@ public class MageTabChecker {
 
     public Collection<CheckResult> check(Experiment exp) throws UnknownExperimentTypeException {
         log.debug("The experiment type is not given explicitly");
-        return check(exp, guessType(exp.getIdfData()));
+        //return check(exp, guessType(exp.getIdfData()));
+        return check(exp, lookUpType(exp.getIdfData()));
     }
 
     private ExperimentType guessType(IdfData idf) throws UnknownExperimentTypeException {
@@ -68,6 +67,34 @@ public class MageTabChecker {
                     "' comment; can't find the experiment type.");
         }
         return lookupTypeInEfo(comments.iterator().next().getValue().getValue());
+    }
+
+    private ExperimentType lookUpType(IdfData idf) throws UnknownExperimentTypeException {
+        log.info("Looking for an experiment type in 'Comment[{}]' IDF field...", EXPERIMENT_TYPE_COMMENT);
+        Collection<Comment> comments = idf.getComments(EXPERIMENT_TYPE_COMMENT);
+
+        if (comments.isEmpty()) {
+            throw new UnknownExperimentTypeException("IDF doesn't contain '" + EXPERIMENT_TYPE_COMMENT +
+                    "' comment; can't find the experiment type.");
+        }
+
+        return lookupExperimentType(comments.iterator().next().getValue().getValue());
+    }
+
+    private ExperimentType lookupExperimentType(String type) {
+        log.debug("Comment[{}]='{}' has been found. Checking if it's defined in Experiment templates...", EXPERIMENT_TYPE_COMMENT, type);
+        for (ExperimentProfileType profile : ExperimentProfileType.values()) {
+            if(profile.isMicroarray(type)){
+                return ExperimentType.MICRO_ARRAY;
+            }
+            else if(profile.isSequencing(type)){
+                return ExperimentType.HTS;
+            }
+            else if (profile.isSingleCell(type)){
+                return ExperimentType.SINGLE_CELL;
+            }
+        }
+        return null;
     }
 
     private ExperimentType lookupTypeInEfo(String type) throws UnknownExperimentTypeException {
