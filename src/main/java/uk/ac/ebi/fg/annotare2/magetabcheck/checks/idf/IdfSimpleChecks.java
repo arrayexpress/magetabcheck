@@ -186,7 +186,7 @@ public class IdfSimpleChecks {
     @MageTabCheck(
             ref = "C06",
             value = "A contact with '" + SUBMITTER_ROLE + "' role must have affiliation specified",
-            application = CheckApplicationType.HTS_ONLY)
+            application = CheckApplicationType.SINGLE_CELL_AND_HTS)
     public void submitterMustHaveAffiliation(Person person) {
         TermList roles = person.getRoles();
         if (roles == null || roles.isEmpty()) {

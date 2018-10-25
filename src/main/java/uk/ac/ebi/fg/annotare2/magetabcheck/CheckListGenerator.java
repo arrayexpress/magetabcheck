@@ -288,9 +288,13 @@ public class CheckListGenerator {
                     case MICRO_ARRAY_ONLY:
                         return "Micro-array";
                     case ANY:
-                        return "Both";
+                        return "All Three";
                     case HTS_ONLY:
                         return "HTS";
+                    case SINGLE_CELL_ONLY:
+                        return "Single-cell";
+                    case SINGLE_CELL_AND_HTS:
+                        return "HTS and Single-cell";
                     default:
                         return annot.application().toString();
                 }

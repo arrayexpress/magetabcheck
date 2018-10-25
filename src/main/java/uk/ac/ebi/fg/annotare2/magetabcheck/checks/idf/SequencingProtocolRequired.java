@@ -35,7 +35,7 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.efo.MageTabCheckEfo.SEQUENCING
 @MageTabCheck(
         ref = "PR09",
         value = "Sequencing protocol is required for HTS submissions",
-        application = CheckApplicationType.HTS_ONLY,
+        application = CheckApplicationType.SINGLE_CELL_AND_HTS,
         details = "1. A `Protocol Type` field must be the name of " +
                 "['sequencing protocols class' in EFO](http://bioportal.bioontology.org/ontologies/49470/?p=terms&conceptid=efo%3AEFO_0004170) " +
                 "or one of its children;<br/>2. `Protocol Term Source REF` must be \"EFO\" if specified ([full list](#term-source-list))")
