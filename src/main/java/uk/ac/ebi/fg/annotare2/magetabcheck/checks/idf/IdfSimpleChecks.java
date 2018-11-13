@@ -30,6 +30,7 @@ import static java.lang.Boolean.FALSE;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.ANY;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.MICRO_ARRAY_ONLY;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.WARNING;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPosition.createPosition;
@@ -186,7 +187,7 @@ public class IdfSimpleChecks {
     @MageTabCheck(
             ref = "C06",
             value = "A contact with '" + SUBMITTER_ROLE + "' role must have affiliation specified",
-            application = CheckApplicationType.SINGLE_CELL_AND_HTS)
+            application = ANY)
     public void submitterMustHaveAffiliation(Person person) {
         TermList roles = person.getRoles();
         if (roles == null || roles.isEmpty()) {
