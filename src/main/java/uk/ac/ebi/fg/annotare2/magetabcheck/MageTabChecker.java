@@ -35,7 +35,7 @@ public class MageTabChecker {
     private static final Logger log = LoggerFactory.getLogger(MageTabChecker.class);
 
     private static final String AE_EXPERIMENT_TYPE_COMMENT = "AEExperimentType";
-    private static final String EXPERIMENT_TYPE_COMMENT = "ExperimentType";
+    private static final String TEMPLATE_TYPE_COMMENT = "TemplateType";
 
     private final MageTabCheckEfo efoService;
 
@@ -70,11 +70,11 @@ public class MageTabChecker {
     }
 
     private ExperimentType lookUpType(IdfData idf) throws UnknownExperimentTypeException {
-        log.info("Looking for an experiment type in 'Comment[{}]' IDF field...", EXPERIMENT_TYPE_COMMENT);
-        Collection<Comment> comments = idf.getComments(EXPERIMENT_TYPE_COMMENT);
+        log.info("Looking for an experiment type in 'Comment[{}]' IDF field...", TEMPLATE_TYPE_COMMENT);
+        Collection<Comment> comments = idf.getComments(TEMPLATE_TYPE_COMMENT);
 
         if (comments.isEmpty()) {
-            throw new UnknownExperimentTypeException("IDF doesn't contain '" + EXPERIMENT_TYPE_COMMENT +
+            throw new UnknownExperimentTypeException("IDF doesn't contain '" + TEMPLATE_TYPE_COMMENT +
                     "' comment; can't find the experiment type.");
         }
 
@@ -82,7 +82,7 @@ public class MageTabChecker {
     }
 
     private ExperimentType lookupExperimentType(String type) {
-        log.debug("Comment[{}]='{}' has been found. Checking if it's defined in Experiment templates...", EXPERIMENT_TYPE_COMMENT, type);
+        log.debug("Comment[{}]='{}' has been found. Checking if it's defined in Experiment templates...", TEMPLATE_TYPE_COMMENT, type);
         for (ExperimentProfileType profile : ExperimentProfileType.values()) {
             if(profile.isMicroarray(type)){
                 return ExperimentType.MICRO_ARRAY;
