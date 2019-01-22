@@ -51,7 +51,7 @@ public class LimpopoModelTest {
     public void magetabAssemblyTest() throws UnknownExperimentTypeException {
         MAGETABInvestigation inv = new MAGETABInvestigation();
         inv.IDF.getComments().put("AEExperimentType", new HashSet<String>(asList(RNA_SEQ_TYPE)));
-        inv.IDF.getComments().put("ExperimentType", new HashSet<String>(asList(SINGLE_CELL_PROFILE)));
+        inv.IDF.getComments().put("TemplateType", new HashSet<String>(asList(SINGLE_CELL_PROFILE)));
         inv.IDF.investigationTitle = "Test";
         inv.IDF.personEmail.add(0, "user@ebi.ac.uk");
 
