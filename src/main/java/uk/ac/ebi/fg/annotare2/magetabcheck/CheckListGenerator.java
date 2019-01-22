@@ -287,6 +287,8 @@ public class CheckListGenerator {
                 switch (annot.application()) {
                     case MICRO_ARRAY_ONLY:
                         return "Micro-array";
+                    case MICRO_ARRAY_AND_METHYLATION_MICROARRAY:
+                        return "Micro-array and Methylation-microarray";
                     case ANY:
                         return "All Three";
                     case HTS_ONLY:

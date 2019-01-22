@@ -219,7 +219,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "EX03",
             value = "A nucleic acid extraction protocol must be included",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void extractNodeShouldBeDescribedByProtocol(SdrfExtractNode extractNode) {
         setLinePosition(extractNode);
@@ -249,7 +249,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "LE02",
             value = "A labeled extract must have name specified",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void labeledExtractNodeMustHaveName(SdrfLabeledExtractNode labeledExtractNode) {
         setCellPosition(labeledExtractNode);
@@ -260,7 +260,7 @@ public class SdrfSimpleChecks {
             ref = "LE03",
             value = "A labeled extract should have a 'Material Type' attribute specified",
             modality = WARNING,
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void labeledExtractNodeShouldHaveMaterialTypeAttribute(SdrfLabeledExtractNode labeledExtractNode) {
         setLinePosition(labeledExtractNode);
@@ -270,7 +270,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "LE04",
             value = "A labeled extract must have 'Label' attribute specified",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void labeledExtractNodeMustHaveLabelAttribute(SdrfLabeledExtractNode labeledExtractNode) {
         setLinePosition(labeledExtractNode);
@@ -280,7 +280,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "LE05",
             value = "A nucleic acid labeling protocol must be included",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void labeledExtractNodeShouldBeDescribedByProtocol(SdrfLabeledExtractNode labeledExtractNode) {
         setLinePosition(labeledExtractNode);
@@ -296,7 +296,7 @@ public class SdrfSimpleChecks {
             ref = "L01",
             value = "A label attribute should have name specified",
             modality = WARNING,
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void labelAttributeShouldHaveName(SdrfLabelAttribute labelAttribute) {
         setCellPosition(labelAttribute);
@@ -307,7 +307,7 @@ public class SdrfSimpleChecks {
             ref = "L02",
             value = "A label attribute should have term source specified",
             modality = WARNING,
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void labelAttributeShouldHaveTermSource(SdrfLabelAttribute labelAttribute) {
         setCellPosition(labelAttribute);
@@ -317,7 +317,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "L03",
             value = "Term source of a label attribute must be defined in IDF",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void termSourceOfLabelAttributeMustBeValid(SdrfLabelAttribute labelAttribute) {
         setCellPosition(labelAttribute);
@@ -409,7 +409,7 @@ public class SdrfSimpleChecks {
             ref = "PN07",
             value = "A protocol should have a 'performer' attribute specified",
             modality = WARNING,
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void protocolNodeShouldHavePerformerAttribute(SdrfProtocolNode protocolNode) {
         assertProtocolHasPerformerAttribute(protocolNode);
@@ -459,7 +459,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "AN04",
             value = "A nucleic acid hybridization to array protocol must be included",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void assayNodeMustBeDescribedByHybridizationProtocol(SdrfAssayNode assayNode) {
         setLinePosition(assayNode);
@@ -474,7 +474,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "AN05",
             value = "'Technology Type' attribute must be equal to 'array assay' in micro-array submissions",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void assayNodeTechnologyTypeIsArrayAssay(SdrfAssayNode assayNode) {
         setLinePosition(assayNode);
@@ -486,7 +486,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "AN06",
             value = "For an array assay (microarray experiment) the incoming nodes must be 'Labeled Extract' nodes only",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void assayNodeMustBeDerivedFromLabeledExtracts(SdrfAssayNode assayNode) {
         setLinePosition(assayNode);
@@ -704,7 +704,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "AD01",
             value = "An array design attribute must have a name specified",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void arrayDesignAttributeMustHaveName(SdrfArrayDesignAttribute adAttribute) {
         assertNotEmptyName(adAttribute);
@@ -714,7 +714,7 @@ public class SdrfSimpleChecks {
             ref = "AD02",
             value = "An array design should have a term source specified",
             modality = WARNING,
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void arrayDesignAttributeShouldHaveTermSource(SdrfArrayDesignAttribute adAttribute) {
         setCellPosition(adAttribute);
@@ -724,7 +724,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "AD03",
             value = "Term source of an array design attribute must be declared in IDF",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void termSourceOfArrayDesignAttributeMustBeValid(SdrfArrayDesignAttribute adAttribute) {
         setCellPosition(adAttribute);

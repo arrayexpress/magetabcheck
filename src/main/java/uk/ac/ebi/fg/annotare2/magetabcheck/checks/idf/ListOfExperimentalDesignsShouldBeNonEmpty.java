@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
 @MageTabCheck(
         ref = "ED01",
         value = "Experiment must have at least one experimental design specified",
-  application = CheckApplicationType.MICRO_ARRAY_ONLY,
+  application = CheckApplicationType.MICRO_ARRAY_AND_METHYLATION_MICROARRAY,
   modality = CheckModality.WARNING
      )
 public class ListOfExperimentalDesignsShouldBeNonEmpty extends NonEmptyRangeCheck<ExperimentalDesign> {

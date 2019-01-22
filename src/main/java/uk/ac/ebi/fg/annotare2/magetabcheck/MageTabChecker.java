@@ -93,6 +93,9 @@ public class MageTabChecker {
             else if (profile.isSingleCell(type)){
                 return ExperimentType.SINGLE_CELL;
             }
+            else if (profile.isMethylationMicroarray(type)){
+                return ExperimentType.METHYLATION_MICROARRAY;
+            }
         }
         return null;
     }
