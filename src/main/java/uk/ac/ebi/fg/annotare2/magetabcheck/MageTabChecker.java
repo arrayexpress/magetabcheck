@@ -82,21 +82,31 @@ public class MageTabChecker {
     }
 
     private ExperimentType lookupExperimentType(String type) {
+
+        ExperimentProfileType experimentProfileType = null;
+
         log.debug("Comment[{}]='{}' has been found. Checking if it's defined in Experiment templates...", TEMPLATE_TYPE_COMMENT, type);
-        for (ExperimentProfileType profile : ExperimentProfileType.values()) {
-            if(profile.isMicroarray(type)){
+
+        for (ExperimentProfileType profileType : ExperimentProfileType.values()){
+            if(experimentProfileType == null){
+                experimentProfileType = profileType.getExperimentProfileType(type);
+            }
+        }
+        if(experimentProfileType != null){
+            if(experimentProfileType.isMicroarray()){
                 return ExperimentType.MICRO_ARRAY;
             }
-            else if(profile.isSequencing(type)){
+            else if(experimentProfileType.isSequencing()){
                 return ExperimentType.HTS;
             }
-            else if (profile.isSingleCell(type)){
+            else if (experimentProfileType.isSingleCell()){
                 return ExperimentType.SINGLE_CELL;
             }
-            else if (profile.isMethylationMicroarray(type)){
+            else if (experimentProfileType.isMethylationMicroarray()){
                 return ExperimentType.METHYLATION_MICROARRAY;
             }
         }
+
         return null;
     }
 

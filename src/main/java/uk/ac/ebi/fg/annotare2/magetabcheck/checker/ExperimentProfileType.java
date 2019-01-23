@@ -37,40 +37,47 @@ public enum ExperimentProfileType {
         return title;
     }
 
-    public boolean isMicroarray(String title) {
-        return ONE_COLOR_MICROARRAY.title.equalsIgnoreCase(title) ||
-                TWO_COLOR_MICROARRAY.title.equalsIgnoreCase(title) ||
-                PLANT_ONE_COLOR_MICROARRAY.title.equalsIgnoreCase(title) ||
-                PLANT_TWO_COLOR_MICROARRAY.title.equalsIgnoreCase(title) ||
-                HUMAN_ONE_COLOR_MICROARRAY.title.equalsIgnoreCase(title) ||
-                HUMAN_TWO_COLOR_MICROARRAY.title.equalsIgnoreCase(title) ||
-                ANIMAL_ONE_COLOR_MICROARRAY.title.equalsIgnoreCase(title) ||
-                ANIMAL_TWO_COLOR_MICROARRAY.title.equalsIgnoreCase(title) ||
-                CELL_LINE_ONE_COLOR_MICROARRAY.title.equalsIgnoreCase(title) ||
-                CELL_LINE_TWO_COLOR_MICROARRAY.title.equalsIgnoreCase(title);
+    public ExperimentProfileType getExperimentProfileType(String title){
+        if(this.title.equalsIgnoreCase(title)){
+            return this;
+        }
+        return null;
     }
 
-    public boolean isSequencing(String title) {
-        return SEQUENCING.title.equalsIgnoreCase(title) ||
-                PLANT_SEQUENCING.title.equalsIgnoreCase(title) ||
-                HUMAN_SEQUENCING.title.equalsIgnoreCase(title) ||
-                ANIMAL_SEQUENCING.title.equalsIgnoreCase(title) ||
-                CELL_LINE_SEQUENCING.title.equalsIgnoreCase(title);
+    public boolean isMicroarray() {
+        return ONE_COLOR_MICROARRAY == this ||
+                TWO_COLOR_MICROARRAY == this ||
+                PLANT_ONE_COLOR_MICROARRAY == this ||
+                PLANT_TWO_COLOR_MICROARRAY == this ||
+                HUMAN_ONE_COLOR_MICROARRAY == this ||
+                HUMAN_TWO_COLOR_MICROARRAY == this ||
+                ANIMAL_ONE_COLOR_MICROARRAY == this ||
+                ANIMAL_TWO_COLOR_MICROARRAY == this ||
+                CELL_LINE_ONE_COLOR_MICROARRAY == this ||
+                CELL_LINE_TWO_COLOR_MICROARRAY == this;
     }
 
-    public boolean isSingleCell(String title) {
-        return SINGLE_CELL_SEQUENCING.title.equalsIgnoreCase(title) ||
-                SINGLE_CELL_PLANT_SEQUENCING.title.equalsIgnoreCase(title) ||
-                SINGLE_CELL_HUMAN_SEQUENCING.title.equalsIgnoreCase(title) ||
-                SINGLE_CELL_ANIMAL_SEQUENCING.title.equalsIgnoreCase(title) ||
-                SINGLE_CELL_CELL_LINE_SEQUENCING.title.equalsIgnoreCase(title);
+    public boolean isSequencing() {
+        return SEQUENCING == this ||
+                PLANT_SEQUENCING == this ||
+                HUMAN_SEQUENCING == this ||
+                ANIMAL_SEQUENCING == this ||
+                CELL_LINE_SEQUENCING == this;
     }
 
-    public boolean isMethylationMicroarray(String title) {
-        return METHYLATION_MICROARRAY.title.equalsIgnoreCase(title) ||
-                PLANT_METHYLATION_MICROARRAY.title.equalsIgnoreCase(title) ||
-                HUMAN_METHYLATION_MICROARRAY.title.equalsIgnoreCase(title) ||
-                ANIMAL_METHYLATION_MICROARRAY.title.equalsIgnoreCase(title) ||
-                CELL_LINE_METHYLATION_MICROARRAY.title.equalsIgnoreCase(title);
+    public boolean isSingleCell() {
+        return SINGLE_CELL_SEQUENCING == this ||
+                SINGLE_CELL_PLANT_SEQUENCING == this ||
+                SINGLE_CELL_HUMAN_SEQUENCING == this ||
+                SINGLE_CELL_ANIMAL_SEQUENCING == this ||
+                SINGLE_CELL_CELL_LINE_SEQUENCING == this;
+    }
+
+    public boolean isMethylationMicroarray() {
+        return METHYLATION_MICROARRAY == this ||
+                PLANT_METHYLATION_MICROARRAY == this ||
+                HUMAN_METHYLATION_MICROARRAY == this ||
+                ANIMAL_METHYLATION_MICROARRAY == this ||
+                CELL_LINE_METHYLATION_MICROARRAY == this;
     }
 }
