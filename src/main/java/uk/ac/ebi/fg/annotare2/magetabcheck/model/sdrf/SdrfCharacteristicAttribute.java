@@ -16,10 +16,14 @@
 
 package uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf;
 
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.UnitAttribute;
+
 /**
  * @author Olga Melnichuk
  */
 public interface SdrfCharacteristicAttribute extends SdrfGraphAttribute, HasTermSource {
 
     String getType();
+
+    UnitAttribute getUnit();
 }

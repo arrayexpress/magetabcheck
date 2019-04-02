@@ -18,6 +18,7 @@ package uk.ac.ebi.fg.annotare2.magetabcheck.modelimpl.limpopo.sdrf;
 
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.CharacteristicsAttribute;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.SDRFAttribute;
+import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.UnitAttribute;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.idf.TermSource;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.sdrf.SdrfCharacteristicAttribute;
 
@@ -49,6 +50,9 @@ class LimpopoBasedCharacteristicAttribute extends LimpopoBasedSdrfAttribute<Char
     public String getType() {
         return attr().type;
     }
+
+    @Override
+    public UnitAttribute getUnit() { return attr().unit; }
 
     @Override
     protected Collection<SDRFAttribute> getRawAttributes() {

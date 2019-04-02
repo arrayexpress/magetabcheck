@@ -79,6 +79,22 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
+            ref = "UN01",
+            value = "Age unit should have a unit specified.",
+            modality = WARNING)
+    @SuppressWarnings("unused")
+    public void sourceNodeShouldHaveAgeAttributeUnit(SdrfSourceNode sourceNode) {
+        setLinePosition(sourceNode);
+        Collection<SdrfCharacteristicAttribute> characteristics = sourceNode.getCharacteristics();
+        assertNotNull(characteristics);
+        assertThat(characteristics.isEmpty(), is(Boolean.FALSE));
+        SdrfCharacteristicAttribute age = getAge(characteristics);
+        assertNotNull(age);
+        setCellPosition(age);
+        assertNotNull(age.getUnit());
+    }
+
+    @MageTabCheck(
             ref = "SR03",
             value = "A source (starting sample for the experiment) should have 'Provider' attribute specified",
             modality = WARNING)
@@ -108,6 +124,15 @@ public class SdrfSimpleChecks {
     private SdrfCharacteristicAttribute getOrganism(Collection<SdrfCharacteristicAttribute> characteristics) {
         for (SdrfCharacteristicAttribute attr : characteristics) {
             if ("Organism".equalsIgnoreCase(attr.getType())) {
+                return attr;
+            }
+        }
+        return null;
+    }
+
+    private SdrfCharacteristicAttribute getAge(Collection<SdrfCharacteristicAttribute> characteristics) {
+        for (SdrfCharacteristicAttribute attr : characteristics) {
+            if ("Age".equalsIgnoreCase(attr.getType())) {
                 return attr;
             }
         }
@@ -680,6 +705,32 @@ public class SdrfSimpleChecks {
     public void factorValueAttributeShouldHaveName(SdrfFactorValueAttribute fvAttribute) {
         setCellPosition(fvAttribute);
         assertNotEmptyString(fvAttribute.getType());
+    }
+
+    @MageTabCheck(
+            ref = "UN02",
+            value = "Time factor value should have units",
+            modality = WARNING)
+    @SuppressWarnings("unused")
+    public void factorValueAttributeTimeShouldHaveUnit(SdrfFactorValueAttribute fvAttribute) {
+        setCellPosition(fvAttribute);
+        assertNotEmptyString(fvAttribute.getType());
+        if(fvAttribute.getType().equalsIgnoreCase("time")) {
+            assertNotNull(fvAttribute.getUnit());
+        }
+    }
+
+    @MageTabCheck(
+            ref = "UN03",
+            value = "Dose factor value should have units",
+            modality = WARNING)
+    @SuppressWarnings("unused")
+    public void factorValueAttributeDoseShouldHaveUnit(SdrfFactorValueAttribute fvAttribute) {
+        setCellPosition(fvAttribute);
+        assertNotEmptyString(fvAttribute.getType());
+        if(fvAttribute.getType().equalsIgnoreCase("dose")) {
+            assertNotNull(fvAttribute.getUnit());
+        }
     }
 
     @MageTabCheck(
