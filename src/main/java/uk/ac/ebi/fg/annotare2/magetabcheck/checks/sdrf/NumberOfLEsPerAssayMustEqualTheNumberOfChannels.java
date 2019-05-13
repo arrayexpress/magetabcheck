@@ -20,14 +20,14 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.MICRO_ARRAY_AND_METHYLATION_MICROARRAY;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.MICRO_ARRAY_ONLY;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSetter.setCheckDynamicDetail;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.setCheckPosition;
 
 @MageTabCheck(
         ref = "AN08",
         value = "An assay must be connected to a number of distinctly labeled extracts that equals a number of channels (dyes used)",
-        application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
+        application = MICRO_ARRAY_ONLY)
 @SuppressWarnings("unused")
 public class NumberOfLEsPerAssayMustEqualTheNumberOfChannels {
 
