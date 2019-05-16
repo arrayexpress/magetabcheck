@@ -54,9 +54,9 @@ public class NumberOfLEsPerAssayMustEqualTheNumberOfChannels {
         }
 
         setCellPosition(assayNode);
-        setCheckDynamicDetail("'" + assayNode.getName() + "' must be connected to " + uniqueLabels.size() +
+        setCheckDynamicDetail("'" + assayNode.getName() + "' must be assigned to " + uniqueLabels.size() +
                 " labeled extract" + (1 == uniqueLabels.size() ? "" : "s") + " with labels " + Joiner.on(", ").join(uniqueLabels) +
-                "; currently connected to " +
+                "; currently assigned to " +
                 Joiner.on(", ").join(transform(labeledExtractNodes, GET_NODE_NAME)));
         assertThat(labels.size(), equalTo(uniqueLabels.size()));
         assertThat(labeledExtractNodes.size(), equalTo(uniqueLabels.size()));
