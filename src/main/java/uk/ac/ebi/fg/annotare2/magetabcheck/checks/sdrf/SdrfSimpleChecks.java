@@ -86,12 +86,13 @@ public class SdrfSimpleChecks {
     public void sourceNodeShouldHaveAgeAttributeUnit(SdrfSourceNode sourceNode) {
         setLinePosition(sourceNode);
         Collection<SdrfCharacteristicAttribute> characteristics = sourceNode.getCharacteristics();
-        assertNotNull(characteristics);
-        assertThat(characteristics.isEmpty(), is(Boolean.FALSE));
-        SdrfCharacteristicAttribute age = getAge(characteristics);
-        assertNotNull(age);
-        setCellPosition(age);
-        assertNotNull(age.getUnit());
+        if(!characteristics.isEmpty()) {
+            SdrfCharacteristicAttribute age = getAge(characteristics);
+            if (age != null) {
+                setCellPosition(age);
+                assertNotNull(age.getUnit());
+            }
+        }
     }
 
     @MageTabCheck(
