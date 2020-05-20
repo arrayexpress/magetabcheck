@@ -52,7 +52,6 @@ public class KnownProtocolHardware {
             "AB SOLiD 4 System",
             "AB SOLiD 4hq System",
             "AB SOLiD PI System",
-            "AB SOLiD System",
             "AB SOLiD System 2.0",
             "AB SOLiD System 3.0",
             "BGISEQ-500",
@@ -74,6 +73,7 @@ public class KnownProtocolHardware {
             "Illumina MiniSeq",
             "Illumina MiSeq",
             "Illumina NovaSeq 6000",
+            "Illumina iSeq 100",
             "Ion Torrent PGM",
             "Ion Torrent Proton",
             "Ion Torrent S5",
@@ -85,6 +85,7 @@ public class KnownProtocolHardware {
             "PacBio RS II",
             "PromethION",
             "Sequel",
+            "Sequel II",
             "unspecified"), new Function<String, String>() {
         @Override
         public String apply(@Nullable String input) {
