@@ -641,6 +641,7 @@ public class SdrfSimpleChecks {
         assertThat(singleCellCount, is(requiredSingleCellComments.size()));
     }
 
+    /* //Disabling this check as it no longer valid.
     @MageTabCheck(
             ref = "LC02",
             value = "NOMINAL_LENGTH must be a positive integer and NOMINAL_SDEV must be a positive number for paired-end sequencing samples in the ENA library info",
@@ -667,7 +668,7 @@ public class SdrfSimpleChecks {
         if (isPaired) {
             assertThat(count, is(2));
         }
-    }
+    }*/
 
     @MageTabCheck(
             ref = "CA01",
