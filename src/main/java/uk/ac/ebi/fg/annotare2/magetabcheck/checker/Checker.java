@@ -90,7 +90,9 @@ public class Checker {
             checkAttributes(node, visited);
             visited.add(node);
             for (SdrfGraphNode n : node.getChildNodes()) {
-                queue.add(n);
+                if(!(n instanceof SdrfProtocolNode && n.getName().isEmpty())){
+                    queue.add(n);
+                }
             }
         }
     }
