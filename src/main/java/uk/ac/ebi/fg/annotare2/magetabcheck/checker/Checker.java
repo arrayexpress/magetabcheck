@@ -86,13 +86,13 @@ public class Checker {
             if (visited.contains(node)) {
                 continue;
             }
-            checkOne(node);
-            checkAttributes(node, visited);
+            if(!(node instanceof SdrfProtocolNode && node.getName().isEmpty())){
+                checkOne(node);
+                checkAttributes(node, visited);
+            }
             visited.add(node);
             for (SdrfGraphNode n : node.getChildNodes()) {
-                if(!(n instanceof SdrfProtocolNode && n.getName().isEmpty())){
-                    queue.add(n);
-                }
+                queue.add(n);
             }
         }
     }

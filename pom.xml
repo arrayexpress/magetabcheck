@@ -20,7 +20,7 @@
 
     <groupId>uk.ac.ebi.fg.annotare2</groupId>
     <artifactId>magetabcheck</artifactId>
-    <version>1.28</version>
+    <version>1.29</version>
     <packaging>jar</packaging>
 
     <name>MAGE-TAB Checker</name>
