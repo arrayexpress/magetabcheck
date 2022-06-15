@@ -37,8 +37,8 @@ import static com.google.common.collect.Collections2.filter;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.HTS_ONLY;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.MICRO_ARRAY_ONLY;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.*;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckDynamicDetailSetter.setCheckDynamicDetail;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.WARNING;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.setCheckPosition;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf.IdfConstants.DATE_FORMAT;
@@ -79,6 +79,23 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
+            ref = "UN01",
+            value = "Age unit should have a unit specified.",
+            modality = WARNING)
+    @SuppressWarnings("unused")
+    public void sourceNodeShouldHaveAgeAttributeUnit(SdrfSourceNode sourceNode) {
+        setLinePosition(sourceNode);
+        Collection<SdrfCharacteristicAttribute> characteristics = sourceNode.getCharacteristics();
+        if(!characteristics.isEmpty()) {
+            SdrfCharacteristicAttribute age = getAge(characteristics);
+            if (age != null) {
+                setCellPosition(age);
+                assertNotNull(age.getUnit());
+            }
+        }
+    }
+
+    @MageTabCheck(
             ref = "SR03",
             value = "A source (starting sample for the experiment) should have 'Provider' attribute specified",
             modality = WARNING)
@@ -114,6 +131,15 @@ public class SdrfSimpleChecks {
         return null;
     }
 
+    private SdrfCharacteristicAttribute getAge(Collection<SdrfCharacteristicAttribute> characteristics) {
+        for (SdrfCharacteristicAttribute attr : characteristics) {
+            if ("Age".equalsIgnoreCase(attr.getType())) {
+                return attr;
+            }
+        }
+        return null;
+    }
+
     @MageTabCheck(
             ref = "SR05",
             value = "A source (starting sample for the experiment) should have more than 2 characteristic attributes",
@@ -143,6 +169,7 @@ public class SdrfSimpleChecks {
     @SuppressWarnings("unused")
     public void growthTreatmentOrSampleCollectionProtocolMustBeDefined(SdrfSourceNode sourceNode) {
         setLinePosition(sourceNode);
+        setCheckDynamicDetail("Affected sample: " + sourceNode.getName());
         assertThat(
                 isProtocolTypeMatching(
                         getFollowingProtocolNodes(sourceNode),
@@ -218,10 +245,11 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "EX03",
             value = "A nucleic acid extraction protocol must be included",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void extractNodeShouldBeDescribedByProtocol(SdrfExtractNode extractNode) {
         setLinePosition(extractNode);
+        setCheckDynamicDetail("Affected sample: " + extractNode.getName());
         assertThat(
                 isProtocolTypeMatching(
                         getParentProtocolNodes(extractNode),
@@ -232,10 +260,11 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "EX04",
             value = "A nucleic acid library construction protocol must be included",
-            application = HTS_ONLY)
+            application = SINGLE_CELL_AND_HTS)
     @SuppressWarnings("unused")
     public void extractNodeMustBeDescribedByLibraryConstructionProtocol(SdrfExtractNode extractNode) {
         setLinePosition(extractNode);
+        setCheckDynamicDetail("Offending sample: " + extractNode.getName());
         assertThat(
                 isProtocolTypeMatching(
                         getParentProtocolNodes(extractNode),
@@ -246,7 +275,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "LE02",
             value = "A labeled extract must have name specified",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void labeledExtractNodeMustHaveName(SdrfLabeledExtractNode labeledExtractNode) {
         setCellPosition(labeledExtractNode);
@@ -257,7 +286,7 @@ public class SdrfSimpleChecks {
             ref = "LE03",
             value = "A labeled extract should have a 'Material Type' attribute specified",
             modality = WARNING,
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void labeledExtractNodeShouldHaveMaterialTypeAttribute(SdrfLabeledExtractNode labeledExtractNode) {
         setLinePosition(labeledExtractNode);
@@ -267,7 +296,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "LE04",
             value = "A labeled extract must have 'Label' attribute specified",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void labeledExtractNodeMustHaveLabelAttribute(SdrfLabeledExtractNode labeledExtractNode) {
         setLinePosition(labeledExtractNode);
@@ -277,10 +306,11 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "LE05",
             value = "A nucleic acid labeling protocol must be included",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void labeledExtractNodeShouldBeDescribedByProtocol(SdrfLabeledExtractNode labeledExtractNode) {
         setLinePosition(labeledExtractNode);
+        setCheckDynamicDetail("Affected sample: " + labeledExtractNode.getName());
         assertThat(
                 isProtocolTypeMatching(
                         getParentProtocolNodes(labeledExtractNode),
@@ -292,7 +322,7 @@ public class SdrfSimpleChecks {
             ref = "L01",
             value = "A label attribute should have name specified",
             modality = WARNING,
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void labelAttributeShouldHaveName(SdrfLabelAttribute labelAttribute) {
         setCellPosition(labelAttribute);
@@ -303,7 +333,7 @@ public class SdrfSimpleChecks {
             ref = "L02",
             value = "A label attribute should have term source specified",
             modality = WARNING,
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void labelAttributeShouldHaveTermSource(SdrfLabelAttribute labelAttribute) {
         setCellPosition(labelAttribute);
@@ -313,7 +343,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "L03",
             value = "Term source of a label attribute must be defined in IDF",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void termSourceOfLabelAttributeMustBeValid(SdrfLabelAttribute labelAttribute) {
         setCellPosition(labelAttribute);
@@ -392,7 +422,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "PN06",
             value = "A nucleic acid sequencing protocol must have a 'performer' attribute specified",
-            application = HTS_ONLY)
+            application = SINGLE_CELL_AND_HTS)
     @SuppressWarnings("unused")
     public void sequencingProtocolNodeMustHavePerformerAttribute(SdrfProtocolNode protocolNode) {
         Protocol protocol = protocolNode.getProtocol();
@@ -405,7 +435,7 @@ public class SdrfSimpleChecks {
             ref = "PN07",
             value = "A protocol should have a 'performer' attribute specified",
             modality = WARNING,
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void protocolNodeShouldHavePerformerAttribute(SdrfProtocolNode protocolNode) {
         assertProtocolHasPerformerAttribute(protocolNode);
@@ -440,10 +470,11 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "AN03",
             value = "A nucleic acid sequencing protocol must be included",
-            application = HTS_ONLY)
+            application = SINGLE_CELL_AND_HTS)
     @SuppressWarnings("unused")
     public void assayNodeMustBeDescribedBySequencingProtocol(SdrfAssayNode assayNode) {
         setLinePosition(assayNode);
+        setCheckDynamicDetail("Offending sample: " + assayNode.getName());
         assertThat(
                 isProtocolTypeMatching(
                         getParentProtocolNodes(assayNode),
@@ -454,10 +485,11 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "AN04",
             value = "A nucleic acid hybridization to array protocol must be included",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void assayNodeMustBeDescribedByHybridizationProtocol(SdrfAssayNode assayNode) {
         setLinePosition(assayNode);
+        setCheckDynamicDetail("Affected sample: " + assayNode.getName());
         assertThat(
                 isProtocolTypeMatching(
                         getParentProtocolNodes(assayNode),
@@ -468,7 +500,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "AN05",
             value = "'Technology Type' attribute must be equal to 'array assay' in micro-array submissions",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void assayNodeTechnologyTypeIsArrayAssay(SdrfAssayNode assayNode) {
         setLinePosition(assayNode);
@@ -480,7 +512,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "AN06",
             value = "For an array assay (microarray experiment) the incoming nodes must be 'Labeled Extract' nodes only",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void assayNodeMustBeDerivedFromLabeledExtracts(SdrfAssayNode assayNode) {
         setLinePosition(assayNode);
@@ -573,7 +605,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "LC01",
             value = "Library source, layout, selection and strategy must be specified for the ENA library info",
-            application = HTS_ONLY)
+            application = SINGLE_CELL_AND_HTS)
     @SuppressWarnings("unused")
     public void extractNodeMustHaveFourLibraryComments(SdrfExtractNode extractNode) {
         setLinePosition(extractNode);
@@ -590,9 +622,30 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
+            ref = "SC01",
+            value = "Single cell Library construction and spike in must be specified for the Single cell library info",
+            application = SINGLE_CELL_ONLY)
+    @SuppressWarnings("unused")
+    public void extractNodeMustHaveTwoSingleCellLibraryComments(SdrfExtractNode extractNode) {
+        setLinePosition(extractNode);
+        Collection<String> requiredSingleCellComments = ImmutableSet.of(
+                "library construction", "spike in");
+
+        int singleCellCount = 0;
+
+        for (SdrfComment comment : extractNode.getComments()) {
+            if(requiredSingleCellComments.contains(comment.getName())) {
+                singleCellCount++;
+            }
+        }
+        assertThat(singleCellCount, is(requiredSingleCellComments.size()));
+    }
+
+    /* //Disabling this check as it no longer valid.
+    @MageTabCheck(
             ref = "LC02",
             value = "NOMINAL_LENGTH must be a positive integer and NOMINAL_SDEV must be a positive number for paired-end sequencing samples in the ENA library info",
-            application = HTS_ONLY)
+            application = SINGLE_CELL_AND_HTS)
     @SuppressWarnings("unused")
     public void extractNodeMustHaveNominalLengthAndSDevSpecifiedForPairedExtracts(SdrfExtractNode extractNode) {
         setLinePosition(extractNode);
@@ -615,7 +668,7 @@ public class SdrfSimpleChecks {
         if (isPaired) {
             assertThat(count, is(2));
         }
-    }
+    }*/
 
     @MageTabCheck(
             ref = "CA01",
@@ -657,6 +710,32 @@ public class SdrfSimpleChecks {
     }
 
     @MageTabCheck(
+            ref = "UN02",
+            value = "Time factor value should have units",
+            modality = WARNING)
+    @SuppressWarnings("unused")
+    public void factorValueAttributeTimeShouldHaveUnit(SdrfFactorValueAttribute fvAttribute) {
+        setCellPosition(fvAttribute);
+        assertNotEmptyString(fvAttribute.getType());
+        if(fvAttribute.getType().equalsIgnoreCase("time")) {
+            assertNotNull(fvAttribute.getUnit());
+        }
+    }
+
+    @MageTabCheck(
+            ref = "UN03",
+            value = "Dose factor value should have units",
+            modality = WARNING)
+    @SuppressWarnings("unused")
+    public void factorValueAttributeDoseShouldHaveUnit(SdrfFactorValueAttribute fvAttribute) {
+        setCellPosition(fvAttribute);
+        assertNotEmptyString(fvAttribute.getType());
+        if(fvAttribute.getType().equalsIgnoreCase("dose")) {
+            assertNotNull(fvAttribute.getUnit());
+        }
+    }
+
+    @MageTabCheck(
             ref = "FV02",
             value = "An experimental variable attribute should have a term source specified",
             modality = WARNING)
@@ -678,7 +757,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "AD01",
             value = "An array design attribute must have a name specified",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void arrayDesignAttributeMustHaveName(SdrfArrayDesignAttribute adAttribute) {
         assertNotEmptyName(adAttribute);
@@ -688,7 +767,7 @@ public class SdrfSimpleChecks {
             ref = "AD02",
             value = "An array design should have a term source specified",
             modality = WARNING,
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void arrayDesignAttributeShouldHaveTermSource(SdrfArrayDesignAttribute adAttribute) {
         setCellPosition(adAttribute);
@@ -698,7 +777,7 @@ public class SdrfSimpleChecks {
     @MageTabCheck(
             ref = "AD03",
             value = "Term source of an array design attribute must be declared in IDF",
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     @SuppressWarnings("unused")
     public void termSourceOfArrayDesignAttributeMustBeValid(SdrfArrayDesignAttribute adAttribute) {
         setCellPosition(adAttribute);
@@ -736,6 +815,7 @@ public class SdrfSimpleChecks {
             value = "A raw data file name must only contain alphanumeric characters, underscores and dots")
     @SuppressWarnings("unused")
     public void arrayDataNodeMustHaveFormattedName(SdrfArrayDataNode arrayDataNode) {
+        setCheckDynamicDetail("Affected file: " + arrayDataNode.getName());
         setCellPosition(arrayDataNode);
         assertThat(checkFileName(arrayDataNode), is(true));
     }
@@ -772,8 +852,9 @@ public class SdrfSimpleChecks {
             value = "A processed data file name must only contain alphanumeric characters, underscores and dots")
     @SuppressWarnings("unused")
     public void derivedArrayDataNodeMustHaveFormattedName(SdrfDerivedArrayDataNode derivedArrayDataNode) {
+        setCheckDynamicDetail("Affected file: " + derivedArrayDataNode.getName());
         setCellPosition(derivedArrayDataNode);
-        assertThat(checkFileName(derivedArrayDataNode), is(true));
+        assertThat(checkProcessedFileName(derivedArrayDataNode), is(true));
     }
 
     @MageTabCheck(
@@ -790,11 +871,20 @@ public class SdrfSimpleChecks {
     @SuppressWarnings("unused")
     public void derivedArrayDataNodeShouldBeDescribedByProtocol(SdrfDerivedArrayDataNode derivedArrayDataNode) {
         setLinePosition(derivedArrayDataNode);
-        assertThat(
-                isProtocolTypeMatching(
-                        getParentProtocolNodes(derivedArrayDataNode),
-                        DATA_TRANSOFRMATION_PROTOCOL),
-                is(Boolean.TRUE));
+        if(!isNullOrEmpty(derivedArrayDataNode.getName())) {
+            assertThat(
+                    isProtocolTypeMatching(
+                            getParentProtocolNodes(derivedArrayDataNode),
+                            DATA_TRANSOFRMATION_PROTOCOL),
+                    is(Boolean.TRUE));
+        }
+        else {
+            assertThat(
+                    isProtocolTypeMatching(
+                            getParentProtocolNodes(derivedArrayDataNode),
+                            DATA_TRANSOFRMATION_PROTOCOL),
+                    is(Boolean.FALSE));
+        }
     }
 
     @MageTabCheck(
@@ -810,6 +900,7 @@ public class SdrfSimpleChecks {
             value = "An array data matrix file name must only contain alphanumeric characters, underscores and dots")
     @SuppressWarnings("unused")
     public void arrayDataMatrixNodeMustHaveFormattedName(SdrfArrayDataMatrixNode arrayDataMatrixNode) {
+        setCheckDynamicDetail("Affected file: " + arrayDataMatrixNode.getName());
         setCellPosition(arrayDataMatrixNode);
         assertThat(checkFileName(arrayDataMatrixNode), is(true));
     }
@@ -844,6 +935,7 @@ public class SdrfSimpleChecks {
             value = "A derived array data matrix file name must only contain alphanumeric characters, underscores and dots")
     @SuppressWarnings("unused")
     public void derivedArrayDataMatrixNodeMustHaveFormattedName(SdrfDerivedArrayDataMatrixNode derivedArrayDataMatrixNode) {
+        setCheckDynamicDetail("Affected file: " + derivedArrayDataMatrixNode.getName());
         setCellPosition(derivedArrayDataMatrixNode);
         assertThat(checkFileName(derivedArrayDataMatrixNode), is(true));
     }
@@ -874,7 +966,17 @@ public class SdrfSimpleChecks {
     private static boolean checkFileName(SdrfDataNode dataNode){
         // We only want to accept files with alphanumeric characters, no spaces, symbols etc.
         String filename = dataNode.getName();
-        return null != filename && filename.matches("^[_a-zA-Z0-9\\-\\.]+$");
+        return null != filename &&
+                (filename.matches("^(?!\\#)[_a-zA-Z0-9\\-\\.\\#]+$")
+                        || isNullOrEmpty(filename));
+
+    }
+
+    private static boolean checkProcessedFileName(SdrfDataNode dataNode){
+        // We only want to accept files with alphanumeric characters, no spaces, symbols etc.
+        String filename = dataNode.getName();
+        return filename.matches("^(?!\\#)[_a-zA-Z0-9\\-\\.\\#]+$") || isNullOrEmpty(filename);
+
     }
 
     private static boolean isValidPositiveInteger(Collection<String> values) {

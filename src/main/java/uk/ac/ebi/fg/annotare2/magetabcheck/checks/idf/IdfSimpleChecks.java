@@ -17,7 +17,6 @@
 package uk.ac.ebi.fg.annotare2.magetabcheck.checks.idf;
 
 import org.hamcrest.Matchers;
-import uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType;
 import uk.ac.ebi.fg.annotare2.magetabcheck.checker.annotation.MageTabCheck;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.Cell;
 import uk.ac.ebi.fg.annotare2.magetabcheck.model.FileLocation;
@@ -30,7 +29,8 @@ import static java.lang.Boolean.FALSE;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.MICRO_ARRAY_ONLY;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.ANY;
+import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckApplicationType.MICRO_ARRAY_AND_METHYLATION_MICROARRAY;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckModality.WARNING;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPosition.createPosition;
 import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.CheckPositionSetter.setCheckPosition;
@@ -186,7 +186,7 @@ public class IdfSimpleChecks {
     @MageTabCheck(
             ref = "C06",
             value = "A contact with '" + SUBMITTER_ROLE + "' role must have affiliation specified",
-            application = CheckApplicationType.HTS_ONLY)
+            application = ANY)
     public void submitterMustHaveAffiliation(Person person) {
         TermList roles = person.getRoles();
         if (roles == null || roles.isEmpty()) {
@@ -201,7 +201,7 @@ public class IdfSimpleChecks {
             ref = "ED02",
             value = "An experimental design should be defined by a term",
             modality = WARNING,
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     public void experimentDesignShouldHaveName(ExperimentalDesign exd) {
         assertNotEmptyString(exd.getName());
     }
@@ -210,7 +210,7 @@ public class IdfSimpleChecks {
             ref = "ED03",
             value = "An experimental design term should have a term source",
             modality = WARNING,
-            application = MICRO_ARRAY_ONLY)
+            application = MICRO_ARRAY_AND_METHYLATION_MICROARRAY)
     public void experimentalDesignShouldHaveTermSource(ExperimentalDesign exd) {
         assertNotNull(exd.getSource());
     }

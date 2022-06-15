@@ -20,7 +20,7 @@
 
     <groupId>uk.ac.ebi.fg.annotare2</groupId>
     <artifactId>magetabcheck</artifactId>
-    <version>1.22</version>
+    <version>1.29</version>
     <packaging>jar</packaging>
 
     <name>MAGE-TAB Checker</name>
@@ -70,7 +70,7 @@
         <url>https://github.com/arrayexpress/magetabcheck</url>
         <connection>scm:git:git://github.com/arrayexpress/magetabcheck.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/arrayexpress/magetabcheck.git</developerConnection>
-      <tag>magetabcheck-1.22</tag>
+      <tag>magetabcheck-1.20</tag>
     </scm>
 
     <profiles>
@@ -93,7 +93,7 @@
                                 <id>sign-artifacts</id>
                                 <phase>verify</phase>
                                 <goals>
-                                    <goal>sign</goal>
+                                    <!--<goal>sign</goal>-->
                                 </goals>
                             </execution>
                         </executions>
@@ -116,10 +116,16 @@
 
     <distributionManagement>
         <downloadUrl>https://oss.sonatype.org/content/groups/public</downloadUrl>
-        <repository>
+        <!--<repository>
             <id>oss-sonatype-staging</id>
             <name>OSS Repository at sonatype</name>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>-->
+        <repository>
+            <id>ebi-repo</id>
+            <name>The EBI internal repository</name>
+            <!--<url>http://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo/</url>-->
+            <url>http://45.88.81.176:80/artifactory/maven-local/</url>
         </repository>
         <snapshotRepository>
             <id>oss-sonatype-snapshots</id>
@@ -132,9 +138,10 @@
         <repository>
             <id>ebi-repo</id>
             <name>The EBI internal repository</name>
-            <url>http://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo/</url>
+            <!--<url>http://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo/</url>-->
+            <url>http://45.88.81.176:80/artifactory/maven-local/</url>
         </repository>
-        <repository>
+        <!--<repository>
             <id>ebi-snapshot-repo</id>
             <name>The EBI internal snapshot repository</name>
             <url>http://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo-snapshots/</url>
@@ -143,7 +150,7 @@
             <id>limpopo-repo</id>
             <name>Limpopo Mini-SF Repository</name>
             <url>http://limpopo.sourceforge.net/maven/repo</url>
-        </repository>
+        </repository>-->
     </repositories>
 
     <reporting>

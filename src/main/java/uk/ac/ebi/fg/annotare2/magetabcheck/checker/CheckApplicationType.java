@@ -29,7 +29,10 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.checker.ExperimentType.MICRO_A
 public enum CheckApplicationType {
     ANY(allOf(ExperimentType.class)),
     HTS_ONLY(of(HTS)),
-    MICRO_ARRAY_ONLY(of(MICRO_ARRAY));
+    MICRO_ARRAY_AND_METHYLATION_MICROARRAY(of(MICRO_ARRAY, METHYLATION_MICROARRAY)),
+    MICRO_ARRAY_ONLY(of(MICRO_ARRAY)),
+    SINGLE_CELL_AND_HTS(of(SINGLE_CELL, HTS)),
+    SINGLE_CELL_ONLY(of(SINGLE_CELL));
 
     private final EnumSet<ExperimentType> enumSet;
 

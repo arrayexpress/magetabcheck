@@ -19,7 +19,7 @@ import static uk.ac.ebi.fg.annotare2.magetabcheck.extension.KnownProtocolHardwar
 @MageTabCheck(
         ref = "PR10",
         value = "Sequencing protocol must have sequencing hardware from the following list: 454 GS, 454 GS 20, 454 GS FLX, 454 GS FLX+, 454 GS FLX Titanium, 454 GS Junior, Illumina Genome Analyzer, Illumina Genome Analyzer II, Illumina Genome Analyzer IIx, Illumina HiSeq 2500, Illumina HiSeq 2000, Illumina HiSeq 1500, Illumina HiSeq 1000, Illumina MiSeq, Illumina HiScanSQ, HiSeq X Ten, NextSeq 500, Helicos HeliScope, AB SOLiD System, AB SOLiD System 2.0, AB SOLiD System 3.0, AB SOLiD 3 Plus System, AB SOLiD 4 System, AB SOLiD 4hq System, AB SOLiD PI System, AB 5500 Genetic Analyzer, AB 5500xl Genetic Analyzer, PacBio RS, PacBio RS II, Ion Torrent PGM, Ion Torrent Proton, MinION, GridION, AB 3730xL Genetic Analyzer, AB 3730 Genetic Analyzer, AB 3500xL Genetic Analyzer, AB 3500 Genetic Analyzer, AB 3130xL Genetic Analyzer, AB 3130 Genetic Analyzer, AB 310 Genetic Analyzer, unspecified",
-        application = CheckApplicationType.HTS_ONLY,
+        application = CheckApplicationType.SINGLE_CELL_AND_HTS,
         details = "`Protocol Hardware` field for the sequencing protocol must contain a comma separated list of protocol hardware used ([supported term sources](#protocol-hardware-list))")
 
 public class SequencingProtocolHardwareRequired extends RangeCheck<Protocol> {
